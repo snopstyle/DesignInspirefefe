@@ -1,0 +1,61 @@
+Prompt:
+
+"Using the provided files Logic.py and THE BASE (1).xlsx, build a fully functional website that implements a Profile Matching System. The website should allow users to take a quiz based on the adaptive tree structure defined in Logic.py and the question weights, key traits, and sub-profiles defined in THE BASE (1).xlsx.
+
+The website should include the following features:
+
+User Interface (UI):
+
+A clean, user-friendly interface where users can start the quiz.
+
+Display questions one at a time, based on the adaptive tree structure.
+
+Allow users to select answers from predefined options (e.g., dropdowns, radio buttons, or sliders).
+
+Show progress (e.g., "Question 1 of 25").
+
+Quiz Logic:
+
+Implement the adaptive tree logic from Logic.py to determine the next question based on the user's previous answer.
+
+Use the question weights and key traits from THE BASE (1).xlsx to calculate the user's scores for each key trait.
+
+Map the user's answers to sub-profiles and dominant profiles based on the weights and traits defined in the Excel file.
+
+Profile Matching:
+
+After the quiz, calculate the user's dominant profile and sub-profile based on their answers.
+
+Display the results to the user, including:
+
+Their dominant profile (e.g., "The Analytical Thinker").
+
+Their sub-profile (e.g., "The Researcher").
+
+A summary of their key traits and strengths.
+
+Career paths and academic recommendations based on their profile.
+
+Data Storage:
+
+Store user answers and results in a database (e.g., SQLite or Firebase) for future reference.
+
+Allow users to revisit their results by logging in or providing a unique identifier.
+
+Additional Features:
+
+Include a section where users can explore detailed information about each profile (e.g., summaries, career paths, academic backing, and celebrity examples from the "Summary" sheet in THE BASE (1).xlsx).
+
+Add a feedback form for users to provide input on their experience.
+
+Implement a responsive design to ensure the website works on both desktop and mobile devices.
+
+Technical Requirements:
+
+Use Python (Flask or Django) for the backend to handle quiz logic and profile matching.
+
+Use HTML, CSS, and JavaScript (or a framework like React) for the frontend.
+
+Use the data from THE BASE (1).xlsx to populate the quiz questions, weights, and profile information.
+
+Ensure the website is fully functional, with no bugs or errors in the quiz logic or profile matching.
