@@ -1,7 +1,9 @@
-// This would be replaced with actual logic from Logic.py and Excel file
+// Implementing adaptive tree structure for the quiz
 export interface Question {
   text: string;
   options: string[];
+  weights: Record<string, number>; // trait weights for each option
+  next: Record<string, number>; // next question based on answer
 }
 
 export interface QuizState {
@@ -13,126 +15,141 @@ export interface Profile {
   dominantProfile: string;
   subProfile: string;
   traits: string[];
+  scores: Record<string, number>;
 }
 
+// Adaptive question tree based on Logic.py structure
 export const QUESTIONS: Record<number, Question> = {
   1: {
-    text: "How do you prefer to solve problems?",
+    text: "How do you prefer to approach problem-solving?",
     options: [
-      "Analyze data and facts",
-      "Trust your intuition",
+      "Break it down systematically",
+      "Trust intuition and experience",
       "Collaborate with others",
-      "Try different approaches"
-    ]
+      "Try multiple approaches"
+    ],
+    weights: {
+      "Analytical": 2,
+      "Intuitive": 1,
+      "Collaborative": 1.5,
+      "Adaptable": 1
+    },
+    next: {
+      "Break it down systematically": 2,
+      "Trust intuition and experience": 3,
+      "Collaborate with others": 4,
+      "Try multiple approaches": 5
+    }
   },
   2: {
-    text: "When learning something new, what approach do you take?",
+    text: "When analyzing data, what's most important to you?",
     options: [
-      "Read documentation thoroughly",
-      "Learn by doing and experimenting",
-      "Watch tutorials and demonstrations",
-      "Discuss with others who have experience"
-    ]
+      "Accuracy and precision",
+      "Finding patterns",
+      "Practical applications",
+      "Multiple perspectives"
+    ],
+    weights: {
+      "Analytical": 2,
+      "Pattern Recognition": 1.5,
+      "Practical": 1,
+      "Holistic": 1
+    },
+    next: {
+      "Accuracy and precision": 6,
+      "Finding patterns": 7,
+      "Practical applications": 8,
+      "Multiple perspectives": 9
+    }
   },
   3: {
-    text: "How do you handle challenging situations?",
+    text: "How do you prefer to learn new concepts?",
     options: [
-      "Break it down into smaller parts",
-      "Look for creative solutions",
-      "Seek advice from others",
-      "Trust your gut feeling"
-    ]
-  },
-  4: {
-    text: "What environment helps you work best?",
-    options: [
-      "Quiet and organized space",
-      "Dynamic and flexible environment",
-      "Collaborative workspace",
-      "Anywhere that feels inspiring"
-    ]
+      "Through detailed study",
+      "By experimenting",
+      "Through discussion",
+      "By observing others"
+    ],
+    weights: {
+      "Methodical": 2,
+      "Experimental": 1.5,
+      "Interactive": 1,
+      "Observant": 1
+    },
+    next: {
+      "Through detailed study": 6,
+      "By experimenting": 7,
+      "Through discussion": 8,
+      "By observing others": 9
+    }
   }
 };
 
-export function determineNextQuestion(currentQuestion: number, _answer: string): number | null {
-  const totalQuestions = Object.keys(QUESTIONS).length;
-  const nextQuestion = currentQuestion + 1;
+export function determineNextQuestion(currentQuestion: number, answer: string): number | null {
+  const question = QUESTIONS[currentQuestion];
+  if (!question) return null;
 
-  return nextQuestion <= totalQuestions ? nextQuestion : null;
+  // Get next question based on the answer
+  const nextQuestion = question.next[answer];
+
+  // If there's no specific next question or it doesn't exist, end the quiz
+  if (!nextQuestion || !QUESTIONS[nextQuestion]) {
+    return null;
+  }
+
+  return nextQuestion;
 }
 
 export function calculateProfile(answers: Record<string, string>): Profile {
-  // Calculate dominant traits based on answers
-  const traits = new Map<string, number>();
+  const traitScores: Record<string, number> = {};
 
-  // Map answers to traits
-  Object.entries(answers).forEach(([question, answer]) => {
-    switch(question) {
-      case "1":
-        if (answer === "Analyze data and facts") traits.set("Analytical", (traits.get("Analytical") || 0) + 1);
-        if (answer === "Trust your intuition") traits.set("Intuitive", (traits.get("Intuitive") || 0) + 1);
-        if (answer === "Collaborate with others") traits.set("Collaborative", (traits.get("Collaborative") || 0) + 1);
-        break;
-      case "2":
-        if (answer === "Read documentation thoroughly") traits.set("Methodical", (traits.get("Methodical") || 0) + 1);
-        if (answer === "Learn by doing and experimenting") traits.set("Practical", (traits.get("Practical") || 0) + 1);
-        if (answer === "Watch tutorials and demonstrations") traits.set("Visual", (traits.get("Visual") || 0) + 1);
-        break;
-      case "3":
-        if (answer === "Break it down into smaller parts") traits.set("Systematic", (traits.get("Systematic") || 0) + 1);
-        if (answer === "Look for creative solutions") traits.set("Creative", (traits.get("Creative") || 0) + 1);
-        if (answer === "Seek advice from others") traits.set("Collaborative", (traits.get("Collaborative") || 0) + 1);
-        break;
-      case "4":
-        if (answer === "Quiet and organized space") traits.set("Focused", (traits.get("Focused") || 0) + 1);
-        if (answer === "Dynamic and flexible environment") traits.set("Adaptable", (traits.get("Adaptable") || 0) + 1);
-        if (answer === "Collaborative workspace") traits.set("Team-oriented", (traits.get("Team-oriented") || 0) + 1);
-        break;
-    }
+  // Calculate trait scores based on answers and weights
+  Object.entries(answers).forEach(([questionId, answer]) => {
+    const question = QUESTIONS[parseInt(questionId)];
+    if (!question) return;
+
+    const weights = question.weights;
+    Object.entries(weights).forEach(([trait, weight]) => {
+      traitScores[trait] = (traitScores[trait] || 0) + weight;
+    });
   });
 
-  // Get dominant trait
-  let dominantTrait = "";
+  // Find dominant trait
+  let dominantTrait = '';
   let maxScore = 0;
-  traits.forEach((score, trait) => {
+  Object.entries(traitScores).forEach(([trait, score]) => {
     if (score > maxScore) {
       maxScore = score;
       dominantTrait = trait;
     }
   });
 
-  // Map dominant trait to profile
-  let profile: Profile = {
+  // Map trait to profile
+  const profile: Profile = {
     dominantProfile: "Analytical Thinker",
     subProfile: "Researcher",
-    traits: Array.from(traits.keys()).filter(trait => traits.get(trait)! > 0)
+    traits: Object.entries(traitScores)
+      .filter(([_, score]) => score > 0)
+      .map(([trait]) => trait),
+    scores: traitScores
   };
 
-  // Map dominant traits to profiles
+  // Determine profile based on dominant trait
   switch(dominantTrait) {
     case "Intuitive":
-    case "Creative":
-      profile = {
-        dominantProfile: "Creative Innovator",
-        subProfile: "Visionary",
-        traits: Array.from(traits.keys()).filter(trait => traits.get(trait)! > 0)
-      };
+    case "Pattern Recognition":
+      profile.dominantProfile = "Creative Innovator";
+      profile.subProfile = "Pattern Seeker";
       break;
     case "Collaborative":
-    case "Team-oriented":
-      profile = {
-        dominantProfile: "Team Player",
-        subProfile: "Facilitator",
-        traits: Array.from(traits.keys()).filter(trait => traits.get(trait)! > 0)
-      };
+    case "Interactive":
+      profile.dominantProfile = "Team Facilitator";
+      profile.subProfile = "Group Catalyst";
       break;
-    case "Practical":
     case "Adaptable":
-      profile = {
-        dominantProfile: "Pragmatic Adapter",
-        subProfile: "Problem Solver",
-        traits: Array.from(traits.keys()).filter(trait => traits.get(trait)! > 0)
-      };
+    case "Experimental":
+      profile.dominantProfile = "Adaptive Problem Solver";
+      profile.subProfile = "Practical Innovator";
       break;
   }
 
