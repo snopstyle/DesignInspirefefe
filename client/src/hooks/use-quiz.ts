@@ -47,6 +47,7 @@ export function useQuiz() {
     if (nextQuestion) {
       setCurrentQuestion(nextQuestion);
     } else {
+      // No more questions, calculate profile and submit
       const results = calculateProfile(answers);
       submitQuizMutation.mutate(results);
     }
