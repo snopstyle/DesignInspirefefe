@@ -12,20 +12,27 @@ interface RankingOptionsProps {
 export function RankingOptions({ options, onRankingChange, currentRanking = [] }: RankingOptionsProps) {
   const [items, setItems] = useState(currentRanking.length ? currentRanking : options);
 
+  const handleReorder = (newOrder: string[]) => {
+    setItems(newOrder); // Update local state
+  };
+
+  const handleDragEnd = () => {
+    // Trigger the parent callback only when dragging ends
+    onRankingChange(items);
+  };
+
   return (
     <Reorder.Group 
       axis="y" 
       values={items} 
-      onReorder={(newOrder) => {
-        setItems(newOrder);
-        onRankingChange(newOrder);
-      }}
+      onReorder={handleReorder}
       className="space-y-2"
     >
       {items.map((item) => (
         <Reorder.Item
           key={item}
           value={item}
+          onDragEnd={handleDragEnd} // Trigger callback when dragging ends
           className={cn(
             "flex items-center gap-3 p-4 rounded-lg cursor-move",
             "bg-white/5 hover:bg-white/10 border border-white/10",
