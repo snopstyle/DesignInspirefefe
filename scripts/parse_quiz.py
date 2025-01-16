@@ -2,6 +2,28 @@ import pandas as pd
 import json
 from pathlib import Path
 
+def parse_answer_options(options_str):
+    if pd.isna(options_str):
+        return []
+
+    # First split by newlines
+    options = str(options_str).split('\n')
+
+    # For each option, further split by "-" if present
+    expanded_options = []
+    for opt in options:
+        if '-' in opt:
+            # Split by "-" and add each part
+            parts = [p.strip() for p in opt.split('-')]
+            expanded_options.extend(parts)
+        else:
+            expanded_options.append(opt.strip())
+
+    # Clean up options: remove empty strings and whitespace
+    cleaned_options = [opt for opt in expanded_options if opt and not opt.isspace()]
+
+    return cleaned_options
+
 def parse_quiz_excel():
     # Read the Excel file
     excel_path = Path("attached_assets/QUIZ POOL.xlsx")
@@ -24,11 +46,8 @@ def parse_quiz_excel():
             except ValueError:
                 continue
 
-            # Parse answer options from the string representation
-            options = []
-            if pd.notna(row['Answer Options']):
-                options = [opt.strip() for opt in str(row['Answer Options']).split(';')]
-                options = [opt for opt in options if opt]  # Remove empty options
+            # Parse answer options using the new function
+            options = parse_answer_options(row['Answer Options'])
 
             # Create question object
             question = {
@@ -54,6 +73,12 @@ def parse_quiz_excel():
             if pd.notna(section):
                 count = len(df[df['Section'] == section])
                 print(f"- {section}: {count} questions")
+
+        # Print first few questions' options to verify parsing
+        print("\nSample of parsed questions:")
+        for q in questions[:3]:
+            print(f"\nQ{q['id']}: {q['text']}")
+            print("Options:", q['options'])
 
         return True
     except Exception as e:
