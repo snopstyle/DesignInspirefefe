@@ -184,6 +184,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               onValueChange={(value) => {
                 const newValue = value[0].toString();
                 setSliderValue(newValue);
+                onAnswer(newValue); // Added to update parent component
               }}
               className="w-full"
             />
