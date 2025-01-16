@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Question, QuestionFormat } from "@/lib/quiz-logic";
@@ -25,66 +26,70 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     switch (question.format as QuestionFormat) {
       case "Single choice":
         return (
-          <RadioGroup 
-            value={currentAnswer as string} 
-            onValueChange={onAnswer} 
-            className="space-y-6"
-          >
-            {question.options.map((option, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="group"
-              >
-                <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
-                  <RadioGroupItem value={option} id={`option-${index}`} />
-                  <Label 
-                    htmlFor={`option-${index}`} 
-                    className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
-                  >
-                    {option}
-                  </Label>
-                </div>
-              </motion.div>
-            ))}
-          </RadioGroup>
+          <ScrollArea className="h-[60vh] pr-4">
+            <RadioGroup 
+              value={currentAnswer as string} 
+              onValueChange={onAnswer} 
+              className="space-y-4"
+            >
+              {question.options.map((option, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
+                    <RadioGroupItem value={option} id={`option-${index}`} />
+                    <Label 
+                      htmlFor={`option-${index}`} 
+                      className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
+                    >
+                      {option}
+                    </Label>
+                  </div>
+                </motion.div>
+              ))}
+            </RadioGroup>
+          </ScrollArea>
         );
 
       case "Multiple choice":
         return (
-          <div className="space-y-6">
-            {question.options.map((option, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="group"
-              >
-                <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
-                  <Checkbox
-                    id={`option-${index}`}
-                    checked={multipleChoiceAnswers.includes(option)}
-                    onCheckedChange={(checked) => {
-                      const newAnswers = checked
-                        ? [...multipleChoiceAnswers, option]
-                        : multipleChoiceAnswers.filter(a => a !== option);
-                      setMultipleChoiceAnswers(newAnswers);
-                      onAnswer(newAnswers);
-                    }}
-                  />
-                  <Label 
-                    htmlFor={`option-${index}`}
-                    className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
-                  >
-                    {option}
-                  </Label>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <ScrollArea className="h-[60vh] pr-4">
+            <div className="space-y-4">
+              {question.options.map((option, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
+                    <Checkbox
+                      id={`option-${index}`}
+                      checked={multipleChoiceAnswers.includes(option)}
+                      onCheckedChange={(checked) => {
+                        const newAnswers = checked
+                          ? [...multipleChoiceAnswers, option]
+                          : multipleChoiceAnswers.filter(a => a !== option);
+                        setMultipleChoiceAnswers(newAnswers);
+                        onAnswer(newAnswers);
+                      }}
+                    />
+                    <Label 
+                      htmlFor={`option-${index}`}
+                      className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
+                    >
+                      {option}
+                    </Label>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </ScrollArea>
         );
 
       case "Scale":
@@ -141,8 +146,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      className="w-full max-w-2xl mx-auto"
     >
-      <Card className="w-full max-w-2xl mx-auto bg-background/80 backdrop-blur-sm border-white/10 shadow-xl">
+      <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl">
         <CardHeader className="space-y-4">
           <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
             {question.text}
