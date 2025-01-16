@@ -96,6 +96,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                     : [...multipleChoiceAnswers, option];
                   console.log('Toggled option:', option, 'New answers:', newAnswers);
                   setMultipleChoiceAnswers(newAnswers);
+                  onAnswer(newAnswers);
                 }}
               />
             </ScrollArea>
