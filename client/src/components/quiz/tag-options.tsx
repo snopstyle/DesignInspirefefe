@@ -9,7 +9,7 @@ interface TagOptionsProps {
 
 export function TagOptions({ options, selectedOptions, onToggle }: TagOptionsProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap justify-center gap-3 px-6">
       {options.map((option, index) => {
         const isSelected = selectedOptions.includes(option);
         return (
