@@ -1,4 +1,6 @@
-// Data Structures
+import { type Question } from './quiz-logic';
+
+// Core data structures
 export const key_traits: Record<string, number> = {
     "Teamwork": 0,
     "Independence": 0,
@@ -426,7 +428,7 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
     }
 };
 
-// Helper Functions
+// Answer scaling function with error handling
 export function answerValue(answer: string, questionId: string): number {
     const answerScales: Record<string, Record<string, number>> = {
         "Q1": {
@@ -604,49 +606,87 @@ export function answerValue(answer: string, questionId: string): number {
         }
     };
 
-    const scale = answerScales[questionId] || {};
-    return scale[answer] || 0.0;
+    try {
+        const scale = answerScales[questionId];
+        if (!scale) {
+            console.warn(`No scale found for question ${questionId}`);
+            return 0.0;
+        }
+        return scale[answer] ?? 0.0;
+    } catch (error) {
+        console.error(`Error processing answer value for ${questionId}:`, error);
+        return 0.0;
+    }
 }
 
+// Profile calculation with validation
 export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
     const profileScores: Record<string, number> = { ...key_traits };
 
-    for (const [questionId, answer] of Object.entries(userAnswers)) {
-        if (question_weights[questionId]) {
-            for (const [trait, weight] of Object.entries(question_weights[questionId])) {
-                profileScores[trait] += weight * answerValue(answer, questionId);
+    try {
+        for (const [questionId, answer] of Object.entries(userAnswers)) {
+            const weights = question_weights[questionId];
+            if (weights) {
+                for (const [trait, weight] of Object.entries(weights)) {
+                    profileScores[trait] = (profileScores[trait] || 0) + weight * answerValue(answer, questionId);
+                }
             }
         }
+    } catch (error) {
+        console.error('Error calculating profile scores:', error);
     }
 
     return profileScores;
 }
 
+// Profile matching with validation
 export function getMatchedProfile(profileScores: Record<string, number>): string {
-    let maxScore = -1;
-    let matchedProfile = "";
+    try {
+        let maxScore = -1;
+        let matchedProfile = "";
 
-    for (const [profile, traits] of Object.entries(sub_profiles)) {
-        let score = 0;
-        for (const trait of traits) {
-            score += profileScores[trait] * (sub_profile_weights[profile][trait] || 0);
+        for (const [profile, traits] of Object.entries(sub_profiles)) {
+            const weights = sub_profile_weights[profile];
+            if (!weights) continue;
+
+            let score = 0;
+            for (const trait of traits) {
+                if (profileScores[trait] !== undefined && weights[trait] !== undefined) {
+                    score += profileScores[trait] * weights[trait];
+                }
+            }
+
+            if (score > maxScore) {
+                maxScore = score;
+                matchedProfile = profile;
+            }
         }
-        if (score > maxScore) {
-            maxScore = score;
-            matchedProfile = profile;
-        }
+
+        return matchedProfile;
+    } catch (error) {
+        console.error('Error getting matched profile:', error);
+        return "The Generalist"; // Default fallback profile
     }
-
-    return matchedProfile;
 }
 
-// Data Structures (already defined in previous steps)
-export const key_traits: Record<string, number> = { /* ... */ };
-export const sub_profiles: Record<string, string[]> = { /* ... */ };
-export const question_weights: Record<string, Record<string, number>> = { /* ... */ };
-export const sub_profile_weights: Record<string, Record<string, number>> = { /* ... */ };
+// Adaptive question flow
+export function getNextQuestion(currentQuestion: string, userAnswer: string): string {
+    try {
+        return adaptiveTree[currentQuestion]?.[userAnswer] || "End";
+    } catch (error) {
+        console.error('Error getting next question:', error);
+        return "End";
+    }
+}
 
-// Adaptive Tree Logic
+// Export for testing and debugging
+export const __testing = {
+    answerValue,
+    calculateProfileScores,
+    getMatchedProfile,
+    getNextQuestion
+};
+
 export const adaptiveTree: Record<string, Record<string, string>> = {
     // Step 1: Initial Questions (Q1–Q7)
     "Q1": {  // Do you prefer working in a team or independently?
@@ -827,47 +867,3 @@ export const adaptiveTree: Record<string, Record<string, string>> = {
         "Not at all important": "End"
     }
 };
-
-// Helper Functions
-export function answerValue(answer: string, questionId: string): number {
-    const answerScales: Record<string, Record<string, number>> = { /* ... */ };
-    const scale = answerScales[questionId] || {};
-    return scale[answer] || 0.0;
-}
-
-export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
-    const profileScores: Record<string, number> = { ...key_traits };
-
-    for (const [questionId, answer] of Object.entries(userAnswers)) {
-        if (question_weights[questionId]) {
-            for (const [trait, weight] of Object.entries(question_weights[questionId])) {
-                profileScores[trait] += weight * answerValue(answer, questionId);
-            }
-        }
-    }
-
-    return profileScores;
-}
-
-export function getMatchedProfile(profileScores: Record<string, number>): string {
-    let maxScore = -1;
-    let matchedProfile = "";
-
-    for (const [profile, traits] of Object.entries(sub_profiles)) {
-        let score = 0;
-        for (const trait of traits) {
-            score += profileScores[trait] * (sub_profile_weights[profile][trait] || 0);
-        }
-        if (score > maxScore) {
-            maxScore = score;
-            matchedProfile = profile;
-        }
-    }
-
-    return matchedProfile;
-}
-
-export function getNextQuestion(currentQuestion: string, userAnswer: string): string {
-    const nextQuestion = adaptiveTree[currentQuestion]?.[userAnswer] || "End";
-    return nextQuestion;
-}
