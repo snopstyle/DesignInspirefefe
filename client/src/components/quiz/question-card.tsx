@@ -12,26 +12,13 @@ import type { Question, QuestionFormat } from "@/lib/quiz-logic";
 import { useState, useEffect } from "react";
 import { TagOptions } from "./tag-options";
 import { RankingOptions } from "./ranking-options";
+import { parseSliderOptions } from "@/lib/quiz-logic";
 
 interface QuestionCardProps {
   question: Question;
   onAnswer: (answer: string | string[]) => void;
   currentAnswer?: string | string[];
 }
-
-const parseSliderOptions = (optionsText: string): { min: number; max: number; defaultValue: number; step: number } => {
-  const match = optionsText.match(/Slider: €(\d+)-€(\d+),(\d+) \(default: €(\d+), step: €(\d+)\)/);
-  if (!match) {
-    throw new Error("Invalid slider options format");
-  }
-  return {
-    min: parseInt(match[1]),
-    max: parseInt(match[2]),
-    defaultValue: parseInt(match[4]),
-    step: parseInt(match[5]),
-  };
-};
-
 
 export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCardProps) {
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
