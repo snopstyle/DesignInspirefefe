@@ -1,7 +1,7 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
 
-export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text";
+export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection";
 
 export interface Question {
   id: number;
@@ -35,7 +35,7 @@ export const QUESTIONS = quizData.questions as Question[];
 
 export function getCurrentSection(questionId: number): string {
   const question = QUESTIONS.find(q => q.id === questionId);
-  return question?.section || QUIZ_SECTIONS.PSYCHO_SOCIAL;
+  return question?.section || "";
 }
 
 export function getNextQuestion(currentId: number): number | null {
@@ -44,6 +44,21 @@ export function getNextQuestion(currentId: number): number | null {
     return null;
   }
   return QUESTIONS[currentIndex + 1].id;
+}
+
+// Debug function to help identify question loading issues
+export function debugQuestionData(questionId: number) {
+  const question = QUESTIONS.find(q => q.id === questionId);
+  console.log('Question Data:', question);
+  return question;
+}
+
+// Helper function to check if a question should use tag layout
+export function shouldUseTagLayout(question: Question): boolean {
+  return (
+    (question.format === "Multiple choice" || question.format === "Multiple selection") &&
+    question.options.length > 8
+  );
 }
 
 export function calculateProfile(answers: Record<number, string | string[]>): Profile {

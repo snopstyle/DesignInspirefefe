@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Question, QuestionFormat } from "@/lib/quiz-logic";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TagOptions } from "./tag-options";
 
 interface QuestionCardProps {
@@ -23,7 +23,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     Array.isArray(currentAnswer) ? currentAnswer : []
   );
 
-  const hasMultipleOptions = question.options.length > 8;
+  // Debug logging
+  useEffect(() => {
+    console.log('Question Data:', {
+      id: question.id,
+      format: question.format,
+      optionsCount: question.options.length,
+      options: question.options
+    });
+  }, [question]);
+
+  const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
   const renderAnswerInput = () => {
     switch (question.format as QuestionFormat) {
@@ -59,7 +69,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         );
 
       case "Multiple choice":
-        if (hasMultipleOptions) {
+      case "Multiple selection":
+        if (shouldUseTagLayout) {
           return (
             <ScrollArea className="h-[60vh] pr-4">
               <TagOptions
@@ -69,6 +80,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   const newAnswers = multipleChoiceAnswers.includes(option)
                     ? multipleChoiceAnswers.filter(a => a !== option)
                     : [...multipleChoiceAnswers, option];
+                  console.log('Toggled option:', option, 'New answers:', newAnswers);
                   setMultipleChoiceAnswers(newAnswers);
                   onAnswer(newAnswers);
                 }}
@@ -152,6 +164,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       case "Single choice":
         return Boolean(currentAnswer);
       case "Multiple choice":
+      case "Multiple selection":
         return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
       case "Scale":
         return Boolean(currentAnswer);
