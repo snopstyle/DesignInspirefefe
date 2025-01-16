@@ -24,6 +24,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
     Array.isArray(currentAnswer) ? currentAnswer : []
   );
+  const [sliderValue, setSliderValue] = useState<string>(currentAnswer as string || '');
 
   // Debug logging
   useEffect(() => {
@@ -181,10 +182,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               step={step}
               value={[parseInt(currentAnswer as string) || defaultValue]}
               onValueChange={(value) => {
-                setSliderValue(value[0].toString());
-                if (question.format === "Single choice") {
-                  onAnswer(value[0].toString());
-                }
+                const newValue = value[0].toString();
+                setSliderValue(newValue);
+                onAnswer(newValue);
               }}
               className="w-full"
             />
