@@ -567,7 +567,7 @@
         "Cooking or baking",
         "Learning new skills or languages"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice"
     },
     {
       "id": 45,
@@ -607,7 +607,7 @@
         "Agriculture/Food Industry",
         "Media/Journalism"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice"
     },
     {
       "id": 47,
@@ -634,7 +634,7 @@
         "Achieving financial success or recognition",
         "Exploring new ideas or concepts"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice"
     },
     {
       "id": 49,
@@ -689,6 +689,7 @@
       "id": 53,
       "section": "Education Project",
       "text": "Where would you prefer to study? (Select up to 3)",
+      "format": "Multiple choice",
       "options": [
         "Paris",
         "Marseille",
@@ -735,6 +736,7 @@
       "id": 55,
       "section": "Education Project",
       "text": "What are your top selection criteria for choosing a school? (Select up to 3)",
+      "format": "Multiple choice",
       "options": [
         "Academic reputation",
         "Cost of tuition",
