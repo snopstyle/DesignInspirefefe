@@ -42,7 +42,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     switch (question.format as QuestionFormat) {
       case "Single choice":
         return (
-          <ScrollArea className="h-[60vh] pr-4">
+          <ScrollArea className="h-[60vh] pr-4 grid grid-cols-2 gap-4"> {/* Added grid layout */}
             <RadioGroup
               value={currentAnswer as string}
               onValueChange={(value) => {
@@ -60,11 +60,15 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   transition={{ delay: index * 0.1 }}
                   className="group"
                 >
-                  <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
-                    <RadioGroupItem value={option} id={`option-${index}`} />
+                  <div className="flex items-center justify-center rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors text-center mx-auto max-w-md"
+                    style={{
+                      gridColumn: index % 2 === 0 ? "1" : "2",
+                      margin: "4px"
+                    }}>
+                    <RadioGroupItem value={option} id={`option-${index}`} className="absolute left-4" />
                     <Label
                       htmlFor={`option-${index}`}
-                      className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
+                      className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full text-center px-8"
                     >
                       {option}
                     </Label>
