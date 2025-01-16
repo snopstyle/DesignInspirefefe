@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion, Reorder } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -13,11 +14,13 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
   const [items, setItems] = useState(currentRanking.length ? currentRanking : options);
 
   const handleReorder = (newOrder: string[]) => {
-    setItems(newOrder); // Update local state
+    setItems(newOrder);
+    // Remove the automatic submission
+    // onRankingChange(newOrder);
   };
 
-  const handleDragEnd = () => {
-    // Trigger the parent callback only when dragging ends
+  // Update parent component with current order
+  const handleUpdate = () => {
     onRankingChange(items);
   };
 
@@ -32,7 +35,6 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
         <Reorder.Item
           key={item}
           value={item}
-          onDragEnd={handleDragEnd} // Trigger callback when dragging ends
           className={cn(
             "flex items-center gap-3 p-4 rounded-lg cursor-move",
             "bg-white/5 hover:bg-white/10 border border-white/10",
