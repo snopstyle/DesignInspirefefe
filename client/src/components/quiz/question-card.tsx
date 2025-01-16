@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Question, QuestionFormat } from "@/lib/quiz-logic";
 import { useState } from "react";
+import { TagOptions } from "./tag-options";
 
 interface QuestionCardProps {
   question: Question;
@@ -21,6 +22,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
     Array.isArray(currentAnswer) ? currentAnswer : []
   );
+
+  const hasMultipleOptions = question.options.length > 8;
 
   const renderAnswerInput = () => {
     switch (question.format as QuestionFormat) {
@@ -56,6 +59,24 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         );
 
       case "Multiple choice":
+        if (hasMultipleOptions) {
+          return (
+            <ScrollArea className="h-[60vh] pr-4">
+              <TagOptions
+                options={question.options}
+                selectedOptions={multipleChoiceAnswers}
+                onToggle={(option) => {
+                  const newAnswers = multipleChoiceAnswers.includes(option)
+                    ? multipleChoiceAnswers.filter(a => a !== option)
+                    : [...multipleChoiceAnswers, option];
+                  setMultipleChoiceAnswers(newAnswers);
+                  onAnswer(newAnswers);
+                }}
+              />
+            </ScrollArea>
+          );
+        }
+
         return (
           <ScrollArea className="h-[60vh] pr-4">
             <div className="space-y-4">
