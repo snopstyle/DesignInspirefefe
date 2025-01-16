@@ -180,11 +180,10 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               min={min}
               max={max}
               step={step}
-              value={[parseInt(currentAnswer as string) || defaultValue]}
+              value={[parseInt(sliderValue) || defaultValue]}
               onValueChange={(value) => {
                 const newValue = value[0].toString();
                 setSliderValue(newValue);
-                onAnswer(newValue);
               }}
               className="w-full"
             />
