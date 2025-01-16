@@ -19,6 +19,20 @@ interface QuestionCardProps {
   currentAnswer?: string | string[];
 }
 
+const parseSliderOptions = (optionsText: string): { min: number; max: number; defaultValue: number; step: number } => {
+  const match = optionsText.match(/Slider: €(\d+)-€(\d+),(\d+) \(default: €(\d+), step: €(\d+)\)/);
+  if (!match) {
+    throw new Error("Invalid slider options format");
+  }
+  return {
+    min: parseInt(match[1]),
+    max: parseInt(match[2]),
+    defaultValue: parseInt(match[4]),
+    step: parseInt(match[5]),
+  };
+};
+
+
 export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCardProps) {
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
     Array.isArray(currentAnswer) ? currentAnswer : []
@@ -41,9 +55,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       case "Single choice":
         return (
           <ScrollArea className="h-[60vh] pr-4">
-            <RadioGroup 
-              value={currentAnswer as string} 
-              onValueChange={onAnswer} 
+            <RadioGroup
+              value={currentAnswer as string}
+              onValueChange={onAnswer}
               className="space-y-4"
             >
               {question.options.map((option, index) => (
@@ -56,8 +70,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                 >
                   <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
                     <RadioGroupItem value={option} id={`option-${index}`} />
-                    <Label 
-                      htmlFor={`option-${index}`} 
+                    <Label
+                      htmlFor={`option-${index}`}
                       className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
                     >
                       {option}
@@ -113,7 +127,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                         onAnswer(newAnswers);
                       }}
                     />
-                    <Label 
+                    <Label
                       htmlFor={`option-${index}`}
                       className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
                     >
@@ -165,7 +179,27 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             className="w-full"
           />
         );
-
+      case "Slider":
+        const { min, max, defaultValue, step } = parseSliderOptions(question.options[0]);
+        return (
+          <div className="space-y-8">
+            <div className="text-center text-white/90 text-lg mb-4">
+              €{currentAnswer || defaultValue}
+            </div>
+            <Slider
+              min={min}
+              max={max}
+              step={step}
+              value={[parseInt(currentAnswer as string) || defaultValue]}
+              onValueChange={(value) => onAnswer(value[0].toString())}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-white/70">
+              <span>€{min}</span>
+              <span>€{max}</span>
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -184,6 +218,10 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         return Boolean(currentAnswer);
       case "Text":
         return Boolean(currentAnswer && (currentAnswer as string).trim());
+      case "Slider":
+        const value = parseInt(currentAnswer as string);
+        const { min, max } = parseSliderOptions(question.options[0]);
+        return !isNaN(value) && value >= min && value <= max;
       default:
         return false;
     }
@@ -212,7 +250,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <Button 
+              <Button
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
                 onClick={() => onAnswer(currentAnswer!)}
               >

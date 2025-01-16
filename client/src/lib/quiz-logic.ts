@@ -1,7 +1,7 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
 
-export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking";
+export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking" | "Slider";
 
 export interface Question {
   id: number;
@@ -9,6 +9,26 @@ export interface Question {
   text: string;
   options: string[];
   format: QuestionFormat;
+}
+
+// Helper function to parse slider options
+export function parseSliderOptions(optionText: string) {
+  try {
+    // Example format: "Slider: €0–€20,000 (default: €5,000, step: €500)"
+    const matches = optionText.match(/€(\d+(?:,\d+)?)[^€]*€(\d+(?:,\d+)?)[^€]*€(\d+(?:,\d+)?)[^€]*€(\d+(?:,\d+)?)/);
+    if (!matches) return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
+
+    const [, min, max, defaultVal, step] = matches;
+    return {
+      min: parseInt(min.replace(/,/g, '')),
+      max: parseInt(max.replace(/,/g, '')),
+      defaultValue: parseInt(defaultVal.replace(/,/g, '')),
+      step: parseInt(step.replace(/,/g, ''))
+    };
+  } catch (e) {
+    console.error('Error parsing slider options:', e);
+    return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
+  }
 }
 
 export interface QuizState {
