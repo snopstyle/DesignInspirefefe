@@ -67,13 +67,7 @@
       "id": 6,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you feel about working with numbers and data?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
@@ -93,13 +87,7 @@
       "id": 8,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you handle deadlines and time management?",
-      "options": [
-        "Very well",
-        "Well",
-        "Neutral",
-        "Poorly",
-        "Very poorly"
-      ],
+      "options": ["Very well", "Well", "Neutral", "Poorly", "Very poorly"],
       "format": "Single choice"
     },
     {
@@ -119,13 +107,7 @@
       "id": 10,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you enjoy exploring new cultures and perspectives?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
@@ -145,26 +127,14 @@
       "id": 12,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you enjoy learning new things?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
       "id": 13,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you handle leadership roles?",
-      "options": [
-        "Very well",
-        "Well",
-        "Neutral",
-        "Poorly",
-        "Very poorly"
-      ],
+      "options": ["Very well", "Well", "Neutral", "Poorly", "Very poorly"],
       "format": "Single choice"
     },
     {
@@ -184,26 +154,14 @@
       "id": 15,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you feel about physical fitness and outdoor activities?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
       "id": 16,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you approach hands-on problem-solving?",
-      "options": [
-        "Very well",
-        "Well",
-        "Neutral",
-        "Poorly",
-        "Very poorly"
-      ],
+      "options": ["Very well", "Well", "Neutral", "Poorly", "Very poorly"],
       "format": "Single choice"
     },
     {
@@ -223,13 +181,7 @@
       "id": 18,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you handle conflict or disagreements?",
-      "options": [
-        "Very well",
-        "Well",
-        "Neutral",
-        "Poorly",
-        "Very poorly"
-      ],
+      "options": ["Very well", "Well", "Neutral", "Poorly", "Very poorly"],
       "format": "Single choice"
     },
     {
@@ -249,13 +201,7 @@
       "id": 20,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you feel about public speaking or presenting ideas?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
@@ -275,13 +221,7 @@
       "id": 22,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you feel about working in a fast-paced environment?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
@@ -301,13 +241,7 @@
       "id": 24,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How do you feel about working on multiple projects at once?",
-      "options": [
-        "Love it",
-        "Enjoy it",
-        "Neutral",
-        "Dislike it",
-        "Hate it"
-      ],
+      "options": ["Love it", "Enjoy it", "Neutral", "Dislike it", "Hate it"],
       "format": "Single choice"
     },
     {
@@ -351,13 +285,7 @@
       "id": 28,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How much do you enjoy deep, abstract thinking?",
-      "options": [
-        "Extremely",
-        "A lot",
-        "Moderately",
-        "Slightly",
-        "Not at All"
-      ],
+      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
       "format": "Single choice"
     },
     {
@@ -378,8 +306,8 @@
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you prefer focusing on one passion or exploring many interests?",
       "options": [
-        "1. Focusing on one passion",
-        "2. Exploring many interests",
+        "Focusing on one passion",
+        "Exploring many interests",
         "Both equally"
       ],
       "format": "Single choice"
@@ -388,13 +316,7 @@
       "id": 31,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How much do you value aesthetic sensitivity and imagination?",
-      "options": [
-        "Extremely",
-        "A lot",
-        "Moderately",
-        "Slightly",
-        "Not at All"
-      ],
+      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
       "format": "Single choice"
     },
     {
@@ -414,24 +336,14 @@
       "id": 33,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you prefer one-on-one interactions or public speaking?",
-      "options": [
-        "1. One-on-one interactions",
-        "2. Public speaking",
-        "3. Both equally"
-      ],
+      "options": ["One-on-one interactions", "Public speaking", "Both equally"],
       "format": "Single choice"
     },
     {
       "id": 34,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How much do you value emotional expression in communication?",
-      "options": [
-        "Extremely",
-        "A lot",
-        "Moderately",
-        "Slightly",
-        "Not at All"
-      ],
+      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
       "format": "Single choice"
     },
     {
@@ -451,24 +363,14 @@
       "id": 36,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you prefer leading teams or working independently to achieve goals?",
-      "options": [
-        "1. Leading teams",
-        "2. Working independently",
-        "3. Both equally"
-      ],
+      "options": ["Leading teams", "Working independently", "Both equally"],
       "format": "Single choice"
     },
     {
       "id": 37,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How much do you value strategic thinking and long-term planning?",
-      "options": [
-        "Extremely",
-        "A lot",
-        "Moderately",
-        "Slightly",
-        "Not at All"
-      ],
+      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
       "format": "Single choice"
     },
     {
@@ -488,24 +390,14 @@
       "id": 39,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you prefer working with gadgets or designing systems?",
-      "options": [
-        "Working with gadgets",
-        "Designing systems",
-        "Both equally"
-      ],
+      "options": ["Working with gadgets", "Designing systems", "Both equally"],
       "format": "Single choice"
     },
     {
       "id": 40,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How much do you value innovation and technical expertise?",
-      "options": [
-        "Extremely",
-        "A lot",
-        "Moderately",
-        "Slightly",
-        "Not at All"
-      ],
+      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
       "format": "Single choice"
     },
     {
@@ -536,13 +428,7 @@
       "id": 43,
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "How much do you value sustainability and global perspective?",
-      "options": [
-        "Extremely",
-        "A lot",
-        "Moderately",
-        "Slightly",
-        "Not at All"
-      ],
+      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
       "format": "Single choice"
     },
     {
@@ -668,9 +554,7 @@
       "id": 51,
       "section": "Education Project",
       "text": "What is your budget for education (per year)?",
-      "options": [
-        "Slider: €0–€20,000 (default: €5,000, step: €500)"
-      ],
+      "options": ["Slider: €0–€20,000 (default: €5,000, step: €500)"],
       "format": "Slider"
     },
     {
@@ -730,7 +614,7 @@
         "Not very interested",
         "Not interested at all"
       ],
-      "format": "Assesses interest in programs with international or mobility components."
+      "format": "Single choice"
     },
     {
       "id": 55,
@@ -746,7 +630,7 @@
         "Program flexibility",
         "Research opportunities"
       ],
-      "format": "Helps prioritize schools based on the student’s key criteria."
+      "format": "Multiple selection"
     }
   ]
 }
