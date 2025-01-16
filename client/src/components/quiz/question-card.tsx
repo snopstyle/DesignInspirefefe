@@ -115,7 +115,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                           ? [...multipleChoiceAnswers, option]
                           : multipleChoiceAnswers.filter(a => a !== option);
                         setMultipleChoiceAnswers(newAnswers);
-                        onAnswer(newAnswers);
                       }}
                     />
                     <Label
