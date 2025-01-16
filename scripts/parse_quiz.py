@@ -9,18 +9,23 @@ def parse_answer_options(options_str):
     # First split by newlines
     options = str(options_str).split('\n')
 
-    # For each option, further split by "-" if present
-    expanded_options = []
+    # Process each line
+    cleaned_options = []
     for opt in options:
-        if '-' in opt:
-            # Split by "-" and add each part
-            parts = [p.strip() for p in opt.split('-')]
-            expanded_options.extend(parts)
-        else:
-            expanded_options.append(opt.strip())
+        # Remove leading/trailing whitespace
+        opt = opt.strip()
 
-    # Clean up options: remove empty strings and whitespace
-    cleaned_options = [opt for opt in expanded_options if opt and not opt.isspace()]
+        # Skip empty lines
+        if not opt:
+            continue
+
+        # If the line starts with a dash, remove it
+        if opt.startswith('-'):
+            opt = opt[1:].strip()
+
+        # Add to cleaned options if not empty
+        if opt and not opt.isspace():
+            cleaned_options.append(opt)
 
     return cleaned_options
 
@@ -57,6 +62,14 @@ def parse_quiz_excel():
                 'options': options,
                 'format': str(row['Format type']).strip() if pd.notna(row['Format type']) else "Single choice"
             }
+
+            # Print details for Question 44
+            if question_id == 44:
+                print("\nDetailed info for Question 44:")
+                print("Raw Answer Options:", row['Answer Options'])
+                print("Parsed Options:", options)
+                print("Format Type:", row['Format type'])
+
             questions.append(question)
 
         # Sort questions by ID to ensure proper order
@@ -66,19 +79,13 @@ def parse_quiz_excel():
         with open('client/src/lib/quiz-data.json', 'w', encoding='utf-8') as f:
             json.dump({'questions': questions}, f, indent=2, ensure_ascii=False)
 
-        print("Successfully parsed quiz data:")
+        print("\nSuccessfully parsed quiz data:")
         print(f"Total questions: {len(questions)}")
         print("\nSections found:")
         for section in df['Section'].unique():
             if pd.notna(section):
                 count = len(df[df['Section'] == section])
                 print(f"- {section}: {count} questions")
-
-        # Print first few questions' options to verify parsing
-        print("\nSample of parsed questions:")
-        for q in questions[:3]:
-            print(f"\nQ{q['id']}: {q['text']}")
-            print("Options:", q['options'])
 
         return True
     except Exception as e:

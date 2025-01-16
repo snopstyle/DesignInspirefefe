@@ -415,9 +415,7 @@
       "section": "PSYCHO−SOCIAL PROFILE QUIZ",
       "text": "Do you prefer one-on-one interactions or public speaking?",
       "options": [
-        "1. One",
-        "on",
-        "one interactions",
+        "1. One-on-one interactions",
         "2. Public speaking",
         "3. Both equally"
       ],
@@ -565,8 +563,7 @@
         "Designing (graphic, fashion, interior, etc.)",
         "Traveling or exploring new cultures",
         "Participating in debates or public speaking",
-        "Gardening or nature",
-        "related activities",
+        "Gardening or nature-related activities",
         "Cooking or baking",
         "Learning new skills or languages"
       ],
@@ -578,8 +575,7 @@
       "text": "Rank these academic fields by order of interest.",
       "options": [
         "Mathematics",
-        "Physics",
-        "Chemistry",
+        "Physics-Chemistry",
         "Biology/Earth Sciences",
         "Literature/Philosophy",
         "History/Geography",
@@ -620,11 +616,9 @@
       "options": [
         "Structured and organized (e.g., corporate office, laboratory)",
         "Creative and flexible (e.g., design studio, startup)",
-        "Outdoors or hands",
-        "on (e.g., fieldwork, construction)",
+        "Outdoors or hands-on (e.g., fieldwork, construction)",
         "Social and collaborative (e.g., NGOs, education)",
-        "Independent and self",
-        "directed (e.g., freelance, research)"
+        "Independent and self-directed (e.g., freelance, research)"
       ],
       "format": "Single choice"
     },
@@ -647,12 +641,10 @@
       "section": "Passion & Interests",
       "text": "How do you prefer to learn? (Select one)",
       "options": [
-        "Through hands",
-        "on practice and experimentation",
+        "Through hands-on practice and experimentation",
         "By reading and researching independently",
         "In collaborative group settings",
-        "Through creative projects and self",
-        "expression",
+        "Through creative projects and self-expression",
         "By following structured lessons and guidelines"
       ],
       "format": "Single choice"
@@ -711,27 +703,18 @@
         "Rennes",
         "Reims",
         "Le Havre",
-        "Saint",
-        "Étienne",
+        "Saint-Étienne",
         "Toulon",
         "Angers",
         "Grenoble",
         "Dijon",
         "Nîmes",
-        "Aix",
-        "en",
-        "Provence",
-        "Saint",
-        "Denis (Réunion)",
-        "Fort",
-        "de",
-        "France (Martinique)",
-        "Pointe",
-        "à",
-        "Pitre (Guadeloupe)",
+        "Aix-en-Provence",
+        "Saint-Denis (Réunion)",
+        "Fort-de-France (Martinique)",
+        "Pointe-à-Pitre (Guadeloupe)",
         "Cayenne (French Guiana)",
-        "Saint",
-        "Pierre (Saint Pierre and Miquelon)"
+        "Saint-Pierre (Saint Pierre and Miquelon)"
       ],
       "format": "Multiple selection"
     },
