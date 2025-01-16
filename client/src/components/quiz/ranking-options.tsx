@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion, Reorder } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { GripVertical } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface RankingOptionsProps {
   options: string[];
@@ -46,5 +47,18 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
         </Reorder.Item>
       ))}
     </Reorder.Group>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2 }}
+      className="mt-6"
+    >
+      <Button
+        className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
+        onClick={handleUpdate}
+      >
+        Validate Ranking
+      </Button>
+    </motion.div>
   );
 }
