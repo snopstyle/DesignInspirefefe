@@ -18,11 +18,8 @@ export default function Quiz() {
     );
   }
 
-  // Get the current question data
-  const question = QUESTIONS[currentQuestion];
-
   // If we don't have a question (quiz completed), show nothing
-  if (!question) {
+  if (!currentQuestion) {
     return null;
   }
 
@@ -30,14 +27,13 @@ export default function Quiz() {
     <GradientBackground className="p-4">
       <div className="container mx-auto py-8">
         <ProgressBar
-          current={currentQuestion}
-          total={Object.keys(QUESTIONS).length}
+          current={currentQuestion.id}
+          total={QUESTIONS.length}
         />
         <QuestionCard
-          question={question.text}
-          options={question.options}
+          question={currentQuestion}
           onAnswer={handleAnswer}
-          currentAnswer={answers[currentQuestion]}
+          currentAnswer={answers[currentQuestion.id]}
         />
       </div>
     </GradientBackground>

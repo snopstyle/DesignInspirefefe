@@ -1,157 +1,123 @@
-// Implementing adaptive tree structure for the quiz
+// Quiz sections and types based on QUIZ POOL.xlsx
+import quizData from './quiz-data.json';
+
+export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text";
+
 export interface Question {
+  id: number;
+  section: string;
   text: string;
   options: string[];
-  weights: Record<string, number>; // trait weights for each option
-  next: Record<string, number>; // next question based on answer
+  format: QuestionFormat;
 }
 
 export interface QuizState {
+  currentSection: string;
   currentQuestion: number;
-  answers: Record<string, string>;
+  answers: Record<number, string | string[]>;
 }
 
 export interface Profile {
-  dominantProfile: string;
-  subProfile: string;
-  traits: string[];
-  scores: Record<string, number>;
+  psychoSocialProfile: Record<string, number>;
+  passionInterests: string[];
+  educationProject: Record<string, string>;
 }
 
-// Adaptive question tree based on Logic.py structure
-export const QUESTIONS: Record<number, Question> = {
-  1: {
-    text: "How do you prefer to approach problem-solving?",
-    options: [
-      "Break it down systematically",
-      "Trust intuition and experience",
-      "Collaborate with others",
-      "Try multiple approaches"
-    ],
-    weights: {
-      "Analytical": 2,
-      "Intuitive": 1,
-      "Collaborative": 1.5,
-      "Adaptable": 1
-    },
-    next: {
-      "Break it down systematically": 2,
-      "Trust intuition and experience": 3,
-      "Collaborate with others": 4,
-      "Try multiple approaches": 5
-    }
-  },
-  2: {
-    text: "When analyzing data, what's most important to you?",
-    options: [
-      "Accuracy and precision",
-      "Finding patterns",
-      "Practical applications",
-      "Multiple perspectives"
-    ],
-    weights: {
-      "Analytical": 2,
-      "Pattern Recognition": 1.5,
-      "Practical": 1,
-      "Holistic": 1
-    },
-    next: {
-      "Accuracy and precision": 6,
-      "Finding patterns": 7,
-      "Practical applications": 8,
-      "Multiple perspectives": 9
-    }
-  },
-  3: {
-    text: "How do you prefer to learn new concepts?",
-    options: [
-      "Through detailed study",
-      "By experimenting",
-      "Through discussion",
-      "By observing others"
-    ],
-    weights: {
-      "Methodical": 2,
-      "Experimental": 1.5,
-      "Interactive": 1,
-      "Observant": 1
-    },
-    next: {
-      "Through detailed study": 6,
-      "By experimenting": 7,
-      "Through discussion": 8,
-      "By observing others": 9
-    }
-  }
-};
+// Questions are organized by sections as defined in QUIZ POOL.xlsx
+export const QUIZ_SECTIONS = {
+  PSYCHO_SOCIAL: "PSYCHO-SOCIAL PROFILE QUIZ",
+  PASSION: "Passion & Interests",
+  EDUCATION: "Education Project"
+} as const;
 
-export function determineNextQuestion(currentQuestion: number, answer: string): number | null {
-  const question = QUESTIONS[currentQuestion];
-  if (!question) return null;
+// Load questions from the generated JSON
+export const QUESTIONS = quizData.questions as Question[];
 
-  // Get next question based on the answer
-  const nextQuestion = question.next[answer];
+export function getCurrentSection(questionId: number): string {
+  const question = QUESTIONS.find(q => q.id === questionId);
+  return question?.section || QUIZ_SECTIONS.PSYCHO_SOCIAL;
+}
 
-  // If there's no specific next question or it doesn't exist, end the quiz
-  if (!nextQuestion || !QUESTIONS[nextQuestion]) {
+export function getNextQuestion(currentId: number): number | null {
+  const currentIndex = QUESTIONS.findIndex(q => q.id === currentId);
+  if (currentIndex === -1 || currentIndex === QUESTIONS.length - 1) {
     return null;
   }
-
-  return nextQuestion;
+  return QUESTIONS[currentIndex + 1].id;
 }
 
-export function calculateProfile(answers: Record<string, string>): Profile {
-  const traitScores: Record<string, number> = {};
+export function calculateProfile(answers: Record<number, string | string[]>): Profile {
+  // Initialize profile structure
+  const profile: Profile = {
+    psychoSocialProfile: {},
+    passionInterests: [],
+    educationProject: {}
+  };
 
-  // Calculate trait scores based on answers and weights
+  // Process answers for each section
   Object.entries(answers).forEach(([questionId, answer]) => {
-    const question = QUESTIONS[parseInt(questionId)];
+    const question = QUESTIONS.find(q => q.id === parseInt(questionId));
     if (!question) return;
 
-    const weights = question.weights;
-    Object.entries(weights).forEach(([trait, weight]) => {
-      traitScores[trait] = (traitScores[trait] || 0) + weight;
-    });
-  });
+    switch (question.section) {
+      case QUIZ_SECTIONS.PSYCHO_SOCIAL:
+        // Map answers to psycho-social traits
+        if (typeof answer === 'string') {
+          const traits = mapAnswerToTraits(answer, question);
+          traits.forEach(trait => {
+            profile.psychoSocialProfile[trait] = (profile.psychoSocialProfile[trait] || 0) + 1;
+          });
+        }
+        break;
 
-  // Find dominant trait
-  let dominantTrait = '';
-  let maxScore = 0;
-  Object.entries(traitScores).forEach(([trait, score]) => {
-    if (score > maxScore) {
-      maxScore = score;
-      dominantTrait = trait;
+      case QUIZ_SECTIONS.PASSION:
+        // Add passion and interests
+        if (Array.isArray(answer)) {
+          profile.passionInterests.push(...answer);
+        } else {
+          profile.passionInterests.push(answer);
+        }
+        break;
+
+      case QUIZ_SECTIONS.EDUCATION:
+        // Map education project preferences
+        if (typeof answer === 'string') {
+          profile.educationProject[question.text] = answer;
+        }
+        break;
     }
   });
 
-  // Map trait to profile
-  const profile: Profile = {
-    dominantProfile: "Analytical Thinker",
-    subProfile: "Researcher",
-    traits: Object.entries(traitScores)
-      .filter(([_, score]) => score > 0)
-      .map(([trait]) => trait),
-    scores: traitScores
-  };
+  return profile;
+}
 
-  // Determine profile based on dominant trait
-  switch(dominantTrait) {
-    case "Intuitive":
-    case "Pattern Recognition":
-      profile.dominantProfile = "Creative Innovator";
-      profile.subProfile = "Pattern Seeker";
-      break;
-    case "Collaborative":
-    case "Interactive":
-      profile.dominantProfile = "Team Facilitator";
-      profile.subProfile = "Group Catalyst";
-      break;
-    case "Adaptable":
-    case "Experimental":
-      profile.dominantProfile = "Adaptive Problem Solver";
-      profile.subProfile = "Practical Innovator";
-      break;
+// Helper function to map answers to traits based on the question and answer
+function mapAnswerToTraits(answer: string, question: Question): string[] {
+  // This mapping should be based on the Excel file's trait categorization
+  // For now, we'll use a simple mapping based on the answer text
+  const traits: string[] = [];
+
+  // Add traits based on the question context and answer
+  if (answer.toLowerCase().includes('analytical') || answer.toLowerCase().includes('systematic')) {
+    traits.push('Analytical');
+  }
+  if (answer.toLowerCase().includes('creative') || answer.toLowerCase().includes('innovative')) {
+    traits.push('Creative');
+  }
+  if (answer.toLowerCase().includes('team') || answer.toLowerCase().includes('collaborate')) {
+    traits.push('Collaborative');
+  }
+  if (answer.toLowerCase().includes('practical') || answer.toLowerCase().includes('hands-on')) {
+    traits.push('Practical');
+  }
+  if (answer.toLowerCase().includes('lead') || answer.toLowerCase().includes('guide')) {
+    traits.push('Leadership');
   }
 
-  return profile;
+  // If no specific traits were mapped, use the answer itself as a trait
+  if (traits.length === 0) {
+    traits.push(answer);
+  }
+
+  return traits;
 }

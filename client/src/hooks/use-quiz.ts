@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-import { determineNextQuestion, calculateProfile } from "@/lib/quiz-logic";
+import { getNextQuestion, calculateProfile, QUESTIONS } from "@/lib/quiz-logic";
 
 export function useQuiz() {
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const { toast } = useToast();
   const [, setLocation] = useLocation();
@@ -37,15 +37,15 @@ export function useQuiz() {
     },
   });
 
-  const handleAnswer = useCallback((answer: string) => {
+  const handleAnswer = useCallback((answer: string | string[]) => {
     setAnswers((prev) => ({
       ...prev,
       [currentQuestion]: answer,
     }));
 
-    const nextQuestion = determineNextQuestion(currentQuestion, answer);
-    if (nextQuestion) {
-      setCurrentQuestion(nextQuestion);
+    const nextQuestionId = getNextQuestion(currentQuestion);
+    if (nextQuestionId) {
+      setCurrentQuestion(nextQuestionId);
     } else {
       // No more questions, calculate profile and submit
       const results = calculateProfile(answers);
@@ -53,8 +53,11 @@ export function useQuiz() {
     }
   }, [currentQuestion, answers, submitQuizMutation]);
 
+  // Find the current question object
+  const currentQuestionObj = QUESTIONS.find(q => q.id === currentQuestion);
+
   return {
-    currentQuestion,
+    currentQuestion: currentQuestionObj,
     answers,
     handleAnswer,
     isSubmitting: submitQuizMutation.isPending,
