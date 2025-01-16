@@ -1,7 +1,7 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
 
-export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection";
+export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking";
 
 export interface Question {
   id: number;

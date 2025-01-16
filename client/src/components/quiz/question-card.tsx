@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import type { Question, QuestionFormat } from "@/lib/quiz-logic";
 import { useState, useEffect } from "react";
 import { TagOptions } from "./tag-options";
+import { RankingOptions } from "./ranking-options";
 
 interface QuestionCardProps {
   question: Question;
@@ -125,6 +126,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           </ScrollArea>
         );
 
+      case "Drag-and-drop ranking":
+        return (
+          <ScrollArea className="h-[60vh] pr-4">
+            <RankingOptions
+              options={question.options}
+              currentRanking={Array.isArray(currentAnswer) ? currentAnswer : []}
+              onRankingChange={onAnswer}
+            />
+          </ScrollArea>
+        );
+
       case "Scale":
         return (
           <div className="space-y-8">
@@ -166,6 +178,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       case "Multiple choice":
       case "Multiple selection":
         return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
+      case "Drag-and-drop ranking":
+        return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
       case "Scale":
         return Boolean(currentAnswer);
       case "Text":
