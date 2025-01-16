@@ -232,9 +232,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-4 text-center"
+        className="mb-6 text-center"
       >
-        <span className="inline-block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium border border-white/10">
+        <span className="inline-block px-6 py-3 rounded-lg bg-gradient-neo from-orange-500/20 to-purple-500/20 backdrop-blur-sm text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-500 text-lg font-bold border border-white/10 shadow-lg">
           {question.section}
         </span>
       </motion.div>
