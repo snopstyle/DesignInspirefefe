@@ -174,7 +174,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         return (
           <div className="space-y-8">
             <div className="text-center text-white/90 text-lg mb-4">
-              €{currentAnswer || defaultValue}
+              €{sliderValue || defaultValue}
             </div>
             <Slider
               min={min}
@@ -184,7 +184,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               onValueChange={(value) => {
                 const newValue = value[0].toString();
                 setSliderValue(newValue);
-                onAnswer(newValue); // Added to update parent component
               }}
               className="w-full"
             />
@@ -192,6 +191,20 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               <span>€{min}</span>
               <span>€{max}</span>
             </div>
+            {sliderValue && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Button
+                  className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
+                  onClick={() => onAnswer(sliderValue)}
+                >
+                  Validate Selection
+                </Button>
+              </motion.div>
+            )}
           </div>
         );
       default:
