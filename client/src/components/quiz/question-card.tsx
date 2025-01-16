@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -26,7 +25,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   );
   const [sliderValue, setSliderValue] = useState<string>(currentAnswer as string || '');
 
-  // Debug logging
   useEffect(() => {
     console.log('Question Data:', {
       id: question.id,
@@ -38,40 +36,49 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
+  // Standardized styling for answer elements
+  const answerElementStyle =
+    "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full"; // Full width and height
+
   const renderAnswerInput = () => {
     switch (question.format as QuestionFormat) {
       case "Single choice":
         return (
           <ScrollArea className="h-[60vh] pr-4">
-            <RadioGroup
-              value={currentAnswer as string}
-              onValueChange={(value) => {
-                if (question.format === "Single choice") {
-                  onAnswer(value);
-                }
-              }}
-              className="space-y-4"
+            <div
+              className="flex flex-col items-center justify-center h-full px-6"
+              data-radix-scroll-area-content
             >
-              {question.options.map((option, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="group"
-                >
-                  <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
-                    <RadioGroupItem value={option} id={`option-${index}`} />
+              <RadioGroup
+                value={currentAnswer as string}
+                onValueChange={(value) => {
+                  if (question.format === "Single choice") {
+                    onAnswer(value);
+                  }
+                }}
+                className="space-y-4 w-full max-w-2xl mx-auto"
+              >
+                {question.options.map((option, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="group"
+                  >
                     <Label
                       htmlFor={`option-${index}`}
-                      className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
+                      className={answerElementStyle}
+                      onClick={() => onAnswer(option)}
                     >
-                      {option}
+                      <span className="text-white/90 group-hover:text-white transition-colors break-words">
+                        {option}
+                      </span>
                     </Label>
-                  </div>
-                </motion.div>
-              ))}
-            </RadioGroup>
+                  </motion.div>
+                ))}
+              </RadioGroup>
+            </div>
           </ScrollArea>
         );
 
@@ -97,7 +104,12 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
         return (
           <ScrollArea className="h-[60vh] pr-4">
-            <div className="space-y-4">
+            <div
+              className="grid w-full px-6 gap-4"
+              style={{
+                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", // Dynamically adjust columns
+              }}
+            >
               {question.options.map((option, index) => (
                 <motion.div
                   key={index}
@@ -106,24 +118,20 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   transition={{ delay: index * 0.1 }}
                   className="group"
                 >
-                  <div className="flex items-center space-x-3 rounded-lg border border-white/10 p-4 hover:bg-white/5 transition-colors">
-                    <Checkbox
-                      id={`option-${index}`}
-                      checked={multipleChoiceAnswers.includes(option)}
-                      onCheckedChange={(checked) => {
-                        const newAnswers = checked
-                          ? [...multipleChoiceAnswers, option]
-                          : multipleChoiceAnswers.filter(a => a !== option);
-                        setMultipleChoiceAnswers(newAnswers);
-                      }}
-                    />
-                    <Label
-                      htmlFor={`option-${index}`}
-                      className="text-lg text-white/90 group-hover:text-white transition-colors cursor-pointer w-full"
-                    >
+                  <Label
+                    htmlFor={`option-${index}`}
+                    className={answerElementStyle}
+                    onClick={() => {
+                      const newAnswers = multipleChoiceAnswers.includes(option)
+                        ? multipleChoiceAnswers.filter(a => a !== option)
+                        : [...multipleChoiceAnswers, option];
+                      setMultipleChoiceAnswers(newAnswers);
+                    }}
+                  >
+                    <span className="text-white/90 group-hover:text-white transition-colors break-words">
                       {option}
-                    </Label>
-                  </div>
+                    </span>
+                  </Label>
                 </motion.div>
               ))}
             </div>
@@ -143,7 +151,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
       case "Scale":
         return (
-          <div className="space-y-8">
+          <div className="space-y-6 w-full max-w-md mx-auto px-6">
             <Slider
               min={1}
               max={5}
@@ -166,14 +174,15 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             value={currentAnswer as string}
             onChange={(e) => onAnswer(e.target.value)}
             placeholder="Type your answer here..."
-            className="w-full"
+            className="w-full max-w-md mx-auto rounded-2xl p-6"
           />
         );
+
       case "Slider":
         const { min, max, defaultValue, step } = parseSliderOptions(question.options[0]);
         return (
-          <div className="space-y-8">
-            <div className="text-center text-white/90 text-lg mb-4">
+          <div className="space-y-6 w-full max-w-md mx-auto px-6">
+            <div className="text-center text-white/90 text-lg mb-6">
               €{sliderValue || defaultValue}
             </div>
             <Slider
@@ -184,6 +193,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               onValueChange={(value) => {
                 const newValue = value[0].toString();
                 setSliderValue(newValue);
+                onAnswer(newValue);
               }}
               className="w-full"
             />
@@ -191,22 +201,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               <span>€{min}</span>
               <span>€{max}</span>
             </div>
-            {sliderValue && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Button
-                  className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
-                  onClick={() => onAnswer(sliderValue)}
-                >
-                  Validate Selection
-                </Button>
-              </motion.div>
-            )}
           </div>
         );
+
       default:
         return null;
     }
@@ -247,17 +244,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         transition={{ duration: 0.5, delay: 0.2 }}
         className="mb-6 text-center"
       >
-        <span className="inline-block px-6 py-3 rounded-lg bg-gradient-neo from-orange-500/40 to-purple-500/40 backdrop-blur-md text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-500 text-lg font-bold border border-white/20 shadow-lg">
+        <span className="inline-block px-6 py-3 rounded-2xl bg-gradient-neo from-orange-500/40 to-purple-500/40 backdrop-blur-md text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-500 text-lg font-bold border border-white/20 shadow-lg">
           {question.section}
         </span>
       </motion.div>
-      <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl">
-        <CardHeader className="space-y-4">
+      <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl">
+        <CardHeader className="space-y-6">
           <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
             {question.text}
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6 px-0">
           <div className="mb-8">
             {renderAnswerInput()}
           </div>
@@ -266,9 +263,10 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
+              className="px-6"
             >
               <Button
-                className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
+                className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
                 onClick={() => onAnswer(currentAnswer!)}
               >
                 Next Question
