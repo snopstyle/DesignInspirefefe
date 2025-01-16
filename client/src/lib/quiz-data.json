@@ -567,7 +567,7 @@
         "Cooking or baking",
         "Learning new skills or languages"
       ],
-      "format": "Multiple choice"
+      "format": "Multiple selection"
     },
     {
       "id": 45,
@@ -607,7 +607,7 @@
         "Agriculture/Food Industry",
         "Media/Journalism"
       ],
-      "format": "Multiple choice"
+      "format": "Multiple selection"
     },
     {
       "id": 47,
@@ -634,7 +634,7 @@
         "Achieving financial success or recognition",
         "Exploring new ideas or concepts"
       ],
-      "format": "Multiple choice"
+      "format": "Multiple selection"
     },
     {
       "id": 49,
