@@ -44,7 +44,11 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           <ScrollArea className="h-[60vh] pr-4">
             <RadioGroup
               value={currentAnswer as string}
-              onValueChange={onAnswer}
+              onValueChange={(value) => {
+                if (question.format === "Single choice") {
+                  onAnswer(value);
+                }
+              }}
               className="space-y-4"
             >
               {question.options.map((option, index) => (
@@ -178,7 +182,12 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               max={max}
               step={step}
               value={[parseInt(currentAnswer as string) || defaultValue]}
-              onValueChange={(value) => onAnswer(value[0].toString())}
+              onValueChange={(value) => {
+                setSliderValue(value[0].toString());
+                if (question.format === "Single choice") {
+                  onAnswer(value[0].toString());
+                }
+              }}
               className="w-full"
             />
             <div className="flex justify-between text-sm text-white/70">
