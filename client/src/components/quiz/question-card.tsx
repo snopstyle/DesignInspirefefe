@@ -44,7 +44,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     switch (question.format as QuestionFormat) {
       case "Single choice":
         return (
-          <ScrollArea className="h-[60vh] pr-4">
+          <ScrollArea className="h-[60vh]">
             <div
               className="flex flex-col items-center justify-center h-full px-6"
               data-radix-scroll-area-content
@@ -86,7 +86,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       case "Multiple selection":
         if (shouldUseTagLayout) {
           return (
-            <ScrollArea className="h-[60vh] pr-4">
+            <ScrollArea className="h-[60vh]">
               <TagOptions
                 options={question.options}
                 selectedOptions={multipleChoiceAnswers}
@@ -96,7 +96,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                     : [...multipleChoiceAnswers, option];
                   console.log('Toggled option:', option, 'New answers:', newAnswers);
                   setMultipleChoiceAnswers(newAnswers);
-                  onAnswer(newAnswers);
                 }}
               />
             </ScrollArea>
@@ -104,7 +103,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         }
 
         return (
-          <ScrollArea className="h-[60vh] pr-4">
+          <ScrollArea className="h-[60vh]">
             <div
               className="grid w-full px-6 gap-4"
               style={{
@@ -141,7 +140,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
       case "Drag-and-drop ranking":
         return (
-          <ScrollArea className="h-[60vh] pr-4">
+          <ScrollArea className="h-[60vh]">
             <RankingOptions
               options={question.options}
               currentRanking={Array.isArray(currentAnswer) ? currentAnswer : []}
