@@ -8,19 +8,13 @@ interface GradientBackgroundProps {
 export function GradientBackground({ children, className }: GradientBackgroundProps) {
   return (
     <div className={cn(
-      "min-h-screen w-full bg-gradient-to-br from-primary/20 via-purple-500/30 to-blue-600/20",
-      "relative overflow-hidden",
+      "min-h-screen w-full bg-gradient-to-br from-orange-500/90 via-purple-500/90 to-purple-800/90",
+      "relative overflow-hidden backdrop-blur-sm",
       className
     )}>
-      {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-primary/5 animate-gradient" />
-
-      {/* Glass morphism effect */}
-      <div className="absolute inset-0 backdrop-blur-[2px] bg-white/5" />
-
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+      {/* Neo-retro grid effect */}
+      <div className="absolute inset-0 bg-[linear-gradient(transparent_1px,transparent_1px),linear-gradient(to_right,rgb(255_255_255/0.025)_1px,transparent_1px)] bg-[size:32px_32px]" />
       <div className="relative z-10">{children}</div>
     </div>
   );
