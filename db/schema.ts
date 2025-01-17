@@ -1,12 +1,13 @@
+
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid, json, serial } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  username: text("username").notNull().unique(),
+  username: text("username").notNull(),
   password: text("password").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const quizResults = pgTable("quiz_results", {
@@ -18,22 +19,16 @@ export const quizResults = pgTable("quiz_results", {
   traits: json("traits").notNull(),
   passionsAndInterests: json("passions_and_interests").notNull(),
   educationProject: json("education_project").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const userRelations = relations(users, ({ many }) => ({
-  quizResults: many(quizResults),
+  quizResults: many(quizResults)
 }));
 
 export const quizResultsRelations = relations(quizResults, ({ one }) => ({
   user: one(users, {
     fields: [quizResults.userId],
     references: [users.id],
-  }),
+  })
 }));
-
-export type User = typeof users.$inferSelect;
-export type InsertUser = typeof users.$inferInsert;
-export const insertUserSchema = createInsertSchema(users);
-export type QuizResult = typeof quizResults.$inferSelect;
-export type InsertQuizResult = typeof quizResults.$inferInsert;
