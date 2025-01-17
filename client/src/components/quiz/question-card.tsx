@@ -15,7 +15,7 @@ import { parseSliderOptions } from "@/lib/quiz-logic";
 
 interface QuestionCardProps {
   question: Question;
-  onAnswer: (answer: string | string[]) => void;
+  onAnswer: (answer: string | string[], preventSubmit?: boolean) => void; // Added preventSubmit
   currentAnswer?: string | string[];
 }
 
@@ -96,6 +96,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                     : [...multipleChoiceAnswers, option];
                   console.log('Toggled option:', option, 'New answers:', newAnswers);
                   setMultipleChoiceAnswers(newAnswers);
+                  onAnswer(newAnswers, true); // Prevent auto-submit
                 }}
               />
             </ScrollArea>
@@ -126,7 +127,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                         ? multipleChoiceAnswers.filter(a => a !== option)
                         : [...multipleChoiceAnswers, option];
                       setMultipleChoiceAnswers(newAnswers);
-                      onAnswer(newAnswers);
+                      onAnswer(newAnswers, true); // Prevent auto-submit
                     }}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
@@ -268,7 +269,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             >
               <Button
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
-                onClick={() => onAnswer(currentAnswer!)}
+                onClick={() => onAnswer(currentAnswer!, false)} // Added false to prevent auto-submit on "Finish Quiz"
               >
                 {question.id === 55 ? (
                   <>

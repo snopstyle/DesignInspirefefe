@@ -1,18 +1,17 @@
-import { pgTable, text, serial, integer, json, timestamp } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid, json } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").unique().notNull(),
+  id: uuid("id").defaultRandom().primaryKey(),
+  username: text("username").notNull().unique(),
   password: text("password").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const quizResults = pgTable("quiz_results", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  answers: json("answers").notNull(),
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  psychoSocialProfile: json("psycho_social_profile").notNull(),
   dominantProfile: text("dominant_profile").notNull(),
   subProfile: text("sub_profile").notNull(),
   traits: json("traits").notNull(),
@@ -22,7 +21,7 @@ export const quizResults = pgTable("quiz_results", {
 });
 
 export const userRelations = relations(users, ({ many }) => ({
-  results: many(quizResults),
+  quizResults: many(quizResults),
 }));
 
 export const quizResultsRelations = relations(quizResults, ({ one }) => ({
@@ -31,11 +30,6 @@ export const quizResultsRelations = relations(quizResults, ({ one }) => ({
     references: [users.id],
   }),
 }));
-
-export const insertUserSchema = createInsertSchema(users);
-export const selectUserSchema = createSelectSchema(users);
-export const insertQuizResultSchema = createInsertSchema(quizResults);
-export const selectQuizResultSchema = createSelectSchema(quizResults);
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
