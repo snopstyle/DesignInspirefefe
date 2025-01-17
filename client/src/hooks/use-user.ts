@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { InsertUser, User } from "@db/schema";
+import type { InsertUser, SelectUser } from "@db/schema";
 import { useToast } from "./use-toast";
 
 type RequestResult = {
@@ -40,7 +40,7 @@ async function handleAuthRequest(
   }
 }
 
-async function fetchUser(): Promise<User | null> {
+async function fetchUser(): Promise<SelectUser | null> {
   const response = await fetch('/api/user', {
     credentials: 'include'
   });
@@ -64,7 +64,7 @@ export function useUser() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const { data: user, error, isLoading } = useQuery<User | null, Error>({
+  const { data: user, error, isLoading } = useQuery<SelectUser | null, Error>({
     queryKey: ['user'],
     queryFn: fetchUser,
     staleTime: Infinity,

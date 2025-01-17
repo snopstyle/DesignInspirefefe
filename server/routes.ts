@@ -6,6 +6,7 @@ import { quizResults, quizSessions, profileCompletion } from "@db/schema";
 import { eq } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
+  // Setup authentication routes and middleware
   setupAuth(app);
 
   app.post("/api/quiz/submit", async (req, res) => {
