@@ -108,6 +108,12 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
       .map(([trait]) => trait),
-    educationProject: {}
+    educationProject: {
+      budget: stringAnswers['Q51'] || '0',
+      duration: stringAnswers['Q52'] || '',
+      locations: (answers[53] || []) as string[],
+      mobility: stringAnswers['Q54'] || '',
+      criteria: (answers[55] || []) as string[]
+    }
   };
 }
