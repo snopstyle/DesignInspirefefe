@@ -19,6 +19,9 @@ export const quizResults = pgTable("quiz_results", {
   passionsAndInterests: json("passions_and_interests"),
   educationProject: json("education_project"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  passionsAndInterests: json("passions_and_interests"),
+  educationProject: json("education_project"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const userRelations = relations(users, ({ many }) => ({
