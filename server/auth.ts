@@ -5,9 +5,10 @@ import session from "express-session";
 import createMemoryStore from "memorystore";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
-import { users, insertUserSchema, type User } from "@db/schema";
+import { users, type User } from "@db/schema";
 import { db } from "@db";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 const scryptAsync = promisify(scrypt);
 const crypto = {
@@ -28,10 +29,16 @@ const crypto = {
   },
 };
 
-// extend express user object with our schema
+// User input validation schema
+const userInputSchema = z.object({
+  username: z.string().min(3),
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
 declare global {
   namespace Express {
-    interface User extends User { }
+    interface User extends User {}
   }
 }
 
@@ -100,14 +107,14 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
-      const result = insertUserSchema.safeParse(req.body);
+      const result = userInputSchema.safeParse(req.body);
       if (!result.success) {
         return res
           .status(400)
           .send("Invalid input: " + result.error.issues.map(i => i.message).join(", "));
       }
 
-      const { username, password } = result.data;
+      const { username, email, password } = result.data;
 
       // Check if user already exists
       const [existingUser] = await db
@@ -127,7 +134,8 @@ export function setupAuth(app: Express) {
       const [newUser] = await db
         .insert(users)
         .values({
-          ...result.data,
+          username,
+          email,
           password: hashedPassword,
         })
         .returning();
@@ -148,7 +156,7 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    const result = insertUserSchema.safeParse(req.body);
+    const result = userInputSchema.partial().safeParse(req.body);
     if (!result.success) {
       return res
         .status(400)

@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { db } from "@db";
 import { quizResults, quizSessions, profileCompletion } from "@db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
   setupAuth(app);
@@ -32,14 +32,31 @@ export function registerRoutes(app: Express): Server {
           userId: req.user!.id,
           sessionId: session.id,
           answers: req.body.answers,
+          adaptiveFlow: {
+            path: req.body.adaptivePath || [],
+            branchingDecisions: req.body.branchingDecisions || {}
+          },
+          traitScores: req.body.traitScores || {},
           dominantProfile: req.body.dominantProfile,
           subProfile: req.body.subProfile,
-          traits: req.body.traits,
-          traitScores: req.body.traitScores || {},
+          traits: req.body.traits || [],
           profileMatchScores: req.body.profileMatchScores || {},
-          passionsAndInterests: req.body.passionsAndInterests || {},
-          educationProject: req.body.educationProject || {},
-          adaptiveFlow: req.body.adaptiveFlow || { path: [], branchingDecisions: {} }
+          passionsAndInterests: req.body.passionsAndInterests || {
+            hobbies: [],
+            academicInterests: [],
+            unwantedIndustries: [],
+            workEnvironment: '',
+            motivations: [],
+            learningStyle: '',
+            careerGoal: ''
+          },
+          educationProject: req.body.educationProject || {
+            budget: '',
+            duration: '',
+            locations: [],
+            mobility: '',
+            criteria: []
+          }
         })
         .returning();
 
@@ -81,7 +98,7 @@ export function registerRoutes(app: Express): Server {
       const results = await db.select()
         .from(quizResults)
         .where(eq(quizResults.userId, req.user!.id))
-        .orderBy(quizResults.createdAt);
+        .orderBy(desc(quizResults.createdAt));
 
       res.json(results);
     } catch (error) {
