@@ -43,7 +43,22 @@ export interface Profile {
   dominantProfile: string;
   subProfile: string;
   traits: string[];
-  educationProject: Record<string, string>;
+  passionsAndInterests: {
+    hobbies: string[] | undefined;
+    academicInterests: string[] | undefined;
+    unwantedIndustries: string[] | undefined;
+    workEnvironment: string | undefined;
+    motivations: string[] | undefined;
+    learningStyle: string | undefined;
+    careerGoal: string | undefined;
+  };
+  educationProject: {
+    budget: string | undefined;
+    duration: string | undefined;
+    locations: string[] | undefined;
+    mobility: string | undefined;
+    criteria: string[] | undefined;
+  };
 }
 
 // Questions are organized by sections as defined in QUIZ POOL.xlsx
@@ -85,30 +100,41 @@ export function shouldUseTagLayout(question: Question): boolean {
 }
 
 export function calculateProfile(answers: Record<number, string | string[]>): Profile {
-  // Convert numeric keys to string format for profile calculation
-  const stringAnswers: Record<string, string> = {};
+  // Calculate scores only for questions 1-25
+  const psychoSocialAnswers: Record<string, string> = {};
   Object.entries(answers).forEach(([key, value]) => {
-    if (Array.isArray(value)) {
-      // For multiple selection questions, join the array into a string
-      stringAnswers[`Q${key}`] = value.join(', ');
-    } else {
-      stringAnswers[`Q${key}`] = value;
+    const questionId = parseInt(key);
+    if (questionId <= 25) {
+      psychoSocialAnswers[`Q${key}`] = Array.isArray(value) ? value.join(', ') : value;
     }
   });
 
-  // Calculate profile scores using imported functions
-  const profileScores = calculateProfileScores(stringAnswers);
+  const profileScores = calculateProfileScores(psychoSocialAnswers);
   const matchedProfile = getMatchedProfile(profileScores);
 
-  const profile = {
-    answers,
+  return {
+    psychoSocialProfile: profileScores,
     dominantProfile: matchedProfile,
     subProfile: matchedProfile,
     traits: Object.entries(profileScores)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([trait]) => trait)
+      .map(([trait]) => trait),
+    passionsAndInterests: {
+      hobbies: answers[44] || [],
+      academicInterests: answers[45] || [],
+      unwantedIndustries: answers[46] || [],
+      workEnvironment: answers[47] || '',
+      motivations: answers[48] || [],
+      learningStyle: answers[49] || '',
+      careerGoal: answers[50] || ''
+    },
+    educationProject: {
+      budget: answers[51] || '',
+      duration: answers[52] || '',
+      locations: answers[53] || [],
+      mobility: answers[54] || '',
+      criteria: answers[55] || []
+    }
   };
-
-  return profile;
 }
