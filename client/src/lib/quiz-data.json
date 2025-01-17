@@ -432,7 +432,7 @@
       "format": "Single choice"
     },
     {
-      "id": 44,
+      "id": 26,
       "section": "Passion & Interests",
       "text": "What do you enjoy doing most in your spare time? (Select up to 5)",
       "options": [
@@ -456,7 +456,7 @@
       "format": "Multiple selection"
     },
     {
-      "id": 45,
+      "id": 27,
       "section": "Passion & Interests",
       "text": "Rank these academic fields by order of interest.",
       "options": [
