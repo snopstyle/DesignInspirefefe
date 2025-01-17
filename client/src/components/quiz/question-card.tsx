@@ -126,6 +126,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                         ? multipleChoiceAnswers.filter(a => a !== option)
                         : [...multipleChoiceAnswers, option];
                       setMultipleChoiceAnswers(newAnswers);
+                      onAnswer(newAnswers);
                     }}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
