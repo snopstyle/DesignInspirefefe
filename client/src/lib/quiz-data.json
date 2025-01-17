@@ -552,10 +552,16 @@
     },
     {
       "id": 51,
-      "section": "Education Project",
+      "section": "Education Project", 
       "text": "What is your budget for education (per year)?",
-      "options": ["Slider: €0–€20,000 (default: €5,000, step: €500)"],
-      "format": "Slider"
+      "options": [
+        "Less than €5,000",
+        "€5,000 - €10,000",
+        "€10,000 - €15,000",
+        "€15,000 - €20,000",
+        "More than €20,000"
+      ],
+      "format": "Single choice"
     },
     {
       "id": 52,
