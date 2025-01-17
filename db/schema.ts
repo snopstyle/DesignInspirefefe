@@ -16,11 +16,8 @@ export const quizResults = pgTable("quiz_results", {
   dominantProfile: text("dominant_profile").notNull(),
   subProfile: text("sub_profile").notNull(),
   traits: json("traits").notNull(),
-  passionsAndInterests: json("passions_and_interests"),
-  educationProject: json("education_project"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  passionsAndInterests: json("passions_and_interests"),
-  educationProject: json("education_project"),
+  passionsAndInterests: json("passions_and_interests").notNull(),
+  educationProject: json("education_project").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

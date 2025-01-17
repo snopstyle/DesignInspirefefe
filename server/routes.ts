@@ -18,12 +18,12 @@ export function registerRoutes(app: Express): Server {
       const [result] = await db.insert(quizResults)
         .values({
           userId: req.user.id,
-          psychoSocialProfile: answers,
+          answers,
           dominantProfile,
           subProfile, 
           traits,
-          passionsAndInterests: {},
-          educationProject: {}
+          passionsAndInterests: req.body.passionsAndInterests || {},
+          educationProject: req.body.educationProject || {}
         })
         .returning();
 
