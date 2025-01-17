@@ -82,11 +82,31 @@ export function shouldUseTagLayout(question: Question): boolean {
 }
 
 export function calculateProfile(answers: Record<number, string | string[]>): Profile {
-  // Initialize profile structure
-  const profile: Profile = {
-    psychoSocialProfile: {},
-    passionInterests: [],
-    educationProject: {}
+  // Convert numeric keys to string format for profile calculation
+  const stringAnswers: Record<string, string> = {};
+  Object.entries(answers).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      // For multiple selection questions, join the array into a string
+      stringAnswers[`Q${key}`] = value.join(', ');
+    } else {
+      stringAnswers[`Q${key}`] = value;
+    }
+  });
+
+  // Calculate profile scores using imported functions
+  const profileScores = calculateProfileScores(stringAnswers);
+  const matchedProfile = getMatchedProfile(profileScores);
+
+  return {
+    psychoSocialProfile: profileScores,
+    dominantProfile: matchedProfile,
+    subProfile: getMatchedProfile(profileScores),
+    traits: Object.entries(profileScores)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 5)
+      .map(([trait]) => trait)
+  };
+}ducationProject: {}
   };
 
   // Process answers for each section
