@@ -18,15 +18,18 @@ export function registerRoutes(app: Express): Server {
       const [result] = await db.insert(quizResults)
         .values({
           userId: req.user.id,
-          answers,
+          psychoSocialProfile: answers,
           dominantProfile,
-          subProfile,
-          traits
+          subProfile, 
+          traits,
+          passionsAndInterests: {},
+          educationProject: {}
         })
         .returning();
 
       res.json(result);
     } catch (error) {
+      console.error('Quiz submission error:', error);
       res.status(500).send("Failed to save quiz results");
     }
   });
