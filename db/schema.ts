@@ -10,7 +10,7 @@ export const users = pgTable("users", {
 });
 
 export const quizResults = pgTable("quiz_results", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: serial("id").primaryKey(),
   userId: uuid("user_id").references(() => users.id),
   answers: json("answers").notNull(),
   dominantProfile: text("dominant_profile").notNull(),
