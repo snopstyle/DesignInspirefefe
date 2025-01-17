@@ -104,9 +104,10 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
     traits: Object.entries(profileScores)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([trait]) => trait)
+      .map(([trait]) => trait),
+    educationProject: {}
   };
-}ducationProject: {}
+}
   };
 
   // Process answers for each section
