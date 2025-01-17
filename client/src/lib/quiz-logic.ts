@@ -100,20 +100,15 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
   const profileScores = calculateProfileScores(stringAnswers);
   const matchedProfile = getMatchedProfile(profileScores);
 
-  return {
-    psychoSocialProfile: profileScores,
+  const profile = {
+    answers,
     dominantProfile: matchedProfile,
     subProfile: matchedProfile,
     traits: Object.entries(profileScores)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([trait]) => trait),
-    educationProject: {
-      budget: stringAnswers['Q51'] || '0',
-      duration: stringAnswers['Q52'] || '',
-      locations: (answers[53] || []) as string[],
-      mobility: stringAnswers['Q54'] || '',
-      criteria: (answers[55] || []) as string[]
-    }
+      .map(([trait]) => trait)
   };
+
+  return profile;
 }
