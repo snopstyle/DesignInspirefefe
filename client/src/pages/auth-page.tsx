@@ -41,22 +41,22 @@ export default function AuthPage() {
 
   return (
     <GradientBackground>
-      <div className="container max-w-lg mx-auto min-h-screen flex items-center">
-        <Card className="w-full bg-background/80 backdrop-blur-sm">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
-            <CardDescription>
+      <div className="container relative min-h-screen flex items-center justify-center py-20">
+        <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-md border-white/20 shadow-xl">
+          <CardHeader className="space-y-2 text-center pb-8">
+            <CardTitle className="text-3xl font-bold tracking-tight">Welcome Back</CardTitle>
+            <CardDescription className="text-base text-muted-foreground">
               Sign in to your account or create a new one
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="login" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
+          <CardContent className="space-y-6">
+            <Tabs defaultValue="login" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2 h-11">
+                <TabsTrigger value="login" className="text-sm font-medium">Login</TabsTrigger>
+                <TabsTrigger value="register" className="text-sm font-medium">Register</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="login" className="space-y-4">
+              <TabsContent value="login">
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit((data) => onSubmit(data, 'login'))} className="space-y-4">
                     <FormField
@@ -64,9 +64,13 @@ export default function AuthPage() {
                       name="username"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Username</FormLabel>
+                          <FormLabel className="text-sm font-medium">Username</FormLabel>
                           <FormControl>
-                            <Input {...field} />
+                            <Input 
+                              {...field} 
+                              className="h-11 bg-white/5 border-white/10 focus:border-white/20 focus:bg-white/10"
+                              placeholder="Enter your username"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -77,9 +81,14 @@ export default function AuthPage() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel className="text-sm font-medium">Password</FormLabel>
                           <FormControl>
-                            <Input type="password" {...field} />
+                            <Input 
+                              type="password" 
+                              {...field} 
+                              className="h-11 bg-white/5 border-white/10 focus:border-white/20 focus:bg-white/10"
+                              placeholder="Enter your password"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -87,16 +96,16 @@ export default function AuthPage() {
                     />
                     <Button 
                       type="submit" 
-                      className="w-full"
+                      className="w-full h-11 font-medium"
                       disabled={isLoading}
                     >
-                      {isLoading ? "Loading..." : "Login"}
+                      {isLoading ? "Signing in..." : "Sign in"}
                     </Button>
                   </form>
                 </Form>
               </TabsContent>
 
-              <TabsContent value="register" className="space-y-4">
+              <TabsContent value="register">
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit((data) => onSubmit(data, 'register'))} className="space-y-4">
                     <FormField
@@ -104,9 +113,13 @@ export default function AuthPage() {
                       name="username"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Username</FormLabel>
+                          <FormLabel className="text-sm font-medium">Username</FormLabel>
                           <FormControl>
-                            <Input {...field} />
+                            <Input 
+                              {...field} 
+                              className="h-11 bg-white/5 border-white/10 focus:border-white/20 focus:bg-white/10"
+                              placeholder="Choose a username"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -117,9 +130,14 @@ export default function AuthPage() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel className="text-sm font-medium">Password</FormLabel>
                           <FormControl>
-                            <Input type="password" {...field} />
+                            <Input 
+                              type="password" 
+                              {...field} 
+                              className="h-11 bg-white/5 border-white/10 focus:border-white/20 focus:bg-white/10"
+                              placeholder="Create a password"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -127,21 +145,21 @@ export default function AuthPage() {
                     />
                     <Button 
                       type="submit" 
-                      className="w-full"
+                      className="w-full h-11 font-medium"
                       disabled={isLoading}
                     >
-                      {isLoading ? "Loading..." : "Register"}
+                      {isLoading ? "Creating account..." : "Create account"}
                     </Button>
                   </form>
                 </Form>
               </TabsContent>
 
-              <div className="relative">
+              <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-background/80 px-2 text-muted-foreground backdrop-blur-sm">
                     Or continue with
                   </span>
                 </div>
@@ -150,10 +168,10 @@ export default function AuthPage() {
               <Button 
                 variant="outline" 
                 type="button" 
-                className="w-full"
+                className="w-full h-11 font-medium bg-white/5 border-white/10 hover:bg-white/10"
                 onClick={handleGoogleLogin}
               >
-                <FcGoogle className="mr-2 h-4 w-4" />
+                <FcGoogle className="mr-2 h-5 w-5" />
                 Google
               </Button>
             </Tabs>
