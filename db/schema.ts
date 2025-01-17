@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid, json, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, json, varchar, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -22,14 +22,44 @@ export const selectUserSchema = createSelectSchema(users);
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type SelectUser = z.infer<typeof selectUserSchema>;
 
+// Profile traits table to store the key_traits
+export const profileTraits = pgTable("profile_traits", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(),
+  baseScore: decimal("base_score").default("0").notNull(),
+  category: varchar("category", { length: 50 }),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// Sub-profiles table to store the profile types
+export const subProfiles = pgTable("sub_profiles", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(),
+  traits: json("traits").$type<string[]>().notNull(),
+  weights: json("weights").$type<Record<string, number>>().notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// Question weights table
+export const questionWeights = pgTable("question_weights", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  questionId: varchar("question_id", { length: 10 }).notNull(),
+  weights: json("weights").$type<Record<string, number>>().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 // Quiz results table aligned with Profile interface
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").notNull().references(() => users.id),
-  answers: json("answers").$type<Record<number, string | string[]>>().notNull(),
+  answers: json("answers").$type<Record<string, string | string[]>>().notNull(),
+  traitScores: json("trait_scores").$type<Record<string, number>>().notNull(),
   dominantProfile: varchar("dominant_profile", { length: 100 }).notNull(),
   subProfile: varchar("sub_profile", { length: 100 }).notNull(),
   traits: json("traits").$type<string[]>().notNull(),
+  profileMatchScores: json("profile_match_scores").$type<Record<string, number>>().notNull(),
   passionsAndInterests: json("passions_and_interests").$type<{
     hobbies: string[];
     academicInterests: string[];
@@ -46,6 +76,10 @@ export const quizResults = pgTable("quiz_results", {
     mobility: string;
     criteria: string[];
   }>().notNull(),
+  adaptiveFlow: json("adaptive_flow").$type<{
+    path: string[];
+    branchingDecisions: Record<string, string>;
+  }>().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
@@ -61,10 +95,53 @@ export const quizResultsRelations = relations(quizResults, ({ one }) => ({
   })
 }));
 
+// Create Zod schemas for trait validation
+export const insertTraitSchema = createInsertSchema(profileTraits);
+export const selectTraitSchema = createSelectSchema(profileTraits);
+
+// Create Zod schemas for sub-profile validation
+export const insertSubProfileSchema = createInsertSchema(subProfiles);
+export const selectSubProfileSchema = createSelectSchema(subProfiles);
+
+// Create Zod schemas for question weights validation
+export const insertQuestionWeightSchema = createInsertSchema(questionWeights);
+export const selectQuestionWeightSchema = createSelectSchema(questionWeights);
+
 // Create Zod schemas for quiz results validation
-export const insertQuizResultSchema = createInsertSchema(quizResults);
+export const insertQuizResultSchema = createInsertSchema(quizResults, {
+  answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
+  traitScores: z.record(z.string(), z.number()),
+  traits: z.array(z.string()),
+  profileMatchScores: z.record(z.string(), z.number()),
+  passionsAndInterests: z.object({
+    hobbies: z.array(z.string()),
+    academicInterests: z.array(z.string()),
+    unwantedIndustries: z.array(z.string()),
+    workEnvironment: z.string(),
+    motivations: z.array(z.string()),
+    learningStyle: z.string(),
+    careerGoal: z.string()
+  }),
+  educationProject: z.object({
+    budget: z.string(),
+    duration: z.string(),
+    locations: z.array(z.string()),
+    mobility: z.string(),
+    criteria: z.array(z.string())
+  }),
+  adaptiveFlow: z.object({
+    path: z.array(z.string()),
+    branchingDecisions: z.record(z.string(), z.string())
+  })
+});
 export const selectQuizResultSchema = createSelectSchema(quizResults);
 
 // Define types for TypeScript
+export type InsertTrait = z.infer<typeof insertTraitSchema>;
+export type SelectTrait = z.infer<typeof selectTraitSchema>;
+export type InsertSubProfile = z.infer<typeof insertSubProfileSchema>;
+export type SelectSubProfile = z.infer<typeof selectSubProfileSchema>;
+export type InsertQuestionWeight = z.infer<typeof insertQuestionWeightSchema>;
+export type SelectQuestionWeight = z.infer<typeof selectQuestionWeightSchema>;
 export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
 export type SelectQuizResult = z.infer<typeof selectQuizResultSchema>;
