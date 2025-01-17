@@ -50,16 +50,36 @@ export const questionWeights = pgTable("question_weights", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Quiz results table aligned with Profile interface
+// Quiz session progress and answers
+export const quizSessions = pgTable("quiz_sessions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  currentQuestionId: varchar("current_question_id", { length: 10 }),
+  completedQuestions: json("completed_questions").$type<string[]>().notNull(),
+  answers: json("answers").$type<Record<string, string>>().notNull(),
+  adaptivePath: json("adaptive_path").$type<string[]>().notNull(),
+  status: varchar("status", { length: 20 }).notNull(), // 'in_progress', 'completed', 'abandoned'
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  lastUpdated: timestamp("last_updated").defaultNow().notNull()
+});
+
+// Quiz results table aligned with Profile interface and scoring system
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
-  answers: json("answers").$type<Record<string, string | string[]>>().notNull(),
+  sessionId: uuid("session_id").references(() => quizSessions.id),
+  answers: json("answers").$type<Record<string, string>>().notNull(),
+  adaptiveFlow: json("adaptive_flow").$type<{
+    path: string[];
+    branchingDecisions: Record<string, string>;
+  }>().notNull(),
+  // Scoring and Profile Matching
   traitScores: json("trait_scores").$type<Record<string, number>>().notNull(),
   dominantProfile: varchar("dominant_profile", { length: 100 }).notNull(),
   subProfile: varchar("sub_profile", { length: 100 }).notNull(),
   traits: json("traits").$type<string[]>().notNull(),
   profileMatchScores: json("profile_match_scores").$type<Record<string, number>>().notNull(),
+  // Additional Profile Information
   passionsAndInterests: json("passions_and_interests").$type<{
     hobbies: string[];
     academicInterests: string[];
@@ -75,10 +95,6 @@ export const quizResults = pgTable("quiz_results", {
     locations: string[];
     mobility: string;
     criteria: string[];
-  }>().notNull(),
-  adaptiveFlow: json("adaptive_flow").$type<{
-    path: string[];
-    branchingDecisions: Record<string, string>;
   }>().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
@@ -99,6 +115,7 @@ export const profileCompletion = pgTable("profile_completion", {
 
 // Define relations
 export const userRelations = relations(users, ({ many, one }) => ({
+  quizSessions: many(quizSessions),
   quizResults: many(quizResults),
   profileCompletion: one(profileCompletion, {
     fields: [users.id],
@@ -106,10 +123,25 @@ export const userRelations = relations(users, ({ many, one }) => ({
   })
 }));
 
+export const quizSessionsRelations = relations(quizSessions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [quizSessions.userId],
+    references: [users.id],
+  }),
+  results: many(quizResults, {
+    fields: [quizSessions.id],
+    references: [quizResults.sessionId],
+  })
+}));
+
 export const quizResultsRelations = relations(quizResults, ({ one }) => ({
   user: one(users, {
     fields: [quizResults.userId],
     references: [users.id],
+  }),
+  session: one(quizSessions, {
+    fields: [quizResults.sessionId],
+    references: [quizSessions.id],
   })
 }));
 
@@ -120,58 +152,29 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
   })
 }));
 
-// Create Zod schemas for trait validation
+// Create Zod schemas for validation
 export const insertTraitSchema = createInsertSchema(profileTraits);
 export const selectTraitSchema = createSelectSchema(profileTraits);
-
-// Create Zod schemas for sub-profile validation
 export const insertSubProfileSchema = createInsertSchema(subProfiles);
 export const selectSubProfileSchema = createSelectSchema(subProfiles);
-
-// Create Zod schemas for question weights validation
 export const insertQuestionWeightSchema = createInsertSchema(questionWeights);
 export const selectQuestionWeightSchema = createSelectSchema(questionWeights);
-
-// Create Zod schemas for quiz results validation
-export const insertQuizResultSchema = createInsertSchema(quizResults, {
-  answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
-  traitScores: z.record(z.string(), z.number()),
-  traits: z.array(z.string()),
-  profileMatchScores: z.record(z.string(), z.number()),
-  passionsAndInterests: z.object({
-    hobbies: z.array(z.string()),
-    academicInterests: z.array(z.string()),
-    unwantedIndustries: z.array(z.string()),
-    workEnvironment: z.string(),
-    motivations: z.array(z.string()),
-    learningStyle: z.string(),
-    careerGoal: z.string()
-  }),
-  educationProject: z.object({
-    budget: z.string(),
-    duration: z.string(),
-    locations: z.array(z.string()),
-    mobility: z.string(),
-    criteria: z.array(z.string())
-  }),
-  adaptiveFlow: z.object({
-    path: z.array(z.string()),
-    branchingDecisions: z.record(z.string(), z.string())
-  })
-});
+export const insertQuizSessionSchema = createInsertSchema(quizSessions);
+export const selectQuizSessionSchema = createSelectSchema(quizSessions);
+export const insertQuizResultSchema = createInsertSchema(quizResults);
 export const selectQuizResultSchema = createSelectSchema(quizResults);
-
-// Create Zod schema for profile completion
 export const insertProfileCompletionSchema = createInsertSchema(profileCompletion);
 export const selectProfileCompletionSchema = createSelectSchema(profileCompletion);
 
-// Define types for TypeScript
+// Export types
 export type InsertTrait = z.infer<typeof insertTraitSchema>;
 export type SelectTrait = z.infer<typeof selectTraitSchema>;
 export type InsertSubProfile = z.infer<typeof insertSubProfileSchema>;
 export type SelectSubProfile = z.infer<typeof selectSubProfileSchema>;
 export type InsertQuestionWeight = z.infer<typeof insertQuestionWeightSchema>;
 export type SelectQuestionWeight = z.infer<typeof selectQuestionWeightSchema>;
+export type InsertQuizSession = z.infer<typeof insertQuizSessionSchema>;
+export type SelectQuizSession = z.infer<typeof selectQuizSessionSchema>;
 export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
 export type SelectQuizResult = z.infer<typeof selectQuizResultSchema>;
 export type InsertProfileCompletion = z.infer<typeof insertProfileCompletionSchema>;
