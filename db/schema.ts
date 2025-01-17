@@ -7,20 +7,10 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 64 }).notNull().unique(),
-  password: text("password").notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(), // Added email field
+  password: text("password").notNull(), // Ensure this is hashed
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
-
-// Create Zod schemas for user validation
-export const insertUserSchema = createInsertSchema(users, {
-  username: z.string().min(3).max(64),
-  password: z.string().min(6)
-});
-export const selectUserSchema = createSelectSchema(users);
-
-// Define types for TypeScript
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type SelectUser = z.infer<typeof selectUserSchema>;
 
 // Profile traits table to store the key_traits
 export const profileTraits = pgTable("profile_traits", {
@@ -58,7 +48,7 @@ export const quizSessions = pgTable("quiz_sessions", {
   completedQuestions: json("completed_questions").$type<string[]>().notNull(),
   answers: json("answers").$type<Record<string, string>>().notNull(),
   adaptivePath: json("adaptive_path").$type<string[]>().notNull(),
-  status: varchar("status", { length: 20 }).notNull(), // 'in_progress', 'completed', 'abandoned'
+  status: text("status", { enum: ["in_progress", "completed", "abandoned"] }).notNull(), // Enum for status
   startedAt: timestamp("started_at").defaultNow().notNull(),
   lastUpdated: timestamp("last_updated").defaultNow().notNull()
 });
@@ -73,13 +63,11 @@ export const quizResults = pgTable("quiz_results", {
     path: string[];
     branchingDecisions: Record<string, string>;
   }>().notNull(),
-  // Scoring and Profile Matching
   traitScores: json("trait_scores").$type<Record<string, number>>().notNull(),
   dominantProfile: varchar("dominant_profile", { length: 100 }).notNull(),
   subProfile: varchar("sub_profile", { length: 100 }).notNull(),
   traits: json("traits").$type<string[]>().notNull(),
   profileMatchScores: json("profile_match_scores").$type<Record<string, number>>().notNull(),
-  // Additional Profile Information
   passionsAndInterests: json("passions_and_interests").$type<{
     hobbies: string[];
     academicInterests: string[];
@@ -108,12 +96,11 @@ export const profileCompletion = pgTable("profile_completion", {
   personalityQuizCompleted: boolean("personality_quiz_completed").default(false).notNull(),
   interestsCompleted: boolean("interests_completed").default(false).notNull(),
   educationPrefsCompleted: boolean("education_prefs_completed").default(false).notNull(),
-  overallProgress: decimal("overall_progress").default("0").notNull(),
   lastUpdated: timestamp("last_updated").defaultNow().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Define relations
+// Define relations (unchanged)
 export const userRelations = relations(users, ({ many, one }) => ({
   quizSessions: many(quizSessions),
   quizResults: many(quizResults),
@@ -151,31 +138,3 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
     references: [users.id],
   })
 }));
-
-// Create Zod schemas for validation
-export const insertTraitSchema = createInsertSchema(profileTraits);
-export const selectTraitSchema = createSelectSchema(profileTraits);
-export const insertSubProfileSchema = createInsertSchema(subProfiles);
-export const selectSubProfileSchema = createSelectSchema(subProfiles);
-export const insertQuestionWeightSchema = createInsertSchema(questionWeights);
-export const selectQuestionWeightSchema = createSelectSchema(questionWeights);
-export const insertQuizSessionSchema = createInsertSchema(quizSessions);
-export const selectQuizSessionSchema = createSelectSchema(quizSessions);
-export const insertQuizResultSchema = createInsertSchema(quizResults);
-export const selectQuizResultSchema = createSelectSchema(quizResults);
-export const insertProfileCompletionSchema = createInsertSchema(profileCompletion);
-export const selectProfileCompletionSchema = createSelectSchema(profileCompletion);
-
-// Export types
-export type InsertTrait = z.infer<typeof insertTraitSchema>;
-export type SelectTrait = z.infer<typeof selectTraitSchema>;
-export type InsertSubProfile = z.infer<typeof insertSubProfileSchema>;
-export type SelectSubProfile = z.infer<typeof selectSubProfileSchema>;
-export type InsertQuestionWeight = z.infer<typeof insertQuestionWeightSchema>;
-export type SelectQuestionWeight = z.infer<typeof selectQuestionWeightSchema>;
-export type InsertQuizSession = z.infer<typeof insertQuizSessionSchema>;
-export type SelectQuizSession = z.infer<typeof selectQuizSessionSchema>;
-export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
-export type SelectQuizResult = z.infer<typeof selectQuizResultSchema>;
-export type InsertProfileCompletion = z.infer<typeof insertProfileCompletionSchema>;
-export type SelectProfileCompletion = z.infer<typeof selectProfileCompletionSchema>;

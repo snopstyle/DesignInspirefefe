@@ -31,7 +31,34 @@ export function parseSliderOptions(optionText: string) {
     return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
   }
 }
+import { useMutation } from '@tanstack/react-query';
 
+export const useSaveQuizResults = () => {
+  return useMutation({
+    mutationFn: async (results: any) => {
+      const response = await fetch('/api/save-results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(results),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save quiz results: ${response.statusText}`);
+      }
+
+      return response.json();
+    },
+    onError: (error) => {
+      console.error('Error saving quiz results:', error);
+    },
+    onSuccess: (data) => {
+      console.log('Quiz results saved successfully:', data);
+    },
+  });
+};
 export interface QuizState {
   currentSection: string;
   currentQuestion: number;
