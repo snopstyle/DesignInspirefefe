@@ -11,6 +11,7 @@ export default function AuthPage() {
   const form = useForm({
     defaultValues: {
       username: "",
+      email: "",
       password: "",
     },
   });
@@ -41,6 +42,19 @@ export default function AuthPage() {
                       <FormLabel>Username</FormLabel>
                       <FormControl>
                         <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
