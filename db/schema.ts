@@ -7,10 +7,19 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 64 }).notNull().unique(),
-  email: varchar("email", { length: 255 }).notNull().unique(), // Added email field
-  password: text("password").notNull(), // Ensure this is hashed
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  password: text("password").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
+
+export const insertUserSchema = z.object({
+  username: z.string().min(3).max(64),
+  email: z.string().email().max(255),
+  password: z.string().min(6),
+});
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
 // Profile traits table to store the key_traits
 export const profileTraits = pgTable("profile_traits", {
@@ -100,7 +109,7 @@ export const profileCompletion = pgTable("profile_completion", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Define relations (unchanged)
+// Define relations
 export const userRelations = relations(users, ({ many, one }) => ({
   quizSessions: many(quizSessions),
   quizResults: many(quizResults),
