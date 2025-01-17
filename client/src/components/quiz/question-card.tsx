@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowRight } from "lucide-react";
@@ -23,7 +22,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
     Array.isArray(currentAnswer) ? currentAnswer : []
   );
-  const [sliderValue, setSliderValue] = useState<string>(currentAnswer as string || '');
 
   useEffect(() => {
     console.log('Question Data:', {
@@ -179,33 +177,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             className="w-full max-w-md mx-auto rounded-2xl p-6"
           />
         );
-
-      case "Slider":
-        const { min, max, defaultValue, step } = parseSliderOptions(question.options[0]);
-        return (
-          <div className="space-y-6 w-full max-w-md mx-auto px-6">
-            <div className="text-center text-white/90 text-lg mb-6">
-              €{sliderValue || defaultValue}
-            </div>
-            <Slider
-              min={min}
-              max={max}
-              step={step}
-              value={[parseInt(sliderValue) || defaultValue]}
-              onValueChange={(value) => {
-                const newValue = value[0].toString();
-                setSliderValue(newValue);
-                onAnswer(newValue);
-              }}
-              className="w-full"
-            />
-            <div className="flex justify-between text-sm text-white/70">
-              <span>€{min}</span>
-              <span>€{max}</span>
-            </div>
-          </div>
-        );
-
       default:
         return null;
     }
