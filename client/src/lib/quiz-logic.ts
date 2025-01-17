@@ -1,5 +1,6 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
+import { calculateProfileScores, getMatchedProfile } from './profile-logic';
 
 export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking" | "Slider";
 
@@ -39,7 +40,9 @@ export interface QuizState {
 
 export interface Profile {
   psychoSocialProfile: Record<string, number>;
-  passionInterests: string[];
+  dominantProfile: string;
+  subProfile: string;
+  traits: string[];
   educationProject: Record<string, string>;
 }
 
@@ -100,80 +103,11 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
   return {
     psychoSocialProfile: profileScores,
     dominantProfile: matchedProfile,
-    subProfile: getMatchedProfile(profileScores),
+    subProfile: matchedProfile,
     traits: Object.entries(profileScores)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
       .map(([trait]) => trait),
     educationProject: {}
   };
-}
-  };
-
-  // Process answers for each section
-  Object.entries(answers).forEach(([questionId, answer]) => {
-    const question = QUESTIONS.find(q => q.id === parseInt(questionId));
-    if (!question) return;
-
-    switch (question.section) {
-      case QUIZ_SECTIONS.PSYCHO_SOCIAL:
-        // Map answers to psycho-social traits
-        if (typeof answer === 'string') {
-          const traits = mapAnswerToTraits(answer, question);
-          traits.forEach(trait => {
-            profile.psychoSocialProfile[trait] = (profile.psychoSocialProfile[trait] || 0) + 1;
-          });
-        }
-        break;
-
-      case QUIZ_SECTIONS.PASSION:
-        // Add passion and interests
-        if (Array.isArray(answer)) {
-          profile.passionInterests.push(...answer);
-        } else {
-          profile.passionInterests.push(answer);
-        }
-        break;
-
-      case QUIZ_SECTIONS.EDUCATION:
-        // Map education project preferences
-        if (typeof answer === 'string') {
-          profile.educationProject[question.text] = answer;
-        }
-        break;
-    }
-  });
-
-  return profile;
-}
-
-// Helper function to map answers to traits based on the question and answer
-function mapAnswerToTraits(answer: string, question: Question): string[] {
-  // This mapping should be based on the Excel file's trait categorization
-  // For now, we'll use a simple mapping based on the answer text
-  const traits: string[] = [];
-
-  // Add traits based on the question context and answer
-  if (answer.toLowerCase().includes('analytical') || answer.toLowerCase().includes('systematic')) {
-    traits.push('Analytical');
-  }
-  if (answer.toLowerCase().includes('creative') || answer.toLowerCase().includes('innovative')) {
-    traits.push('Creative');
-  }
-  if (answer.toLowerCase().includes('team') || answer.toLowerCase().includes('collaborate')) {
-    traits.push('Collaborative');
-  }
-  if (answer.toLowerCase().includes('practical') || answer.toLowerCase().includes('hands-on')) {
-    traits.push('Practical');
-  }
-  if (answer.toLowerCase().includes('lead') || answer.toLowerCase().includes('guide')) {
-    traits.push('Leadership');
-  }
-
-  // If no specific traits were mapped, use the answer itself as a trait
-  if (traits.length === 0) {
-    traits.push(answer);
-  }
-
-  return traits;
 }

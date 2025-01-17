@@ -38,16 +38,11 @@ export const key_traits: Record<string, number> = {
     "Passion for sustainability": 0,
     "Advocacy": 0,
     "Global perspective": 0,
-    "Problem-solving": 0,
     "Physical fitness": 0,
     "Love for nature": 0,
     "Resilience": 0,
     "Hands-on problem-solving": 0,
     "Technical skills": 0,
-    "Innovation": 0,
-    "Practicality": 0,
-    "Creativity": 0,
-    "Self-expression": 0,
     "Imagination": 0,
     "Aesthetic sensitivity": 0,
     "Conflict resolution": 0,
@@ -55,30 +50,16 @@ export const key_traits: Record<string, number> = {
     "Communication skills": 0,
     "Organization": 0,
     "Efficiency": 0,
-    "Strategic thinking": 0,
     "Long-term planning": 0,
-    "Communication skills": 0,
     "Confidence": 0,
     "Charisma": 0,
     "Emotional expression": 0,
-    "Technical expertise": 0,
-    "Innovation": 0,
+    "Technical expertise": 0, 
     "Forward-thinking mindset": 0,
-    "Adaptability": 0,
-    "Resilience": 0,
-    "Efficiency": 0,
-    "Problem-solving": 0,
+    "Adaptability": 0, 
     "Long-term thinking": 0,
-    "Strategic planning": 0,
     "Ambition": 0,
-    "Decision-making": 0,
     "Multitasking": 0,
-    "Adaptability": 0,
-    "Organization": 0,
-    "Efficiency": 0,
-    "Advocacy": 0,
-    "Compassion": 0,
-    "Global perspective": 0,
     "Desire to help others": 0
 };
 
@@ -679,14 +660,6 @@ export function getNextQuestion(currentQuestion: string, userAnswer: string): st
     }
 }
 
-// Export for testing and debugging
-export const __testing = {
-    answerValue,
-    calculateProfileScores,
-    getMatchedProfile,
-    getNextQuestion
-};
-
 export const adaptiveTree: Record<string, Record<string, string>> = {
     // Step 1: Initial Questions (Q1–Q7)
     "Q1": {  // Do you prefer working in a team or independently?
@@ -866,4 +839,11 @@ export const adaptiveTree: Record<string, Record<string, string>> = {
         "Not important": "End",
         "Not at all important": "End"
     }
+};
+// Export for testing and debugging
+export const __testing = {
+    answerValue,
+    calculateProfileScores,
+    getMatchedProfile,
+    getNextQuestion
 };
