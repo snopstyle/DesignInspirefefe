@@ -270,8 +270,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
                 onClick={() => onAnswer(currentAnswer!)}
               >
-                Next Question
-                <ArrowRight className="ml-2 h-4 w-4" />
+                {question.id === 55 ? (
+                  <>
+                    Finish Quiz
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    Next Question
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </motion.div>
           )}
