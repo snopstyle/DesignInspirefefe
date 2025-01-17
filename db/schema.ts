@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid, json } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -33,5 +34,6 @@ export const quizResultsRelations = relations(quizResults, ({ one }) => ({
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
+export const insertUserSchema = createInsertSchema(users);
 export type QuizResult = typeof quizResults.$inferSelect;
 export type InsertQuizResult = typeof quizResults.$inferInsert;
