@@ -1,11 +1,11 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid, json, varchar, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, json, varchar, decimal, boolean, serial, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// User table schema with uuid
+// User table schema with serial id
 export const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: serial("id").primaryKey(),
   username: varchar("username", { length: 64 }).notNull().unique(),
   password: text("password").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
@@ -53,7 +53,7 @@ export const questionWeights = pgTable("question_weights", {
 // Quiz results table aligned with Profile interface
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").notNull().references(() => users.id),
+  userId: integer("user_id").notNull().references(() => users.id),
   answers: json("answers").$type<Record<string, string | string[]>>().notNull(),
   traitScores: json("trait_scores").$type<Record<string, number>>().notNull(),
   dominantProfile: varchar("dominant_profile", { length: 100 }).notNull(),
@@ -83,14 +83,39 @@ export const quizResults = pgTable("quiz_results", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Profile completion tracking table
+export const profileCompletion = pgTable("profile_completion", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  basicInfoCompleted: boolean("basic_info_completed").default(false).notNull(),
+  traitsAssessmentCompleted: boolean("traits_assessment_completed").default(false).notNull(),
+  personalityQuizCompleted: boolean("personality_quiz_completed").default(false).notNull(),
+  interestsCompleted: boolean("interests_completed").default(false).notNull(),
+  educationPrefsCompleted: boolean("education_prefs_completed").default(false).notNull(),
+  overallProgress: decimal("overall_progress").default("0").notNull(),
+  lastUpdated: timestamp("last_updated").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 // Define relations
-export const userRelations = relations(users, ({ many }) => ({
-  quizResults: many(quizResults)
+export const userRelations = relations(users, ({ many, one }) => ({
+  quizResults: many(quizResults),
+  profileCompletion: one(profileCompletion, {
+    fields: [users.id],
+    references: [profileCompletion.userId],
+  })
 }));
 
 export const quizResultsRelations = relations(quizResults, ({ one }) => ({
   user: one(users, {
     fields: [quizResults.userId],
+    references: [users.id],
+  })
+}));
+
+export const profileCompletionRelations = relations(profileCompletion, ({ one }) => ({
+  user: one(users, {
+    fields: [profileCompletion.userId],
     references: [users.id],
   })
 }));
@@ -136,6 +161,10 @@ export const insertQuizResultSchema = createInsertSchema(quizResults, {
 });
 export const selectQuizResultSchema = createSelectSchema(quizResults);
 
+// Create Zod schema for profile completion
+export const insertProfileCompletionSchema = createInsertSchema(profileCompletion);
+export const selectProfileCompletionSchema = createSelectSchema(profileCompletion);
+
 // Define types for TypeScript
 export type InsertTrait = z.infer<typeof insertTraitSchema>;
 export type SelectTrait = z.infer<typeof selectTraitSchema>;
@@ -145,3 +174,5 @@ export type InsertQuestionWeight = z.infer<typeof insertQuestionWeightSchema>;
 export type SelectQuestionWeight = z.infer<typeof selectQuestionWeightSchema>;
 export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
 export type SelectQuizResult = z.infer<typeof selectQuizResultSchema>;
+export type InsertProfileCompletion = z.infer<typeof insertProfileCompletionSchema>;
+export type SelectProfileCompletion = z.infer<typeof selectProfileCompletionSchema>;
