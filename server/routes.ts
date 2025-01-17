@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { db } from "@db";
-import { quizResults, profileCompletion } from "@db/schema";
+import { quizResults, quizSessions, profileCompletion } from "@db/schema";
 import { eq } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
@@ -14,14 +14,27 @@ export function registerRoutes(app: Express): Server {
     }
 
     try {
-      const { answers, dominantProfile, subProfile, traits } = req.body;
+      // First create or update quiz session
+      const [session] = await db.insert(quizSessions)
+        .values({
+          userId: req.user!.id,
+          currentQuestionId: req.body.currentQuestionId,
+          completedQuestions: req.body.completedQuestions || [],
+          answers: req.body.answers || {},
+          adaptivePath: req.body.adaptivePath || [],
+          status: 'completed'
+        })
+        .returning();
+
+      // Then save quiz results
       const [result] = await db.insert(quizResults)
         .values({
           userId: req.user!.id,
-          answers,
-          dominantProfile,
-          subProfile, 
-          traits,
+          sessionId: session.id,
+          answers: req.body.answers,
+          dominantProfile: req.body.dominantProfile,
+          subProfile: req.body.subProfile,
+          traits: req.body.traits,
           traitScores: req.body.traitScores || {},
           profileMatchScores: req.body.profileMatchScores || {},
           passionsAndInterests: req.body.passionsAndInterests || {},
@@ -72,6 +85,7 @@ export function registerRoutes(app: Express): Server {
 
       res.json(results);
     } catch (error) {
+      console.error('Error fetching quiz results:', error);
       res.status(500).send("Failed to fetch quiz results");
     }
   });
@@ -89,7 +103,20 @@ export function registerRoutes(app: Express): Server {
         .limit(1);
 
       if (!status) {
-        return res.status(404).send("Profile completion status not found");
+        // Create initial profile completion status if it doesn't exist
+        const [newStatus] = await db.insert(profileCompletion)
+          .values({
+            userId: req.user!.id,
+            basicInfoCompleted: false,
+            traitsAssessmentCompleted: false,
+            personalityQuizCompleted: false,
+            interestsCompleted: false,
+            educationPrefsCompleted: false,
+            overallProgress: 0
+          })
+          .returning();
+
+        return res.json(newStatus);
       }
 
       res.json(status);
