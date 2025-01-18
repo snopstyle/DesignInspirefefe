@@ -27,8 +27,8 @@ export function useQuiz() {
           queryClient.invalidateQueries({ queryKey: ['/api/quiz/session/current'] });
         } catch (error) {
           toast({
-            title: "Error",
-            description: "Failed to start quiz session. Please try again.",
+            title: "Erreur",
+            description: "Impossible de démarrer la session de quiz. Veuillez réessayer.",
             variant: "destructive",
           });
         }
@@ -40,10 +40,10 @@ export function useQuiz() {
 
   const handleAnswer = useCallback(async (answer: string | string[]) => {
     if (!session?.id) {
-      console.log('No session found, current session:', session);
+      console.log('Aucune session trouvée, session actuelle:', session);
       toast({
-        title: "Error",
-        description: "No active quiz session. Please refresh the page.",
+        title: "Erreur",
+        description: "Aucune session de quiz active. Veuillez rafraîchir la page.",
         variant: "destructive",
       });
       return;
@@ -73,10 +73,10 @@ export function useQuiz() {
         setLocation("/results");
       }
     } catch (error) {
-      console.error('Error handling answer:', error);
+      console.error('Erreur lors du traitement de la réponse:', error);
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to process answer",
+        title: "Erreur",
+        description: error instanceof Error ? error.message : "Échec du traitement de la réponse",
         variant: "destructive",
       });
     }
