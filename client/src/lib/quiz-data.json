@@ -2,64 +2,64 @@
   "questions": [
     {
       "id": 1,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer working in a team or independently?",
+      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
+      "text": "Préférez-vous travailler en équipe ou de manière indépendante ?",
       "options": [
-        "Strongly prefer teamwork",
-        "Prefer teamwork",
-        "Neutral",
-        "Prefer independence",
-        "Strongly prefer independence"
+        "Forte préférence pour le travail d'équipe",
+        "Préférence pour le travail d'équipe",
+        "Neutre",
+        "Préférence pour l'indépendance",
+        "Forte préférence pour l'indépendance"
       ],
       "format": "Single choice"
     },
     {
       "id": 2,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How do you approach solving complex problems?",
+      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
+      "text": "Comment abordez-vous la résolution de problèmes complexes ?",
       "options": [
-        "Logical reasoning",
-        "Creative solutions",
-        "A mix of both",
-        "Avoid problems"
+        "Raisonnement logique",
+        "Solutions créatives",
+        "Un mélange des deux",
+        "J'évite les problèmes"
       ],
       "format": "Single choice"
     },
     {
       "id": 3,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Are you more interested in abstract ideas or practical applications?",
+      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
+      "text": "Êtes-vous plus intéressé par les idées abstraites ou les applications pratiques ?",
       "options": [
-        "Abstract ideas",
-        "Practical applications",
-        "Both equally",
-        "Neither"
+        "Idées abstraites",
+        "Applications pratiques",
+        "Les deux également",
+        "Ni l'un ni l'autre"
       ],
       "format": "Single choice"
     },
     {
       "id": 4,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is emotional expression in your daily life?",
+      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
+      "text": "Quelle importance accordez-vous à l'expression émotionnelle dans votre vie quotidienne ?",
       "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
+        "Très importante",
+        "Importante",
+        "Neutre",
+        "Peu importante",
+        "Pas du tout importante"
       ],
       "format": "Single choice"
     },
     {
       "id": 5,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you enjoy taking risks or prefer a more cautious approach?",
+      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
+      "text": "Aimez-vous prendre des risques ou préférez-vous une approche plus prudente ?",
       "options": [
-        "Strongly prefer risks",
-        "Prefer risks",
-        "Neutral",
-        "Prefer caution",
-        "Strongly prefer caution"
+        "Forte préférence pour les risques",
+        "Préférence pour les risques",
+        "Neutre",
+        "Préférence pour la prudence",
+        "Forte préférence pour la prudence"
       ],
       "format": "Single choice"
     },
@@ -378,7 +378,7 @@
     },
     {
       "id": 33,
-      "section": "Education Project", 
+      "section": "Education Project",
       "text": "What is your budget for education (per year)?",
       "options": [
         "Less than €5,000",

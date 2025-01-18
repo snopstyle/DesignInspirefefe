@@ -21,19 +21,19 @@ export default function Results() {
       <div className="container mx-auto py-12">
         <Card className="max-w-2xl mx-auto bg-background/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-3xl">Your Profile Results</CardTitle>
+            <CardTitle className="text-3xl">Résultats de Votre Profil</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Dominant Profile</h2>
+              <h2 className="text-2xl font-semibold mb-2">Profil Dominant</h2>
               <p className="text-xl">{latestResult.dominantProfile}</p>
             </div>
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Sub Profile</h2>
+              <h2 className="text-2xl font-semibold mb-2">Sous-Profil</h2>
               <p className="text-xl">{latestResult.subProfile}</p>
             </div>
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Key Traits</h2>
+              <h2 className="text-2xl font-semibold mb-2">Traits Principaux</h2>
               <ul className="list-disc list-inside space-y-2">
                 {latestResult.traits.map((trait: string, index: number) => (
                   <li key={index} className="text-lg">{trait}</li>
@@ -44,7 +44,7 @@ export default function Results() {
               onClick={() => setLocation("/")}
               className="w-full mt-6"
             >
-              Take Quiz Again
+              Refaire le Quiz
             </Button>
           </CardContent>
         </Card>

@@ -13,7 +13,7 @@ export default function Quiz() {
       <GradientBackground>
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center gap-4">
           <Loader2 className="w-8 h-8 animate-spin text-white" />
-          <p className="text-white">Loading quiz session...</p>
+          <p className="text-white">Chargement de la session...</p>
         </div>
       </GradientBackground>
     );
