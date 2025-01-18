@@ -43,51 +43,50 @@ export const questionWeights = pgTable("question_weights", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Quiz session table for tracking ongoing quizzes
 export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
+  status: varchar("status", { length: 20 }).notNull().default('in_progress'),
   currentQuestionId: varchar("current_question_id", { length: 10 }),
-  completedQuestions: jsonb("completed_questions").$type<string[]>().notNull(),
-  answers: jsonb("answers").$type<Record<string, string>>().notNull(),
-  adaptivePath: jsonb("adaptive_path").$type<string[]>().notNull(),
-  status: varchar("status", { length: 20 }).notNull(),
+  completedQuestions: jsonb("completed_questions").$type<string[]>().default([]).notNull(),
+  answers: jsonb("answers").$type<Record<string, string>>().default({}).notNull(),
+  adaptivePath: jsonb("adaptive_path").$type<{
+    currentPath: string[];
+    branchingPoints: Record<string, {
+      question: string;
+      answer: string;
+      nextQuestion: string;
+    }>
+  }>().default({ currentPath: [], branchingPoints: {} }).notNull(),
   startedAt: timestamp("started_at").defaultNow().notNull(),
-  lastUpdated: timestamp("last_updated").defaultNow().notNull()
+  lastUpdated: timestamp("last_updated").defaultNow().notNull(),
+  completedAt: timestamp("completed_at")
 });
 
+// Quiz results table for storing completed quiz results
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
-  sessionId: uuid("session_id").references(() => quizSessions.id),
+  sessionId: uuid("session_id").notNull().references(() => quizSessions.id),
   answers: jsonb("answers").$type<Record<string, string>>().notNull(),
   adaptiveFlow: jsonb("adaptive_flow").$type<{
     path: string[];
-    branchingDecisions: Record<string, string>;
+    branchingDecisions: Record<string, {
+      question: string;
+      answer: string;
+      nextQuestion: string;
+    }>
   }>().notNull(),
   traitScores: jsonb("trait_scores").$type<Record<string, number>>().notNull(),
   dominantProfile: varchar("dominant_profile", { length: 100 }).notNull(),
   subProfile: varchar("sub_profile", { length: 100 }).notNull(),
   traits: jsonb("traits").$type<string[]>().notNull(),
   profileMatchScores: jsonb("profile_match_scores").$type<Record<string, number>>().notNull(),
-  passionsAndInterests: jsonb("passions_and_interests").$type<{
-    hobbies: string[];
-    academicInterests: string[];
-    unwantedIndustries: string[];
-    workEnvironment: string;
-    motivations: string[];
-    learningStyle: string;
-    careerGoal: string;
-  }>().notNull(),
-  educationProject: jsonb("education_project").$type<{
-    budget: string;
-    duration: string;
-    locations: string[];
-    mobility: string;
-    criteria: string[];
-  }>().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Profile completion tracking
 export const profileCompletion = pgTable("profile_completion", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id).unique(),

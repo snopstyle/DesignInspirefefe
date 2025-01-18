@@ -4,65 +4,158 @@ import { setupAuth } from "./auth";
 import { db } from "@db";
 import { quizResults, quizSessions, profileCompletion } from "@db/schema";
 import { eq, desc } from "drizzle-orm";
+import { calculateProfileScores, getMatchedProfile } from "../attached_assets/logic";
 
 export function registerRoutes(app: Express): Server {
   setupAuth(app);
 
-  app.post("/api/quiz/submit", async (req, res) => {
+  // Start or resume a quiz session
+  app.post("/api/quiz/session", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).send("Not authenticated");
     }
 
     try {
-      // First create or update quiz session
-      const [session] = await db.insert(quizSessions)
-        .values({
-          userId: req.user!.id,
-          currentQuestionId: req.body.currentQuestionId,
-          completedQuestions: req.body.completedQuestions || [],
-          answers: req.body.answers || {},
-          adaptivePath: req.body.adaptivePath || [],
-          status: 'completed'
-        })
-        .returning();
+      // Check for existing incomplete session
+      const [existingSession] = await db.select()
+        .from(quizSessions)
+        .where(eq(quizSessions.userId, req.user!.id))
+        .where(eq(quizSessions.status, 'in_progress'))
+        .limit(1);
 
-      // Then save quiz results
-      const [result] = await db.insert(quizResults)
+      if (existingSession) {
+        return res.json(existingSession);
+      }
+
+      // Create new session
+      const [newSession] = await db.insert(quizSessions)
         .values({
           userId: req.user!.id,
-          sessionId: session.id,
-          answers: req.body.answers,
-          adaptiveFlow: {
-            path: req.body.adaptivePath || [],
-            branchingDecisions: req.body.branchingDecisions || {}
-          },
-          traitScores: req.body.traitScores || {},
-          dominantProfile: req.body.dominantProfile,
-          subProfile: req.body.subProfile,
-          traits: req.body.traits || [],
-          profileMatchScores: req.body.profileMatchScores || {},
-          passionsAndInterests: req.body.passionsAndInterests || {
-            hobbies: [],
-            academicInterests: [],
-            unwantedIndustries: [],
-            workEnvironment: '',
-            motivations: [],
-            learningStyle: '',
-            careerGoal: ''
-          },
-          educationProject: req.body.educationProject || {
-            budget: '',
-            duration: '',
-            locations: [],
-            mobility: '',
-            criteria: []
+          status: 'in_progress',
+          currentQuestionId: 'Q1', // Start with first question
+          completedQuestions: [],
+          answers: {},
+          adaptivePath: {
+            currentPath: ['Q1'],
+            branchingPoints: {}
           }
         })
         .returning();
 
+      res.json(newSession);
+    } catch (error) {
+      console.error('Error managing quiz session:', error);
+      res.status(500).send("Failed to manage quiz session");
+    }
+  });
+
+  // Update quiz session with new answer
+  app.patch("/api/quiz/session/:sessionId", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Not authenticated");
+    }
+
+    const { sessionId } = req.params;
+    const { questionId, answer, nextQuestionId } = req.body;
+
+    try {
+      const [session] = await db.select()
+        .from(quizSessions)
+        .where(eq(quizSessions.id, sessionId))
+        .where(eq(quizSessions.userId, req.user!.id))
+        .limit(1);
+
+      if (!session) {
+        return res.status(404).send("Session not found");
+      }
+
+      if (session.status !== 'in_progress') {
+        return res.status(400).send("Session is already completed");
+      }
+
+      // Update session with new answer and adaptive path
+      const updatedAnswers = { ...session.answers, [questionId]: answer };
+      const updatedPath = session.adaptivePath;
+      updatedPath.currentPath.push(nextQuestionId);
+      updatedPath.branchingPoints[questionId] = {
+        question: questionId,
+        answer,
+        nextQuestion: nextQuestionId
+      };
+
+      const [updatedSession] = await db.update(quizSessions)
+        .set({
+          answers: updatedAnswers,
+          completedQuestions: [...session.completedQuestions, questionId],
+          currentQuestionId: nextQuestionId,
+          adaptivePath: updatedPath,
+          lastUpdated: new Date()
+        })
+        .where(eq(quizSessions.id, sessionId))
+        .returning();
+
+      res.json(updatedSession);
+    } catch (error) {
+      console.error('Error updating quiz session:', error);
+      res.status(500).send("Failed to update quiz session");
+    }
+  });
+
+  // Complete quiz and save results
+  app.post("/api/quiz/submit", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Not authenticated");
+    }
+
+    const { sessionId } = req.body;
+
+    try {
+      // Get session data
+      const [session] = await db.select()
+        .from(quizSessions)
+        .where(eq(quizSessions.id, sessionId))
+        .where(eq(quizSessions.userId, req.user!.id))
+        .limit(1);
+
+      if (!session) {
+        return res.status(404).send("Session not found");
+      }
+
+      // Calculate results
+      const profileScores = calculateProfileScores(session.answers);
+      const dominantProfile = getMatchedProfile(profileScores);
+
+      // Save quiz results
+      const [result] = await db.insert(quizResults)
+        .values({
+          userId: req.user!.id,
+          sessionId: session.id,
+          answers: session.answers,
+          adaptiveFlow: {
+            path: session.adaptivePath.currentPath,
+            branchingDecisions: session.adaptivePath.branchingPoints
+          },
+          traitScores: profileScores,
+          dominantProfile,
+          subProfile: dominantProfile, // Can be refined based on sub-profile logic
+          traits: Object.entries(profileScores)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 5)
+            .map(([trait]) => trait),
+          profileMatchScores: profileScores
+        })
+        .returning();
+
+      // Update session status
+      await db.update(quizSessions)
+        .set({
+          status: 'completed',
+          completedAt: new Date()
+        })
+        .where(eq(quizSessions.id, sessionId));
+
       // Update profile completion status
-      await db
-        .update(profileCompletion)
+      await db.update(profileCompletion)
         .set({
           personalityQuizCompleted: true,
           lastUpdated: new Date(),
@@ -89,6 +182,7 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Get quiz results history
   app.get("/api/quiz/results", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).send("Not authenticated");
@@ -192,6 +286,27 @@ export function registerRoutes(app: Express): Server {
     } catch (error) {
       console.error('Error updating profile completion:', error);
       res.status(500).send("Failed to update profile completion status");
+    }
+  });
+
+  // Get current quiz session
+  app.get("/api/quiz/session/current", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Not authenticated");
+    }
+
+    try {
+      const [session] = await db.select()
+        .from(quizSessions)
+        .where(eq(quizSessions.userId, req.user!.id))
+        .where(eq(quizSessions.status, 'in_progress'))
+        .orderBy(desc(quizSessions.startedAt))
+        .limit(1);
+
+      res.json(session || null);
+    } catch (error) {
+      console.error('Error fetching current session:', error);
+      res.status(500).send("Failed to fetch current session");
     }
   });
 

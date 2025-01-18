@@ -10,7 +10,6 @@ import type { Question, QuestionFormat } from "@/lib/quiz-logic";
 import { useState, useEffect } from "react";
 import { TagOptions } from "./tag-options";
 import { RankingOptions } from "./ranking-options";
-import { parseSliderOptions } from "@/lib/quiz-logic";
 
 interface QuestionCardProps {
   question: Question;
