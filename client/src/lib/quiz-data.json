@@ -259,180 +259,6 @@
     },
     {
       "id": 26,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is intellectual curiosity to you?",
-      "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 27,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer solving theoretical problems or practical challenges?",
-      "options": [
-        "Theoretical problems",
-        "Practical challenges",
-        "Both equally"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 28,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How much do you enjoy deep, abstract thinking?",
-      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
-      "format": "Single choice"
-    },
-    {
-      "id": 29,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is creativity in your daily life?",
-      "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 30,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer focusing on one passion or exploring many interests?",
-      "options": [
-        "Focusing on one passion",
-        "Exploring many interests",
-        "Both equally"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 31,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How much do you value aesthetic sensitivity and imagination?",
-      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
-      "format": "Single choice"
-    },
-    {
-      "id": 32,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is it for you to help others?",
-      "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 33,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer one-on-one interactions or public speaking?",
-      "options": ["One-on-one interactions", "Public speaking", "Both equally"],
-      "format": "Single choice"
-    },
-    {
-      "id": 34,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How much do you value emotional expression in communication?",
-      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
-      "format": "Single choice"
-    },
-    {
-      "id": 35,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is achieving results to you?",
-      "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 36,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer leading teams or working independently to achieve goals?",
-      "options": ["Leading teams", "Working independently", "Both equally"],
-      "format": "Single choice"
-    },
-    {
-      "id": 37,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How much do you value strategic thinking and long-term planning?",
-      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
-      "format": "Single choice"
-    },
-    {
-      "id": 38,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is hands-on problem-solving to you?",
-      "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 39,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer working with gadgets or designing systems?",
-      "options": ["Working with gadgets", "Designing systems", "Both equally"],
-      "format": "Single choice"
-    },
-    {
-      "id": 40,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How much do you value innovation and technical expertise?",
-      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
-      "format": "Single choice"
-    },
-    {
-      "id": 41,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How important is physical fitness and outdoor activities to you?",
-      "options": [
-        "Very important",
-        "Important",
-        "Neutral",
-        "Not important",
-        "Not at all important"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 42,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "Do you prefer exploring nature or advocating for environmental causes?",
-      "options": [
-        "Exploring nature",
-        "Advocating for environmental causes",
-        "Both equally"
-      ],
-      "format": "Single choice"
-    },
-    {
-      "id": 43,
-      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
-      "text": "How much do you value sustainability and global perspective?",
-      "options": ["Extremely", "A lot", "Moderately", "Slightly", "Not at All"],
-      "format": "Single choice"
-    },
-    {
-      "id": 26,
       "section": "Passion & Interests",
       "text": "What do you enjoy doing most in your spare time? (Select up to 5)",
       "options": [
@@ -474,7 +300,7 @@
       "format": "Drag-and-drop ranking"
     },
     {
-      "id": 46,
+      "id": 28,
       "section": "Passion & Interests",
       "text": "Choose all the working industries/sectors you are sure you DO NOT want to work for.",
       "options": [
@@ -496,7 +322,7 @@
       "format": "Multiple selection"
     },
     {
-      "id": 47,
+      "id": 29,
       "section": "Passion & Interests",
       "text": "What kind of work environment do you prefer? (Select one)",
       "options": [
@@ -509,7 +335,7 @@
       "format": "Single choice"
     },
     {
-      "id": 48,
+      "id": 30,
       "section": "Passion & Interests",
       "text": "What motivates you the most in your work or studies? (Select up to 2)",
       "options": [
@@ -523,7 +349,7 @@
       "format": "Multiple selection"
     },
     {
-      "id": 49,
+      "id": 31,
       "section": "Passion & Interests",
       "text": "How do you prefer to learn? (Select one)",
       "options": [
@@ -536,7 +362,7 @@
       "format": "Single choice"
     },
     {
-      "id": 50,
+      "id": 32,
       "section": "Passion & Interests",
       "text": "What is your long-term career goal? (Select one)",
       "options": [
@@ -551,7 +377,7 @@
       "format": "Single choice"
     },
     {
-      "id": 51,
+      "id": 33,
       "section": "Education Project", 
       "text": "What is your budget for education (per year)?",
       "options": [
@@ -564,7 +390,7 @@
       "format": "Single choice"
     },
     {
-      "id": 52,
+      "id": 34,
       "section": "Education Project",
       "text": "How much time are you willing to dedicate to your studies?",
       "options": [
@@ -576,7 +402,7 @@
       "format": "Single choice"
     },
     {
-      "id": 53,
+      "id": 35,
       "section": "Education Project",
       "text": "Where would you prefer to study? (Select up to 3)",
       "format": "Multiple selection",
@@ -610,7 +436,7 @@
       "format": "Multiple selection"
     },
     {
-      "id": 54,
+      "id": 36,
       "section": "Education Project",
       "text": "Are you interested in mobility opportunities (e.g., study abroad, internships)?",
       "options": [
@@ -623,7 +449,7 @@
       "format": "Single choice"
     },
     {
-      "id": 55,
+      "id": 37,
       "section": "Education Project",
       "text": "What are your top selection criteria for choosing a school? (Select up to 3)",
       "format": "Multiple selection",
