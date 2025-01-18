@@ -54,9 +54,9 @@ export const key_traits: Record<string, number> = {
     "Confidence": 0,
     "Charisma": 0,
     "Emotional expression": 0,
-    "Technical expertise": 0, 
+    "Technical expertise": 0,
     "Forward-thinking mindset": 0,
-    "Adaptability": 0, 
+    "Adaptability": 0,
     "Long-term thinking": 0,
     "Ambition": 0,
     "Multitasking": 0,
@@ -64,45 +64,37 @@ export const key_traits: Record<string, number> = {
 };
 
 export const sub_profiles: Record<string, string[]> = {
-    "The Researcher": ["Intellectual curiosity", "Attention to detail", "Love for learning", "Abstract thinking", "Patience"],
-    "The Problem Solver": ["Logical reasoning", "Analytical skills", "Results-oriented mindset", "Practicality", "Critical thinking"],
-    "The Data Enthusiast": ["Analytical thinking", "Attention to detail", "Love for numbers", "Pattern recognition", "Data interpretation"],
-    "The Theorist": ["Deep thinking", "Creativity in conceptualizing ideas", "Intellectual rigor", "Abstract reasoning", "Curiosity"],
-    "The Engineer": ["Technical skills", "Problem-solving", "Results-driven mindset", "Precision", "Innovation"],
-    "The Artist": ["Creativity", "Emotional intelligence", "Self-expression", "Imagination", "Aesthetic sensitivity"],
-    "The Innovator": ["Creativity", "Technical expertise", "Forward-thinking mindset", "Risk-taking", "Curiosity"],
-    "The Storyteller": ["Creativity", "Communication skills", "Emotional intelligence", "Narrative crafting", "Empathy"],
-    "The Performer": ["Charisma", "Emotional expression", "Stage presence", "Confidence", "Adaptability"],
-    "The Designer": ["Creativity", "Attention to detail", "User-centered mindset", "Visual thinking", "Problem-solving"],
-    "The Helper": ["Empathy", "Patience", "Desire to help others", "Collaboration", "Emotional intelligence"],
-    "The Activist": ["Passion", "Determination", "Strong communication skills", "Advocacy", "Resilience"],
-    "The Communicator": ["Interpersonal skills", "Empathy", "Adaptability", "Dialogue facilitation", "Relationship-building"],
-    "The Educator": ["Patience", "Communication skills", "Love for learning", "Knowledge-sharing", "Mentorship"],
-    "The Humanitarian": ["Compassion", "Resilience", "Global perspective", "Problem-solving", "Advocacy"],
-    "The Entrepreneur": ["Leadership", "Creativity", "Results-oriented mindset", "Risk-taking", "Ambition"],
-    "The Leader": ["Decision-making", "Communication", "Vision for the future", "Strategic thinking", "Confidence"],
-    "The Strategist": ["Analytical thinking", "Organization", "Results-driven mindset", "Efficiency", "Long-term thinking"],
-    "The Salesperson": ["Charisma", "Persistence", "Customer-focused mindset", "Negotiation skills", "Adaptability"],
-    "The Investor": ["Analytical thinking", "Risk assessment", "Long-term perspective", "Financial acumen", "Strategic planning"],
-    "The Generalist": ["Adaptability", "Curiosity", "Love for learning", "Versatility", "Broad skill set"],
-    "The Integrator": ["Versatility", "Creativity", "Problem-solving", "Interdisciplinary thinking", "Adaptability"],
-    "The Lifelong Learner": ["Curiosity", "Adaptability", "Growth mindset", "Love for learning", "Self-improvement"],
-    "The Multipotentialite": ["Versatility", "Creativity", "Broad skill set", "Adaptability", "Curiosity"],
-    "The Cultural Enthusiast": ["Open-mindedness", "Communication skills", "Global perspective", "Curiosity", "Adaptability"],
-    "The Coder": ["Technical skills", "Problem-solving", "Love for coding", "Logical thinking", "Innovation"],
-    "The Gadget Enthusiast": ["Technical skills", "Creativity", "Love for tinkering", "Hands-on problem-solving", "Curiosity"],
-    "The Digital Creator": ["Creativity", "Technical skills", "User-centered mindset", "Innovation", "Adaptability"],
-    "The Conservationist": ["Passion for nature", "Problem-solving", "Global perspective", "Advocacy", "Resilience"],
-    "The Outdoor Adventurer": ["Physical fitness", "Adaptability", "Love for nature", "Problem-solving", "Curiosity"],
-    "The Sustainable Innovator": ["Creativity", "Technical skills", "Passion for sustainability", "Problem-solving", "Innovation"],
-    "The Project Manager": ["Leadership", "Organization", "Problem-solving", "Efficiency", "Strategic thinking"],
-    "The Event Planner": ["Attention to detail", "Communication", "Creativity", "Adaptability", "Problem-solving"],
-    "The Systems Thinker": ["Analytical thinking", "Problem-solving", "Results-driven mindset", "Efficiency", "Innovation"],
-    "The Public Speaker": ["Charisma", "Communication skills", "Emotional intelligence", "Influence", "Adaptability"],
-    "The Writer": ["Creativity", "Communication skills", "Attention to detail", "Storytelling", "Empathy"],
-    "The Negotiator": ["Communication", "Empathy", "Problem-solving", "Diplomacy", "Adaptability"],
-    "The Mentor": ["Empathy", "Communication skills", "Desire to help others", "Leadership", "Patience"],
-    "The Wellness Advocate": ["Empathy", "Communication skills", "Passion for health", "Problem-solving", "Adaptability"]
+    "Le Chercheur": ["Curiosité intellectuelle", "Attention aux détails", "Amour de l'apprentissage", "Pensée abstraite", "Patience"],
+    "Le Solutionneur": ["Raisonnement logique", "Compétences analytiques", "Orientation résultats", "Esprit pratique", "Pensée critique"],
+    "L'Analyste de Données": ["Pensée analytique", "Attention aux détails", "Affinité pour les chiffres", "Reconnaissance des modèles", "Interprétation des données"],
+    "Le Théoricien": ["Pensée profonde", "Créativité conceptuelle", "Rigueur intellectuelle", "Raisonnement abstrait", "Curiosité"],
+    "L'Ingénieur": ["Compétences techniques", "Résolution de problèmes", "Orientation résultats", "Précision", "Innovation"],
+    "L'Artiste": ["Créativité", "Intelligence émotionnelle", "Expression personnelle", "Imagination", "Sensibilité esthétique"],
+    "L'Innovateur": ["Créativité", "Expertise technique", "Vision d'avenir", "Prise de risque", "Curiosité"],
+    "Le Narrateur": ["Créativité", "Communication", "Intelligence émotionnelle", "Construction narrative", "Empathie"],
+    "L'Interprète": ["Charisme", "Expression émotionnelle", "Présence scénique", "Confiance", "Adaptabilité"],
+    "Le Designer": ["Créativité", "Attention aux détails", "Approche centrée utilisateur", "Pensée visuelle", "Résolution de problèmes"],
+    "L'Aidant": ["Empathie", "Patience", "Désir d'aider les autres", "Collaboration", "Intelligence émotionnelle"],
+    "L'Activiste": ["Passion", "Détermination", "Communication forte", "Plaidoyer", "Résilience"],
+    "Le Communicateur": ["Compétences interpersonnelles", "Empathie", "Adaptabilité", "Facilitation du dialogue", "Construction de relations"],
+    "L'Éducateur": ["Patience", "Communication", "Amour de l'apprentissage", "Partage des connaissances", "Mentorat"],
+    "L'Humanitaire": ["Compassion", "Résilience", "Perspective globale", "Résolution de problèmes", "Plaidoyer"],
+    "L'Entrepreneur": ["Leadership", "Créativité", "Orientation résultats", "Prise de risque", "Ambition"],
+    "Le Leader": ["Prise de décision", "Communication", "Vision d'avenir", "Pensée stratégique", "Confiance"],
+    "Le Stratège": ["Pensée analytique", "Organisation", "Orientation résultats", "Efficacité", "Pensée à long terme"],
+    "Le Commercial": ["Charisme", "Persévérance", "Orientation client", "Négociation", "Adaptabilité"],
+    "L'Investisseur": ["Pensée analytique", "Évaluation des risques", "Vision à long terme", "Acuité financière", "Planification stratégique"],
+    "Le Généraliste": ["Adaptabilité", "Curiosité", "Amour de l'apprentissage", "Polyvalence", "Large éventail de compétences"],
+    "L'Intégrateur": ["Polyvalence", "Créativité", "Résolution de problèmes", "Pensée interdisciplinaire", "Adaptabilité"],
+    "L'Apprenant Perpétuel": ["Curiosité", "Adaptabilité", "Mentalité de croissance", "Amour de l'apprentissage", "Développement personnel"],
+    "Le Multipotentiel": ["Polyvalence", "Créativité", "Large éventail de compétences", "Adaptabilité", "Curiosité"],
+    "L'Enthousiaste Culturel": ["Ouverture d'esprit", "Communication", "Perspective globale", "Curiosité", "Adaptabilité"],
+    "Le Codeur": ["Compétences techniques", "Résolution de problèmes", "Passion pour le code", "Pensée logique", "Innovation"],
+    "Le Passionné de Technologie": ["Compétences techniques", "Créativité", "Passion pour le bricolage", "Résolution pratique", "Curiosité"],
+    "Le Créateur Numérique": ["Créativité", "Compétences techniques", "Approche centrée utilisateur", "Innovation", "Adaptabilité"],
+    "Le Conservateur": ["Passion pour la nature", "Résolution de problèmes", "Perspective globale", "Plaidoyer", "Résilience"],
+    "L'Aventurier": ["Condition physique", "Adaptabilité", "Amour de la nature", "Résolution de problèmes", "Curiosité"],
+    "L'Innovateur Durable": ["Créativité", "Compétences techniques", "Passion pour la durabilité", "Résolution de problèmes", "Innovation"]
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
@@ -643,10 +635,10 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
             }
         }
 
-        return matchedProfile;
+        return matchedProfile || "Le Généraliste"; // Default fallback profile in French
     } catch (error) {
         console.error('Error getting matched profile:', error);
-        return "The Generalist"; // Default fallback profile
+        return "Le Généraliste"; // Default fallback profile in French
     }
 }
 
@@ -693,7 +685,7 @@ export const adaptiveTree: Record<string, Record<string, string>> = {
         "Prefer risks": "Q7",
         "Neutral": "Q12",
         "Prefer caution": "Q11",
-        "Strongly prefer caution": "Q11"
+        "Stronglyprefer caution": "Q11"
     },
     "Q6": {  // How do you feel about working with numbers and data?
         "Love it": "Q11",
