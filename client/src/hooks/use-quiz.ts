@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useCallback, useEffect } from "react";
 import { useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 import { getNextQuestion, calculateProfile, QUESTIONS } from "@/lib/quiz-logic";
+import { useStartQuizSession, useUpdateQuizSession, useSubmitQuiz, useQuizSession } from "@/lib/quiz-logic";
+import { queryClient } from "@/lib/queryClient";
 
 export function useQuiz() {
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
@@ -10,34 +11,29 @@ export function useQuiz() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
-  const submitQuizMutation = useMutation({
-    mutationFn: async (results: any) => {
-      const response = await fetch("/api/quiz/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(results),
-      });
+  // Get or create quiz session
+  const { data: session } = useQuizSession();
+  const startSession = useStartQuizSession();
+  const updateSession = useUpdateQuizSession();
+  const submitQuiz = useSubmitQuiz();
 
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
+  // Start a new session if none exists
+  useEffect(() => {
+    if (!session) {
+      startSession.mutate();
+    }
+  }, [session, startSession]);
 
-      return response.json();
-    },
-    onSuccess: () => {
-      setLocation("/results");
-    },
-    onError: (error) => {
+  const handleAnswer = useCallback(async (answer: string | string[]) => {
+    if (!session?.id) {
       toast({
         title: "Error",
-        description: error.message,
+        description: "No active quiz session",
         variant: "destructive",
       });
-    },
-  });
+      return;
+    }
 
-  const handleAnswer = useCallback((answer: string | string[]) => {
     setAnswers((prev) => ({
       ...prev,
       [currentQuestion]: answer,
@@ -45,13 +41,38 @@ export function useQuiz() {
 
     const nextQuestionId = getNextQuestion(currentQuestion);
     if (nextQuestionId) {
-      setCurrentQuestion(nextQuestionId);
+      // Update session with the answer
+      try {
+        await updateSession.mutateAsync({
+          sessionId: session.id,
+          questionId: `Q${currentQuestion}`,
+          answer: Array.isArray(answer) ? answer[0] : answer,
+          nextQuestionId: `Q${nextQuestionId}`,
+        });
+        setCurrentQuestion(nextQuestionId);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to save answer",
+          variant: "destructive",
+        });
+      }
     } else {
-      // No more questions, calculate profile and submit
-      const results = calculateProfile(answers);
-      submitQuizMutation.mutate(results);
+      // No more questions, submit the quiz
+      try {
+        await submitQuiz.mutateAsync(session.id);
+        // Invalidate the session query after successful submission
+        queryClient.invalidateQueries({ queryKey: ['/api/quiz/session/current'] });
+        setLocation("/results");
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to submit quiz",
+          variant: "destructive",
+        });
+      }
     }
-  }, [currentQuestion, answers, submitQuizMutation]);
+  }, [currentQuestion, session, updateSession, submitQuiz, toast, setLocation, queryClient]);
 
   // Find the current question object
   const currentQuestionObj = QUESTIONS.find(q => q.id === currentQuestion);
@@ -60,6 +81,6 @@ export function useQuiz() {
     currentQuestion: currentQuestionObj,
     answers,
     handleAnswer,
-    isSubmitting: submitQuizMutation.isPending,
+    isSubmitting: submitQuiz.isPending || updateSession.isPending,
   };
 }
