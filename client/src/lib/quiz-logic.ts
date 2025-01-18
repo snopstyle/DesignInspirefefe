@@ -1,6 +1,6 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
-import { calculateProfileScores, getMatchedProfile } from './profile-logic';
+import { calculateProfileScores, getMatchedProfile, adaptiveTree, getNextQuestion as getAdaptiveNextQuestion } from './profile-logic';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking" | "Slider";
@@ -32,7 +32,6 @@ export function parseSliderOptions(optionText: string) {
     return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
   }
 }
-
 
 export const useQuizSession = () => {
   return useQuery({
@@ -105,32 +104,6 @@ export const useSubmitQuiz = () => {
   });
 };
 
-export const useSaveQuizResults = () => {
-  return useMutation({
-    mutationFn: async (results: any) => {
-      const response = await fetch('/api/save-results', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(results),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to save quiz results: ${response.statusText}`);
-      }
-
-      return response.json();
-    },
-    onError: (error) => {
-      console.error('Error saving quiz results:', error);
-    },
-    onSuccess: (data) => {
-      console.log('Quiz results saved successfully:', data);
-    },
-  });
-};
 export interface QuizState {
   currentSection: string;
   currentQuestion: number;
@@ -175,19 +148,37 @@ export function getCurrentSection(questionId: number): string {
   return question?.section || "";
 }
 
-export function getNextQuestion(currentId: number): number | null {
+export function getNextQuestion(currentId: number, currentAnswer?: string | string[]): number | null {
+  // For Psycho-Social section (questions 1-25), use adaptive path
+  if (currentId <= 25) {
+    if (!currentAnswer) {
+      return currentId === 0 ? 1 : null;
+    }
+
+    const answer = Array.isArray(currentAnswer) ? currentAnswer[0] : currentAnswer;
+    const nextQuestionId = getAdaptiveNextQuestion(`Q${currentId}`, answer);
+
+    // If "End" is returned or no next question found, try moving to the next section
+    if (nextQuestionId === "End" || !nextQuestionId) {
+      // Find the first question of the next section
+      const currentQuestion = QUESTIONS.find(q => q.id === currentId);
+      if (currentQuestion?.section === QUIZ_SECTIONS.PSYCHO_SOCIAL) {
+        // Find first question in PASSION section
+        const nextSectionQuestion = QUESTIONS.find(q => q.section === QUIZ_SECTIONS.PASSION);
+        return nextSectionQuestion?.id || null;
+      }
+    }
+
+    // Convert question ID format from "Q6" to 6
+    return parseInt(nextQuestionId.replace('Q', ''));
+  }
+
+  // For other sections, use sequential progression
   const currentIndex = QUESTIONS.findIndex(q => q.id === currentId);
   if (currentIndex === -1 || currentIndex === QUESTIONS.length - 1) {
     return null;
   }
   return QUESTIONS[currentIndex + 1].id;
-}
-
-// Debug function to help identify question loading issues
-export function debugQuestionData(questionId: number) {
-  const question = QUESTIONS.find(q => q.id === questionId);
-  console.log('Question Data:', question);
-  return question;
 }
 
 // Helper function to check if a question should use tag layout
@@ -249,3 +240,30 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
     }
   };
 }
+
+export const useSaveQuizResults = () => {
+  return useMutation({
+    mutationFn: async (results: any) => {
+      const response = await fetch('/api/save-results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(results),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save quiz results: ${response.statusText}`);
+      }
+
+      return response.json();
+    },
+    onError: (error) => {
+      console.error('Error saving quiz results:', error);
+    },
+    onSuccess: (data) => {
+      console.log('Quiz results saved successfully:', data);
+    },
+  });
+};
