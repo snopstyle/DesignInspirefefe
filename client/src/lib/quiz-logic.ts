@@ -132,12 +132,24 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
   Object.entries(answers).forEach(([key, value]) => {
     const questionId = parseInt(key);
     if (questionId <= 25) {
-      psychoSocialAnswers[`Q${key}`] = Array.isArray(value) ? value.join(', ') : value;
+      psychoSocialAnswers[`Q${key}`] = Array.isArray(value) ? value[0] : value;
     }
   });
 
   const profileScores = calculateProfileScores(psychoSocialAnswers);
   const matchedProfile = getMatchedProfile(profileScores);
+
+  // Helper function to ensure array type
+  const ensureArray = (value: string | string[] | undefined): string[] => {
+    if (!value) return [];
+    return Array.isArray(value) ? value : [value];
+  };
+
+  // Helper function to ensure string type
+  const ensureString = (value: string | string[] | undefined): string | undefined => {
+    if (!value) return undefined;
+    return Array.isArray(value) ? value[0] : value;
+  };
 
   return {
     psychoSocialProfile: profileScores,
@@ -148,20 +160,20 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
       .slice(0, 5)
       .map(([trait]) => trait),
     passionsAndInterests: {
-      hobbies: answers[44] || [],
-      academicInterests: answers[45] || [],
-      unwantedIndustries: answers[46] || [],
-      workEnvironment: answers[47] || '',
-      motivations: answers[48] || [],
-      learningStyle: answers[49] || '',
-      careerGoal: answers[50] || ''
+      hobbies: ensureArray(answers[44]),
+      academicInterests: ensureArray(answers[45]),
+      unwantedIndustries: ensureArray(answers[46]),
+      workEnvironment: ensureString(answers[47]),
+      motivations: ensureArray(answers[48]),
+      learningStyle: ensureString(answers[49]),
+      careerGoal: ensureString(answers[50])
     },
     educationProject: {
-      budget: answers[51] || '',
-      duration: answers[52] || '',
-      locations: answers[53] || [],
-      mobility: answers[54] || '',
-      criteria: answers[55] || []
+      budget: ensureString(answers[51]),
+      duration: ensureString(answers[52]),
+      locations: ensureArray(answers[53]),
+      mobility: ensureString(answers[54]),
+      criteria: ensureArray(answers[55])
     }
   };
 }

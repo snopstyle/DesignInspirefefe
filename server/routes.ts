@@ -4,7 +4,14 @@ import { setupAuth } from "./auth";
 import { db } from "@db";
 import { quizResults, quizSessions, profileCompletion } from "@db/schema";
 import { eq, desc } from "drizzle-orm";
-import { calculateProfileScores, getMatchedProfile } from "../attached_assets/logic";
+import { calculateProfileScores, getMatchedProfile } from "../client/src/lib/profile-logic";
+import type { User } from "@db/schema";
+
+declare global {
+  namespace Express {
+    interface User extends User {}
+  }
+}
 
 export function registerRoutes(app: Express): Server {
   setupAuth(app);
@@ -17,11 +24,11 @@ export function registerRoutes(app: Express): Server {
 
     try {
       // Check for existing incomplete session
-      const [existingSession] = await db.select()
-        .from(quizSessions)
-        .where(eq(quizSessions.userId, req.user!.id))
-        .where(eq(quizSessions.status, 'in_progress'))
-        .limit(1);
+      const existingSession = await db.query.quizSessions.findFirst({
+        where: (sessions, { eq, and }) => 
+          and(eq(sessions.userId, req.user!.id), eq(sessions.status, 'in_progress')),
+        orderBy: desc(quizSessions.startedAt)
+      });
 
       if (existingSession) {
         return res.json(existingSession);
@@ -59,11 +66,10 @@ export function registerRoutes(app: Express): Server {
     const { questionId, answer, nextQuestionId } = req.body;
 
     try {
-      const [session] = await db.select()
-        .from(quizSessions)
-        .where(eq(quizSessions.id, sessionId))
-        .where(eq(quizSessions.userId, req.user!.id))
-        .limit(1);
+      const session = await db.query.quizSessions.findFirst({
+        where: (sessions, { eq, and }) => 
+          and(eq(sessions.id, sessionId), eq(sessions.userId, req.user!.id))
+      });
 
       if (!session) {
         return res.status(404).send("Session not found");
@@ -111,11 +117,10 @@ export function registerRoutes(app: Express): Server {
 
     try {
       // Get session data
-      const [session] = await db.select()
-        .from(quizSessions)
-        .where(eq(quizSessions.id, sessionId))
-        .where(eq(quizSessions.userId, req.user!.id))
-        .limit(1);
+      const session = await db.query.quizSessions.findFirst({
+        where: (sessions, { eq, and }) => 
+          and(eq(sessions.id, sessionId), eq(sessions.userId, req.user!.id))
+      });
 
       if (!session) {
         return res.status(404).send("Session not found");
@@ -155,13 +160,14 @@ export function registerRoutes(app: Express): Server {
         .where(eq(quizSessions.id, sessionId));
 
       // Update profile completion status
-      await db.update(profileCompletion)
+      await db
+        .update(profileCompletion)
         .set({
           personalityQuizCompleted: true,
           lastUpdated: new Date(),
-          overallProgress: db.raw(`
+          overallProgress: db.sql`
             CASE 
-              WHEN basic_info_completed AND traits_assessment_completed AND interests_completed AND education_prefs_completed 
+              WHEN basic_info_completed AND traits_assessment_completed AND personality_quiz_completed AND interests_completed AND education_prefs_completed 
               THEN 100 
               ELSE (
                 (CASE WHEN basic_info_completed THEN 20 ELSE 0 END) +
@@ -171,7 +177,7 @@ export function registerRoutes(app: Express): Server {
                 (CASE WHEN education_prefs_completed THEN 20 ELSE 0 END)
               )
             END
-          `)
+          `
         })
         .where(eq(profileCompletion.userId, req.user!.id));
 
@@ -189,10 +195,10 @@ export function registerRoutes(app: Express): Server {
     }
 
     try {
-      const results = await db.select()
-        .from(quizResults)
-        .where(eq(quizResults.userId, req.user!.id))
-        .orderBy(desc(quizResults.createdAt));
+      const results = await db.query.quizResults.findMany({
+        where: (results, { eq }) => eq(results.userId, req.user!.id),
+        orderBy: desc(quizResults.createdAt)
+      });
 
       res.json(results);
     } catch (error) {
@@ -296,12 +302,11 @@ export function registerRoutes(app: Express): Server {
     }
 
     try {
-      const [session] = await db.select()
-        .from(quizSessions)
-        .where(eq(quizSessions.userId, req.user!.id))
-        .where(eq(quizSessions.status, 'in_progress'))
-        .orderBy(desc(quizSessions.startedAt))
-        .limit(1);
+      const session = await db.query.quizSessions.findFirst({
+        where: (sessions, { eq, and }) => 
+          and(eq(sessions.userId, req.user!.id), eq(sessions.status, 'in_progress')),
+        orderBy: desc(quizSessions.startedAt)
+      });
 
       res.json(session || null);
     } catch (error) {
