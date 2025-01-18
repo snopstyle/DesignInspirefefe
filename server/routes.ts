@@ -23,6 +23,8 @@ export function registerRoutes(app: Express): Server {
     }
 
     try {
+      console.log('Creating quiz session for user:', req.user!.id);
+
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) => 
@@ -31,6 +33,7 @@ export function registerRoutes(app: Express): Server {
       });
 
       if (existingSession) {
+        console.log('Found existing session:', existingSession.id);
         return res.json(existingSession);
       }
 
@@ -49,6 +52,7 @@ export function registerRoutes(app: Express): Server {
         })
         .returning();
 
+      console.log('Created new session:', newSession.id);
       res.json(newSession);
     } catch (error) {
       console.error('Error managing quiz session:', error);
@@ -65,6 +69,8 @@ export function registerRoutes(app: Express): Server {
     const { sessionId } = req.params;
     const { questionId, answer, nextQuestionId } = req.body;
 
+    console.log('Updating session:', { sessionId, questionId, answer, nextQuestionId });
+
     try {
       const session = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) => 
@@ -72,8 +78,11 @@ export function registerRoutes(app: Express): Server {
       });
 
       if (!session) {
+        console.log('Session not found:', sessionId);
         return res.status(404).send("Session not found");
       }
+
+      console.log('Found session:', session.id);
 
       if (session.status !== 'in_progress') {
         return res.status(400).send("Session is already completed");
@@ -81,12 +90,17 @@ export function registerRoutes(app: Express): Server {
 
       // Update session with new answer and adaptive path
       const updatedAnswers = { ...session.answers, [questionId]: answer };
-      const updatedPath = session.adaptivePath;
-      updatedPath.currentPath.push(nextQuestionId);
-      updatedPath.branchingPoints[questionId] = {
-        question: questionId,
-        answer,
-        nextQuestion: nextQuestionId
+      const updatedPath = {
+        ...session.adaptivePath,
+        currentPath: [...session.adaptivePath.currentPath, nextQuestionId],
+        branchingPoints: {
+          ...session.adaptivePath.branchingPoints,
+          [questionId]: {
+            question: questionId,
+            answer,
+            nextQuestion: nextQuestionId
+          }
+        }
       };
 
       const [updatedSession] = await db.update(quizSessions)
@@ -100,6 +114,7 @@ export function registerRoutes(app: Express): Server {
         .where(eq(quizSessions.id, sessionId))
         .returning();
 
+      console.log('Updated session successfully:', updatedSession.id);
       res.json(updatedSession);
     } catch (error) {
       console.error('Error updating quiz session:', error);
@@ -114,6 +129,7 @@ export function registerRoutes(app: Express): Server {
     }
 
     const { sessionId } = req.body;
+    console.log('Submitting quiz for session:', sessionId);
 
     try {
       // Get session data
@@ -123,8 +139,11 @@ export function registerRoutes(app: Express): Server {
       });
 
       if (!session) {
+        console.log('Submit: Session not found:', sessionId);
         return res.status(404).send("Session not found");
       }
+
+      console.log('Submit: Found session:', session.id);
 
       // Calculate results
       const profileScores = calculateProfileScores(session.answers);
@@ -142,7 +161,7 @@ export function registerRoutes(app: Express): Server {
           },
           traitScores: profileScores,
           dominantProfile,
-          subProfile: dominantProfile, // Can be refined based on sub-profile logic
+          subProfile: dominantProfile,
           traits: Object.entries(profileScores)
             .sort(([,a], [,b]) => b - a)
             .slice(0, 5)
@@ -181,6 +200,7 @@ export function registerRoutes(app: Express): Server {
         })
         .where(eq(profileCompletion.userId, req.user!.id));
 
+      console.log('Quiz submitted successfully:', result.id);
       res.json(result);
     } catch (error) {
       console.error('Quiz submission error:', error);

@@ -1,6 +1,7 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
 import { calculateProfileScores, getMatchedProfile } from './profile-logic';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking" | "Slider";
 
@@ -31,7 +32,78 @@ export function parseSliderOptions(optionText: string) {
     return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
   }
 }
-import { useMutation } from '@tanstack/react-query';
+
+
+export const useQuizSession = () => {
+  return useQuery({
+    queryKey: ['/api/quiz/session/current'],
+    retry: false,
+  });
+};
+
+export const useStartQuizSession = () => {
+  return useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/quiz/session', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to start quiz session: ${response.statusText}`);
+      }
+
+      return response.json();
+    },
+  });
+};
+
+export const useUpdateQuizSession = () => {
+  return useMutation({
+    mutationFn: async ({ sessionId, questionId, answer, nextQuestionId }: {
+      sessionId: string;
+      questionId: string;
+      answer: string;
+      nextQuestionId: string;
+    }) => {
+      const response = await fetch(`/api/quiz/session/${sessionId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ questionId, answer, nextQuestionId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update quiz session: ${response.statusText}`);
+      }
+
+      return response.json();
+    },
+  });
+};
+
+export const useSubmitQuiz = () => {
+  return useMutation({
+    mutationFn: async (sessionId: string) => {
+      const response = await fetch('/api/quiz/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ sessionId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to submit quiz: ${response.statusText}`);
+      }
+
+      return response.json();
+    },
+  });
+};
 
 export const useSaveQuizResults = () => {
   return useMutation({
