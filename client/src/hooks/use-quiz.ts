@@ -12,37 +12,52 @@ export function useQuiz() {
   const [, setLocation] = useLocation();
 
   // Get or create quiz session
-  const { data: session } = useQuizSession();
+  const { data: session, isLoading: isLoadingSession } = useQuizSession();
   const startSession = useStartQuizSession();
   const updateSession = useUpdateQuizSession();
   const submitQuiz = useSubmitQuiz();
 
   // Start a new session if none exists
   useEffect(() => {
-    if (!session) {
-      startSession.mutate();
-    }
-  }, [session, startSession]);
+    const initSession = async () => {
+      if (!session && !isLoadingSession && !startSession.isPending) {
+        try {
+          await startSession.mutateAsync();
+          // Refetch the session after starting a new one
+          queryClient.invalidateQueries({ queryKey: ['/api/quiz/session/current'] });
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Failed to start quiz session. Please try again.",
+            variant: "destructive",
+          });
+        }
+      }
+    };
+
+    initSession();
+  }, [session, isLoadingSession, startSession, toast, queryClient]);
 
   const handleAnswer = useCallback(async (answer: string | string[]) => {
     if (!session?.id) {
+      console.log('No session found, current session:', session);
       toast({
         title: "Error",
-        description: "No active quiz session",
+        description: "No active quiz session. Please refresh the page.",
         variant: "destructive",
       });
       return;
     }
 
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion]: answer,
-    }));
+    try {
+      setAnswers((prev) => ({
+        ...prev,
+        [currentQuestion]: answer,
+      }));
 
-    const nextQuestionId = getNextQuestion(currentQuestion);
-    if (nextQuestionId) {
-      // Update session with the answer
-      try {
+      const nextQuestionId = getNextQuestion(currentQuestion);
+      if (nextQuestionId) {
+        // Update session with the answer
         await updateSession.mutateAsync({
           sessionId: session.id,
           questionId: `Q${currentQuestion}`,
@@ -50,27 +65,20 @@ export function useQuiz() {
           nextQuestionId: `Q${nextQuestionId}`,
         });
         setCurrentQuestion(nextQuestionId);
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to save answer",
-          variant: "destructive",
-        });
-      }
-    } else {
-      // No more questions, submit the quiz
-      try {
+      } else {
+        // No more questions, submit the quiz
         await submitQuiz.mutateAsync(session.id);
         // Invalidate the session query after successful submission
         queryClient.invalidateQueries({ queryKey: ['/api/quiz/session/current'] });
         setLocation("/results");
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to submit quiz",
-          variant: "destructive",
-        });
       }
+    } catch (error) {
+      console.error('Error handling answer:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to process answer",
+        variant: "destructive",
+      });
     }
   }, [currentQuestion, session, updateSession, submitQuiz, toast, setLocation, queryClient]);
 
@@ -81,6 +89,6 @@ export function useQuiz() {
     currentQuestion: currentQuestionObj,
     answers,
     handleAnswer,
-    isSubmitting: submitQuiz.isPending || updateSession.isPending,
+    isSubmitting: submitQuiz.isPending || updateSession.isPending || isLoadingSession || startSession.isPending,
   };
 }
