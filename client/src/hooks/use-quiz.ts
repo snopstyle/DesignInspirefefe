@@ -55,9 +55,9 @@ export function useQuiz() {
         [currentQuestion]: answer,
       }));
 
-      const nextQuestionId = getNextQuestion(currentQuestion, answer);
+      const nextQuestionId = getNextQuestion(currentQuestion);
       if (nextQuestionId) {
-        // Update session with the answer and next question based on adaptive path
+        // Update session with the answer
         await updateSession.mutateAsync({
           sessionId: session.id,
           questionId: `Q${currentQuestion}`,
