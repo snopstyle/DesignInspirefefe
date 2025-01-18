@@ -122,13 +122,17 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  // Complete quiz and save results
+  // Submit quiz and save results
   app.post("/api/quiz/submit", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).send("Not authenticated");
     }
 
     const { sessionId } = req.body;
+    if (!sessionId) {
+      return res.status(400).send("Session ID is required");
+    }
+
     console.log('Submitting quiz for session:', sessionId);
 
     try {
@@ -144,6 +148,10 @@ export function registerRoutes(app: Express): Server {
       }
 
       console.log('Submit: Found session:', session.id);
+
+      if (session.status !== 'in_progress') {
+        return res.status(400).send("Session is already completed");
+      }
 
       // Calculate results
       const profileScores = calculateProfileScores(session.answers);
@@ -178,27 +186,29 @@ export function registerRoutes(app: Express): Server {
         })
         .where(eq(quizSessions.id, sessionId));
 
-      // Update profile completion status
-      await db
-        .update(profileCompletion)
-        .set({
-          personalityQuizCompleted: true,
-          lastUpdated: new Date(),
-          overallProgress: db.sql`
-            CASE 
-              WHEN basic_info_completed AND traits_assessment_completed AND personality_quiz_completed AND interests_completed AND education_prefs_completed 
-              THEN 100 
-              ELSE (
-                (CASE WHEN basic_info_completed THEN 20 ELSE 0 END) +
-                (CASE WHEN traits_assessment_completed THEN 20 ELSE 0 END) +
-                (CASE WHEN personality_quiz_completed THEN 20 ELSE 0 END) +
-                (CASE WHEN interests_completed THEN 20 ELSE 0 END) +
-                (CASE WHEN education_prefs_completed THEN 20 ELSE 0 END)
-              )
-            END
-          `
-        })
-        .where(eq(profileCompletion.userId, req.user!.id));
+      // Get current completion status
+      const currentCompletion = await db.query.profileCompletion.findFirst({
+        where: (pc) => eq(pc.userId, req.user!.id),
+      });
+
+      if (!currentCompletion) {
+        // Create initial profile completion status
+        await db.insert(profileCompletion)
+          .values({
+            userId: req.user!.id,
+            personalityQuizCompleted: true,
+            overallProgress: 20, // 20% for completing personality quiz
+          });
+      } else {
+        // Update existing completion status
+        await db.update(profileCompletion)
+          .set({
+            personalityQuizCompleted: true,
+            lastUpdated: new Date(),
+            overallProgress: currentCompletion.overallProgress + (!currentCompletion.personalityQuizCompleted ? 20 : 0)
+          })
+          .where(eq(profileCompletion.userId, req.user!.id));
+      }
 
       console.log('Quiz submitted successfully:', result.id);
       res.json(result);
