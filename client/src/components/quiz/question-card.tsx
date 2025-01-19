@@ -35,7 +35,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
-  // Standardized styling for answer elements
   const answerElementStyle =
     "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full";
 
@@ -75,6 +74,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         );
 
       case "Multiple choice":
+      case "Multiple selection":
         if (shouldUseTagLayout) {
           return (
             <ScrollArea className="h-[60vh]">
