@@ -30,11 +30,12 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       format: question.format,
       optionsCount: question.options.length,
       options: question.options,
-      currentAnswers: multipleChoiceAnswers
+      currentAnswers: multipleChoiceAnswers,
+      maxSelections: question.maxSelections
     });
   }, [question, multipleChoiceAnswers]);
 
-  const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
+  const shouldUseTagLayout = isMultipleSelectionQuestion && question.options.length > 8;
 
   const answerElementStyle =
     "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full";
@@ -43,10 +44,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     const newAnswers = multipleChoiceAnswers.includes(option)
       ? multipleChoiceAnswers.filter(a => a !== option)
       : [...multipleChoiceAnswers, option];
-
-    if (question.maxSelections && newAnswers.length > question.maxSelections) {
-      return;
-    }
 
     setMultipleChoiceAnswers(newAnswers);
     onAnswer(newAnswers, true); // Always prevent auto-submit for multiple selection
@@ -74,7 +71,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                     <Label
                       htmlFor={`option-${index}`}
                       className={answerElementStyle}
-                      onClick={() => onAnswer(option)}
                     >
                       <span className="text-white/90 group-hover:text-white transition-colors break-words">
                         {option}
@@ -95,6 +91,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                 options={question.options}
                 selectedOptions={multipleChoiceAnswers}
                 onToggle={handleMultipleSelection}
+                maxSelections={question.maxSelections}
               />
             </ScrollArea>
           );
@@ -160,15 +157,12 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const hasValidAnswer = () => {
     if (isMultipleSelectionQuestion) {
-      const minSelections = 1;
-      return multipleChoiceAnswers.length >= minSelections;
+      return multipleChoiceAnswers.length > 0;
     }
 
     switch (question.format) {
       case "Single choice":
         return Boolean(currentAnswer);
-      case "Multiple choice":
-        return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
       case "Drag-and-drop ranking":
         return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
       case "Text":
@@ -214,7 +208,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             >
               <Button
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
-                onClick={() => onAnswer(isMultipleSelectionQuestion ? multipleChoiceAnswers : currentAnswer!, false)}
+                onClick={() => onAnswer(multipleChoiceAnswers, false)}
               >
                 {question.id === 37 ? (
                   <>
