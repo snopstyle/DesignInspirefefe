@@ -5,23 +5,9 @@ interface TagOptionsProps {
   options: string[];
   selectedOptions: string[];
   onToggle: (option: string) => void;
-  maxSelections?: number;
 }
 
-export function TagOptions({ options, selectedOptions, onToggle, maxSelections }: TagOptionsProps) {
-  const handleToggle = (option: string) => {
-    // If already selected, always allow deselection
-    if (selectedOptions.includes(option)) {
-      onToggle(option);
-      return;
-    }
-
-    // If not selected, check if we can add more selections
-    if (!maxSelections || selectedOptions.length < maxSelections) {
-      onToggle(option);
-    }
-  };
-
+export function TagOptions({ options, selectedOptions, onToggle }: TagOptionsProps) {
   return (
     <div className="flex flex-wrap justify-center gap-3 px-6">
       {options.map((option, index) => {
@@ -29,7 +15,7 @@ export function TagOptions({ options, selectedOptions, onToggle, maxSelections }
         return (
           <motion.button
             key={index}
-            onClick={() => handleToggle(option)}
+            onClick={() => onToggle(option)}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.03 }}
@@ -44,8 +30,8 @@ export function TagOptions({ options, selectedOptions, onToggle, maxSelections }
           >
             {option}
           </motion.button>
-        );
-      })}
+        )}
+      )}
     </div>
   );
 }
