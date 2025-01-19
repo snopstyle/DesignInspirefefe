@@ -22,21 +22,35 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     Array.isArray(currentAnswer) ? currentAnswer : []
   );
 
-  const isMultipleChoiceQuestion = [26, 28, 30, 35, 37].includes(question.id);
+  const isMultipleSelectionQuestion = question.format === "Multiple selection";
 
   useEffect(() => {
     console.log('Question Data:', {
       id: question.id,
       format: question.format,
       optionsCount: question.options.length,
-      options: question.options
+      options: question.options,
+      currentAnswers: multipleChoiceAnswers
     });
-  }, [question]);
+  }, [question, multipleChoiceAnswers]);
 
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
   const answerElementStyle =
     "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full";
+
+  const handleMultipleSelection = (option: string) => {
+    const newAnswers = multipleChoiceAnswers.includes(option)
+      ? multipleChoiceAnswers.filter(a => a !== option)
+      : [...multipleChoiceAnswers, option];
+
+    if (question.maxSelections && newAnswers.length > question.maxSelections) {
+      return;
+    }
+
+    setMultipleChoiceAnswers(newAnswers);
+    onAnswer(newAnswers, true); // Always prevent auto-submit for multiple selection
+  };
 
   const renderAnswerInput = () => {
     switch (question.format) {
@@ -73,7 +87,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           </ScrollArea>
         );
 
-      case "Multiple choice":
       case "Multiple selection":
         if (shouldUseTagLayout) {
           return (
@@ -81,18 +94,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
               <TagOptions
                 options={question.options}
                 selectedOptions={multipleChoiceAnswers}
-                onToggle={(option) => {
-                  const newAnswers = multipleChoiceAnswers.includes(option)
-                    ? multipleChoiceAnswers.filter(a => a !== option)
-                    : [...multipleChoiceAnswers, option];
-
-                  if (question.maxSelections && newAnswers.length > question.maxSelections) {
-                    return;
-                  }
-
-                  setMultipleChoiceAnswers(newAnswers);
-                  onAnswer(newAnswers, true);
-                }}
+                onToggle={handleMultipleSelection}
               />
             </ScrollArea>
           );
@@ -119,18 +121,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                     className={`${answerElementStyle} ${
                       multipleChoiceAnswers.includes(option) ? "bg-white/10" : ""
                     }`}
-                    onClick={() => {
-                      const newAnswers = multipleChoiceAnswers.includes(option)
-                        ? multipleChoiceAnswers.filter(a => a !== option)
-                        : [...multipleChoiceAnswers, option];
-
-                      if (question.maxSelections && newAnswers.length > question.maxSelections) {
-                        return;
-                      }
-
-                      setMultipleChoiceAnswers(newAnswers);
-                      onAnswer(newAnswers, true);
-                    }}
+                    onClick={() => handleMultipleSelection(option)}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
                       {option}
@@ -168,15 +159,15 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   };
 
   const hasValidAnswer = () => {
-    if (isMultipleChoiceQuestion) {
-      return multipleChoiceAnswers.length > 0;
+    if (isMultipleSelectionQuestion) {
+      const minSelections = 1;
+      return multipleChoiceAnswers.length >= minSelections;
     }
 
     switch (question.format) {
       case "Single choice":
         return Boolean(currentAnswer);
       case "Multiple choice":
-      case "Multiple selection":
         return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
       case "Drag-and-drop ranking":
         return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
@@ -223,7 +214,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             >
               <Button
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
-                onClick={() => onAnswer(isMultipleChoiceQuestion ? multipleChoiceAnswers : currentAnswer!, false)}
+                onClick={() => onAnswer(isMultipleSelectionQuestion ? multipleChoiceAnswers : currentAnswer!, false)}
               >
                 {question.id === 37 ? (
                   <>
