@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import type { Question, QuestionFormat } from "@/lib/quiz-logic";
+import type { Question } from "@/lib/quiz-logic";
 import { useState, useEffect } from "react";
 import { TagOptions } from "./tag-options";
 import { RankingOptions } from "./ranking-options";
 
 interface QuestionCardProps {
   question: Question;
-  onAnswer: (answer: string | string[], preventSubmit?: boolean) => void; // Added preventSubmit
+  onAnswer: (answer: string | string[], preventSubmit?: boolean) => void;
   currentAnswer?: string | string[];
 }
 
@@ -21,6 +21,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
     Array.isArray(currentAnswer) ? currentAnswer : []
   );
+
+  const isMultipleChoiceQuestion = [26, 28, 30, 35, 37].includes(question.id);
 
   useEffect(() => {
     console.log('Question Data:', {
@@ -35,24 +37,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   // Standardized styling for answer elements
   const answerElementStyle =
-    "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full"; // Full width and height
+    "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full";
 
   const renderAnswerInput = () => {
-    switch (question.format as QuestionFormat) {
+    switch (question.format) {
       case "Single choice":
         return (
           <ScrollArea className="h-[60vh]">
-            <div
-              className="flex flex-col items-center justify-center h-full px-6"
-              data-radix-scroll-area-content
-            >
+            <div className="flex flex-col items-center justify-center h-full px-6" data-radix-scroll-area-content>
               <RadioGroup
                 value={currentAnswer as string}
-                onValueChange={(value) => {
-                  if (question.format === "Single choice") {
-                    onAnswer(value);
-                  }
-                }}
+                onValueChange={(value) => onAnswer(value)}
                 className="space-y-4 w-full max-w-2xl mx-auto"
               >
                 {question.options.map((option, index) => (
@@ -80,7 +75,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         );
 
       case "Multiple choice":
-      case "Multiple selection":
         if (shouldUseTagLayout) {
           return (
             <ScrollArea className="h-[60vh]">
@@ -91,9 +85,13 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   const newAnswers = multipleChoiceAnswers.includes(option)
                     ? multipleChoiceAnswers.filter(a => a !== option)
                     : [...multipleChoiceAnswers, option];
-                  console.log('Toggled option:', option, 'New answers:', newAnswers);
+
+                  if (question.maxSelections && newAnswers.length > question.maxSelections) {
+                    return;
+                  }
+
                   setMultipleChoiceAnswers(newAnswers);
-                  onAnswer(newAnswers, true); // Prevent auto-submit
+                  onAnswer(newAnswers, true);
                 }}
               />
             </ScrollArea>
@@ -105,7 +103,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             <div
               className="grid w-full px-6 gap-4"
               style={{
-                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", // Dynamically adjust columns
+                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
               }}
             >
               {question.options.map((option, index) => (
@@ -118,13 +116,20 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                 >
                   <Label
                     htmlFor={`option-${index}`}
-                    className={answerElementStyle}
+                    className={`${answerElementStyle} ${
+                      multipleChoiceAnswers.includes(option) ? "bg-white/10" : ""
+                    }`}
                     onClick={() => {
                       const newAnswers = multipleChoiceAnswers.includes(option)
                         ? multipleChoiceAnswers.filter(a => a !== option)
                         : [...multipleChoiceAnswers, option];
+
+                      if (question.maxSelections && newAnswers.length > question.maxSelections) {
+                        return;
+                      }
+
                       setMultipleChoiceAnswers(newAnswers);
-                      onAnswer(newAnswers, true); // Prevent auto-submit
+                      onAnswer(newAnswers, true);
                     }}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
@@ -148,31 +153,12 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           </ScrollArea>
         );
 
-      case "Scale":
-        return (
-          <div className="space-y-6 w-full max-w-md mx-auto px-6">
-            <Slider
-              min={1}
-              max={5}
-              step={1}
-              value={[parseInt(currentAnswer as string) || 3]}
-              onValueChange={(value) => onAnswer(value[0].toString())}
-              className="w-full"
-            />
-            <div className="flex justify-between text-sm text-white/70">
-              {question.options.map((label, index) => (
-                <span key={index}>{label}</span>
-              ))}
-            </div>
-          </div>
-        );
-
       case "Text":
         return (
           <Input
             value={currentAnswer as string}
             onChange={(e) => onAnswer(e.target.value)}
-            placeholder="Type your answer here..."
+            placeholder="Tapez votre réponse ici..."
             className="w-full max-w-md mx-auto rounded-2xl p-6"
           />
         );
@@ -182,6 +168,10 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   };
 
   const hasValidAnswer = () => {
+    if (isMultipleChoiceQuestion) {
+      return multipleChoiceAnswers.length > 0;
+    }
+
     switch (question.format) {
       case "Single choice":
         return Boolean(currentAnswer);
@@ -190,14 +180,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
       case "Drag-and-drop ranking":
         return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
-      case "Scale":
-        return Boolean(currentAnswer);
       case "Text":
         return Boolean(currentAnswer && (currentAnswer as string).trim());
-      case "Slider":
-        const value = parseInt(currentAnswer as string);
-        const { min, max } = parseSliderOptions(question.options[0]);
-        return !isNaN(value) && value >= min && value <= max;
       default:
         return false;
     }
@@ -239,16 +223,16 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
             >
               <Button
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
-                onClick={() => onAnswer(currentAnswer!, false)} // Added false to prevent auto-submit on "Finish Quiz"
+                onClick={() => onAnswer(isMultipleChoiceQuestion ? multipleChoiceAnswers : currentAnswer!, false)}
               >
-                {question.id === 55 ? (
+                {question.id === 37 ? (
                   <>
-                    Finish Quiz
+                    Terminer le Quiz
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 ) : (
                   <>
-                    Next Question
+                    Question Suivante
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 )}
