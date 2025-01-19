@@ -326,7 +326,7 @@
     {
       "id": 26,
       "section": "Passions & Intérêts",
-      "text": "Qu'aimez-vous faire pendant votre temps libre ? (Sélectionnez jusqu'à 5)",
+      "text": "Qu'aimez-vous faire pendant votre temps libre ? (Sélectionnez jusqu'à 5 choix)",
       "options": [
         "Lire des livres",
         "Coder ou programmer",
@@ -345,7 +345,8 @@
         "Cuisiner ou faire de la pâtisserie",
         "Apprendre de nouvelles compétences ou langues"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice",
+      "maxSelections": 5
     },
     {
       "id": 27,
@@ -368,7 +369,7 @@
     {
       "id": 28,
       "section": "Passions & Intérêts",
-      "text": "Choisissez tous les secteurs/industries dans lesquels vous êtes sûr de NE PAS vouloir travailler.",
+      "text": "Choisissez tous les secteurs/industries dans lesquels vous êtes sûr de NE PAS vouloir travailler. (Sélection multiple)",
       "options": [
         "Technologie/IT",
         "Santé/Médecine",
@@ -385,7 +386,7 @@
         "Agriculture/Industrie alimentaire",
         "Médias/Journalisme"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice"
     },
     {
       "id": 29,
@@ -403,7 +404,7 @@
     {
       "id": 30,
       "section": "Passions & Intérêts",
-      "text": "Qu'est-ce qui vous motive le plus dans votre travail ou vos études ? (Sélectionnez jusqu'à 2)",
+      "text": "Qu'est-ce qui vous motive le plus dans votre travail ou vos études ? (Sélectionnez 2 choix maximum)",
       "options": [
         "Résoudre des problèmes complexes",
         "Aider les autres ou avoir un impact social",
@@ -412,7 +413,8 @@
         "Atteindre le succès financier ou la reconnaissance",
         "Explorer de nouvelles idées ou concepts"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice",
+      "maxSelections": 2
     },
     {
       "id": 31,
@@ -440,7 +442,7 @@
         "Je veux explorer de nouvelles idées par la recherche",
         "Je veux atteindre le succès financier et la reconnaissance"
       ],
-      "format": "Single choice"
+      "format": "Multiple choice"
     },
     {
       "id": 33,
@@ -470,7 +472,7 @@
     {
       "id": 35,
       "section": "Projet d'Études",
-      "text": "Où préféreriez-vous étudier ? (Sélectionnez jusqu'à 3)",
+      "text": "Où préféreriez-vous étudier ? (Sélectionnez jusqu'à 3 villes)",
       "options": [
         "Paris",
         "Marseille",
@@ -498,7 +500,8 @@
         "Cayenne (Guyane)",
         "Saint-Pierre (Saint-Pierre-et-Miquelon)"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice",
+      "maxSelections": 3
     },
     {
       "id": 36,
@@ -516,7 +519,7 @@
     {
       "id": 37,
       "section": "Projet d'Études",
-      "text": "Quels sont vos principaux critères pour choisir une école ? (Sélectionnez jusqu'à 3)",
+      "text": "Quels sont vos principaux critères pour choisir une école ? (Sélectionnez jusqu'à 3 critères)",
       "options": [
         "Réputation académique",
         "Coût des études",
@@ -526,7 +529,8 @@
         "Flexibilité du programme",
         "Opportunités de recherche"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple choice",
+      "maxSelections": 3
     }
   ]
 }

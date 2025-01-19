@@ -76,7 +76,7 @@ export const sub_profiles: Record<string, string[]> = {
     "Le Designer": ["Créativité", "Attention aux détails", "Approche centrée utilisateur", "Pensée visuelle", "Résolution de problèmes"],
     "L'Aidant": ["Empathie", "Patience", "Désir d'aider les autres", "Collaboration", "Intelligence émotionnelle"],
     "L'Activiste": ["Passion", "Détermination", "Communication forte", "Plaidoyer", "Résilience"],
-    "Le Communicateur": ["Compétences interpersonnelles", "Empathie", "Adaptabilité", "Facilitation du dialogue", "Construction de relations"],
+    "Le Communicant": ["Compétences interpersonnelles", "Empathie", "Adaptabilité", "Facilitation du dialogue", "Construction de relations"],
     "L'Éducateur": ["Patience", "Communication", "Amour de l'apprentissage", "Partage des connaissances", "Mentorat"],
     "L'Humanitaire": ["Compassion", "Résilience", "Perspective globale", "Résolution de problèmes", "Plaidoyer"],
     "L'Entrepreneur": ["Leadership", "Créativité", "Orientation résultats", "Prise de risque", "Ambition"],
