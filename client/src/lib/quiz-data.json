@@ -345,7 +345,7 @@
         "Cuisiner ou faire de la pâtisserie",
         "Apprendre de nouvelles compétences ou langues"
       ],
-      "format": "Multiple choice",
+      "format": "Multiple selection",
       "maxSelections": 5
     },
     {
@@ -386,7 +386,7 @@
         "Agriculture/Industrie alimentaire",
         "Médias/Journalisme"
       ],
-      "format": "Multiple choice"
+      "format": "Multiple selection"
     },
     {
       "id": 29,
@@ -413,7 +413,7 @@
         "Atteindre le succès financier ou la reconnaissance",
         "Explorer de nouvelles idées ou concepts"
       ],
-      "format": "Multiple choice",
+      "format": "Multiple selection",
       "maxSelections": 2
     },
     {
@@ -500,7 +500,7 @@
         "Cayenne (Guyane)",
         "Saint-Pierre (Saint-Pierre-et-Miquelon)"
       ],
-      "format": "Multiple choice",
+      "format": "Multiple selection",
       "maxSelections": 3
     },
     {
@@ -529,7 +529,7 @@
         "Flexibilité du programme",
         "Opportunités de recherche"
       ],
-      "format": "Multiple choice",
+      "format": "Multiple selection",
       "maxSelections": 3
     }
   ]
