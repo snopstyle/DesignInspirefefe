@@ -2,477 +2,693 @@
   "questions": [
     {
       "id": 1,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Préférez-vous travailler en équipe ou de manière indépendante ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer working in a team or independently?",
       "options": [
-        "Forte préférence pour le travail d'équipe",
-        "Préférence pour le travail d'équipe",
-        "Neutre",
-        "Préférence pour l'indépendance",
-        "Forte préférence pour l'indépendance"
+        "Strongly prefer teamwork",
+        "Prefer teamwork",
+        "Neutral",
+        "Prefer independence",
+        "Strongly prefer independence"
       ],
       "format": "Single choice"
     },
     {
       "id": 2,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment abordez-vous la résolution de problèmes complexes ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you approach solving complex problems?",
       "options": [
-        "Raisonnement logique",
-        "Solutions créatives",
-        "Un mélange des deux",
-        "J'évite les problèmes"
+        "Logical reasoning",
+        "Creative solutions",
+        "A mix of both",
+        "Avoid problems"
       ],
       "format": "Single choice"
     },
     {
       "id": 3,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Êtes-vous plus intéressé par les idées abstraites ou les applications pratiques ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Are you more interested in abstract ideas or practical applications?",
       "options": [
-        "Idées abstraites",
-        "Applications pratiques",
-        "Les deux également",
-        "Ni l'un ni l'autre"
+        "Abstract ideas",
+        "Practical applications",
+        "Both equally",
+        "Neither"
       ],
       "format": "Single choice"
     },
     {
       "id": 4,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous à l'expression émotionnelle dans votre vie quotidienne ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is emotional expression in your daily life?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 5,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Aimez-vous prendre des risques ou préférez-vous une approche plus prudente ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you enjoy taking risks or prefer a more cautious approach?",
       "options": [
-        "Forte préférence pour les risques",
-        "Préférence pour les risques",
-        "Neutre",
-        "Préférence pour la prudence",
-        "Forte préférence pour la prudence"
+        "Strongly prefer risks",
+        "Prefer risks",
+        "Neutral",
+        "Prefer caution",
+        "Strongly prefer caution"
       ],
       "format": "Single choice"
     },
     {
       "id": 6,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment vous sentez-vous par rapport au travail avec les chiffres et les données ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you feel about working with numbers and data?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 7,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Êtes-vous plus attiré par les tâches créatives ou techniques ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Are you more drawn to creative or technical tasks?",
       "options": [
-        "Forte préférence pour les tâches créatives",
-        "Préférence pour les tâches créatives",
-        "Neutre",
-        "Préférence pour les tâches techniques",
-        "Forte préférence pour les tâches techniques"
+        "Strongly prefer creative tasks",
+        "Prefer creative tasks",
+        "Neutral",
+        "Prefer technical tasks",
+        "Strongly prefer technical tasks"
       ],
       "format": "Single choice"
     },
     {
       "id": 8,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment gérez-vous les délais et la gestion du temps ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you handle deadlines and time management?",
       "options": [
-        "Très bien",
-        "Bien",
-        "Neutre",
-        "Mal",
-        "Très mal"
+        "Very well",
+        "Well",
+        "Neutral",
+        "Poorly",
+        "Very poorly"
       ],
       "format": "Single choice"
     },
     {
       "id": 9,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous à l'aide aux autres ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to help others?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 10,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Aimez-vous explorer de nouvelles cultures et perspectives ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you enjoy exploring new cultures and perspectives?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 11,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous à l'attention aux détails dans votre travail ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is attention to detail in your work?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 12,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Aimez-vous apprendre de nouvelles choses ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you enjoy learning new things?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 13,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment gérez-vous les rôles de leadership ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you handle leadership roles?",
       "options": [
-        "Très bien",
-        "Bien",
-        "Neutre",
-        "Mal",
-        "Très mal"
+        "Very well",
+        "Well",
+        "Neutral",
+        "Poorly",
+        "Very poorly"
       ],
       "format": "Single choice"
     },
     {
       "id": 14,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Êtes-vous passionné par la durabilité et les questions environnementales ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Are you passionate about sustainability and environmental issues?",
       "options": [
-        "Très passionné",
-        "Passionné",
-        "Neutre",
-        "Peu passionné",
-        "Pas du tout passionné"
+        "Very passionate",
+        "Passionate",
+        "Neutral",
+        "Not passionate",
+        "Not at all passionate"
       ],
       "format": "Single choice"
     },
     {
       "id": 15,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment vous sentez-vous par rapport au fitness et aux activités de plein air ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you feel about physical fitness and outdoor activities?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 16,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment abordez-vous la résolution pratique de problèmes ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you approach hands-on problem-solving?",
       "options": [
-        "Très bien",
-        "Bien",
-        "Neutre",
-        "Mal",
-        "Très mal"
+        "Very well",
+        "Well",
+        "Neutral",
+        "Poorly",
+        "Very poorly"
       ],
       "format": "Single choice"
     },
     {
       "id": 17,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous à l'expression créative ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to express yourself creatively?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 18,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment gérez-vous les conflits ou les désaccords ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you handle conflict or disagreements?",
       "options": [
-        "Très bien",
-        "Bien",
-        "Neutre",
-        "Mal",
-        "Très mal"
+        "Very well",
+        "Well",
+        "Neutral",
+        "Poorly",
+        "Very poorly"
       ],
       "format": "Single choice"
     },
     {
       "id": 19,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous au suivi d'un plan structuré ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to follow a structured plan?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 20,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment vous sentez-vous par rapport à la prise de parole en public ou à la présentation d'idées ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you feel about public speaking or presenting ideas?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 21,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous au fait de rester à jour avec la technologie ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to stay up-to-date with technology?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 22,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment vous sentez-vous dans un environnement à rythme rapide ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you feel about working in a fast-paced environment?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 23,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous au fait d'avoir un parcours professionnel clair ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to have a clear career path?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 24,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Comment vous sentez-vous en travaillant sur plusieurs projets à la fois ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How do you feel about working on multiple projects at once?",
       "options": [
-        "J'adore ça",
-        "J'aime bien",
-        "Neutre",
-        "Je n'aime pas",
-        "Je déteste"
+        "Love it",
+        "Enjoy it",
+        "Neutral",
+        "Dislike it",
+        "Hate it"
       ],
       "format": "Single choice"
     },
     {
       "id": 25,
-      "section": "QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL",
-      "text": "Quelle importance accordez-vous au fait d'avoir un impact positif sur la société ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to have a positive impact on society?",
       "options": [
-        "Très importante",
-        "Importante",
-        "Neutre",
-        "Peu importante",
-        "Pas du tout importante"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 26,
-      "section": "Passions & Intérêts",
-      "text": "Qu'aimez-vous faire pendant votre temps libre ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is intellectual curiosity to you?",
       "options": [
-        "Lire des livres",
-        "Coder ou programmer",
-        "Peindre, dessiner ou autres arts visuels",
-        "Jouer de la musique ou composer",
-        "Écrire (histoires, poésie, blogs, etc.)",
-        "Faire du sport ou des activités de plein air",
-        "Faire du bénévolat ou du service communautaire",
-        "Bricoler avec des gadgets ou de l'électronique",
-        "Regarder des documentaires ou des vidéos éducatives",
-        "Jouer aux jeux vidéo",
-        "Designer (graphique, mode, intérieur, etc.)",
-        "Voyager ou explorer de nouvelles cultures",
-        "Participer à des débats ou parler en public",
-        "Jardiner ou activités liées à la nature",
-        "Cuisiner ou faire de la pâtisserie",
-        "Apprendre de nouvelles compétences ou langues"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
-      "format": "Multiple selection",
-      "maxSelections": 5
+      "format": "Single choice"
     },
     {
       "id": 27,
-      "section": "Passions & Intérêts",
-      "text": "Classez ces domaines académiques par ordre d'intérêt.",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer solving theoretical problems or practical challenges?",
       "options": [
-        "Mathématiques",
-        "Physique-Chimie",
-        "Biologie/Sciences de la Terre",
-        "Littérature/Philosophie",
-        "Histoire/Géographie",
-        "Économie/Sciences Sociales",
-        "Langues Étrangères",
-        "Informatique",
-        "Arts (Visuels, Musique, Théâtre)",
-        "Sciences de l'Ingénieur"
+        "Theoretical problems",
+        "Practical challenges",
+        "Both equally"
       ],
-      "format": "Drag-and-drop ranking"
+      "format": "Single choice"
     },
     {
       "id": 28,
-      "section": "Passions & Intérêts",
-      "text": "Choisissez tous les secteurs/industries dans lesquels vous êtes sûr de NE PAS vouloir travailler.",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How much do you enjoy deep, abstract thinking?",
       "options": [
-        "Technologie/IT",
-        "Santé/Médecine",
-        "Éducation/Enseignement",
-        "Finance/Banque",
-        "Arts/Divertissement",
-        "Ingénierie/Industrie",
-        "Environnement/Développement durable",
-        "Droit/Justice",
-        "Business/Management",
-        "Science/Recherche",
-        "Travail social/ONG",
-        "Hôtellerie/Tourisme",
-        "Agriculture/Industrie alimentaire",
-        "Médias/Journalisme"
+        "Extremely",
+        "A lot",
+        "Moderately",
+        "Slightly",
+        "Not at All"
       ],
-      "format": "Multiple selection"
+      "format": "Single choice"
     },
     {
       "id": 29,
-      "section": "Passions & Intérêts",
-      "text": "Quel type d'environnement de travail préférez-vous ? (Sélectionnez-en un)",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is creativity in your daily life?",
       "options": [
-        "Structuré et organisé (ex: bureau d'entreprise, laboratoire)",
-        "Créatif et flexible (ex: studio de design, startup)",
-        "Extérieur ou pratique (ex: travail de terrain, construction)",
-        "Social et collaboratif (ex: ONG, éducation)",
-        "Indépendant et autonome (ex: freelance, recherche)"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 30,
-      "section": "Passions & Intérêts",
-      "text": "Qu'est-ce qui vous motive le plus dans votre travail ou vos études ? (Sélectionnez 2 choix maximum)",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer focusing on one passion or exploring many interests?",
       "options": [
-        "Résoudre des problèmes complexes",
-        "Aider les autres ou avoir un impact social",
-        "Créer quelque chose de nouveau ou d'innovant",
-        "L'apprentissage et le développement personnel",
-        "Atteindre le succès financier ou la reconnaissance",
-        "Explorer de nouvelles idées ou concepts"
+        "1. Focusing on one passion",
+        "2. Exploring many interests",
+        "Both equally"
       ],
-      "format": "Multiple selection",
-      "maxSelections": 2
+      "format": "Single choice"
     },
     {
       "id": 31,
-      "section": "Passions & Intérêts",
-      "text": "Comment préférez-vous apprendre ? (Sélectionnez-en un)",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How much do you value aesthetic sensitivity and imagination?",
       "options": [
-        "Par la pratique et l'expérimentation",
-        "Par la lecture et la recherche indépendante",
-        "En groupe de manière collaborative",
-        "Par des projets créatifs et l'expression personnelle",
-        "En suivant des leçons et des directives structurées"
+        "Extremely",
+        "A lot",
+        "Moderately",
+        "Slightly",
+        "Not at All"
       ],
       "format": "Single choice"
     },
     {
       "id": 32,
-      "section": "Passions & Intérêts",
-      "text": "Quel est votre objectif professionnel à long terme ? (Sélectionnez-en un)",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is it for you to help others?",
       "options": [
-        "Je veux avoir un impact positif sur l'environnement",
-        "Je veux créer des technologies innovantes",
-        "Je veux aider les gens via la santé ou le travail social",
-        "Je veux m'exprimer à travers l'art ou l'écriture",
-        "Je veux diriger et gérer des équipes en entreprise",
-        "Je veux explorer de nouvelles idées par la recherche",
-        "Je veux atteindre le succès financier et la reconnaissance"
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
       ],
       "format": "Single choice"
     },
     {
       "id": 33,
-      "section": "Projet d'Études",
-      "text": "Quel est votre budget pour les études (par an) ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer one-on-one interactions or public speaking?",
       "options": [
-        "Moins de 5 000€",
-        "5 000€ - 10 000€",
-        "10 000€ - 15 000€",
-        "15 000€ - 20 000€",
-        "Plus de 20 000€"
+        "1. One-on-one interactions",
+        "2. Public speaking",
+        "3. Both equally"
       ],
       "format": "Single choice"
     },
     {
       "id": 34,
-      "section": "Projet d'Études",
-      "text": "Combien de temps êtes-vous prêt à consacrer à vos études ?",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How much do you value emotional expression in communication?",
       "options": [
-        "1 an ou moins",
-        "1-3 ans",
-        "3-5 ans",
-        "Plus de 5 ans"
+        "Extremely",
+        "A lot",
+        "Moderately",
+        "Slightly",
+        "Not at All"
       ],
       "format": "Single choice"
     },
     {
       "id": 35,
-      "section": "Projet d'Études",
-      "text": "Où préféreriez-vous étudier ? (Sélectionnez jusqu'à 3 villes)",
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is achieving results to you?",
+      "options": [
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 36,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer leading teams or working independently to achieve goals?",
+      "options": [
+        "1. Leading teams",
+        "2. Working independently",
+        "3. Both equally"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 37,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How much do you value strategic thinking and long-term planning?",
+      "options": [
+        "Extremely",
+        "A lot",
+        "Moderately",
+        "Slightly",
+        "Not at All"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 38,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is hands-on problem-solving to you?",
+      "options": [
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 39,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer working with gadgets or designing systems?",
+      "options": [
+        "Working with gadgets",
+        "Designing systems",
+        "Both equally"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 40,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How much do you value innovation and technical expertise?",
+      "options": [
+        "Extremely",
+        "A lot",
+        "Moderately",
+        "Slightly",
+        "Not at All"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 41,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How important is physical fitness and outdoor activities to you?",
+      "options": [
+        "Very important",
+        "Important",
+        "Neutral",
+        "Not important",
+        "Not at all important"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 42,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "Do you prefer exploring nature or advocating for environmental causes?",
+      "options": [
+        "Exploring nature",
+        "Advocating for environmental causes",
+        "Both equally"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 43,
+      "section": "PSYCHO−SOCIAL PROFILE QUIZ",
+      "text": "How much do you value sustainability and global perspective?",
+      "options": [
+        "Extremely",
+        "A lot",
+        "Moderately",
+        "Slightly",
+        "Not at All"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 44,
+      "section": "Passion & Interests",
+      "text": "What do you enjoy doing most in your spare time? (Select up to 5)",
+      "options": [
+        "Reading books",
+        "Coding or programming",
+        "Painting, drawing, or other visual arts",
+        "Playing music or composing",
+        "Writing (stories, poetry, blogs, etc.)",
+        "Playing sports or outdoor activities",
+        "Volunteering or community service",
+        "Tinkering with gadgets or electronics",
+        "Watching documentaries or educational videos",
+        "Playing video games",
+        "Designing (graphic, fashion, interior, etc.)",
+        "Traveling or exploring new cultures",
+        "Participating in debates or public speaking",
+        "Gardening or nature-related activities",
+        "Cooking or baking",
+        "Learning new skills or languages"
+      ],
+      "format": "Multiple selection"
+    },
+    {
+      "id": 45,
+      "section": "Passion & Interests",
+      "text": "Rank these academic fields by order of interest.",
+      "options": [
+        "Mathematics",
+        "Physics-Chemistry",
+        "Biology/Earth Sciences",
+        "Literature/Philosophy",
+        "History/Geography",
+        "Economics/Social Sciences",
+        "Foreign Languages",
+        "Computer Science",
+        "Arts (Visual, Music, Theater)",
+        "Engineering Sciences"
+      ],
+      "format": "Drag-and-drop ranking"
+    },
+    {
+      "id": 46,
+      "section": "Passion & Interests",
+      "text": "Choose all the working industries/sectors you are sure you DO NOT want to work for.",
+      "options": [
+        "Technology/IT",
+        "Healthcare/Medicine",
+        "Education/Teaching",
+        "Finance/Banking",
+        "Arts/Entertainment",
+        "Engineering/Manufacturing",
+        "Environmental/Sustainability",
+        "Law/Justice",
+        "Business/Management",
+        "Science/Research",
+        "Social Work/NGOs",
+        "Hospitality/Tourism",
+        "Agriculture/Food Industry",
+        "Media/Journalism"
+      ],
+      "format": "Multiple selection"
+    },
+    {
+      "id": 47,
+      "section": "Passion & Interests",
+      "text": "What kind of work environment do you prefer? (Select one)",
+      "options": [
+        "Structured and organized (e.g., corporate office, laboratory)",
+        "Creative and flexible (e.g., design studio, startup)",
+        "Outdoors or hands-on (e.g., fieldwork, construction)",
+        "Social and collaborative (e.g., NGOs, education)",
+        "Independent and self-directed (e.g., freelance, research)"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 48,
+      "section": "Passion & Interests",
+      "text": "What motivates you the most in your work or studies? (Select up to 2)",
+      "options": [
+        "Solving complex problems",
+        "Helping others or making a social impact",
+        "Creating something new or innovative",
+        "Learning and personal growth",
+        "Achieving financial success or recognition",
+        "Exploring new ideas or concepts"
+      ],
+      "format": "Multiple selection"
+    },
+    {
+      "id": 49,
+      "section": "Passion & Interests",
+      "text": "How do you prefer to learn? (Select one)",
+      "options": [
+        "Through hands-on practice and experimentation",
+        "By reading and researching independently",
+        "In collaborative group settings",
+        "Through creative projects and self-expression",
+        "By following structured lessons and guidelines"
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 50,
+      "section": "Passion & Interests",
+      "text": "What is your long-term career goal? (Select one)",
+      "options": [
+        "I want to make a positive impact on the environment.",
+        "I want to create innovative technologies.",
+        "I want to help people through healthcare or social work.",
+        "I want to express myself through art or writing.",
+        "I want to lead and manage teams in a business setting.",
+        "I want to explore new ideas and concepts through research.",
+        "I want to achieve financial success and recognition."
+      ],
+      "format": "Single choice"
+    },
+    {
+      "id": 51,
+      "section": "Education Project",
+      "text": "What is your budget for education (per year)?",
+      "options": [
+        "Slider: €0–€20,000 (default: €5,000, step: €500)"
+      ],
+      "format": "Slider"
+    },
+    {
+      "id": 52,
+      "section": "Education Project",
+      "text": "How much time are you willing to dedicate to your studies?",
+      "options": [
+        "1 year or less",
+        "1–3 years",
+        "3–5 years",
+        "More than 5 years"
+      ],
+      "format": "Single Choice"
+    },
+    {
+      "id": 53,
+      "section": "Education Project",
+      "text": "Where would you prefer to study? (Select up to 3)",
       "options": [
         "Paris",
         "Marseille",
@@ -497,40 +713,38 @@
         "Saint-Denis (Réunion)",
         "Fort-de-France (Martinique)",
         "Pointe-à-Pitre (Guadeloupe)",
-        "Cayenne (Guyane)",
-        "Saint-Pierre (Saint-Pierre-et-Miquelon)"
+        "Cayenne (French Guiana)",
+        "Saint-Pierre (Saint Pierre and Miquelon)"
       ],
-      "format": "Multiple selection",
-      "maxSelections": 3
+      "format": "Multiple selection"
     },
     {
-      "id": 36,
-      "section": "Projet d'Études",
-      "text": "Êtes-vous intéressé par les opportunités de mobilité (ex: études à l'étranger, stages) ?",
+      "id": 54,
+      "section": "Education Project",
+      "text": "Are you interested in mobility opportunities (e.g., study abroad, internships)?",
       "options": [
-        "Oui, très intéressé",
-        "Plutôt intéressé",
-        "Neutre",
-        "Peu intéressé",
-        "Pas du tout intéressé"
+        "Yes, very interested",
+        "Somewhat interested",
+        "Neutral",
+        "Not very interested",
+        "Not interested at all"
       ],
-      "format": "Single choice"
+      "format": "Assesses interest in programs with international or mobility components."
     },
     {
-      "id": 37,
-      "section": "Projet d'Études",
-      "text": "Quels sont vos principaux critères pour choisir une école ? (Sélectionnez jusqu'à 3 critères)",
+      "id": 55,
+      "section": "Education Project",
+      "text": "What are your top selection criteria for choosing a school? (Select up to 3)",
       "options": [
-        "Réputation académique",
-        "Coût des études",
-        "Localisation",
-        "Services d'accompagnement professionnel",
-        "Réseau d'anciens élèves",
-        "Flexibilité du programme",
-        "Opportunités de recherche"
+        "Academic reputation",
+        "Cost of tuition",
+        "Location",
+        "Career support services",
+        "Alumni network",
+        "Program flexibility",
+        "Research opportunities"
       ],
-      "format": "Multiple selection",
-      "maxSelections": 3
+      "format": "Helps prioritize schools based on the student’s key criteria."
     }
   ]
 }

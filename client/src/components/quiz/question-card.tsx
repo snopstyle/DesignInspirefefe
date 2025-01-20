@@ -19,8 +19,15 @@ interface QuestionCardProps {
 
 export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCardProps) {
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
-    Array.isArray(currentAnswer) ? currentAnswer : []
+    Array.isArray(currentAnswer) && question.format === "Multiple selection" ? currentAnswer : []
   );
+
+  // Reset multiple choice answers when question changes
+  useEffect(() => {
+    if (question.format === "Multiple selection") {
+      setMultipleChoiceAnswers(Array.isArray(currentAnswer) ? currentAnswer : []);
+    }
+  }, [question.id, currentAnswer]);
 
   const isMultipleSelectionQuestion = question.format === "Multiple selection";
 
