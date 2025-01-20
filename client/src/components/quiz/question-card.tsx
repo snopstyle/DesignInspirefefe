@@ -54,7 +54,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     }
 
     setMultipleChoiceAnswers(newAnswers);
-    onAnswer(newAnswers, true); // Ajouter true pour éviter la soumission automatique
   };
 
   const renderAnswerInput = () => {
