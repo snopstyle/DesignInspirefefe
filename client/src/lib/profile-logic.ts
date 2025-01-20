@@ -113,16 +113,16 @@ export const question_weights: Record<string, Record<string, number>> = {
     "Q13": { "Leadership": 0.3, "Prise de décision": 0.25, "Pensée stratégique": 0.2, "Vision d'avenir": 0.15 },
     "Q14": { "Passion pour la durabilité": 0.4, "Plaidoyer": 0.25, "Perspective globale": 0.2, "Résolution de problèmes": 0.15 },
     "Q15": { "Condition physique": 0.4, "Amour de la nature": 0.25, "Résilience": 0.2 },
-    "Q16": { "Hands-on problem-solving": 0.3, "Technical skills": 0.25, "Innovation": 0.2, "Practicality": 0.15 },
-    "Q17": { "Creativity": 0.4, "Self-expression": 0.25, "Imagination": 0.2, "Aesthetic sensitivity": 0.15 },
-    "Q18": { "Conflict resolution": 0.3, "Diplomacy": 0.25, "Communication skills": 0.2 },
-    "Q19": { "Organization": 0.3, "Efficiency": 0.25, "Strategic thinking": 0.2, "Long-term planning": 0.15 },
-    "Q20": { "Communication skills": 0.4, "Confidence": 0.25, "Charisma": 0.2, "Emotional expression": 0.15 },
-    "Q21": { "Technical expertise": 0.4, "Innovation": 0.25, "Forward-thinking mindset": 0.2, "Adaptability": 0.15 },
-    "Q22": { "Adaptability": 0.3, "Resilience": 0.25, "Efficiency": 0.2, "Problem-solving": 0.15 },
-    "Q23": { "Long-term thinking": 0.3, "Strategic planning": 0.25, "Ambition": 0.2, "Decision-making": 0.15 },
-    "Q24": { "Multitasking": 0.3, "Adaptability": 0.25, "Organization": 0.2, "Efficiency": 0.15 },
-    "Q25": { "Advocacy": 0.4, "Compassion": 0.25, "Global perspective": 0.2, "Desire to help others": 0.15 }
+    "Q16": { "Résolution pratique de problèmes": 0.3, "Compétences techniques": 0.25, "Innovation": 0.2, "Pragmatisme": 0.15 },
+    "Q17": { "Créativité": 0.4, "Expression personnelle": 0.25, "Imagination": 0.2, "Sensibilité esthétique": 0.15 },
+    "Q18": { "Résolution de conflits": 0.3, "Diplomatie": 0.25, "Compétences en communication": 0.2 },
+    "Q19": { "Organisation": 0.3, "Efficacité": 0.25, "Pensée stratégique": 0.2, "Planification à long terme": 0.15 },
+    "Q20": { "Compétences en communication": 0.4, "Confiance": 0.25, "Charisme": 0.2, "Expression émotionnelle": 0.15 },
+    "Q21": { "Expertise technique": 0.4, "Innovation": 0.25, "Esprit tourné vers l'avenir": 0.2, "Adaptabilité": 0.15 },
+    "Q22": { "Adaptabilité": 0.3, "Résilience": 0.25, "Efficacité": 0.2, "Résolution de problèmes": 0.15 },
+    "Q23": { "Réflexion à long terme": 0.3, "Planification stratégique": 0.25, "Ambition": 0.2, "Prise de décision": 0.15 },
+    "Q24": { "Multitâche": 0.3, "Adaptabilité": 0.25, "Organisation": 0.2, "Efficacité": 0.15 },
+    "Q25": { "Plaidoyer": 0.4, "Compassion": 0.25, "Perspective globale": 0.2, "Désir d'aider les autres": 0.15 }
 };
 
 export const sub_profile_weights: Record<string, Record<string, number>> = {
