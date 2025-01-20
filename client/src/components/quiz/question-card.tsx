@@ -52,6 +52,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     }
 
     setMultipleChoiceAnswers(newAnswers);
+    if (question.format === "Multiple selection") {
+      onAnswer(newAnswers, true);
+    }
   };
 
   const renderAnswerInput = () => {
@@ -161,9 +164,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const hasValidAnswer = () => {
     if (isMultipleSelectionQuestion) {
-      const maxSelections = question.maxSelections || 5;
-      const minSelections = 1;
-      return multipleChoiceAnswers.length >= minSelections && multipleChoiceAnswers.length <= maxSelections;
+      return true; // Always show the button for multiple selection questions
     }
 
     switch (question.format) {
