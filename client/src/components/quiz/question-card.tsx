@@ -37,7 +37,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
   const answerElementStyle =
-    "flex items-center justify-center rounded-2xl border border-white/10 p-4 hover:bg-white/5 transition-colors cursor-pointer text-center text-lg font-medium w-full h-full";
+    "flex items-center justify-center rounded-2xl border border-white/10 p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30";
 
   const handleMultipleSelection = (option: string) => {
     const newAnswers = multipleChoiceAnswers.includes(option)
