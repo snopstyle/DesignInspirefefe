@@ -248,38 +248,3 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
   };
 }
 
-const handleAnswer = useCallback(async (answer: string | string[]) => {
-    if (!session?.id) {
-      console.log('Aucune session trouvée, session actuelle:', session);
-      toast({
-        title: "Erreur", 
-        description: "Aucune session de quiz active. Veuillez rafraîchir la page.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      setAnswers(prev => ({
-        ...prev,
-        [currentQuestion]: answer
-      }));
-
-      const nextQuestionId = getNextQuestion(currentQuestion);
-      if (nextQuestionId) {
-        // For multiple selection questions, join answers with comma
-        const processedAnswer = Array.isArray(answer) ? answer.join(',') : answer;
-
-        await updateSession.mutateAsync({
-          sessionId: session.id,
-          questionId: `Q${currentQuestion}`,
-          answer: processedAnswer,
-          nextQuestionId: `Q${nextQuestionId}`,
-        });
-        setCurrentQuestion(nextQuestionId);
-      }
-    } catch (error) {
-      console.error("Error handling answer:", error);
-      // Handle error appropriately, e.g., display an error message
-    }
-  }, [session, currentQuestion, updateSession, setAnswers]);
