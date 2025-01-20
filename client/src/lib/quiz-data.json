@@ -326,8 +326,7 @@
     {
       "id": 26,
       "section": "Passions & Intérêts",
-      "text": "Qu'aimez-vous faire pendant votre temps libre ? (Sélectionnez jusqu'à 5 choix)",
-      "maxSelections": 5,
+      "text": "Qu'aimez-vous faire pendant votre temps libre ?",
       "options": [
         "Lire des livres",
         "Coder ou programmer",
@@ -370,7 +369,7 @@
     {
       "id": 28,
       "section": "Passions & Intérêts",
-      "text": "Choisissez tous les secteurs/industries dans lesquels vous êtes sûr de NE PAS vouloir travailler. (Sélection multiple)",
+      "text": "Choisissez tous les secteurs/industries dans lesquels vous êtes sûr de NE PAS vouloir travailler.",
       "options": [
         "Technologie/IT",
         "Santé/Médecine",
@@ -502,7 +501,6 @@
         "Saint-Pierre (Saint-Pierre-et-Miquelon)"
       ],
       "format": "Multiple selection",
-      "maxSelections": 3
     },
     {
       "id": 36,
