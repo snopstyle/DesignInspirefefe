@@ -41,10 +41,14 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
+    const maxSelections = question.maxSelections || 5;
+    
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else {
+    } else if (multipleChoiceAnswers.length < maxSelections) {
       newAnswers = [...multipleChoiceAnswers, option];
+    } else {
+      return; // Maximum selections reached
     }
 
     setMultipleChoiceAnswers(newAnswers);

@@ -443,7 +443,7 @@
         "Je veux explorer de nouvelles idées par la recherche",
         "Je veux atteindre le succès financier et la reconnaissance"
       ],
-      "format": "Multiple choice"
+      "format": "Single choice"
     },
     {
       "id": 33,
