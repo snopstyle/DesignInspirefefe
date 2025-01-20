@@ -45,7 +45,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else if (multipleChoiceAnswers.length < maxSelections) {
+    } else if (!maxSelections || multipleChoiceAnswers.length < maxSelections) {
       newAnswers = [...multipleChoiceAnswers, option];
     } else {
       return; // Maximum selections reached
