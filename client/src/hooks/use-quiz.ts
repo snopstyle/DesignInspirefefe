@@ -50,6 +50,15 @@ export function useQuiz() {
     }
 
     try {
+      // Pour les questions à choix multiples, on gère l'array directement
+      if (currentQuestion === 28) {
+        setAnswers(prev => ({
+          ...prev,
+          [currentQuestion]: Array.isArray(answer) ? answer : [answer]
+        }));
+        return; // Ne pas passer à la question suivante
+      }
+      
       setAnswers(prev => ({
         ...prev,
         [currentQuestion]: answer
