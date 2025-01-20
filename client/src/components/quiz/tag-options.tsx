@@ -22,11 +22,11 @@ export function TagOptions({ options, selectedOptions, onToggle }: TagOptionsPro
             transition={{ delay: index * 0.03 }}
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
-              "border hover:border-white/30",
+              "border border-white/10",
               "focus:outline-none focus:ring-2 focus:ring-white/20",
               isSelected ? 
-                "bg-gradient-to-r from-orange-500 to-purple-500 text-white border-transparent" :
-                "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border-white/10"
+                "bg-gradient-to-r from-orange-500/20 to-purple-500/20 text-white border-white/30" :
+                "bg-white/5 hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30 text-white/70 hover:text-white"
             )}
           >
             {option}
