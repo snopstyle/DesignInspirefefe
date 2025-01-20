@@ -10,9 +10,9 @@ export default function AuthPage() {
   const { login, register } = useUser();
   const form = useForm({
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
+      username: "testuser",
+      email: "test@example.com", 
+      password: "test123",
     },
   });
 
