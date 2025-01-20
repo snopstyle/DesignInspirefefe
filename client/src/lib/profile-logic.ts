@@ -412,44 +412,44 @@ export function answerValue(answer: string, questionId: string): number {
             "Forte préférence pour l'indépendance": 0.0
         },
         "Q2": {
-            "Logical reasoning": 1.0,
-            "Creative solutions": 0.75,
-            "A mix of both": 0.5,
-            "Avoid problems": 0.0
+            "Raisonnement logique": 1.0,
+            "Solutions créatives": 0.75,
+            "Un mélange des deux": 0.5,
+            "J'évite les problèmes": 0.0
         },
         "Q3": {
-            "Abstract ideas": 1.0,
-            "Practical applications": 0.75,
-            "Both equally": 0.5,
-            "Neither": 0.0
+            "Idées abstraites": 1.0,
+            "Applications pratiques": 0.75,
+            "Les deux également": 0.5,
+            "Ni l'un ni l'autre": 0.0
         },
         "Q4": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
+            "Très importante": 1.0,
+            "Importante": 0.75,
+            "Neutre": 0.5,
+            "Peu importante": 0.25,
+            "Pas du tout importante": 0.0
         },
         "Q5": {
-            "Strongly prefer risks": 1.0,
-            "Prefer risks": 0.75,
-            "Neutral": 0.5,
-            "Prefer caution": 0.25,
-            "Strongly prefer caution": 0.0
+            "Forte préférence pour les risques": 1.0,
+            "Préférence pour les risques": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour la prudence": 0.25,
+            "Forte préférence pour la prudence": 0.0
         },
         "Q6": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
+            "J'adore ça": 1.0,
+            "J'aime bien": 0.75,
+            "Neutre": 0.5,
+            "Je n'aime pas": 0.25,
+            "Je déteste": 0.0
         },
         "Q7": {
-            "Strongly prefer creative tasks": 1.0,
-            "Prefer creative tasks": 0.75,
-            "Neutral": 0.5,
-            "Prefer technical tasks": 0.25,
-            "Strongly prefer technical tasks": 0.0
+            "Forte préférence pour les tâches créatives": 1.0,
+            "Préférence pour les tâches créatives": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour les tâches techniques": 0.25,
+            "Forte préférence pour les tâches techniques": 0.0
         },
         "Q8": {
             "Very well": 1.0,
