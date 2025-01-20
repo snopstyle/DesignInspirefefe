@@ -646,6 +646,5 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
 export const __testing = {
     answerValue,
     calculateProfileScores,
-    getMatchedProfile,
-    getNextQuestion
+    getMatchedProfile
 };
