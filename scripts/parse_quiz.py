@@ -54,21 +54,6 @@ def parse_quiz_excel():
             # Parse answer options using the new function
             options = parse_answer_options(row['Answer Options'])
 
-            # Determine maxSelections based on question content (not ID)
-            max_selections = None
-            if row['Format type'] == "Multiple selection":
-                # Check the content of the question to determine maxSelections
-                if "industries/sectors you are sure you DO NOT want to work for" in row['Question Text']:
-                    max_selections = 7
-                elif "spare time" in row['Question Text']:
-                    max_selections = 5
-                elif "selection criteria for choosing a school" in row['Question Text']:
-                    max_selections = 3
-                elif "Where would you prefer to study" in row['Question Text']:
-                    max_selections = 3
-                elif "motivates you the most" in row['Question Text']:
-                    max_selections = 2
-
             # Create question object
             question = {
                 'id': question_id,
@@ -78,9 +63,12 @@ def parse_quiz_excel():
                 'format': str(row['Format type']).strip() if pd.notna(row['Format type']) else "Single choice"
             }
 
-            # Add maxSelections only if it's defined
-            if max_selections is not None:
-                question['maxSelections'] = max_selections
+            # Print details for Question 44
+            if question_id == 44:
+                print("\nDetailed info for Question 44:")
+                print("Raw Answer Options:", row['Answer Options'])
+                print("Parsed Options:", options)
+                print("Format Type:", row['Format type'])
 
             questions.append(question)
 
@@ -88,11 +76,10 @@ def parse_quiz_excel():
         questions.sort(key=lambda x: x['id'])
 
         # Save as JSON for easy import into TypeScript
-        output_path = 'client/src/lib/quiz-data.json'
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open('client/src/lib/quiz-data.json', 'w', encoding='utf-8') as f:
             json.dump({'questions': questions}, f, indent=2, ensure_ascii=False)
 
-        print(f"\nSuccessfully parsed quiz data and saved to {output_path}")
+        print("\nSuccessfully parsed quiz data:")
         print(f"Total questions: {len(questions)}")
         print("\nSections found:")
         for section in df['Section'].unique():

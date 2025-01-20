@@ -11,7 +11,6 @@ export interface Question {
   text: string;
   options: string[];
   format: QuestionFormat;
-  maxSelections?: number;  // Ajout de la propriété optionnelle maxSelections
 }
 
 // Helper function to parse slider options

@@ -36,27 +36,22 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
-  const answerElementStyle = (isSelected: boolean) => `
-    flex items-center justify-center rounded-2xl border 
-    ${isSelected 
-      ? "bg-gradient-to-r from-orange-500/20 to-purple-500/20 border-white/30" 
-      : "border-white/10"} 
-    p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full 
-    hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30`;
+  const answerElementStyle =
+    "flex items-center justify-center rounded-2xl border border-white/10 p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30";
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
+    const maxSelections = question.maxSelections || 5;
 
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else if (!question.maxSelections || multipleChoiceAnswers.length < question.maxSelections) {
+    } else if (!maxSelections || multipleChoiceAnswers.length < maxSelections) {
       newAnswers = [...multipleChoiceAnswers, option];
     } else {
       return; // Maximum selections reached
     }
 
     setMultipleChoiceAnswers(newAnswers);
-    // Ne pas envoyer la réponse automatiquement, attendre le clic sur le bouton
   };
 
   const renderAnswerInput = () => {
@@ -80,7 +75,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   >
                     <Label
                       htmlFor={`option-${index}`}
-                      className={answerElementStyle(currentAnswer === option)}
+                      className={answerElementStyle}
                       onClick={() => onAnswer(option)}
                     >
                       <span className="text-white/90 group-hover:text-white transition-colors break-words">
@@ -124,7 +119,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   className="group"
                 >
                   <div
-                    className={answerElementStyle(multipleChoiceAnswers.includes(option))}
+                    className={`${answerElementStyle} ${
+                      multipleChoiceAnswers.includes(option) ? "bg-white/10 border-white/30" : ""
+                    }`}
                     onClick={() => handleMultipleSelection(option)}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
@@ -134,6 +131,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                 </motion.div>
               ))}
             </div>
+          </ScrollArea>
+        );
+
+      case "Drag-and-drop ranking":
+        return (
+          <ScrollArea className="h-[60vh]">
+            <RankingOptions
+              options={question.options}
+              currentRanking={Array.isArray(currentAnswer) ? currentAnswer : []}
+              onRankingChange={onAnswer}
+            />
           </ScrollArea>
         );
 
@@ -153,14 +161,16 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const hasValidAnswer = () => {
     if (isMultipleSelectionQuestion) {
-      return multipleChoiceAnswers.length > 0;
+      return true; // Always show the button for multiple selection questions
     }
 
     switch (question.format) {
       case "Single choice":
         return Boolean(currentAnswer);
       case "Multiple choice":
-        return Array.isArray(currentAnswer) && currentAnswer.length > 0;
+        return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
+      case "Drag-and-drop ranking":
+        return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
       case "Text":
         return Boolean(currentAnswer && (currentAnswer as string).trim());
       default:
