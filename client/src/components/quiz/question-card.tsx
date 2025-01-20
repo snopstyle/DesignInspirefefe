@@ -41,17 +41,20 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
-    const maxSelections = question.maxSelections || 5;
+    // Définir une valeur par défaut de 5 si maxSelections n'est pas spécifié
+    const defaultMaxSelections = 5;
+    const maxSelections = question.maxSelections ?? defaultMaxSelections;
 
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else if (!maxSelections || multipleChoiceAnswers.length < maxSelections) {
+    } else if (multipleChoiceAnswers.length < maxSelections) {
       newAnswers = [...multipleChoiceAnswers, option];
     } else {
       return; // Maximum selections reached
     }
 
     setMultipleChoiceAnswers(newAnswers);
+    onAnswer(newAnswers, true); // Ajouter true pour éviter la soumission automatique
   };
 
   const renderAnswerInput = () => {
