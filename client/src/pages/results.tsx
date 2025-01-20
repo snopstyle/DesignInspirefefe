@@ -37,12 +37,13 @@ export default function Results() {
   }
 
   // Sort trait scores by value
-  const sortedTraits = Object.entries(latestResult.psychoSocialProfile || {})
+  const sortedTraits = Object.entries(latestResult.traits || {})
     .sort(([, a], [, b]) => (b as number) - (a as number));
 
-  // Sort profile scores by value
-  const sortedProfiles = Object.entries(latestResult.profileScores || {})
-    .sort(([, a], [, b]) => (b as number) - (a as number));
+  // Sort profile scores by value 
+  const sortedProfiles = Object.entries(latestResult.psychoSocialProfile || {})
+    .sort(([, a], [, b]) => (b as number) - (a as number))
+    .filter(([trait, score]) => score > 0);
 
   return (
     <GradientBackground>
