@@ -41,17 +41,16 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
-    const maxSelections = question.maxSelections || 5;
+    const maxSelections = question.maxSelections || multipleChoiceAnswers.length + 1;
 
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else if (!maxSelections || multipleChoiceAnswers.length < maxSelections) {
-      newAnswers = [...multipleChoiceAnswers, option];
     } else {
-      return; // Maximum selections reached
+      newAnswers = [...multipleChoiceAnswers, option];
     }
 
     setMultipleChoiceAnswers(newAnswers);
+    onAnswer(newAnswers, true);
   };
 
   const renderAnswerInput = () => {
