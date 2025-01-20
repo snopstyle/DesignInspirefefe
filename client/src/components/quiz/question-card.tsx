@@ -42,7 +42,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
     const maxSelections = question.maxSelections || 5;
-    
+
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
     } else if (multipleChoiceAnswers.length < maxSelections) {
@@ -205,11 +205,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
             {question.text}
           </CardTitle>
-          {question.format === "Multiple selection" && (
-            <p className="text-white/70 text-sm mt-2">
-              Sélectionnez vos réponses ({multipleChoiceAnswers.length}/{question.maxSelections || 5} sélections) puis cliquez sur "Question Suivante" pour continuer
-            </p>
-          )}
         </CardHeader>
         <CardContent className="space-y-6 px-0">
           <div className="mb-8">
