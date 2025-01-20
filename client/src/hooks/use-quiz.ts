@@ -49,6 +49,19 @@ export function useQuiz() {
       return;
     }
 
+    // Reset answers for new question if it's not a multiple selection
+    if (currentQuestion === 28) {
+      setAnswers((prev) => ({
+        ...prev,
+        [currentQuestion]: Array.isArray(answer) ? answer : [answer],
+      }));
+    } else {
+      setAnswers((prev) => ({
+        ...prev,
+        [currentQuestion]: answer,
+      }));
+    }
+
     try {
       setAnswers((prev) => ({
         ...prev,
