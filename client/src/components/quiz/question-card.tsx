@@ -53,9 +53,8 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
     setMultipleChoiceAnswers(newAnswers);
     if (question.format === "Multiple selection") {
-      onAnswer(newAnswers, true); // Toujours envoyer avec preventSubmit=true
+      onAnswer(newAnswers, true);
     }
-    onAnswer(newAnswers, true);
   };
 
   const renderAnswerInput = () => {
