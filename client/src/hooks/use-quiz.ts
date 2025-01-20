@@ -50,12 +50,28 @@ export function useQuiz() {
     }
 
     try {
-      setAnswers((prev) => ({
-        ...prev,
-        [currentQuestion]: currentQuestion === 28 ? 
-          (Array.isArray(answer) ? answer : [answer]) : 
-          answer,
-      }));
+      if (currentQuestion === 28) {
+        // For question 28, handle array of selections
+        const currentAnswers = Array.isArray(answers[currentQuestion]) ? answers[currentQuestion] as string[] : [];
+        const newAnswer = answer as string;
+        
+        let updatedAnswers;
+        if (currentAnswers.includes(newAnswer)) {
+          updatedAnswers = currentAnswers.filter(a => a !== newAnswer);
+        } else {
+          updatedAnswers = [...currentAnswers, newAnswer];
+        }
+        
+        setAnswers(prev => ({
+          ...prev,
+          [currentQuestion]: updatedAnswers
+        }));
+      } else {
+        setAnswers(prev => ({
+          ...prev,
+          [currentQuestion]: answer
+        }));
+      }
 
       const nextQuestionId = getNextQuestion(currentQuestion);
       if (nextQuestionId) {
