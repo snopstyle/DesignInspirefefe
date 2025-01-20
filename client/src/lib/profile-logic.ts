@@ -140,12 +140,12 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
         "Pragmatisme": 0.15,
         "Pensée critique": 0.1
     },
-    "The Data Enthusiast": {
-        "Analytical thinking": 0.3,
-        "Attention to detail": 0.25,
-        "Love for numbers": 0.2,
-        "Pattern recognition": 0.15,
-        "Data interpretation": 0.1
+    "L'Analyste de Données": {
+        "Pensée analytique": 0.3,
+        "Attention aux détails": 0.25,
+        "Amour des chiffres": 0.2,
+        "Reconnaissance des modèles": 0.15,
+        "Interprétation des données": 0.1
     },
     "The Theorist": {
         "Deep thinking": 0.3,
@@ -154,26 +154,26 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
         "Abstract reasoning": 0.15,
         "Curiosity": 0.1
     },
-    "The Engineer": {
-        "Technical skills": 0.3,
-        "Problem-solving": 0.25,
-        "Results-driven mindset": 0.2,
-        "Precision": 0.15,
+    "L'Ingénieur": {
+        "Compétences techniques": 0.3,
+        "Résolution de problèmes": 0.25,
+        "Orientation résultats": 0.2,
+        "Précision": 0.15,
         "Innovation": 0.1
     },
-    "The Artist": {
-        "Creativity": 0.4,
-        "Emotional intelligence": 0.25,
-        "Self-expression": 0.15,
+    "L'Artiste": {
+        "Créativité": 0.4,
+        "Intelligence émotionnelle": 0.25,
+        "Expression personnelle": 0.15,
         "Imagination": 0.1,
-        "Aesthetic sensitivity": 0.1
+        "Sensibilité esthétique": 0.1
     },
-    "The Innovator": {
-        "Creativity": 0.4,
-        "Technical expertise": 0.25,
-        "Forward-thinking mindset": 0.15,
-        "Risk-taking": 0.1,
-        "Curiosity": 0.1
+    "L'Innovateur": {
+        "Créativité": 0.4,
+        "Expertise technique": 0.25,
+        "Vision d'avenir": 0.15,
+        "Prise de risque": 0.1,
+        "Curiosité": 0.1
     },
     "The Storyteller": {
         "Creativity": 0.4,
