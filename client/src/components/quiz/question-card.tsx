@@ -115,17 +115,16 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   transition={{ delay: index * 0.1 }}
                   className="group"
                 >
-                  <Label
-                    htmlFor={`option-${index}`}
+                  <div
                     className={`${answerElementStyle} ${
-                      multipleChoiceAnswers.includes(option) ? "bg-white/10" : ""
+                      multipleChoiceAnswers.includes(option) ? "bg-white/10 border-white/30" : ""
                     }`}
                     onClick={() => handleMultipleSelection(option)}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
                       {option}
                     </span>
-                  </Label>
+                  </div>
                 </motion.div>
               ))}
             </div>
