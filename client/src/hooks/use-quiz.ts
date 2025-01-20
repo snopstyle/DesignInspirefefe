@@ -51,21 +51,23 @@ export function useQuiz() {
 
     try {
       if (currentQuestion === 28) {
-        // For question 28, handle array of selections
-        const currentAnswers = Array.isArray(answers[currentQuestion]) ? answers[currentQuestion] as string[] : [];
         const newAnswer = answer as string;
+        const currentAnswers = Array.isArray(answers[28]) ? answers[28] as string[] : [];
         
-        let updatedAnswers;
-        if (currentAnswers.includes(newAnswer)) {
-          updatedAnswers = currentAnswers.filter(a => a !== newAnswer);
-        } else {
-          updatedAnswers = [...currentAnswers, newAnswer];
-        }
+        setAnswers(prev => {
+          const isAlreadySelected = currentAnswers.includes(newAnswer);
+          const updatedAnswers = isAlreadySelected
+            ? currentAnswers.filter(a => a !== newAnswer)
+            : [...currentAnswers, newAnswer];
+            
+          return {
+            ...prev,
+            [28]: updatedAnswers
+          };
+        });
         
-        setAnswers(prev => ({
-          ...prev,
-          [currentQuestion]: updatedAnswers
-        }));
+        // Ne pas passer à la question suivante pour la question 28
+        return;
       } else {
         setAnswers(prev => ({
           ...prev,
