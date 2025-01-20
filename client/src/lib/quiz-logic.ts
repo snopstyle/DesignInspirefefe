@@ -1,6 +1,7 @@
 // Quiz sections and types based on QUIZ POOL.xlsx
 import quizData from './quiz-data.json';
 import { calculateProfileScores, getMatchedProfile } from './profile-logic';
+import { useCallback } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export type QuestionFormat = "Single choice" | "Multiple choice" | "Scale" | "Text" | "Multiple selection" | "Drag-and-drop ranking" | "Slider";
