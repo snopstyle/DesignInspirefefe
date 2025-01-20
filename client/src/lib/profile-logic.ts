@@ -98,21 +98,21 @@ export const sub_profiles: Record<string, string[]> = {
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
-    "Q1": { "Teamwork": 0.3, "Independence": 0.3 },
-    "Q2": { "Logical reasoning": 0.3, "Analytical skills": 0.25, "Creativity": 0.4, "Problem-solving": 0.25 },
-    "Q3": { "Abstract thinking": 0.3, "Practicality": 0.3, "Innovation": 0.4, "Results-oriented mindset": 0.2 },
-    "Q4": { "Emotional intelligence": 0.4, "Self-expression": 0.25, "Empathy": 0.4, "Compassion": 0.4 },
-    "Q5": { "Risk-taking": 0.4, "Caution": 0.3, "Risk assessment": 0.25, "Strategic planning": 0.15 },
-    "Q6": { "Love for numbers": 0.3, "Data interpretation": 0.25, "Analytical thinking": 0.3, "Pattern recognition": 0.15 },
-    "Q7": { "Creativity": 0.4, "Technical skills": 0.25, "Innovation": 0.2, "Hands-on problem-solving": 0.15 },
-    "Q8": { "Efficiency": 0.3, "Adaptability": 0.25, "Organization": 0.2, "Long-term thinking": 0.15 },
-    "Q9": { "Empathy": 0.4, "Desire to help others": 0.25, "Mentorship": 0.2, "Advocacy": 0.15 },
-    "Q10": { "Open-mindedness": 0.3, "Global perspective": 0.25, "Curiosity": 0.2, "Interdisciplinary thinking": 0.15 },
-    "Q11": { "Attention to detail": 0.3, "Precision": 0.25, "Results-driven mindset": 0.2 },
-    "Q12": { "Love for learning": 0.2, "Intellectual curiosity": 0.3, "Growth mindset": 0.2, "Self-improvement": 0.1 },
-    "Q13": { "Leadership": 0.3, "Decision-making": 0.25, "Strategic thinking": 0.2, "Vision for the future": 0.15 },
-    "Q14": { "Passion for sustainability": 0.4, "Advocacy": 0.25, "Global perspective": 0.2, "Problem-solving": 0.15 },
-    "Q15": { "Physical fitness": 0.4, "Love for nature": 0.25, "Resilience": 0.2 },
+    "Q1": { "Travail d'équipe": 0.3, "Indépendance": 0.3 },
+    "Q2": { "Raisonnement logique": 0.3, "Compétences analytiques": 0.25, "Créativité": 0.4, "Résolution de problèmes": 0.25 },
+    "Q3": { "Pensée abstraite": 0.3, "Pragmatisme": 0.3, "Innovation": 0.4, "Orientation résultats": 0.2 },
+    "Q4": { "Intelligence émotionnelle": 0.4, "Expression personnelle": 0.25, "Empathie": 0.4, "Compassion": 0.4 },
+    "Q5": { "Prise de risque": 0.4, "Prudence": 0.3, "Évaluation des risques": 0.25, "Planification stratégique": 0.15 },
+    "Q6": { "Amour des chiffres": 0.3, "Interprétation des données": 0.25, "Pensée analytique": 0.3, "Reconnaissance des modèles": 0.15 },
+    "Q7": { "Créativité": 0.4, "Compétences techniques": 0.25, "Innovation": 0.2, "Résolution pratique de problèmes": 0.15 },
+    "Q8": { "Efficacité": 0.3, "Adaptabilité": 0.25, "Organisation": 0.2, "Réflexion à long terme": 0.15 },
+    "Q9": { "Empathie": 0.4, "Désir d'aider les autres": 0.25, "Mentorat": 0.2, "Plaidoyer": 0.15 },
+    "Q10": { "Ouverture d'esprit": 0.3, "Perspective globale": 0.25, "Curiosité": 0.2, "Pensée interdisciplinaire": 0.15 },
+    "Q11": { "Attention aux détails": 0.3, "Précision": 0.25, "Orientation résultats": 0.2 },
+    "Q12": { "Amour de l'apprentissage": 0.2, "Curiosité intellectuelle": 0.3, "Esprit de croissance": 0.2, "Développement personnel": 0.1 },
+    "Q13": { "Leadership": 0.3, "Prise de décision": 0.25, "Pensée stratégique": 0.2, "Vision d'avenir": 0.15 },
+    "Q14": { "Passion pour la durabilité": 0.4, "Plaidoyer": 0.25, "Perspective globale": 0.2, "Résolution de problèmes": 0.15 },
+    "Q15": { "Condition physique": 0.4, "Amour de la nature": 0.25, "Résilience": 0.2 },
     "Q16": { "Hands-on problem-solving": 0.3, "Technical skills": 0.25, "Innovation": 0.2, "Practicality": 0.15 },
     "Q17": { "Creativity": 0.4, "Self-expression": 0.25, "Imagination": 0.2, "Aesthetic sensitivity": 0.15 },
     "Q18": { "Conflict resolution": 0.3, "Diplomacy": 0.25, "Communication skills": 0.2 },
@@ -126,19 +126,19 @@ export const question_weights: Record<string, Record<string, number>> = {
 };
 
 export const sub_profile_weights: Record<string, Record<string, number>> = {
-    "The Researcher": {
-        "Intellectual curiosity": 0.3,
-        "Attention to detail": 0.25,
-        "Love for learning": 0.2,
-        "Abstract thinking": 0.15,
+    "Le Chercheur": {
+        "Curiosité intellectuelle": 0.3,
+        "Attention aux détails": 0.25,
+        "Amour de l'apprentissage": 0.2,
+        "Pensée abstraite": 0.15,
         "Patience": 0.1
     },
-    "The Problem Solver": {
-        "Logical reasoning": 0.3,
-        "Analytical skills": 0.25,
-        "Results-oriented mindset": 0.2,
-        "Practicality": 0.15,
-        "Critical thinking": 0.1
+    "Le Solutionneur": {
+        "Raisonnement logique": 0.3,
+        "Compétences analytiques": 0.25,
+        "Orientation résultats": 0.2,
+        "Pragmatisme": 0.15,
+        "Pensée critique": 0.1
     },
     "The Data Enthusiast": {
         "Analytical thinking": 0.3,
