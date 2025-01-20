@@ -405,11 +405,11 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
 export function answerValue(answer: string, questionId: string): number {
     const answerScales: Record<string, Record<string, number>> = {
         "Q1": {
-            "Strongly prefer teamwork": 1.0,
-            "Prefer teamwork": 0.75,
-            "Neutral": 0.5,
-            "Prefer independence": 0.25,
-            "Strongly prefer independence": 0.0
+            "Forte préférence pour le travail d'équipe": 1.0,
+            "Préférence pour le travail d'équipe": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour l'indépendance": 0.25,
+            "Forte préférence pour l'indépendance": 0.0
         },
         "Q2": {
             "Logical reasoning": 1.0,
@@ -617,17 +617,16 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
     try {
         let maxScore = -1;
         let matchedProfile = "";
+        console.log("Profile Scores:", profileScores);
 
-        for (const [profile, traits] of Object.entries(sub_profiles)) {
-            const weights = sub_profile_weights[profile];
-            if (!weights) continue;
-
+        for (const [profile, weights] of Object.entries(sub_profile_weights)) {
             let score = 0;
-            for (const trait of traits) {
-                if (profileScores[trait] !== undefined && weights[trait] !== undefined) {
-                    score += profileScores[trait] * weights[trait];
+            for (const [trait, weight] of Object.entries(weights)) {
+                if (profileScores[trait] !== undefined) {
+                    score += profileScores[trait] * weight;
                 }
             }
+            console.log(`Score for ${profile}:`, score);
 
             if (score > maxScore) {
                 maxScore = score;
@@ -635,10 +634,11 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
             }
         }
 
-        return matchedProfile || "Le Généraliste"; // Default fallback profile in French
+        console.log("Selected Profile:", matchedProfile, "with score:", maxScore);
+        return matchedProfile || "Le Généraliste";
     } catch (error) {
         console.error('Error getting matched profile:', error);
-        return "Le Généraliste"; // Default fallback profile in French
+        return "Le Généraliste";
     }
 }
 
