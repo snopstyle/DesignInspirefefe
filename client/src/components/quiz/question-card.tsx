@@ -36,13 +36,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
-  const answerElementStyle =
-    "flex items-center justify-center rounded-2xl border border-white/10 p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30";
+  const answerElementStyle = (isSelected: boolean) => `
+    flex items-center justify-center rounded-2xl border 
+    ${isSelected 
+      ? "bg-gradient-to-r from-orange-500/20 to-purple-500/20 border-white/30" 
+      : "border-white/10"} 
+    p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full 
+    hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30`;
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
-    // Définir une valeur par défaut de 5 si maxSelections n'est pas spécifié
-    const defaultMaxSelections = 5;
+    const defaultMaxSelections = question.id === 28 ? 7 : 5;
     const maxSelections = question.maxSelections ?? defaultMaxSelections;
 
     if (multipleChoiceAnswers.includes(option)) {
@@ -77,7 +81,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   >
                     <Label
                       htmlFor={`option-${index}`}
-                      className={answerElementStyle}
+                      className={answerElementStyle(currentAnswer === option)}
                       onClick={() => onAnswer(option)}
                     >
                       <span className="text-white/90 group-hover:text-white transition-colors break-words">
@@ -121,9 +125,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                   className="group"
                 >
                   <div
-                    className={`${answerElementStyle} ${
-                      multipleChoiceAnswers.includes(option) ? "bg-white/10 border-white/30" : ""
-                    }`}
+                    className={answerElementStyle(multipleChoiceAnswers.includes(option))}
                     onClick={() => handleMultipleSelection(option)}
                   >
                     <span className="text-white/90 group-hover:text-white transition-colors break-words">
