@@ -54,19 +54,20 @@ def parse_quiz_excel():
             # Parse answer options using the new function
             options = parse_answer_options(row['Answer Options'])
 
-            # Determine maxSelections based on question format and ID
+            # Determine maxSelections based on question content (not ID)
             max_selections = None
             if row['Format type'] == "Multiple selection":
-                if question_id == 26:
+                # Check the content of the question to determine maxSelections
+                if "industries/sectors you are sure you DO NOT want to work for" in row['Question Text']:
+                    max_selections = 7
+                elif "spare time" in row['Question Text']:
                     max_selections = 5
-                elif question_id == 28:
-                    max_selections = 7  # Pour les industries non désirées
-                elif question_id == 30:
+                elif "selection criteria for choosing a school" in row['Question Text']:
+                    max_selections = 3
+                elif "Where would you prefer to study" in row['Question Text']:
+                    max_selections = 3
+                elif "motivates you the most" in row['Question Text']:
                     max_selections = 2
-                elif question_id == 35:
-                    max_selections = 3
-                elif question_id == 37:
-                    max_selections = 3
 
             # Create question object
             question = {

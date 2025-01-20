@@ -567,7 +567,8 @@
         "Cooking or baking",
         "Learning new skills or languages"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple selection",
+      "maxSelections": 5
     },
     {
       "id": 45,
@@ -607,7 +608,8 @@
         "Agriculture/Food Industry",
         "Media/Journalism"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple selection",
+      "maxSelections": 7
     },
     {
       "id": 47,
@@ -634,7 +636,8 @@
         "Achieving financial success or recognition",
         "Exploring new ideas or concepts"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple selection",
+      "maxSelections": 2
     },
     {
       "id": 49,
@@ -716,7 +719,8 @@
         "Cayenne (French Guiana)",
         "Saint-Pierre (Saint Pierre and Miquelon)"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple selection",
+      "maxSelections": 3
     },
     {
       "id": 54,

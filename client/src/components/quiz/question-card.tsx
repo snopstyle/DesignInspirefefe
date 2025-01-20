@@ -19,15 +19,8 @@ interface QuestionCardProps {
 
 export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCardProps) {
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
-    Array.isArray(currentAnswer) && question.format === "Multiple selection" ? currentAnswer : []
+    Array.isArray(currentAnswer) ? currentAnswer : []
   );
-
-  // Reset multiple choice answers when question changes
-  useEffect(() => {
-    if (question.format === "Multiple selection") {
-      setMultipleChoiceAnswers(Array.isArray(currentAnswer) ? currentAnswer : []);
-    }
-  }, [question.id, currentAnswer]);
 
   const isMultipleSelectionQuestion = question.format === "Multiple selection";
 
@@ -53,18 +46,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
-    const defaultMaxSelections = question.id === 28 ? 7 : 5;
-    const maxSelections = question.maxSelections ?? defaultMaxSelections;
 
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else if (multipleChoiceAnswers.length < maxSelections) {
+    } else if (!question.maxSelections || multipleChoiceAnswers.length < question.maxSelections) {
       newAnswers = [...multipleChoiceAnswers, option];
     } else {
       return; // Maximum selections reached
     }
 
     setMultipleChoiceAnswers(newAnswers);
+    // Ne pas envoyer la réponse automatiquement, attendre le clic sur le bouton
   };
 
   const renderAnswerInput = () => {
@@ -145,17 +137,6 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           </ScrollArea>
         );
 
-      case "Drag-and-drop ranking":
-        return (
-          <ScrollArea className="h-[60vh]">
-            <RankingOptions
-              options={question.options}
-              currentRanking={Array.isArray(currentAnswer) ? currentAnswer : []}
-              onRankingChange={onAnswer}
-            />
-          </ScrollArea>
-        );
-
       case "Text":
         return (
           <Input
@@ -172,16 +153,14 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const hasValidAnswer = () => {
     if (isMultipleSelectionQuestion) {
-      return true; // Always show the button for multiple selection questions
+      return multipleChoiceAnswers.length > 0;
     }
 
     switch (question.format) {
       case "Single choice":
         return Boolean(currentAnswer);
       case "Multiple choice":
-        return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
-      case "Drag-and-drop ranking":
-        return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
+        return Array.isArray(currentAnswer) && currentAnswer.length > 0;
       case "Text":
         return Boolean(currentAnswer && (currentAnswer as string).trim());
       default:
