@@ -247,4 +247,3 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
     }
   };
 }
-
