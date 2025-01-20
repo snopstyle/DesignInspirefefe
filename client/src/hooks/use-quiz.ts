@@ -50,30 +50,10 @@ export function useQuiz() {
     }
 
     try {
-      if (currentQuestion === 28) {
-        const newAnswer = answer as string;
-        const currentAnswers = Array.isArray(answers[28]) ? answers[28] as string[] : [];
-        
-        setAnswers(prev => {
-          const isAlreadySelected = currentAnswers.includes(newAnswer);
-          const updatedAnswers = isAlreadySelected
-            ? currentAnswers.filter(a => a !== newAnswer)
-            : [...currentAnswers, newAnswer];
-            
-          return {
-            ...prev,
-            [28]: updatedAnswers
-          };
-        });
-        
-        // Ne pas passer à la question suivante pour la question 28
-        return;
-      } else {
-        setAnswers(prev => ({
-          ...prev,
-          [currentQuestion]: answer
-        }));
-      }
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion]: answer
+      }));
 
       const nextQuestionId = getNextQuestion(currentQuestion);
       if (nextQuestionId) {
