@@ -197,9 +197,17 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       </motion.div>
       <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl">
         <CardHeader className="space-y-6">
-          <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
-            {question.text}
-          </CardTitle>
+          <motion.div
+            key={question.text}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
+              {question.text}
+            </CardTitle>
+          </motion.div>
         </CardHeader>
         <CardContent className="space-y-6 px-0">
           <div className="mb-8">
