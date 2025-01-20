@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,30 +36,51 @@ export default function Results() {
     );
   }
 
+  // Sort trait scores by value
+  const sortedTraits = Object.entries(latestResult.psychoSocialProfile || {})
+    .sort(([, a], [, b]) => (b as number) - (a as number));
+
+  // Sort profile scores by value
+  const sortedProfiles = Object.entries(latestResult.profileScores || {})
+    .sort(([, a], [, b]) => (b as number) - (a as number));
+
   return (
     <GradientBackground>
       <div className="container mx-auto py-12">
-        <Card className="max-w-2xl mx-auto bg-background/80 backdrop-blur-sm">
+        <Card className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-3xl">Résultats de Votre Profil</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8">
             <div>
               <h2 className="text-2xl font-semibold mb-2">Profil Dominant</h2>
               <p className="text-xl">{latestResult.dominantProfile}</p>
             </div>
+            
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Sous-Profil</h2>
-              <p className="text-xl">{latestResult.subProfile}</p>
-            </div>
-            <div>
-              <h2 className="text-2xl font-semibold mb-2">Traits Principaux</h2>
-              <ul className="list-disc list-inside space-y-2">
-                {latestResult.traits.map((trait: string, index: number) => (
-                  <li key={index} className="text-lg">{trait}</li>
+              <h2 className="text-2xl font-semibold mb-4">Scores des Traits</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sortedTraits.map(([trait, score], index) => (
+                  <div key={index} className="flex justify-between items-center border-b py-2">
+                    <span className="text-lg">{trait}</span>
+                    <span className="font-semibold">{(score as number).toFixed(2)}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
+
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Scores des Profils</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sortedProfiles.map(([profile, score], index) => (
+                  <div key={index} className="flex justify-between items-center border-b py-2">
+                    <span className="text-lg">{profile}</span>
+                    <span className="font-semibold">{(score as number).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <Button
               onClick={() => setLocation("/")}
               className="w-full mt-6"
