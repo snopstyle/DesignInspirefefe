@@ -40,16 +40,15 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     "flex items-center justify-center rounded-2xl border border-white/10 p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30";
 
   const handleMultipleSelection = (option: string) => {
-    const newAnswers = multipleChoiceAnswers.includes(option)
-      ? multipleChoiceAnswers.filter(a => a !== option)
-      : [...multipleChoiceAnswers, option];
-
-    if (question.maxSelections && newAnswers.length > question.maxSelections) {
-      return;
+    let newAnswers;
+    if (multipleChoiceAnswers.includes(option)) {
+      newAnswers = multipleChoiceAnswers.filter(a => a !== option);
+    } else {
+      newAnswers = [...multipleChoiceAnswers, option];
     }
 
     setMultipleChoiceAnswers(newAnswers);
-    onAnswer(newAnswers, true); // Always prevent auto-submit for multiple selection
+    onAnswer(newAnswers, true);
   };
 
   const renderAnswerInput = () => {

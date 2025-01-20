@@ -167,8 +167,26 @@ export const QUIZ_SECTIONS = {
   EDUCATION: "Education Project"
 } as const;
 
-// Load questions from the generated JSON
-export const QUESTIONS = quizData.questions as Question[];
+// Add answers for question 32
+quizData.questions = quizData.questions.map(q => {
+  if (q.id === 32) {
+    return {
+      ...q,
+      options: [
+        "Je veux avoir un impact positif sur l'environnement",
+        "Je veux créer des technologies innovantes",
+        "Je veux aider les gens via la santé ou le travail social",
+        "Je veux m'exprimer à travers l'art ou l'écriture",
+        "Je veux diriger et gérer des équipes en entreprise",
+        "Je veux explorer de nouvelles idées par la recherche",
+        "Je veux atteindre le succès financier et la reconnaissance"
+      ]
+    };
+  }
+  return q;
+});
+
+export const QUESTIONS = quizData.questions;
 
 export function getCurrentSection(questionId: number): string {
   const question = QUESTIONS.find(q => q.id === questionId);
