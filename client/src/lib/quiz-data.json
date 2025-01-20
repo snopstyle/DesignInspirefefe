@@ -501,6 +501,7 @@
         "Saint-Pierre (Saint-Pierre-et-Miquelon)"
       ],
       "format": "Multiple selection",
+      "maxSelections": 3
     },
     {
       "id": 36,
