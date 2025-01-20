@@ -65,7 +65,7 @@ export const key_traits: Record<string, number> = {
 
 export const sub_profiles: Record<string, string[]> = {
     "Le Chercheur": ["Curiosité intellectuelle", "Attention aux détails", "Amour de l'apprentissage", "Pensée abstraite", "Patience"],
-    "Le Solutionneur": ["Raisonnement logique", "Compétences analytiques", "Orientation résultats", "Esprit pratique", "Pensée critique"],
+    "Le Solutionneur": ["Raisonnement logique", "Compétences analytiques", "Orientation résultats", "Pragmatisme", "Pensée critique"],
     "L'Analyste de Données": ["Pensée analytique", "Attention aux détails", "Affinité pour les chiffres", "Reconnaissance des modèles", "Interprétation des données"],
     "Le Théoricien": ["Pensée profonde", "Créativité conceptuelle", "Rigueur intellectuelle", "Raisonnement abstrait", "Curiosité"],
     "L'Ingénieur": ["Compétences techniques", "Résolution de problèmes", "Orientation résultats", "Précision", "Innovation"],
