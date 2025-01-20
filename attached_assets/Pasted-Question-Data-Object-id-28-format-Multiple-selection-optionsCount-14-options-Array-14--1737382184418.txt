@@ -1,0 +1,37 @@
+Question Data: 
+Object {id: 28, format: "Multiple selection", optionsCount: 14, options: Array(14), currentAnswers: Array(10)}
+currentAnswers: Array(10)
+0: "Mathématiques"
+1: "Physique-Chimie"
+2: "Biologie/Sciences de la Terre"
+3: "Littérature/Philosophie"
+4: "Histoire/Géographie"
+5: "Économie/Sciences Sociales"
+6: "Langues Étrangères"
+7: "Informatique"
+8: "Arts (Visuels, Musique, Théâtre)"
+9: "Sciences de l'Ingénieur"
+length: 10
+[[Prototype]]: Array(0)
+format: "Multiple selection"
+id: 28
+options: Array(14)
+optionsCount: 14
+[[Prototype]]: Object
+e.set is not a function
+at t.<anonymous> (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:167014)
+at t.<anonymous> (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:343897)
+at https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:389108
+at t (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:365583)
+at t.emit (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:343871)
+at t.value (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:56798)
+at https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:52844
+at t (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:365583)
+at t.value (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:52802)
+at t.value (https://a5346835-72c6-4195-94e8-8b0bc9c2532b-00-3kwq60axaw7y9.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:56876)
+Question Data: 
+Object {id: 28, format: "Multiple selection", optionsCount: 14, options: Array(14), currentAnswers: Array(10)}
+Question Data: 
+Object {id: 28, format: "Multiple selection", optionsCount: 14, options: Array(14), currentAnswers: Array(10)}
+Question Data: 
+Object {id: 29, format: "Single choice", optionsCount: 5, options: Array(5), currentAnswers: Array(10)}
