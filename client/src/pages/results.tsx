@@ -13,7 +13,26 @@ export default function Results() {
   const latestResult = results?.[results.length - 1];
 
   if (!latestResult) {
-    return null;
+    return (
+      <GradientBackground>
+        <div className="container mx-auto py-12">
+          <Card className="max-w-2xl mx-auto bg-background/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-3xl">Erreur</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg">Aucun résultat trouvé. Veuillez compléter le quiz.</p>
+              <Button
+                onClick={() => setLocation("/")}
+                className="w-full mt-6"
+              >
+                Retourner à l'Accueil
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </GradientBackground>
+    );
   }
 
   return (
