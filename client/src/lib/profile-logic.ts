@@ -147,12 +147,12 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
         "Reconnaissance des modèles": 0.15,
         "Interprétation des données": 0.1
     },
-    "The Theorist": {
-        "Deep thinking": 0.3,
-        "Creativity in conceptualizing ideas": 0.25,
-        "Intellectual rigor": 0.2,
-        "Abstract reasoning": 0.15,
-        "Curiosity": 0.1
+    "Le Théoricien": {
+        "Pensée profonde": 0.3,
+        "Créativité conceptuelle": 0.25,
+        "Rigueur intellectuelle": 0.2,
+        "Raisonnement abstrait": 0.15,
+        "Curiosité": 0.1
     },
     "L'Ingénieur": {
         "Compétences techniques": 0.3,
@@ -175,229 +175,229 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
         "Prise de risque": 0.1,
         "Curiosité": 0.1
     },
-    "The Storyteller": {
-        "Creativity": 0.4,
-        "Communication skills": 0.25,
-        "Emotional intelligence": 0.15,
-        "Narrative crafting": 0.1,
-        "Empathy": 0.1
+    "Le Narrateur": {
+        "Créativité": 0.4,
+        "Compétences en communication": 0.25,
+        "Intelligence émotionnelle": 0.15,
+        "Construction narrative": 0.1,
+        "Empathie": 0.1
     },
-    "The Performer": {
-        "Charisma": 0.4,
-        "Emotional expression": 0.25,
-        "Stage presence": 0.15,
-        "Confidence": 0.1,
-        "Adaptability": 0.1
+    "L'Interprète": {
+        "Charisme": 0.4,
+        "Expression émotionnelle": 0.25,
+        "Présence scénique": 0.15,
+        "Confiance": 0.1,
+        "Adaptabilité": 0.1
     },
-    "The Designer": {
-        "Creativity": 0.4,
-        "Attention to detail": 0.25,
-        "User-centered mindset": 0.15,
-        "Visual thinking": 0.1,
-        "Problem-solving": 0.1
+    "Le Designer": {
+        "Créativité": 0.4,
+        "Attention aux détails": 0.25,
+        "Approche centrée utilisateur": 0.15,
+        "Pensée visuelle": 0.1,
+        "Résolution de problèmes": 0.1
     },
-    "The Helper": {
-        "Empathy": 0.4,
+    "L'Aidant": {
+        "Empathie": 0.4,
         "Patience": 0.25,
-        "Desire to help others": 0.15,
+        "Désir d'aider les autres": 0.15,
         "Collaboration": 0.1,
-        "Emotional intelligence": 0.1
+        "Intelligence émotionnelle": 0.1
     },
-    "The Activist": {
+    "L'Activiste": {
         "Passion": 0.4,
-        "Determination": 0.25,
-        "Strong communication skills": 0.15,
-        "Advocacy": 0.1,
-        "Resilience": 0.1
+        "Détermination": 0.25,
+        "Compétences en communication": 0.15,
+        "Plaidoyer": 0.1,
+        "Résilience": 0.1
     },
-    "The Communicator": {
-        "Interpersonal skills": 0.4,
-        "Empathy": 0.25,
-        "Adaptability": 0.15,
-        "Dialogue facilitation": 0.1,
-        "Relationship-building": 0.1
+    "Le Communicant": {
+        "Compétences interpersonnelles": 0.4,
+        "Empathie": 0.25,
+        "Adaptabilité": 0.15,
+        "Facilitation du dialogue": 0.1,
+        "Construction de relations": 0.1
     },
-    "The Educator": {
+    "L'Éducateur": {
         "Patience": 0.4,
-        "Communication skills": 0.25,
-        "Love for learning": 0.15,
-        "Knowledge-sharing": 0.1,
-        "Mentorship": 0.1
+        "Compétences en communication": 0.25,
+        "Amour de l'apprentissage": 0.15,
+        "Partage des connaissances": 0.1,
+        "Mentorat": 0.1
     },
-    "The Humanitarian": {
+    "L'Humanitaire": {
         "Compassion": 0.4,
-        "Resilience": 0.25,
-        "Global perspective": 0.15,
-        "Problem-solving": 0.1,
-        "Advocacy": 0.1
+        "Résilience": 0.25,
+        "Perspective globale": 0.15,
+        "Résolution de problèmes": 0.1,
+        "Plaidoyer": 0.1
     },
-    "The Entrepreneur": {
+    "L'Entrepreneur": {
         "Leadership": 0.3,
-        "Creativity": 0.25,
-        "Results-oriented mindset": 0.2,
-        "Risk-taking": 0.15,
+        "Créativité": 0.25,
+        "Orientation résultats": 0.2,
+        "Prise de risque": 0.15,
         "Ambition": 0.1
     },
-    "The Leader": {
-        "Decision-making": 0.3,
+    "Le Leader": {
+        "Prise de décision": 0.3,
         "Communication": 0.25,
-        "Vision for the future": 0.2,
-        "Strategic thinking": 0.15,
-        "Confidence": 0.1
+        "Vision d'avenir": 0.2,
+        "Pensée stratégique": 0.15,
+        "Confiance": 0.1
     },
-    "The Strategist": {
-        "Analytical thinking": 0.3,
-        "Organization": 0.25,
-        "Results-driven mindset": 0.2,
-        "Efficiency": 0.15,
-        "Long-term thinking": 0.1
+    "Le Stratège": {
+        "Pensée analytique": 0.3,
+        "Organisation": 0.25,
+        "Orientation résultats": 0.2,
+        "Efficacité": 0.15,
+        "Réflexion à long terme": 0.1
     },
-    "The Salesperson": {
-        "Charisma": 0.3,
-        "Persistence": 0.25,
-        "Customer-focused mindset": 0.2,
-        "Negotiation skills": 0.15,
-        "Adaptability": 0.1
+    "Le Commercial": {
+        "Charisme": 0.3,
+        "Persévérance": 0.25,
+        "Orientation client": 0.2,
+        "Compétences en négociation": 0.15,
+        "Adaptabilité": 0.1
     },
-    "The Investor": {
-        "Analytical thinking": 0.3,
-        "Risk assessment": 0.25,
-        "Long-term perspective": 0.2,
-        "Financial acumen": 0.15,
-        "Strategic planning": 0.1
+    "L'Investisseur": {
+        "Pensée analytique": 0.3,
+        "Évaluation des risques": 0.25,
+        "Vision à long terme": 0.2,
+        "Acuité financière": 0.15,
+        "Planification stratégique": 0.1
     },
-    "The Generalist": {
-        "Adaptability": 0.3,
-        "Curiosity": 0.25,
-        "Love for learning": 0.2,
-        "Versatility": 0.15,
-        "Broad skill set": 0.1
+    "Le Généraliste": {
+        "Adaptabilité": 0.3,
+        "Curiosité": 0.25,
+        "Amour de l'apprentissage": 0.2,
+        "Polyvalence": 0.15,
+        "Large éventail de compétences": 0.1
     },
-    "The Integrator": {
-        "Versatility": 0.3,
-        "Creativity": 0.25,
-        "Problem-solving": 0.2,
-        "Interdisciplinary thinking": 0.15,
-        "Adaptability": 0.1
+    "L'Intégrateur": {
+        "Polyvalence": 0.3,
+        "Créativité": 0.25,
+        "Résolution de problèmes": 0.2,
+        "Pensée interdisciplinaire": 0.15,
+        "Adaptabilité": 0.1
     },
-    "The Lifelong Learner": {
-        "Curiosity": 0.3,
-        "Adaptability": 0.25,
-        "Growth mindset": 0.2,
-        "Love for learning": 0.15,
-        "Self-improvement": 0.1
+    "L'Apprenant Perpétuel": {
+        "Curiosité": 0.3,
+        "Adaptabilité": 0.25,
+        "Mentalité de croissance": 0.2,
+        "Amour de l'apprentissage": 0.15,
+        "Développement personnel": 0.1
     },
-    "The Multipotentialite": {
-        "Versatility": 0.3,
-        "Creativity": 0.25,
-        "Broad skill set": 0.2,
-        "Adaptability": 0.15,
-        "Curiosity": 0.1
+    "Le Multipotentiel": {
+        "Polyvalence": 0.3,
+        "Créativité": 0.25,
+        "Large éventail de compétences": 0.2,
+        "Adaptabilité": 0.15,
+        "Curiosité": 0.1
     },
-    "The Cultural Enthusiast": {
-        "Open-mindedness": 0.3,
-        "Communication skills": 0.25,
-        "Global perspective": 0.2,
-        "Curiosity": 0.15,
-        "Adaptability": 0.1
+    "L'Enthousiaste Culturel": {
+        "Ouverture d'esprit": 0.3,
+        "Compétences en communication": 0.25,
+        "Perspective globale": 0.2,
+        "Curiosité": 0.15,
+        "Adaptabilité": 0.1
     },
-    "The Coder": {
-        "Technical skills": 0.4,
-        "Problem-solving": 0.25,
-        "Love for coding": 0.15,
-        "Logical thinking": 0.1,
+    "Le Codeur": {
+        "Compétences techniques": 0.4,
+        "Résolution de problèmes": 0.25,
+        "Passion pour le code": 0.15,
+        "Pensée logique": 0.1,
         "Innovation": 0.1
     },
-    "The Gadget Enthusiast": {
-        "Technical skills": 0.4,
-        "Creativity": 0.25,
-        "Love for tinkering": 0.15,
-        "Hands-on problem-solving": 0.1,
-        "Curiosity": 0.1
+    "Le Passionné de Technologie": {
+        "Compétences techniques": 0.4,
+        "Créativité": 0.25,
+        "Passion pour le bricolage": 0.15,
+        "Résolution pratique": 0.1,
+        "Curiosité": 0.1
     },
-    "The Digital Creator": {
-        "Creativity": 0.4,
-        "Technical skills": 0.25,
-        "User-centered mindset": 0.15,
+    "Le Créateur Numérique": {
+        "Créativité": 0.4,
+        "Compétences techniques": 0.25,
+        "Approche centrée utilisateur": 0.15,
         "Innovation": 0.1,
-        "Adaptability": 0.1
+        "Adaptabilité": 0.1
     },
-    "The Conservationist": {
-        "Passion for nature": 0.4,
-        "Problem-solving": 0.25,
-        "Global perspective": 0.15,
-        "Advocacy": 0.1,
-        "Resilience": 0.1
+    "Le Conservateur": {
+        "Passion pour la nature": 0.4,
+        "Résolution de problèmes": 0.25,
+        "Perspective globale": 0.15,
+        "Plaidoyer": 0.1,
+        "Résilience": 0.1
     },
-    "The Outdoor Adventurer": {
-        "Physical fitness": 0.4,
-        "Adaptability": 0.25,
-        "Love for nature": 0.15,
-        "Problem-solving": 0.1,
-        "Curiosity": 0.1
+    "L'Aventurier": {
+        "Condition physique": 0.4,
+        "Adaptabilité": 0.25,
+        "Amour de la nature": 0.15,
+        "Résolution de problèmes": 0.1,
+        "Curiosité": 0.1
     },
-    "The Sustainable Innovator": {
-        "Creativity": 0.4,
-        "Technical skills": 0.25,
-        "Passion for sustainability": 0.15,
-        "Problem-solving": 0.1,
+    "L'Innovateur Durable": {
+        "Créativité": 0.4,
+        "Compétences techniques": 0.25,
+        "Passion pour la durabilité": 0.15,
+        "Résolution de problèmes": 0.1,
         "Innovation": 0.1
     },
-    "The Project Manager": {
+    "Le Chef de Projet": {
         "Leadership": 0.3,
-        "Organization": 0.25,
-        "Problem-solving": 0.2,
-        "Efficiency": 0.15,
-        "Strategic thinking": 0.1
+        "Organisation": 0.25,
+        "Résolution de problèmes": 0.2,
+        "Efficacité": 0.15,
+        "Pensée stratégique": 0.1
     },
-    "The Event Planner": {
-        "Attention to detail": 0.3,
+    "L'Organisateur d'Événements": {
+        "Attention aux détails": 0.3,
         "Communication": 0.25,
-        "Creativity": 0.2,
-        "Adaptability": 0.15,
-        "Problem-solving": 0.1
+        "Créativité": 0.2,
+        "Adaptabilité": 0.15,
+        "Résolution de problèmes": 0.1
     },
-    "The Systems Thinker": {
-        "Analytical thinking": 0.3,
-        "Problem-solving": 0.25,
-        "Results-driven mindset": 0.2,
-        "Efficiency": 0.15,
+    "Le Penseur Systémique": {
+        "Pensée analytique": 0.3,
+        "Résolution de problèmes": 0.25,
+        "Orientation résultats": 0.2,
+        "Efficacité": 0.15,
         "Innovation": 0.1
     },
-    "The Public Speaker": {
-        "Charisma": 0.4,
-        "Communication skills": 0.25,
-        "Emotional intelligence": 0.15,
+    "L'Orateur": {
+        "Charisme": 0.4,
+        "Compétences en communication": 0.25,
+        "Intelligence émotionnelle": 0.15,
         "Influence": 0.1,
-        "Adaptability": 0.1
+        "Adaptabilité": 0.1
     },
-    "The Writer": {
-        "Creativity": 0.4,
-        "Communication skills": 0.25,
-        "Attention to detail": 0.15,
-        "Storytelling": 0.1,
-        "Empathy": 0.1
+    "L'Écrivain": {
+        "Créativité": 0.4,
+        "Compétences en communication": 0.25,
+        "Attention aux détails": 0.15,
+        "Narration": 0.1,
+        "Empathie": 0.1
     },
-    "The Negotiator": {
+    "Le Négociateur": {
         "Communication": 0.4,
-        "Empathy": 0.25,
-        "Problem-solving": 0.15,
-        "Diplomacy": 0.1,
-        "Adaptability": 0.1
+        "Empathie": 0.25,
+        "Résolution de problèmes": 0.15,
+        "Diplomatie": 0.1,
+        "Adaptabilité": 0.1
     },
-    "The Mentor": {
-        "Empathy": 0.4,
-        "Communication skills": 0.25,
-        "Desire to help others": 0.15,
+    "Le Mentor": {
+        "Empathie": 0.4,
+        "Compétences en communication": 0.25,
+        "Désir d'aider les autres": 0.15,
         "Leadership": 0.1,
         "Patience": 0.1
     },
-    "The Wellness Advocate": {
-        "Empathy": 0.4,
-        "Communication skills": 0.25,
-        "Passion for health": 0.15,
-        "Problem-solving": 0.1,
-        "Adaptability": 0.1
+    "Le Défenseur du Bien-être": {
+        "Empathie": 0.4,
+        "Compétences en communication": 0.25,
+        "Passion pour la santé": 0.15,
+        "Résolution de problèmes": 0.1,
+        "Adaptabilité": 0.1
     }
 };
 
