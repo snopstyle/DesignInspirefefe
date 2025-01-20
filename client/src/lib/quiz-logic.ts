@@ -167,25 +167,6 @@ export const QUIZ_SECTIONS = {
   EDUCATION: "Education Project"
 } as const;
 
-// Add answers for question 32
-quizData.questions = quizData.questions.map(q => {
-  if (q.id === 32) {
-    return {
-      ...q,
-      options: [
-        "Je veux avoir un impact positif sur l'environnement",
-        "Je veux créer des technologies innovantes",
-        "Je veux aider les gens via la santé ou le travail social",
-        "Je veux m'exprimer à travers l'art ou l'écriture",
-        "Je veux diriger et gérer des équipes en entreprise",
-        "Je veux explorer de nouvelles idées par la recherche",
-        "Je veux atteindre le succès financier et la reconnaissance"
-      ]
-    };
-  }
-  return q;
-});
-
 export const QUESTIONS = quizData.questions;
 
 export function getCurrentSection(questionId: number): string {
@@ -248,20 +229,20 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
       .slice(0, 5)
       .map(([trait]) => trait),
     passionsAndInterests: {
-      hobbies: ensureArray(answers[44]),
-      academicInterests: ensureArray(answers[45]),
-      unwantedIndustries: ensureArray(answers[46]),
-      workEnvironment: ensureString(answers[47]),
-      motivations: ensureArray(answers[48]),
-      learningStyle: ensureString(answers[49]),
-      careerGoal: ensureString(answers[50])
+      hobbies: ensureArray(answers[26]),
+      academicInterests: ensureArray(answers[27]),
+      unwantedIndustries: ensureArray(answers[28]),
+      workEnvironment: ensureString(answers[29]),
+      motivations: ensureArray(answers[30]),
+      learningStyle: ensureString(answers[31]),
+      careerGoal: ensureString(answers[32])
     },
     educationProject: {
-      budget: ensureString(answers[51]),
-      duration: ensureString(answers[52]),
-      locations: ensureArray(answers[53]),
-      mobility: ensureString(answers[54]),
-      criteria: ensureArray(answers[55])
+      budget: ensureString(answers[33]),
+      duration: ensureString(answers[34]),
+      locations: ensureArray(answers[35]),
+      mobility: ensureString(answers[36]),
+      criteria: ensureArray(answers[37])
     }
   };
 }
