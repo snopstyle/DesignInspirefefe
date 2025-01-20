@@ -327,6 +327,7 @@
       "id": 26,
       "section": "Passions & Intérêts",
       "text": "Qu'aimez-vous faire pendant votre temps libre ? (Sélectionnez jusqu'à 5 choix)",
+      "maxSelections": 5,
       "options": [
         "Lire des livres",
         "Coder ou programmer",

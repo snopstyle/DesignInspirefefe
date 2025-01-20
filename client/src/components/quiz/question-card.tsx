@@ -158,8 +158,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   const hasValidAnswer = () => {
     if (isMultipleSelectionQuestion) {
+      const maxSelections = question.maxSelections || 5;
       const minSelections = 1;
-      return multipleChoiceAnswers.length >= minSelections;
+      return multipleChoiceAnswers.length >= minSelections && multipleChoiceAnswers.length <= maxSelections;
     }
 
     switch (question.format) {
@@ -200,7 +201,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
           </CardTitle>
           {question.format === "Multiple selection" && (
             <p className="text-white/70 text-sm mt-2">
-              Sélectionnez vos réponses puis cliquez sur "Question Suivante" pour continuer
+              Sélectionnez vos réponses ({multipleChoiceAnswers.length}/{question.maxSelections || 5} sélections) puis cliquez sur "Question Suivante" pour continuer
             </p>
           )}
         </CardHeader>

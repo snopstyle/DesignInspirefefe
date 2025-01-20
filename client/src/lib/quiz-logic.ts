@@ -195,9 +195,7 @@ export function getCurrentSection(questionId: number): string {
 
 export function getNextQuestion(currentId: number): number | null {
   const currentIndex = QUESTIONS.findIndex(q => q.id === currentId);
-  if (currentIndex === -1 || currentIndex === QUESTIONS.length - 1) {
-    return null;
-  }
+  if (currentIndex === -1 || currentIndex === QUESTIONS.length - 1) return null;
   return QUESTIONS[currentIndex + 1].id;
 }
 
