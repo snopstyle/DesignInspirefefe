@@ -53,7 +53,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
     setMultipleChoiceAnswers(newAnswers);
     if (question.format === "Multiple selection") {
-      onAnswer(newAnswers, true);
+      onAnswer(newAnswers, false);
     }
   };
 
