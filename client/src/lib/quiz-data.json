@@ -386,7 +386,8 @@
         "Agriculture/Industrie alimentaire",
         "Médias/Journalisme"
       ],
-      "format": "Multiple selection"
+      "format": "Multiple selection",
+      "maxSelections": 5
     },
     {
       "id": 29,

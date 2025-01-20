@@ -63,14 +63,6 @@ def parse_quiz_excel():
                 'format': str(row['Format type']).strip() if pd.notna(row['Format type']) else "Single choice"
             }
 
-            # Print details for Question 44
-            if question_id == 44:
-                print("\nDetailed info for Question 44:")
-                print("Raw Answer Options:", row['Answer Options'])
-                print("Parsed Options:", options)
-                print("Format Type:", row['Format type'])
-
-            questions.append(question)
 
         # Sort questions by ID to ensure proper order
         questions.sort(key=lambda x: x['id'])
