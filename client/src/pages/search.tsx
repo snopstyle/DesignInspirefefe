@@ -168,7 +168,10 @@ export default function SearchPage() {
                     />
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="outline" className="gap-2">
+                        <Button 
+                          variant="outline" 
+                          className="gap-2 hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 hover:text-white transition-colors"
+                        >
                           <Filter className="h-4 w-4" />
                           Filtres
                         </Button>
