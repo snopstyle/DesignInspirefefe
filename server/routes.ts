@@ -349,62 +349,116 @@ export function registerRoutes(app: Express): Server {
 
   const httpServer = createServer(app);
   
-  let cachedData = null;
+  interface FormationData {
+    id: string;
+    formation: string;
+    etablissement: string;
+    ville: string;
+    region: string;
+    niveau: string;
+    type: string;
+    domaines: string[];
+    cout: {
+      montant: number;
+      devise: string;
+      gratuitApprentissage: boolean;
+    };
+    duree: string;
+    pedagogie: {
+      tempsPlein: boolean;
+      presentiel: boolean;
+      alternance: boolean;
+    };
+    statut: string;
+    hebergement: boolean;
+    lien: string;
+    adresse: string;
+    departement: string;
+    tel: string;
+    coordinates: {
+      lat: number;
+      lng: number;
+    } | null;
+  }
+
+  let cachedData: FormationData[] | null = null;
 
   app.get('/api/search', async (req, res) => {
     try {
       if (!cachedData) {
         const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
         const sheetName = workbook.SheetNames[0];
-        cachedData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+        const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+        cachedData = rawData.map(transformData);
       }
 
-      // Afficher le premier élément pour debug
-      console.log('Premier élément:', JSON.stringify(cachedData[0], null, 2));
-      console.log('Données brutes:', cachedData.length, 'écoles trouvées');
-      
       const query = req.query.q?.toString().toLowerCase() || '';
-
-      // Transformation simple des données
-      const transformData = (item: any) => {
-        return {
-          id: String(Math.random()),
-          formation: item.Formation || '',
-          etablissement: item.Etablissement || '',
-          ville: item.Ville || '',
-          region: item.Région || '',
-          niveau: item.NIveau || '',
-          type: item["Type Formation"] || '',
-          domaines: item.Domaines || '',
-          cout: item.Coût || '',
-          duree: item.Durée || '',
-          pedagogie: item.Pédagogie || '',
-          statut: item.Statut || '',
-          hebergement: item.Hebergement || '',
-          lien: item["Lien officiel"] || '',
-          adresse: item.Adresse || '',
-          departement: item.Département || '',
-          tel: item.Tel || ''
+      
+      // Improved data transformation with validation
+      function transformData(item: any): FormationData {
+        // Parse cost information
+        const costRegex = /(\d+(?:\s*\d+)*)\s*(euros?|€)(?:\s*\(([^)]+)\))?/i;
+        const costMatch = (item.Coût || '').match(costRegex);
+        const cost = {
+          montant: costMatch ? parseInt(costMatch[1].replace(/\s+/g, '')) : 0,
+          devise: 'EUR',
+          gratuitApprentissage: /gratuit.*apprentissage/i.test(item.Coût || '')
         };
-      };
 
-      // Si pas de requête, retourner toutes les écoles
-      if (!query) {
-        const allSchools = cachedData.map(transformData);
-        console.log('Retour de toutes les écoles:', allSchools.length);
-        return res.json(allSchools);
+        // Parse pedagogy information
+        const pedagogie = {
+          tempsPlein: /(temps.*plein|full.*time)/i.test(item.Pédagogie || ''),
+          presentiel: /(présentiel|on.*site)/i.test(item.Pédagogie || ''),
+          alternance: /(alternance|apprentissage)/i.test(item.Pédagogie || '')
+        };
+
+        // Clean and split domains
+        const domaines = item.Domaines ? 
+          item.Domaines.split(',').map((d: string) => d.trim()).filter(Boolean) : 
+          [];
+
+        return {
+          id: `${item.UAI || Math.random().toString(36).substr(2, 9)}`,
+          formation: (item.Formation || '').toLowerCase().trim(),
+          etablissement: (item.Etablissement || '').trim(),
+          ville: (item.Ville || '').trim(),
+          region: (item.Région || '').trim(),
+          niveau: (item.NIveau || '').trim(),
+          type: (item["Type Formation"] || '').trim(),
+          domaines,
+          cout: cost,
+          duree: (item.Durée || '').trim(),
+          pedagogie,
+          statut: (item.Statut || '').trim(),
+          hebergement: /avec.*hébergement/i.test(item.Hebergement || ''),
+          lien: (item["Lien officiel"] || '').trim(),
+          adresse: (item.Adresse || '').trim(),
+          departement: (item.Département || '').trim(),
+          tel: (item.Tel || '').trim(),
+          coordinates: item.Latitude && item.Longitude ? {
+            lat: parseFloat(item.Latitude),
+            lng: parseFloat(item.Longitude)
+          } : null
+        };
       }
 
-      // Recherche simple sur toutes les valeurs
-      const results = cachedData.filter((item: any) => {
-        return Object.values(item).some(value => 
-          value && value.toString().toLowerCase().includes(query)
-        );
-      }).map(transformData);
+      // Implement efficient search with pre-processed data
+      if (!query) {
+        return res.json(cachedData);
+      }
 
-      console.log('Résultats de la recherche:', results.length);
+      const searchableFields = ['formation', 'etablissement', 'ville', 'region', 'niveau', 'type', 'domaines'];
+      
+      const results = cachedData.filter((item) => {
+        return searchableFields.some(field => {
+          const value = item[field];
+          if (Array.isArray(value)) {
+            return value.some(v => v.toLowerCase().includes(query));
+          }
+          return value.toLowerCase().includes(query);
+        });
+      });
 
-      console.log('Résultats de la recherche:', results.length);
       res.json(results);
     } catch (error) {
       console.error('Search error:', error);
