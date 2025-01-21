@@ -348,7 +348,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   const httpServer = createServer(app);
-  
+
   interface FormationData {
     id: string;
     formation: string;
@@ -393,51 +393,85 @@ export function registerRoutes(app: Express): Server {
       }
 
       const query = req.query.q?.toString().toLowerCase() || '';
-      
+
       // Improved data transformation with validation
       function transformData(item: any): FormationData {
-        // Parse cost information
+        // Map Excel column names to our expected fields
+        const columnMap = {
+          'Nom Formation': 'Formation',
+          'Établissement': 'Etablissement',
+          'City': 'Ville',
+          'Region': 'Région',
+          'Level': 'NIveau',
+          'Type': 'Type Formation',
+          'Domains': 'Domaines',
+          'Cost': 'Coût',
+          'Duration': 'Durée',
+          'Teaching Method': 'Pédagogie',
+          'Status': 'Statut',
+          'Housing': 'Hebergement',
+          'Official Link': 'Lien officiel',
+          'Address': 'Adresse',
+          'Department': 'Département',
+          'Phone': 'Tel'
+        };
+
+        // Map item keys using the column map
+        const mappedItem = Object.entries(columnMap).reduce((acc, [excelKey, dbKey]) => {
+          acc[dbKey] = item[excelKey] || item[dbKey] || '';
+          return acc;
+        }, {} as Record<string, any>);
+
+        // Parse cost information with better validation
         const costRegex = /(\d+(?:\s*\d+)*)\s*(euros?|€)(?:\s*\(([^)]+)\))?/i;
-        const costMatch = (item.Coût || '').match(costRegex);
+        const costMatch = (mappedItem.Coût || '').match(costRegex);
         const cost = {
           montant: costMatch ? parseInt(costMatch[1].replace(/\s+/g, '')) : 0,
           devise: 'EUR',
-          gratuitApprentissage: /gratuit.*apprentissage/i.test(item.Coût || '')
+          gratuitApprentissage: /gratuit|apprentissage|alternance/i.test(mappedItem.Coût || '')
         };
 
-        // Parse pedagogy information
+        // Enhanced pedagogy parsing
         const pedagogie = {
-          tempsPlein: /(temps.*plein|full.*time)/i.test(item.Pédagogie || ''),
-          presentiel: /(présentiel|on.*site)/i.test(item.Pédagogie || ''),
-          alternance: /(alternance|apprentissage)/i.test(item.Pédagogie || '')
+          tempsPlein: /(temps.*plein|full.*time|présentiel)/i.test(mappedItem.Pédagogie || ''),
+          presentiel: /(présentiel|on.*site|sur.*site)/i.test(mappedItem.Pédagogie || ''),
+          alternance: /(altern|apprentissage|dual)/i.test(mappedItem.Pédagogie || '')
         };
 
-        // Clean and split domains
-        const domaines = item.Domaines ? 
-          item.Domaines.split(',').map((d: string) => d.trim()).filter(Boolean) : 
+        // Improved domain parsing with normalization
+        const domaines = mappedItem.Domaines ? 
+          mappedItem.Domaines.split(/[,;|]/)
+            .map((d: string) => d.trim().toLowerCase())
+            .filter(Boolean)
+            .map((d: string) => d.charAt(0).toUpperCase() + d.slice(1)) : 
           [];
 
+        // Generate consistent ID
+        const id = mappedItem.UAI || 
+                   mappedItem.ID || 
+                   `FORM-${Math.random().toString(36).substr(2, 9)}`;
+
         return {
-          id: `${item.UAI || Math.random().toString(36).substr(2, 9)}`,
-          formation: (item.Formation || '').toLowerCase().trim(),
-          etablissement: (item.Etablissement || '').trim(),
-          ville: (item.Ville || '').trim(),
-          region: (item.Région || '').trim(),
-          niveau: (item.NIveau || '').trim(),
-          type: (item["Type Formation"] || '').trim(),
-          domaines,
+          id,
+          formation: (mappedItem.Formation || 'Formation non renseignée').toLowerCase().trim(),
+          etablissement: (mappedItem.Etablissement || 'Établissement non renseigné').trim(),
+          ville: (mappedItem.Ville || 'Ville non renseignée').trim(),
+          region: (mappedItem.Région || 'Région non renseignée').trim(),
+          niveau: (mappedItem.NIveau || 'Niveau non renseigné').trim(),
+          type: (mappedItem["Type Formation"] || 'Type non renseigné').trim(),
+          domaines: domaines.length > 0 ? domaines : ['Domaine non renseigné'],
           cout: cost,
-          duree: (item.Durée || '').trim(),
+          duree: (mappedItem.Durée || 'Durée non renseignée').trim(),
           pedagogie,
-          statut: (item.Statut || '').trim(),
-          hebergement: /avec.*hébergement/i.test(item.Hebergement || ''),
-          lien: (item["Lien officiel"] || '').trim(),
-          adresse: (item.Adresse || '').trim(),
-          departement: (item.Département || '').trim(),
-          tel: (item.Tel || '').trim(),
-          coordinates: item.Latitude && item.Longitude ? {
-            lat: parseFloat(item.Latitude),
-            lng: parseFloat(item.Longitude)
+          statut: (mappedItem.Statut || 'Statut non renseigné').trim(),
+          hebergement: /avec.*hébergement|logement|housing/i.test(mappedItem.Hebergement || ''),
+          lien: (mappedItem["Lien officiel"] || 'Non renseigné').trim(),
+          adresse: (mappedItem.Adresse || 'Adresse non renseignée').trim(),
+          departement: (mappedItem.Département || 'Département non renseigné').trim(),
+          tel: (mappedItem.Tel || 'Non renseigné').trim(),
+          coordinates: mappedItem.Latitude && mappedItem.Longitude ? {
+            lat: parseFloat(mappedItem.Latitude),
+            lng: parseFloat(mappedItem.Longitude)
           } : null
         };
       }
@@ -448,7 +482,7 @@ export function registerRoutes(app: Express): Server {
       }
 
       const searchableFields = ['formation', 'etablissement', 'ville', 'region', 'niveau', 'type', 'domaines'];
-      
+
       const results = cachedData.filter((item) => {
         return searchableFields.some(field => {
           const value = item[field];
