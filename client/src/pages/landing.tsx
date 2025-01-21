@@ -74,7 +74,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <div className="max-w-md mx-auto">
+          <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -90,6 +90,26 @@ export default function Landing() {
                   <CardTitle className="text-xl mt-4">{features[2].title}</CardTitle>
                   <CardDescription className="text-white/70">
                     {features[2].description}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Card 
+                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors"
+                onClick={() => setLocation(features[3].path)}
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <MessageCircle className="h-8 w-8" />
+                  </div>
+                  <CardTitle className="text-xl mt-4">{features[3].title}</CardTitle>
+                  <CardDescription className="text-white/70">
+                    {features[3].description}
                   </CardDescription>
                 </CardHeader>
               </Card>
