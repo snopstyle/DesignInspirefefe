@@ -174,10 +174,19 @@ export default function SearchPage() {
               {results?.map((result, index) => (
                 <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-xl">{result.Formation}</CardTitle>
-                    <CardDescription className="text-lg font-medium">
-                      {result["Etablissement "]}
-                    </CardDescription>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-xl">{result.Formation}</CardTitle>
+                        <CardDescription className="text-lg font-medium">
+                          {result["Etablissement "]}
+                        </CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {result.Facebook && <SocialLink href={result.Facebook} icon={Facebook} label="Facebook" />}
+                        {result.Instagram && <SocialLink href={result.Instagram} icon={Instagram} label="Instagram" />}
+                        {result.Linkedin && <SocialLink href={result.Linkedin} icon={Linkedin} label="LinkedIn" />}
+                      </div>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
