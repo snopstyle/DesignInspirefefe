@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GraduationCap, Search } from "lucide-react";
+import { GradientBackground } from "@/components/layout/gradient-background";
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,7 +22,8 @@ export default function SearchPage() {
   };
 
   return (
-    <main className="container mx-auto p-4">
+    <GradientBackground>
+      <main className="container mx-auto p-4">
       <div className="max-w-4xl mx-auto space-y-6">
         <Card>
           <CardHeader>
@@ -61,5 +63,6 @@ export default function SearchPage() {
         </ScrollArea>
       </div>
     </main>
+    </GradientBackground>
   );
 }
