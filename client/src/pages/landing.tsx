@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Brain, Search, User, Trophy, Crown, BookOpen } from "lucide-react";
+import { Brain, Search, User, Trophy, Crown, BookOpen, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { SocialIcon } from 'react-social-icons'; // Added import
 
