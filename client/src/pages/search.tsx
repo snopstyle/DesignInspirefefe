@@ -60,7 +60,7 @@ export default function SearchPage() {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("all");
 
   // Charger les domaines depuis l'API
   const { data: domains = [] } = useQuery({
@@ -110,14 +110,14 @@ export default function SearchPage() {
         queryParams.append('tags', selectedTags.map(tag => tag.label).join(','));
       }
 
-      // Ajouter la ville sélectionnée
-      if (selectedCity) {
+      // Only append ville if it's not "all"
+      if (selectedCity && selectedCity !== "all") {
         queryParams.append('ville', selectedCity);
       }
 
       // Ajouter les autres filtres actifs
       Object.entries(activeFilters).forEach(([key, value]) => {
-        if (value && key !== 'ville') {  // Skip ville since we handle it separately
+        if (value && value !== "all" && key !== 'ville') {
           queryParams.append(key, value);
         }
       });
@@ -166,14 +166,14 @@ export default function SearchPage() {
 
   const removeFilter = (type: string) => {
     if (type === 'ville') {
-      setSelectedCity('');
+      setSelectedCity('all');
     }
     const newFilters = { ...activeFilters };
     delete newFilters[type];
     setActiveFilters(newFilters);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
 
@@ -221,7 +221,7 @@ export default function SearchPage() {
                                 <SelectValue placeholder="Toutes les villes" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">Toutes les villes</SelectItem>
+                                <SelectItem value="all">Toutes les villes</SelectItem>
                                 {cities?.map((city: string) => (
                                   <SelectItem key={city} value={city}>
                                     {city}
@@ -233,14 +233,14 @@ export default function SearchPage() {
                           <div className="space-y-2">
                             <label className="text-sm font-medium">Niveau</label>
                             <Select
-                              value={activeFilters['niveau'] || ''}
+                              value={activeFilters['niveau'] || 'all'}
                               onValueChange={(value) => handleFilterChange('niveau', value)}
                             >
                               <SelectTrigger>
                                 <SelectValue placeholder="Tous les niveaux" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">Tous les niveaux</SelectItem>
+                                <SelectItem value="all">Tous les niveaux</SelectItem>
                                 <SelectItem value="Bac+2">Bac+2</SelectItem>
                                 <SelectItem value="Bac+3">Bac+3</SelectItem>
                                 <SelectItem value="Bac+4">Bac+4</SelectItem>
@@ -268,9 +268,10 @@ export default function SearchPage() {
                   </div>
 
                   {/* Active Filters */}
-                  {(Object.keys(activeFilters).length > 0 || selectedCity) && (
+                  {((Object.keys(activeFilters).length > 0 && Object.values(activeFilters).some(v => v !== 'all')) ||
+                    (selectedCity && selectedCity !== 'all')) && (
                     <div className="flex flex-wrap gap-2 mt-3">
-                      {selectedCity && (
+                      {selectedCity && selectedCity !== 'all' && (
                         <Badge
                           variant="secondary"
                           className="flex items-center gap-1"
@@ -279,14 +280,14 @@ export default function SearchPage() {
                           <X
                             className="h-3 w-3 cursor-pointer"
                             onClick={() => {
-                              setSelectedCity('');
+                              setSelectedCity('all');
                               removeFilter('ville');
                             }}
                           />
                         </Badge>
                       )}
                       {Object.entries(activeFilters).map(([type, value]) => (
-                        type !== 'ville' && value && (
+                        type !== 'ville' && value && value !== 'all' && (
                           <Badge
                             key={type}
                             variant="secondary"
@@ -309,7 +310,7 @@ export default function SearchPage() {
                       type="checkbox"
                       id="diplomeEtat"
                       className="h-4 w-4 rounded border-input"
-                      onChange={(e) => handleFilterChange('diplomeEtat', e.target.checked ? 'true' : '')}
+                      onChange={(e) => handleFilterChange('diplomeEtat', e.target.checked ? 'true' : 'all')}
                       checked={activeFilters['diplomeEtat'] === 'true'}
                     />
                     <label htmlFor="diplomeEtat" className="text-sm">
