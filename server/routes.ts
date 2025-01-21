@@ -510,7 +510,7 @@ export function registerRoutes(app: Express): Server {
       rawData.forEach(item => {
         if (item.Domaines) {
           const domains = item.Domaines.toString()
-            .split(',')
+            .split(/[,|]/)  // Split on comma OR vertical bar
             .map(d => {
               const trimmed = d.trim();
               return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
