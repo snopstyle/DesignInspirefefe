@@ -635,10 +635,10 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
         }
 
         console.log("Selected Profile:", matchedProfile, "with score:", maxScore);
-        return matchedProfile || "Le Généraliste";
+        return matchedProfile || "Erreur";
     } catch (error) {
         console.error('Error getting matched profile:', error);
-        return "Le Généraliste";
+        return "Erreur";
     }
 }
 
