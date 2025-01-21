@@ -36,6 +36,92 @@ function formatText(text: string, defaultValue: string): string {
     .join(' ');
 }
 
+// Helper function to determine establishment name
+function getEstablishmentName(formation: string, etablissement: string): string {
+  // If etablissement is provided and not "non renseigné", use it
+  if (etablissement && !etablissement.toLowerCase().includes('non renseigné')) {
+    return formatText(etablissement, '');
+  }
+
+  // Check formation name for institution patterns
+  const formationLower = formation.toLowerCase();
+
+  // Universities and Institutes
+  if (formationLower.includes('iae') || formationLower.includes('institut d\'administration des entreprises')) {
+    return 'IAE';
+  }
+  if (formationLower.includes('iut') || formationLower.includes('institut universitaire de technologie')) {
+    return 'IUT';
+  }
+
+  // Engineering Schools
+  if (formationLower.includes('ensam') || formationLower.includes('arts et métiers')) {
+    return 'ENSAM';
+  }
+  if (formationLower.match(/\bensea\b/) || formationLower.includes('école nationale supérieure de l\'électronique')) {
+    return 'ENSEA';
+  }
+
+  // Business Schools
+  if (formationLower.includes('escp') || formationLower.includes('école supérieure de commerce de paris')) {
+    return 'ESCP Business School';
+  }
+  if (formationLower.includes('essec')) {
+    return 'ESSEC Business School';
+  }
+  if (formationLower.includes('edhec')) {
+    return 'EDHEC Business School';
+  }
+  if (formationLower.includes('hec') && !formationLower.includes('edhec')) {
+    return 'HEC Paris';
+  }
+  if (formationLower.includes('emlyon') || formationLower.includes('em lyon')) {
+    return 'EMLYON Business School';
+  }
+  if (formationLower.includes('kedge')) {
+    return 'KEDGE Business School';
+  }
+  if (formationLower.includes('neoma')) {
+    return 'NEOMA Business School';
+  }
+  if (formationLower.includes('skema')) {
+    return 'SKEMA Business School';
+  }
+  if (formationLower.includes('icn')) {
+    return 'ICN Business School';
+  }
+
+  // Science and Technology
+  if (formationLower.includes('ensea')) {
+    return 'ENSEA';
+  }
+  if (formationLower.includes('supélec') || formationLower.includes('supelec')) {
+    return 'CentraleSupélec';
+  }
+  if (formationLower.includes('polytechnique')) {
+    return 'École Polytechnique';
+  }
+  if (formationLower.includes('mines')) {
+    return 'École des Mines';
+  }
+  if (formationLower.includes('insa')) {
+    return 'INSA';
+  }
+
+  // Default case - be more specific about unknown establishments
+  if (formationLower.includes('master') || formationLower.includes('mba') || formationLower.includes('bachelor')) {
+    const formationType = formationLower.includes('master') ? 'Master' : formationLower.includes('mba') ? 'MBA' : 'Bachelor';
+    return `École Supérieure - ${formationType}`;
+  }
+
+  if (formationLower.includes('bts')) {
+    return 'Lycée - BTS';
+  }
+
+  // Default case
+  return 'Établissement Supérieur';
+}
+
 // Helper function to parse and format domains
 function parseDomains(domainsText: string): string[] {
   if (!domainsText) return ['Domaine Non Renseigné'];
@@ -49,6 +135,7 @@ function parseDomains(domainsText: string): string[] {
 
 async function importFormations() {
   try {
+    console.log('Starting import process...');
     const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
     const sheetName = workbook.SheetNames[0];
     const rawData = xlsx.utils.sheet_to_json<ExcelRow>(workbook.Sheets[sheetName]);
@@ -62,9 +149,13 @@ async function importFormations() {
 
       await Promise.all(batch.map(async (item) => {
         try {
-          // Create establishment record
+          // Get establishment name using the enhanced logic
+          const establishmentName = getEstablishmentName(item.Formation, item.Etablissement);
+          console.log(`Determined establishment name: ${establishmentName} for formation: ${item.Formation}`);
+
+          // Create establishment record with enhanced name determination
           const [establishment] = await db.insert(establishments).values({
-            name: formatText(item.Etablissement, 'Etablissement'),
+            name: establishmentName,
             statut: formatText(item.Statut, 'Statut Non Renseigné'),
             hebergement: Boolean(item.Hébergement),
             lien: item.Lien || 'Non Renseigné',
@@ -82,7 +173,7 @@ async function importFormations() {
             adresse: formatText(item.Adresse, 'Adresse Non Renseignée')
           }).returning();
 
-          // Create cost record
+          // Create cost record with better parsing
           const montantMatch = (item.Coût || '0').match(/\d+/);
           const [cost] = await db.insert(costs).values({
             montant: montantMatch ? parseFloat(montantMatch[0]) : 0,
@@ -100,14 +191,14 @@ async function importFormations() {
           // Create formation with relations
           await db.insert(formations).values({
             formation: formatText(item.Formation, 'Formation Non Renseignée'),
-            etablissementId: establishment.id,
-            locationId: location.id,
+            etablissement_id: establishment.id,
+            location_id: location.id,
             niveau: formatText(item.Niveau, 'Niveau Non Renseigné'),
             type: formatText(item['Type de Formation'], 'Type de Formation Non Renseigné'),
             domaines: parseDomains(item.Domaines),
-            costId: cost.id,
+            cost_id: cost.id,
             duree: formatText(item.Durée, 'Durée Non Renseignée'),
-            pedagogyId: pedagogy.id
+            pedagogy_id: pedagogy.id
           });
 
         } catch (error) {

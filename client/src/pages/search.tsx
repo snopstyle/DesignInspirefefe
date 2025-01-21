@@ -24,6 +24,33 @@ import { GradientBackground } from "@/components/layout/gradient-background";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
 
+const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
+  if (!href || href === "non renseigné") return null;
+
+  const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
+
+  const iconColors = {
+    Facebook: "bg-[#1877F2] hover:bg-[#0D65D9]",
+    Instagram: "bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] hover:opacity-90",
+    Linkedin: "bg-[#0A66C2] hover:bg-[#004182]"
+  };
+
+  const iconColor = iconColors[label as keyof typeof iconColors] || "bg-gray-600 hover:bg-gray-700";
+
+  return (
+    <a
+      href={cleanUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center hover:scale-110 transition-transform"
+    >
+      <div className={`p-2 rounded-full ${iconColor} text-white shadow-md`}>
+        <Icon className="h-5 w-5" />
+      </div>
+    </a>
+  );
+};
+
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<Array<any>>([]);
@@ -130,32 +157,6 @@ export default function SearchPage() {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
 
-  const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
-    if (!href || href === "non renseigné") return null;
-
-    const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
-
-    const iconColors = {
-      Facebook: "bg-[#1877F2] hover:bg-[#0D65D9]",
-      Instagram: "bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] hover:opacity-90",
-      Linkedin: "bg-[#0A66C2] hover:bg-[#004182]"
-    };
-
-    const iconColor = iconColors[label as keyof typeof iconColors] || "bg-gray-600 hover:bg-gray-700";
-
-    return (
-      <a
-        href={cleanUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center hover:scale-110 transition-transform"
-      >
-        <div className={`p-2 rounded-full ${iconColor} text-white shadow-md`}>
-          <Icon className="h-5 w-5" />
-        </div>
-      </a>
-    );
-  };
 
   return (
     <GradientBackground>
