@@ -1,9 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { quizResults, quizSessions, profileCompletion, formations } from "@db/schema";
-import { eq, desc, ilike, or } from "drizzle-orm";
-import { calculateProfileScores, getMatchedProfile } from "../client/src/lib/profile-logic";
+import { formations, establishments, locations, costs, pedagogyTypes } from "@db/schema";
+import { eq, desc, ilike, or, and } from "drizzle-orm";
 import { setupAuth } from "./auth";
 import path from 'path';
 import xlsx from 'xlsx';
@@ -340,174 +339,64 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  const httpServer = createServer(app);
-
-  interface FormationData {
-    id: string;
-    formation: string;
-    etablissement: string;
-    ville: string;
-    region: string;
-    niveau: string;
-    type: string;
-    domaines: string[];
-    cout: {
-      montant: number;
-      devise: string;
-      gratuitApprentissage: boolean;
-    };
-    duree: string;
-    pedagogie: {
-      tempsPlein: boolean;
-      presentiel: boolean;
-      alternance: boolean;
-    };
-    statut: string;
-    hebergement: boolean;
-    lien: string;
-    adresse: string;
-    departement: string;
-    tel: string;
-    coordinates: {
-      lat: number;
-      lng: number;
-    } | null;
-  }
-
+  // Search endpoint
   app.get('/api/search', async (req, res) => {
     try {
       const query = req.query.q?.toString().toLowerCase() || '';
-      const results = await db.select({
-        id: formations.id,
-        formation: formations.formation,
-        etablissement: establishments.name,
-        ville: locations.ville,
-        region: locations.region,
-        niveau: formations.niveau,
-        type: formations.type,
-        domaines: formations.domaines,
-        duree: formations.duree
-      })
-      .from(formations)
-      .leftJoin(establishments, eq(formations.etablissementId, establishments.id))
-      .leftJoin(locations, eq(formations.locationId, locations.id))
-      .where(query ? 
-        or(
-          ilike(formations.formation, `%${query}%`),
-          ilike(establishments.name, `%${query}%`)
-        ) : undefined)
-      .limit(50);
+      const ville = req.query.ville?.toString();
+      const niveau = req.query.niveau?.toString();
+      const diplomeEtat = req.query.diplomeEtat === 'true';
 
-      // Search query was already defined above, removing duplicate
-      function transformData(item: any): FormationData {
-        // Utiliser directement les clés de l'Excel
-        return {
-          id: `FORM-${Math.random().toString(36).substr(2, 9)}`,
-          formation: item['Formation'] || 'Formation non renseignée',
-          etablissement: item["Etablissement"] || 'Établissement non renseigné',
-          ville: item['Ville'] || 'Ville non renseignée',
-          region: item['Région'] || 'Région non renseignée',
-          niveau: item['Niveau'] || 'Niveau non renseigné',
-          type: item['Type de Formation'] || 'Type non renseigné',
-          domaines: item['Domaines'] ? 
-            item['Domaines'].split(',').map((d: string) => d.trim()) : 
-            ['Domaine non renseigné'],
-          cout: {
-            montant: parseInt(item['Coût']?.match(/\d+/)?.[0] || '0'),
-            devise: 'EUR',
-            gratuitApprentissage: /gratuit|apprentissage/i.test(item['Coût'] || '')
-          },
-          duree: item['Durée'] || 'Durée non renseignée',
-          pedagogie: {
-            tempsPlein: /temps.*plein/i.test(item['Pédagogie'] || ''),
-            presentiel: /présentiel/i.test(item['Pédagogie'] || ''),
-            alternance: /alternance/i.test(item['Pédagogie'] || '')
-          },
-          statut: item['Statut'] || 'Statut non renseigné',
-          hebergement: Boolean(item['Hébergement']),
-          lien: item['Lien'] || 'Non renseigné',
-          adresse: item['Adresse'] || 'Adresse non renseignée',
-          departement: item['Département'] || 'Département non renseigné',
-          tel: item['Téléphone'] || 'Non renseigné',
-          coordinates: null,
-          facebook: item['Facebook'] || '',
-          instagram: item['Instagram'] || '',
-          linkedin: item['LinkedIn'] || ''
-        };
+      // Build the where clause based on filters
+      const whereConditions = [];
 
-        // Parse cost information with better validation
-        const costRegex = /(\d+(?:\s*\d+)*)\s*(euros?|€)(?:\s*\(([^)]+)\))?/i;
-        const costMatch = (mappedItem.Coût || '').match(costRegex);
-        const cost = {
-          montant: costMatch ? parseInt(costMatch[1].replace(/\s+/g, '')) : 0,
-          devise: 'EUR',
-          gratuitApprentissage: /gratuit|apprentissage|alternance/i.test(mappedItem.Coût || '')
-        };
-
-        // Enhanced pedagogy parsing
-        const pedagogie = {
-          tempsPlein: /(temps.*plein|full.*time|présentiel)/i.test(mappedItem.Pédagogie || ''),
-          presentiel: /(présentiel|on.*site|sur.*site)/i.test(mappedItem.Pédagogie || ''),
-          alternance: /(altern|apprentissage|dual)/i.test(mappedItem.Pédagogie || '')
-        };
-
-        // Improved domain parsing with proper capitalization
-        const domaines = mappedItem.Domaines ?
-          mappedItem.Domaines.split(/[,;|]/)
-            .map((d: string) => d.trim())
-            .filter(Boolean)
-            .map((d: string) => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()) :
-          ['Domaine non renseigné'];
-
-        // Generate consistent ID
-        const id = mappedItem.UAI ||
-          mappedItem.ID ||
-          `FORM-${Math.random().toString(36).substr(2, 9)}`;
-
-        return {
-          id,
-          formation: (mappedItem.Formation || 'Formation non renseignée').toLowerCase().trim(),
-          etablissement: (mappedItem.Etablissement || 'Établissement non renseigné').trim(),
-          ville: (mappedItem.Ville || 'Ville non renseignée').trim(),
-          region: (mappedItem.Région || 'Région non renseignée').trim(),
-          niveau: (mappedItem.NIveau || 'Niveau non renseigné').trim(),
-          type: (mappedItem["Type Formation"] || 'Type non renseigné').trim(),
-          domaines: domaines,
-          cout: cost,
-          duree: (mappedItem.Durée || 'Durée non renseignée').trim(),
-          pedagogie,
-          statut: (mappedItem.Statut || 'Statut non renseigné').trim(),
-          hebergement: /avec.*hébergement|logement|housing/i.test(mappedItem.Hebergement || ''),
-          lien: (mappedItem["Lien officiel"] || 'Non renseigné').trim(),
-          adresse: (mappedItem.Adresse || 'Adresse non renseignée').trim(),
-          departement: (mappedItem.Département || 'Département non renseigné').trim(),
-          tel: (mappedItem.Tel || 'Non renseigné').trim(),
-          coordinates: mappedItem.Latitude && mappedItem.Longitude ? {
-            lat: parseFloat(mappedItem.Latitude),
-            lng: parseFloat(mappedItem.Longitude)
-          } : null
-        };
+      if (query) {
+        whereConditions.push(
+          or(
+            ilike(formations.formation, `%${query}%`),
+            ilike(establishments.name, `%${query}%`)
+          )
+        );
       }
 
-
-
-      // Implement efficient search with pre-processed data
-      if (!query) {
-        return res.json(cachedData);
+      if (ville) {
+        whereConditions.push(eq(locations.ville, ville));
       }
 
-      const primarySearchFields = ['formation', 'etablissement'];
-      const filteredResults = cachedData.filter((item) => {
-        return primarySearchFields.some(field => {
-          const value = item[field];
-          if (typeof value === 'string') {
-            return value.toLowerCase().includes(query);
-          }
-          return false;
-        });
-      });
-      
-      res.json(filteredResults);
+      if (niveau) {
+        whereConditions.push(eq(formations.niveau, niveau));
+      }
+
+      const results = await db
+        .select({
+          id: formations.id,
+          formation: formations.formation,
+          etablissement: establishments.name,
+          ville: locations.ville,
+          region: locations.region,
+          niveau: formations.niveau,
+          type: formations.type,
+          domaines: formations.domaines,
+          duree: formations.duree,
+          cout: costs,
+          pedagogie: pedagogyTypes,
+          statut: establishments.statut,
+          hebergement: establishments.hebergement,
+          lien: establishments.lien,
+          adresse: locations.adresse,
+          departement: locations.departement,
+          tel: establishments.tel,
+          facebook: establishments.facebook,
+          instagram: establishments.instagram,
+          linkedin: establishments.linkedin
+        })
+        .from(formations)
+        .leftJoin(establishments, eq(formations.etablissementId, establishments.id))
+        .leftJoin(locations, eq(formations.locationId, locations.id))
+        .leftJoin(costs, eq(formations.costId, costs.id))
+        .leftJoin(pedagogyTypes, eq(formations.pedagogyId, pedagogyTypes.id))
+        .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
+        .limit(50);
 
       res.json(results);
     } catch (error) {
@@ -519,24 +408,14 @@ export function registerRoutes(app: Express): Server {
   // Get unique formation domains
   app.get('/api/domains', async (req, res) => {
     try {
-      const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
-      const sheetName = workbook.SheetNames[0];
-      const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+      const results = await db.query.formations.findMany({
+        columns: { domaines: true }
+      });
 
-      // Extract all unique domains from the Domaines column
+      // Extract unique domains from the results
       const uniqueDomains = new Set<string>();
-      rawData.forEach(item => {
-        if (item.Domaines) {
-          const domains = item.Domaines.toString()
-            .split(/[,|]/)  // Split on comma OR vertical bar
-            .map(d => {
-              const trimmed = d.trim();
-              return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
-            })
-            .filter(d => d.length > 0);
-
-          domains.forEach(domain => uniqueDomains.add(domain));
-        }
+      results.forEach(result => {
+        result.domaines.forEach(domain => uniqueDomains.add(domain));
       });
 
       const domainsList = Array.from(uniqueDomains).sort();
@@ -550,22 +429,13 @@ export function registerRoutes(app: Express): Server {
   // Get unique cities
   app.get('/api/cities', async (req, res) => {
     try {
-      const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
-      const sheetName = workbook.SheetNames[0];
-      const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-
-      // Extract all unique cities with proper capitalization
-      const uniqueCities = new Set<string>();
-      rawData.forEach(item => {
-        if (item.Ville) {
-          const city = item.Ville.toString().trim();
-          if (city) {
-            uniqueCities.add(city.charAt(0).toUpperCase() + city.slice(1).toLowerCase());
-          }
-        }
+      const results = await db.query.locations.findMany({
+        columns: { ville: true },
+        orderBy: locations.ville
       });
 
-      const citiesList = Array.from(uniqueCities).sort();
+      const uniqueCities = new Set(results.map(r => r.ville));
+      const citiesList = Array.from(uniqueCities);
       res.json(citiesList);
     } catch (error) {
       console.error('Error fetching cities:', error);
@@ -573,5 +443,6 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  const httpServer = createServer(app);
   return httpServer;
 }
