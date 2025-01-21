@@ -80,7 +80,7 @@ export default function Results() {
 
             {/* Profils Compatibles */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Profils Compatibles (>65%)</h2>
+              <h2 className="text-2xl font-semibold mb-4">Profils Compatibles (&gt;65%)</h2>
               <div className="grid grid-cols-1 gap-3">
                 {compatibleProfiles.map(([profile, score], index) => (
                   <div 
