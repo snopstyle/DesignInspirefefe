@@ -392,34 +392,40 @@ export function registerRoutes(app: Express): Server {
 
       //Improved data transformation with validation
       function transformData(item: any): FormationData {
-        // Map Excel column names to our expected fields
-        const columnMap = {
-          'Formation': 'formation',
-          'Établissement': 'etablissement',
-          'Ville': 'ville',
-          'Région': 'region',
-          'Niveau': 'niveau',
-          'Type de Formation': 'type',
-          'Domaines': 'domaines',
-          'Coût': 'cout',
-          'Durée': 'duree',
-          'Pédagogie': 'pedagogie',
-          'Statut': 'statut',
-          'Hébergement': 'hebergement',
-          'Lien': 'lien',
-          'Adresse': 'adresse',
-          'Département': 'departement',
-          'Téléphone': 'tel',
-          'Facebook': 'facebook',
-          'Instagram': 'instagram',
-          'LinkedIn': 'linkedin'
+        // Utiliser directement les clés de l'Excel
+        return {
+          id: `FORM-${Math.random().toString(36).substr(2, 9)}`,
+          formation: item['Formation'] || 'Formation non renseignée',
+          etablissement: item['Établissement'] || 'Établissement non renseigné',
+          ville: item['Ville'] || 'Ville non renseignée',
+          region: item['Région'] || 'Région non renseignée',
+          niveau: item['Niveau'] || 'Niveau non renseigné',
+          type: item['Type de Formation'] || 'Type non renseigné',
+          domaines: item['Domaines'] ? 
+            item['Domaines'].split(',').map((d: string) => d.trim()) : 
+            ['Domaine non renseigné'],
+          cout: {
+            montant: parseInt(item['Coût']?.match(/\d+/)?.[0] || '0'),
+            devise: 'EUR',
+            gratuitApprentissage: /gratuit|apprentissage/i.test(item['Coût'] || '')
+          },
+          duree: item['Durée'] || 'Durée non renseignée',
+          pedagogie: {
+            tempsPlein: /temps.*plein/i.test(item['Pédagogie'] || ''),
+            presentiel: /présentiel/i.test(item['Pédagogie'] || ''),
+            alternance: /alternance/i.test(item['Pédagogie'] || '')
+          },
+          statut: item['Statut'] || 'Statut non renseigné',
+          hebergement: Boolean(item['Hébergement']),
+          lien: item['Lien'] || 'Non renseigné',
+          adresse: item['Adresse'] || 'Adresse non renseignée',
+          departement: item['Département'] || 'Département non renseigné',
+          tel: item['Téléphone'] || 'Non renseigné',
+          coordinates: null,
+          facebook: item['Facebook'] || '',
+          instagram: item['Instagram'] || '',
+          linkedin: item['LinkedIn'] || ''
         };
-
-        // Map item keys using the column map
-        const mappedItem = Object.entries(columnMap).reduce((acc, [excelKey, dbKey]) => {
-          acc[dbKey] = item[excelKey] || item[dbKey] || '';
-          return acc;
-        }, {} as Record<string, any>);
 
         // Parse cost information with better validation
         const costRegex = /(\d+(?:\s*\d+)*)\s*(euros?|€)(?:\s*\(([^)]+)\))?/i;
