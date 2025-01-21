@@ -11,6 +11,7 @@ export default function Results() {
   });
 
   const latestResult = results?.[results.length - 1];
+  console.log('Latest quiz result:', latestResult); // Ajout de logs pour debug
 
   if (!latestResult) {
     return (

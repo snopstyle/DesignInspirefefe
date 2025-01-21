@@ -472,9 +472,13 @@ export function registerRoutes(app: Express): Server {
 import { calculateProfileScores as calculateScores, getMatchedProfile as getProfile } from "../client/src/lib/profile-logic";
 
 function calculateProfileScores(answers: any): any {
-  return calculateScores(answers);
+  const scores = calculateScores(answers);
+  console.log('Calculated scores:', scores); // Ajout de logs pour debug
+  return scores;
 }
 
 function getMatchedProfile(profileScores: any): any {
-  return getProfile(profileScores);
+  const profile = getProfile(profileScores);
+  console.log('Matched profile:', profile); // Ajout de logs pour debug
+  return profile;
 }
