@@ -1,57 +1,102 @@
 
-import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Brain, Search, User, Trophy, Crown, BookOpen } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
 
+  const features = [
+    {
+      title: "Quiz d'orientation",
+      description: "Découvrez votre profil unique à travers notre quiz interactif",
+      icon: Brain,
+      path: "/quiz",
+      score: "10 pts"
+    },
+    {
+      title: "Recherche de formation",
+      description: "Trouvez la formation idéale selon vos critères",
+      icon: Search,
+      path: "/search",
+      score: "5 pts"
+    },
+    {
+      title: "Profil",
+      description: "Consultez et gérez votre profil personnel",
+      icon: User,
+      path: "/profile",
+      score: "3 pts"
+    }
+  ];
+
   return (
     <GradientBackground>
       <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-2xl space-y-6">
-          {/* Main Navigation */}
-          <div className="space-y-4">
-            <Button
-              onClick={() => setLocation("/quiz")}
-              className="w-full h-16 text-xl bg-primary hover:bg-primary/90"
-            >
-              Quiz d'orientation
-            </Button>
-            <Button
-              onClick={() => setLocation("/search")}
-              className="w-full h-16 text-xl bg-primary hover:bg-primary/90"
-            >
-              Recherche de formation
-            </Button>
-            <Button
-              onClick={() => setLocation("/profile")}
-              className="w-full h-16 text-xl bg-primary hover:bg-primary/90"
-            >
-              Profil
-            </Button>
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-4xl space-y-8"
+        >
+          <div className="text-center space-y-4 mb-8">
+            <Trophy className="h-16 w-16 mx-auto text-yellow-500" />
+            <h1 className="text-4xl font-bold">Votre Parcours D'orientation</h1>
+            <p className="text-xl text-white/80">Commencez votre aventure et gagnez des points</p>
           </div>
 
-          {/* Premium Section */}
-          <Card className="p-6 bg-accent/10">
-            <h2 className="text-2xl font-bold mb-4 text-center">Zone Premium</h2>
-            <div className="space-y-4">
-              <Button
-                disabled
-                className="w-full h-16 text-xl bg-accent/50 cursor-not-allowed"
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature) => (
+              <motion.div
+                key={feature.title}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Entretien avec un conseiller
-              </Button>
-              <Button
-                disabled
-                className="w-full h-16 text-xl bg-accent/50 cursor-not-allowed"
-              >
-                Service d'aide à l'inscription
-              </Button>
-            </div>
+                <Card 
+                  className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors"
+                  onClick={() => setLocation(feature.path)}
+                >
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <feature.icon className="h-8 w-8" />
+                      <div className="flex items-center gap-1">
+                        <Trophy className="h-4 w-4 text-yellow-500" />
+                        <span className="text-sm font-medium">{feature.score}</span>
+                      </div>
+                    </div>
+                    <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
+                    <CardDescription className="text-white/70">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          <Card className="bg-purple-500/20 border-purple-500/30 backdrop-blur-sm mt-8">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Crown className="h-6 w-6 text-purple-400" />
+                <CardTitle>Zone Premium</CardTitle>
+              </div>
+              <CardDescription className="text-white/70">
+                Débloquez des fonctionnalités exclusives
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-3 text-white/60">
+                <BookOpen className="h-5 w-5" />
+                <span>Entretien avec un conseiller</span>
+              </div>
+              <div className="flex items-center gap-3 text-white/60">
+                <Trophy className="h-5 w-5" />
+                <span>Service d'aide à l'inscription</span>
+              </div>
+            </CardContent>
           </Card>
-        </div>
+        </motion.div>
       </div>
     </GradientBackground>
   );
