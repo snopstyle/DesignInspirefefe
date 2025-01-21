@@ -6,6 +6,8 @@ import { quizResults, quizSessions, profileCompletion } from "@db/schema";
 import { eq, desc } from "drizzle-orm";
 import { calculateProfileScores, getMatchedProfile } from "../client/src/lib/profile-logic";
 import type { User } from "@db/schema";
+import path from 'path';
+import xlsx from 'xlsx';
 
 declare global {
   namespace Express {
@@ -346,14 +348,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   const httpServer = createServer(app);
-  return httpServer;
-}
-import fs from 'fs/promises';
-import path from 'path';
-import xlsx from 'xlsx';
-
-// Add this to your existing routes
-app.get('/api/search', async (req, res) => {
+  app.get('/api/search', async (req, res) => {
   try {
     const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
     const sheetName = workbook.SheetNames[0];
