@@ -22,15 +22,21 @@ export default function SearchPage() {
     }
   };
 
-  const SocialLink = ({ href, icon: Icon, label }) => 
-    href ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center hover:scale-110 transition-transform">
-        <Badge variant="secondary" className="gap-1 cursor-pointer">
-          <Icon className="h-4 w-4" />
-          {label}
-        </Badge>
-      </a>
-    ) : null;
+  const SocialLink = ({ href, icon: Icon, label }: { href: string, icon: any, label: string }) => {
+  if (!href || href === "non renseigné") return null;
+  
+  // Nettoyer l'URL si nécessaire
+  const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
+  
+  return (
+    <a href={cleanUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center hover:scale-110 transition-transform">
+      <Badge variant="outline" className="gap-1 cursor-pointer bg-background/60 hover:bg-background">
+        <Icon className="h-4 w-4" />
+        <span className="hidden sm:inline">{label}</span>
+      </Badge>
+    </a>
+  );
+};
 
   return (
     <GradientBackground>
@@ -102,9 +108,9 @@ export default function SearchPage() {
                       </div>
 
                       <div className="flex flex-wrap gap-2 pt-2">
-                        <SocialLink href={result["Facebook"]} icon={Facebook} label="Facebook" />
-                        <SocialLink href={result["Instagram"]} icon={Instagram} label="Instagram" />
-                        <SocialLink href={result["Linkedin"]} icon={Linkedin} label="LinkedIn" />
+                        {result.Facebook && <SocialLink href={result.Facebook} icon={Facebook} label="Facebook" />}
+                        {result.Instagram && <SocialLink href={result.Instagram} icon={Instagram} label="Instagram" />}
+                        {result.Linkedin && <SocialLink href={result.Linkedin} icon={Linkedin} label="LinkedIn" />}
                       </div>
                     </div>
                   </CardContent>
