@@ -398,22 +398,25 @@ export function registerRoutes(app: Express): Server {
       function transformData(item: any): FormationData {
         // Map Excel column names to our expected fields
         const columnMap = {
-          'Nom Formation': 'Formation',
-          'Établissement': 'Etablissement',
-          'City': 'Ville',
-          'Region': 'Région',
-          'Level': 'NIveau',
-          'Type': 'Type Formation',
-          'Domains': 'Domaines',
-          'Cost': 'Coût',
-          'Duration': 'Durée',
-          'Teaching Method': 'Pédagogie',
-          'Status': 'Statut',
-          'Housing': 'Hebergement',
-          'Official Link': 'Lien officiel',
-          'Address': 'Adresse',
-          'Department': 'Département',
-          'Phone': 'Tel'
+          'Formation': 'formation',
+          'Établissement': 'etablissement',
+          'Ville': 'ville',
+          'Région': 'region',
+          'Niveau': 'niveau',
+          'Type de Formation': 'type',
+          'Domaines': 'domaines',
+          'Coût': 'cout',
+          'Durée': 'duree',
+          'Pédagogie': 'pedagogie',
+          'Statut': 'statut',
+          'Hébergement': 'hebergement',
+          'Lien': 'lien',
+          'Adresse': 'adresse',
+          'Département': 'departement',
+          'Téléphone': 'tel',
+          'Facebook': 'facebook',
+          'Instagram': 'instagram',
+          'LinkedIn': 'linkedin'
         };
 
         // Map item keys using the column map

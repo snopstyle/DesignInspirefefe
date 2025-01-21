@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { Input } from "@/components/ui/input";
@@ -53,9 +52,9 @@ export default function SearchPage() {
 
   const SocialLink = ({ href, icon: Icon, label }) => {
     if (!href || href === "non renseigné") return null;
-    
+
     const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
-    
+
     return (
       <a 
         href={cleanUrl} 
@@ -102,7 +101,7 @@ export default function SearchPage() {
                       Rechercher
                     </Button>
                   </div>
-                  
+
                   {suggestions.length > 0 && searchTerm && (
                     <div className="absolute z-10 w-full bg-background border rounded-md mt-1 shadow-lg">
                       {suggestions.map((suggestion, index) => (
@@ -208,15 +207,20 @@ export default function SearchPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div>
                           <p className="font-semibold">Type de formation:</p>
-                          <p>{result["Type Formation"] || "Non renseigné"}</p>
+                          <p>{result.type || "Non renseigné"}</p>
                         </div>
                         <div>
                           <p className="font-semibold">Niveau:</p>
-                          <p>{result["NIveau"] || "Non renseigné"}</p>
+                          <p>{result.niveau || "Non renseigné"}</p>
                         </div>
                         <div>
                           <p className="font-semibold">Pédagogie:</p>
-                          <p>{result["Pédagogie"] || "Non renseigné"}</p>
+                          <p>{result.pedagogie ? 
+                            Object.entries(result.pedagogie)
+                              .filter(([_, value]) => value)
+                              .map(([key]) => key)
+                              .join(', ') 
+                            : "Non renseigné"}</p>
                         </div>
                       </div>
 
