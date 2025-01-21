@@ -473,6 +473,7 @@ export function registerRoutes(app: Express): Server {
       }
 
 
+
       // Implement efficient search with pre-processed data
       if (!query) {
         return res.json(cachedData);
@@ -512,7 +513,7 @@ export function registerRoutes(app: Express): Server {
             .split(',')
             .map(d => {
               const trimmed = d.trim();
-              return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+              return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
             })
             .filter(d => d.length > 0);
 
