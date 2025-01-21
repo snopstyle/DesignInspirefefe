@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { Input } from "@/components/ui/input";
@@ -5,14 +6,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Search, Facebook, Instagram, Linkedin, Clock, Euro, MapPin } from "lucide-react";
+import { 
+  GraduationCap, 
+  Search, 
+  Facebook, 
+  Instagram, 
+  Linkedin, 
+  Clock, 
+  Euro, 
+  MapPin,
+  Filter,
+  X 
+} from "lucide-react";
 import { GradientBackground } from "@/components/layout/gradient-background";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<Array<any>>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
 
   const debouncedSearch = useCallback(
     debounce(async (term) => {
@@ -32,10 +46,14 @@ export default function SearchPage() {
   );
 
   const handleSearch = async () => {
-    if (!searchTerm) return;
+    if (!searchTerm && Object.keys(activeFilters).length === 0) return;
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(searchTerm)}`);
+      let query = searchTerm;
+      Object.entries(activeFilters).forEach(([key, value]) => {
+        if (value) query += ` ${key}:${value}`;
+      });
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
       const data = await response.json();
       setResults(data);
       setSuggestions([]);
@@ -46,15 +64,28 @@ export default function SearchPage() {
     }
   };
 
+  const handleFilterChange = (type: string, value: string) => {
+    setActiveFilters(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const removeFilter = (type: string) => {
+    const newFilters = { ...activeFilters };
+    delete newFilters[type];
+    setActiveFilters(newFilters);
+  };
+
   React.useEffect(() => {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
 
   const SocialLink = ({ href, icon: Icon, label }) => {
     if (!href || href === "non renseigné") return null;
-
+    
     const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
-
+    
     return (
       <a 
         href={cleanUrl} 
@@ -74,7 +105,7 @@ export default function SearchPage() {
     <GradientBackground>
       <main className="container mx-auto p-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Card>
+          <Card className="border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-2">
                 <GraduationCap className="h-6 w-6" />
@@ -92,6 +123,61 @@ export default function SearchPage() {
                       className="flex-1"
                       onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                     />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className="gap-2">
+                          <Filter className="h-4 w-4" />
+                          Filtres
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-80">
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Durée</label>
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('durée', e.target.value)}
+                              value={activeFilters['durée'] || ''}
+                            >
+                              <option value="">Toutes les durées</option>
+                              <option value="1-3 mois">1-3 mois</option>
+                              <option value="3-6 mois">3-6 mois</option>
+                              <option value="6-12 mois">6-12 mois</option>
+                              <option value="+12 mois">+12 mois</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Ville</label>
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('ville', e.target.value)}
+                              value={activeFilters['ville'] || ''}
+                            >
+                              <option value="">Toutes les villes</option>
+                              <option value="Paris">Paris</option>
+                              <option value="Lyon">Lyon</option>
+                              <option value="Marseille">Marseille</option>
+                              <option value="Bordeaux">Bordeaux</option>
+                              <option value="Toulouse">Toulouse</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Niveau</label>
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('niveau', e.target.value)}
+                              value={activeFilters['niveau'] || ''}
+                            >
+                              <option value="">Tous les niveaux</option>
+                              <option value="Bac+2">Bac+2</option>
+                              <option value="Bac+3">Bac+3</option>
+                              <option value="Bac+4">Bac+4</option>
+                              <option value="Bac+5">Bac+5</option>
+                            </select>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                     <Button onClick={handleSearch} disabled={isLoading}>
                       {isLoading ? (
                         <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
@@ -101,6 +187,25 @@ export default function SearchPage() {
                       Rechercher
                     </Button>
                   </div>
+
+                  {/* Active Filters */}
+                  {Object.keys(activeFilters).length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {Object.entries(activeFilters).map(([type, value]) => (
+                        <Badge 
+                          key={type}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {type}: {value}
+                          <X
+                            className="h-3 w-3 cursor-pointer"
+                            onClick={() => removeFilter(type)}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
 
                   {suggestions.length > 0 && searchTerm && (
                     <div className="absolute z-10 w-full bg-background border rounded-md mt-1 shadow-lg">
@@ -120,50 +225,6 @@ export default function SearchPage() {
                     </div>
                   )}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <select 
-                    className="w-full p-2 rounded-md border border-input bg-background"
-                    onChange={(e) => {
-                      setSearchTerm(prev => prev + ` durée:${e.target.value}`);
-                      handleSearch();
-                    }}
-                  >
-                    <option value="">Filtrer par durée</option>
-                    <option value="1-3 mois">1-3 mois</option>
-                    <option value="3-6 mois">3-6 mois</option>
-                    <option value="6-12 mois">6-12 mois</option>
-                    <option value="+12 mois">+12 mois</option>
-                  </select>
-
-                  <select 
-                    className="w-full p-2 rounded-md border border-input bg-background"
-                    onChange={(e) => {
-                      setSearchTerm(prev => prev + ` ville:${e.target.value}`);
-                      handleSearch();
-                    }}
-                  >
-                    <option value="">Filtrer par ville</option>
-                    <option value="Paris">Paris</option>
-                    <option value="Lyon">Lyon</option>
-                    <option value="Marseille">Marseille</option>
-                    <option value="Bordeaux">Bordeaux</option>
-                    <option value="Toulouse">Toulouse</option>
-                  </select>
-
-                  <select 
-                    className="w-full p-2 rounded-md border border-input bg-background"
-                    onChange={(e) => {
-                      setSearchTerm(prev => prev + ` niveau:${e.target.value}`);
-                      handleSearch();
-                    }}
-                  >
-                    <option value="">Filtrer par niveau</option>
-                    <option value="Bac+2">Bac+2</option>
-                    <option value="Bac+3">Bac+3</option>
-                    <option value="Bac+4">Bac+4</option>
-                    <option value="Bac+5">Bac+5</option>
-                  </select>
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -181,9 +242,9 @@ export default function SearchPage() {
                         </CardDescription>
                       </div>
                       <div className="flex gap-2">
-                        {result.Facebook && <SocialLink href={result.Facebook} icon={Facebook} label="Facebook" />}
-                        {result.Instagram && <SocialLink href={result.Instagram} icon={Instagram} label="Instagram" />}
-                        {result.Linkedin && <SocialLink href={result.Linkedin} icon={Linkedin} label="LinkedIn" />}
+                        {result.facebook && <SocialLink href={result.facebook} icon={Facebook} label="Facebook" />}
+                        {result.instagram && <SocialLink href={result.instagram} icon={Instagram} label="Instagram" />}
+                        {result.linkedin && <SocialLink href={result.linkedin} icon={Linkedin} label="LinkedIn" />}
                       </div>
                     </div>
                   </CardHeader>
@@ -222,12 +283,6 @@ export default function SearchPage() {
                               .join(', ') 
                             : "Non renseigné"}</p>
                         </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {result.Facebook && <SocialLink href={result.Facebook} icon={Facebook} label="Facebook" />}
-                        {result.Instagram && <SocialLink href={result.Instagram} icon={Instagram} label="Instagram" />}
-                        {result.Linkedin && <SocialLink href={result.Linkedin} icon={Linkedin} label="LinkedIn" />}
                       </div>
                     </div>
                   </CardContent>
