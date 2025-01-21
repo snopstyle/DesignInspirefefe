@@ -27,10 +27,6 @@ export default function Quiz() {
   return (
     <GradientBackground className="p-4">
       <div className="container mx-auto py-8">
-        <ProgressBar
-          current={currentQuestion.id}
-          total={QUESTIONS.length}
-        />
         <QuestionCard
           question={currentQuestion}
           onAnswer={handleAnswer}

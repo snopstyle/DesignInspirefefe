@@ -185,16 +185,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
       transition={{ duration: 0.5 }}
       className="w-full max-w-2xl mx-auto"
     >
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-6 text-center"
-      >
-        <span className="inline-block px-6 py-3 rounded-2xl bg-gradient-neo from-orange-500/40 to-purple-500/40 backdrop-blur-md text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-500 text-lg font-bold border border-white/20 shadow-lg">
-          {question.section}
-        </span>
-      </motion.div>
+      
       <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl">
         <CardHeader className="space-y-6">
           <motion.div
