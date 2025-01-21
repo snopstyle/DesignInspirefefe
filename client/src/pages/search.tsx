@@ -17,24 +17,24 @@ import {
   MapPin,
   Filter,
   X,
-  History
+  History,
+  BookOpen
 } from "lucide-react";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-// Tags populaires prédéfinis
-const POPULAR_TAGS: Tag[] = [
+// Tags des domaines de formation
+const FORMATION_DOMAINS: Tag[] = [
   { id: "dev", label: "Développement", category: "domaine" },
   { id: "data", label: "Data Science", category: "domaine" },
   { id: "design", label: "Design", category: "domaine" },
   { id: "marketing", label: "Marketing Digital", category: "domaine" },
-  { id: "certif", label: "Certification", category: "type" },
-  { id: "diplome", label: "Diplômant", category: "type" },
-  { id: "distance", label: "À distance", category: "modalite" },
-  { id: "presentiel", label: "Présentiel", category: "modalite" },
-  { id: "alternance", label: "Alternance", category: "modalite" },
-  { id: "court", label: "Formation courte", category: "duree" },
-  { id: "long", label: "Formation longue", category: "duree" },
+  { id: "business", label: "Business", category: "domaine" },
+  { id: "management", label: "Management", category: "domaine" },
+  { id: "communication", label: "Communication", category: "domaine" },
+  { id: "langues", label: "Langues", category: "domaine" },
+  { id: "sante", label: "Santé", category: "domaine" },
+  { id: "art", label: "Arts & Culture", category: "domaine" }
 ];
 
 export default function SearchPage() {
@@ -228,14 +228,18 @@ export default function SearchPage() {
                     </Button>
                   </div>
 
-                  {/* Tags Input Section */}
+                  {/* Domaines de formation */}
                   <div className="mt-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                      <BookOpen className="h-4 w-4" />
+                      Domaines de formation
+                    </div>
                     <TagInput
-                      tags={POPULAR_TAGS}
+                      tags={FORMATION_DOMAINS}
                       selectedTags={selectedTags}
                       onTagSelect={handleTagSelect}
                       onTagRemove={handleTagRemove}
-                      placeholder="Ajouter des tags..."
+                      placeholder="Sélectionner un domaine..."
                     />
                   </div>
 
