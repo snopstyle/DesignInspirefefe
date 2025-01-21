@@ -1,6 +1,6 @@
+
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
-import Landing from "@/pages/landing";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
@@ -13,6 +13,7 @@ import { useUser } from "@/hooks/use-user";
 import { Loader2 } from "lucide-react";
 import { NavButtons } from "@/components/layout/nav-buttons";
 import SearchPage from './pages/search';
+import Landing from "@/pages/landing";
 
 function Router() {
   const { user, isLoading } = useUser();
@@ -33,12 +34,12 @@ function Router() {
     <>
       <NavButtons />
       <Switch>
-        <Route path="/" element={<Landing />} />
-        <Route path="/welcome" element={<Home />} />
-        <Route path="/quiz" element={<Quiz />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/search" element={<SearchPage />} />
+        <Route path="/" component={Landing} />
+        <Route path="/welcome" component={Home} />
+        <Route path="/quiz" component={Quiz} />
+        <Route path="/results" component={Results} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/search" component={SearchPage} />
         <Route component={NotFound} />
       </Switch>
     </>
