@@ -1,11 +1,11 @@
-
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { TagInput, type Tag } from "@/components/ui/tag-input";
 import { 
   GraduationCap, 
   Search, 
@@ -16,20 +16,38 @@ import {
   Euro, 
   MapPin,
   Filter,
-  X 
+  X,
+  History
 } from "lucide-react";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
+// Tags populaires prédéfinis
+const POPULAR_TAGS: Tag[] = [
+  { id: "dev", label: "Développement", category: "domaine" },
+  { id: "data", label: "Data Science", category: "domaine" },
+  { id: "design", label: "Design", category: "domaine" },
+  { id: "marketing", label: "Marketing Digital", category: "domaine" },
+  { id: "certif", label: "Certification", category: "type" },
+  { id: "diplome", label: "Diplômant", category: "type" },
+  { id: "distance", label: "À distance", category: "modalite" },
+  { id: "presentiel", label: "Présentiel", category: "modalite" },
+  { id: "alternance", label: "Alternance", category: "modalite" },
+  { id: "court", label: "Formation courte", category: "duree" },
+  { id: "long", label: "Formation longue", category: "duree" },
+];
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<Array<any>>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   const debouncedSearch = useCallback(
-    debounce(async (term) => {
+    debounce(async (term: string) => {
       if (!term) return;
       try {
         setIsLoading(true);
@@ -46,22 +64,44 @@ export default function SearchPage() {
   );
 
   const handleSearch = async () => {
-    if (!searchTerm && Object.keys(activeFilters).length === 0) return;
+    if (!searchTerm && selectedTags.length === 0 && Object.keys(activeFilters).length === 0) return;
+
     setIsLoading(true);
     try {
       let query = searchTerm;
+
+      // Ajouter les tags à la requête
+      if (selectedTags.length > 0) {
+        query += ` tags:${selectedTags.map(tag => tag.label).join(',')}`;
+      }
+
+      // Ajouter les filtres actifs
       Object.entries(activeFilters).forEach(([key, value]) => {
         if (value) query += ` ${key}:${value}`;
       });
+
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
       const data = await response.json();
       setResults(data);
       setSuggestions([]);
+
+      // Sauvegarder dans l'historique récent
+      if (searchTerm.trim()) {
+        setRecentSearches(prev => [searchTerm, ...prev.slice(0, 4)]);
+      }
     } catch (error) {
       console.error('Search failed:', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleTagSelect = (tag: Tag) => {
+    setSelectedTags(prev => [...prev, tag]);
+  };
+
+  const handleTagRemove = (tagToRemove: Tag) => {
+    setSelectedTags(prev => prev.filter(tag => tag.id !== tagToRemove.id));
   };
 
   const handleFilterChange = (type: string, value: string) => {
@@ -81,11 +121,11 @@ export default function SearchPage() {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
 
-  const SocialLink = ({ href, icon: Icon, label }) => {
+  const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
     if (!href || href === "non renseigné") return null;
-    
+
     const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
-    
+
     return (
       <a 
         href={cleanUrl} 
@@ -188,6 +228,42 @@ export default function SearchPage() {
                     </Button>
                   </div>
 
+                  {/* Tags Input Section */}
+                  <div className="mt-4">
+                    <TagInput
+                      tags={POPULAR_TAGS}
+                      selectedTags={selectedTags}
+                      onTagSelect={handleTagSelect}
+                      onTagRemove={handleTagRemove}
+                      placeholder="Ajouter des tags..."
+                    />
+                  </div>
+
+                  {/* Recherches récentes */}
+                  {recentSearches.length > 0 && (
+                    <div className="mt-4">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                        <History className="h-4 w-4" />
+                        Recherches récentes
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {recentSearches.map((search, index) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="cursor-pointer hover:bg-accent"
+                            onClick={() => {
+                              setSearchTerm(search);
+                              handleSearch();
+                            }}
+                          >
+                            {search}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Active Filters */}
                   {Object.keys(activeFilters).length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
@@ -242,9 +318,9 @@ export default function SearchPage() {
                         </CardDescription>
                       </div>
                       <div className="flex gap-2">
-                        {result.facebook && <SocialLink href={result.facebook} icon={Facebook} label="Facebook" />}
-                        {result.instagram && <SocialLink href={result.instagram} icon={Instagram} label="Instagram" />}
-                        {result.linkedin && <SocialLink href={result.linkedin} icon={Linkedin} label="LinkedIn" />}
+                        <SocialLink href={result.facebook} icon={Facebook} label="Facebook" />
+                        <SocialLink href={result.instagram} icon={Instagram} label="Instagram" />
+                        <SocialLink href={result.linkedin} icon={Linkedin} label="LinkedIn" />
                       </div>
                     </div>
                   </CardHeader>
