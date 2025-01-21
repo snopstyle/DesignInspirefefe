@@ -378,8 +378,16 @@ export function registerRoutes(app: Express): Server {
           type: formations.type,
           domaines: formations.domaines,
           duree: formations.duree,
-          cout: costs,
-          pedagogie: pedagogyTypes,
+          cout: {
+            montant: costs.montant,
+            devise: costs.devise,
+            gratuitApprentissage: costs.gratuitApprentissage
+          },
+          pedagogie: {
+            tempsPlein: pedagogyTypes.tempsPlein,
+            presentiel: pedagogyTypes.presentiel,
+            alternance: pedagogyTypes.alternance
+          },
           statut: establishments.statut,
           hebergement: establishments.hebergement,
           lien: establishments.lien,
@@ -398,6 +406,7 @@ export function registerRoutes(app: Express): Server {
         .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
         .limit(50);
 
+      console.log('Search results:', results);
       res.json(results);
     } catch (error) {
       console.error('Search error:', error);
