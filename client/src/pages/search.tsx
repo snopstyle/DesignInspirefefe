@@ -67,24 +67,30 @@ export default function SearchPage() {
   );
 
   const handleSearch = async () => {
-    if (!searchTerm && selectedTags.length === 0 && Object.keys(activeFilters).length === 0) return;
-
     setIsLoading(true);
     try {
-      let query = searchTerm;
+      let queryParams = new URLSearchParams();
+      
+      // Ajouter le terme de recherche
+      if (searchTerm) {
+        queryParams.append('q', searchTerm);
+      }
 
-      // Ajouter les tags à la requête
+      // Ajouter les tags
       if (selectedTags.length > 0) {
-        query += ` tags:${selectedTags.map(tag => tag.label).join(',')}`;
+        queryParams.append('tags', selectedTags.map(tag => tag.label).join(','));
       }
 
       // Ajouter les filtres actifs
       Object.entries(activeFilters).forEach(([key, value]) => {
-        if (value) query += ` ${key}:${value}`;
+        if (value) {
+          queryParams.append(key, value);
+        }
       });
 
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/search?${queryParams.toString()}`);
       const data = await response.json();
+      console.log('Search results:', data);
       setResults(data);
       setSuggestions([]);
 
