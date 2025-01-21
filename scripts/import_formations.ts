@@ -64,7 +64,7 @@ async function importFormations() {
         try {
           // Create establishment record
           const [establishment] = await db.insert(establishments).values({
-            name: formatText(item.Etablissement, 'Établissement Non Renseigné'),
+            name: formatText(item.Etablissement, 'Etablissement'),
             statut: formatText(item.Statut, 'Statut Non Renseigné'),
             hebergement: Boolean(item.Hébergement),
             lien: item.Lien || 'Non Renseigné',
