@@ -49,14 +49,13 @@ useEffect(() => {
 
     if (multipleChoiceAnswers.includes(option)) {
       newAnswers = multipleChoiceAnswers.filter(a => a !== option);
-    } else if (!maxSelections || multipleChoiceAnswers.length < maxSelections) {
+    } else if (multipleChoiceAnswers.length < maxSelections) {
       newAnswers = [...multipleChoiceAnswers, option];
     } else {
       return; // Maximum selections reached
     }
 
     setMultipleChoiceAnswers(newAnswers);
-    onAnswer(newAnswers, true); // Prevent auto-submit
   };
 
   const renderAnswerInput = () => {
@@ -169,11 +168,10 @@ useEffect(() => {
   const hasValidAnswer = () => {
     switch (question.format) {
       case "Multiple selection":
-        return multipleChoiceAnswers.length > 0 && multipleChoiceAnswers.length <= (question.maxSelections || 5);
+      case "Multiple choice":
+        return multipleChoiceAnswers.length > 0;
       case "Single choice":
         return Boolean(currentAnswer);
-      case "Multiple choice":
-        return Array.isArray(multipleChoiceAnswers) && multipleChoiceAnswers.length > 0;
       case "Drag-and-drop ranking":
         return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
       case "Text":
