@@ -120,7 +120,9 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
                 >
                   <div
                     className={`${answerElementStyle} ${
-                      multipleChoiceAnswers.includes(option) ? "bg-white/10 border-white/30" : ""
+                      multipleChoiceAnswers.includes(option) 
+                        ? "bg-gradient-to-r from-orange-500/20 to-purple-500/20 border-white/30" 
+                        : ""
                     }`}
                     onClick={() => handleMultipleSelection(option)}
                   >
