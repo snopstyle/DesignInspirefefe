@@ -54,18 +54,65 @@ export default function SearchPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Rechercher une formation..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="flex-1"
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                />
-                <Button onClick={handleSearch}>
-                  <Search className="h-4 w-4 mr-2" />
-                  Rechercher
-                </Button>
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Rechercher une formation..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="flex-1"
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  />
+                  <Button onClick={handleSearch}>
+                    <Search className="h-4 w-4 mr-2" />
+                    Rechercher
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <select 
+                    className="w-full p-2 rounded-md border border-input bg-background"
+                    onChange={(e) => {
+                      setSearchTerm(prev => prev + ` durée:${e.target.value}`);
+                      handleSearch();
+                    }}
+                  >
+                    <option value="">Filtrer par durée</option>
+                    <option value="1-3 mois">1-3 mois</option>
+                    <option value="3-6 mois">3-6 mois</option>
+                    <option value="6-12 mois">6-12 mois</option>
+                    <option value="+12 mois">+12 mois</option>
+                  </select>
+
+                  <select 
+                    className="w-full p-2 rounded-md border border-input bg-background"
+                    onChange={(e) => {
+                      setSearchTerm(prev => prev + ` ville:${e.target.value}`);
+                      handleSearch();
+                    }}
+                  >
+                    <option value="">Filtrer par ville</option>
+                    <option value="Paris">Paris</option>
+                    <option value="Lyon">Lyon</option>
+                    <option value="Marseille">Marseille</option>
+                    <option value="Bordeaux">Bordeaux</option>
+                    <option value="Toulouse">Toulouse</option>
+                  </select>
+
+                  <select 
+                    className="w-full p-2 rounded-md border border-input bg-background"
+                    onChange={(e) => {
+                      setSearchTerm(prev => prev + ` niveau:${e.target.value}`);
+                      handleSearch();
+                    }}
+                  >
+                    <option value="">Filtrer par niveau</option>
+                    <option value="Bac+2">Bac+2</option>
+                    <option value="Bac+3">Bac+3</option>
+                    <option value="Bac+4">Bac+4</option>
+                    <option value="Bac+5">Bac+5</option>
+                  </select>
+                </div>
               </div>
             </CardContent>
           </Card>
