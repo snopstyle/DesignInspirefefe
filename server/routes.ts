@@ -377,14 +377,14 @@ export function registerRoutes(app: Express): Server {
   app.get('/api/search', async (req, res) => {
     try {
       const query = req.query.q?.toString().toLowerCase() || '';
-      const results = await db.query.formations.findMany({
-        where: query ? 
-          (formations, { or, ilike }) => or(
+      const results = await db.select()
+        .from(formations)
+        .where(query ? 
+          or(
             ilike(formations.formation, `%${query}%`),
             ilike(formations.etablissement, `%${query}%`)
-          ) : undefined,
-        limit: 50
-      });
+          ) : undefined)
+        .limit(50);
 
       // Search query was already defined above, removing duplicate
       function transformData(item: any): FormationData {
