@@ -23,12 +23,6 @@ export default function Results() {
             </CardHeader>
             <CardContent>
               <p className="text-lg">Aucun résultat trouvé. Veuillez compléter le quiz.</p>
-              <Button
-                onClick={() => setLocation("/")}
-                className="w-full mt-6"
-              >
-                Retourner à l'Accueil
-              </Button>
             </CardContent>
           </Card>
         </div>
@@ -51,20 +45,28 @@ export default function Results() {
       <div className="container mx-auto py-12">
         <Card className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-3xl">Résultats de Votre Profil</CardTitle>
+            <CardTitle className="text-3xl">Votre Profil Personnalisé</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8">
-            {/* Profil Dominant */}
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Profil Dominant</h2>
-              <div className="bg-primary/10 p-4 rounded-lg">
-                <p className="text-xl font-semibold text-primary">{latestResult.dominantProfile}</p>
+            {/* Profil Dominant et Sous-Profil */}
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Profil Dominant</h2>
+                <div className="bg-primary/10 p-4 rounded-lg">
+                  <p className="text-xl font-semibold text-primary">{latestResult.dominantProfile}</p>
+                </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Sous-Profil</h2>
+                <div className="bg-secondary/10 p-4 rounded-lg">
+                  <p className="text-xl font-semibold text-secondary">{latestResult.subProfile}</p>
+                </div>
               </div>
             </div>
 
             {/* Traits Dominants */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Traits Dominants</h2>
+              <h2 className="text-2xl font-semibold mb-4">Traits Principaux</h2>
               <div className="grid grid-cols-1 gap-3">
                 {dominantTraits.map(([trait, score], index) => (
                   <div 
@@ -79,21 +81,23 @@ export default function Results() {
             </div>
 
             {/* Description */}
-            <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">Description du Profil</h2>
-              <p className="text-lg leading-relaxed">
-                Votre profil dominant est "{latestResult.dominantProfile}". 
-                Ce profil se caractérise par une forte {dominantTraits[0]?.[0]} ({((dominantTraits[0]?.[1] as number) * 100).toFixed(1)}%), 
-                {dominantTraits[1]?.[0]} ({((dominantTraits[1]?.[1] as number) * 100).toFixed(1)}%) 
-                et {dominantTraits[2]?.[0]} ({((dominantTraits[2]?.[1] as number) * 100).toFixed(1)}%).
-              </p>
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Description du Profil</h2>
+              <div className="bg-secondary/5 p-6 rounded-lg">
+                <p className="text-lg leading-relaxed">
+                  Votre profil dominant est "{latestResult.dominantProfile}" avec un sous-profil de type "{latestResult.subProfile}". 
+                  Ce profil se caractérise par une forte {dominantTraits[0]?.[0]} ({((dominantTraits[0]?.[1] as number) * 100).toFixed(1)}%), 
+                  {dominantTraits[1]?.[0]} ({((dominantTraits[1]?.[1] as number) * 100).toFixed(1)}%) 
+                  et {dominantTraits[2]?.[0]} ({((dominantTraits[2]?.[1] as number) * 100).toFixed(1)}%).
+                </p>
+              </div>
             </div>
 
             <Button
-              onClick={() => setLocation("/")}
-              className="w-full mt-6"
+              onClick={() => setLocation("/search")}
+              className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
             >
-              Refaire le Quiz
+              En savoir plus
             </Button>
           </CardContent>
         </Card>
