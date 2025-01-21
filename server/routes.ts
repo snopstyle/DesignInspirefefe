@@ -386,9 +386,7 @@ export function registerRoutes(app: Express): Server {
         limit: 50
       });
 
-      const query = req.query.q?.toString().toLowerCase() || '';
-
-      //Improved data transformation with validation
+      // Search query was already defined above, removing duplicate
       function transformData(item: any): FormationData {
         // Utiliser directement les clés de l'Excel
         return {
@@ -487,7 +485,7 @@ export function registerRoutes(app: Express): Server {
       }
 
       const primarySearchFields = ['formation', 'etablissement'];
-      const results = cachedData.filter((item) => {
+      const filteredResults = cachedData.filter((item) => {
         return primarySearchFields.some(field => {
           const value = item[field];
           if (typeof value === 'string') {
@@ -496,6 +494,8 @@ export function registerRoutes(app: Express): Server {
           return false;
         });
       });
+      
+      res.json(filteredResults);
 
       res.json(results);
     } catch (error) {
