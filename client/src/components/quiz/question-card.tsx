@@ -56,7 +56,6 @@ useEffect(() => {
     }
 
     setMultipleChoiceAnswers(newAnswers);
-    onAnswer(newAnswers, true);
   };
 
   const renderAnswerInput = () => {
@@ -167,11 +166,9 @@ useEffect(() => {
   };
 
   const hasValidAnswer = () => {
-    if (isMultipleSelectionQuestion) {
-      return true; // Always show the button for multiple selection questions
-    }
-
     switch (question.format) {
+      case "Multiple selection":
+        return multipleChoiceAnswers.length > 0;
       case "Single choice":
         return Boolean(currentAnswer);
       case "Multiple choice":
@@ -221,7 +218,13 @@ useEffect(() => {
             >
               <Button
                 className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
-                onClick={() => onAnswer(isMultipleSelectionQuestion ? multipleChoiceAnswers : currentAnswer!, false)}
+                onClick={() => {
+                  if (isMultipleSelectionQuestion) {
+                    onAnswer(multipleChoiceAnswers, false);
+                  } else {
+                    onAnswer(currentAnswer!, false);
+                  }
+                }}
               >
                 {question.id === 37 ? (
                   <>
