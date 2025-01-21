@@ -27,6 +27,15 @@ interface ExcelRow {
 
 const BATCH_SIZE = 10;
 
+// Helper function to properly format text
+function formatText(text: string, defaultValue: string): string {
+  if (!text) return defaultValue;
+  return text.trim()
+    .split(/\s+/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 async function importFormations() {
   try {
     const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
@@ -44,11 +53,11 @@ async function importFormations() {
         try {
           // Create establishment record
           const [establishment] = await db.insert(establishments).values({
-            name: item.Etablissement || 'Établissement non renseigné',
-            statut: item.Statut || 'Statut non renseigné',
+            name: formatText(item.Etablissement, 'Établissement Non Renseigné'),
+            statut: formatText(item.Statut, 'Statut Non Renseigné'),
             hebergement: Boolean(item.Hébergement),
-            lien: item.Lien || 'Non renseigné',
-            tel: item.Téléphone || 'Non renseigné',
+            lien: item.Lien || 'Non Renseigné',
+            tel: item.Téléphone || 'Non Renseigné',
             facebook: item.Facebook || '',
             instagram: item.Instagram || '',
             linkedin: item.LinkedIn || ''
@@ -56,10 +65,10 @@ async function importFormations() {
 
           // Create location record
           const [location] = await db.insert(locations).values({
-            ville: item.Ville || 'Ville non renseignée',
-            region: item.Région || 'Région non renseignée',
-            departement: item.Département || 'Département non renseigné',
-            adresse: item.Adresse || 'Adresse non renseignée'
+            ville: formatText(item.Ville, 'Ville Non Renseignée'),
+            region: formatText(item.Région, 'Région Non Renseignée'),
+            departement: formatText(item.Département, 'Département Non Renseigné'),
+            adresse: formatText(item.Adresse, 'Adresse Non Renseignée')
           }).returning();
 
           // Create cost record
@@ -79,14 +88,17 @@ async function importFormations() {
 
           // Create formation with relations
           await db.insert(formations).values({
-            formation: item.Formation || 'Formation non renseignée',
+            formation: formatText(item.Formation, 'Formation Non Renseignée'),
             etablissementId: establishment.id,
             locationId: location.id,
-            niveau: item.Niveau || 'Niveau non renseigné',
-            type: item['Type de Formation'] || 'Type non renseigné',
-            domaines: item.Domaines ? item.Domaines.split(',').map(d => d.trim()) : ['Domaine non renseigné'],
+            niveau: formatText(item.Niveau, 'Niveau Non Renseigné'),
+            type: formatText(item['Type de Formation'], 'Type de Formation Non Renseigné'),
+            domaines: item.Domaines ? 
+              item.Domaines.split(',')
+                .map(d => formatText(d, ''))
+                .filter(d => d !== '') : ['Domaine Non Renseigné'],
             costId: cost.id,
-            duree: item.Durée || 'Durée non renseignée',
+            duree: formatText(item.Durée, 'Durée Non Renseignée'),
             pedagogyId: pedagogy.id
           });
 
