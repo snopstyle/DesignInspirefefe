@@ -1,0 +1,15 @@
+
+Problème rencontré:
+Les questions à choix multiples (notamment 28, 30, 32 et 37) ne permettaient pas de faire une sélection multiple, contrairement à la question 26 qui fonctionnait correctement.
+
+Cause:
+Le problème venait de la gestion d'état dans QuestionCard où les réponses précédentes étaient conservées de manière incorrecte dans currentAnswers, et la validation automatique empêchait la sélection multiple.
+
+Solution:
+Le problème a été résolu en corrigeant la gestion d'état dans question-card.tsx pour:
+1. Permettre la sélection/désélection pour toutes les questions à choix multiples
+2. Ne pas valider automatiquement les réponses pour les questions à sélection multiple
+3. Maintenir correctement l'état des sélections précédentes
+4. Respecter les limites de sélections maximales pour chaque question
+
+Cette correction a permis d'uniformiser le comportement des questions à choix multiples dans tout le questionnaire.
