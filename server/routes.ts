@@ -1,8 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { quizResults, quizSessions, profileCompletion } from "@db/schema";
-import { eq, desc } from "drizzle-orm";
+import { quizResults, quizSessions, profileCompletion, formations } from "@db/schema";
+import { eq, desc, ilike, or } from "drizzle-orm";
 import { calculateProfileScores, getMatchedProfile } from "../client/src/lib/profile-logic";
 import { setupAuth } from "./auth";
 import path from 'path';
