@@ -379,7 +379,10 @@ export function registerRoutes(app: Express): Server {
   app.get('/api/search', async (req, res) => {
     try {
       if (!cachedData) {
-        const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+        console.log('Loading Excel file...');
+        const excelPath = path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx');
+        console.log('Excel file path:', excelPath);
+        const workbook = xlsx.readFile(excelPath);
         const sheetName = workbook.SheetNames[0];
         const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
         cachedData = rawData.map(transformData);
