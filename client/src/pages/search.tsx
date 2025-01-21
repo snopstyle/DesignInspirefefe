@@ -176,9 +176,9 @@ export default function SearchPage() {
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-xl">{result.Formation}</CardTitle>
+                        <CardTitle className="text-xl">{result.formation}</CardTitle>
                         <CardDescription className="text-lg font-medium">
-                          {result["Etablissement "]}
+                          {result.etablissement}
                         </CardDescription>
                       </div>
                       <div className="flex gap-2">
@@ -193,15 +193,15 @@ export default function SearchPage() {
                       <div className="flex flex-wrap gap-2">
                         <Badge variant="outline" className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          {result["Durée "] || "Non renseigné"}
+                          {result.duree || "Non renseigné"}
                         </Badge>
                         <Badge variant="outline" className="flex items-center gap-1">
                           <Euro className="h-4 w-4" />
-                          {result["Coût"] || "Non renseigné"}
+                          {result.cout?.montant ? `${result.cout.montant}€` : "Non renseigné"}
                         </Badge>
                         <Badge variant="outline" className="flex items-center gap-1">
                           <MapPin className="h-4 w-4" />
-                          {result["Ville"] || "Non renseigné"}
+                          {result.ville || "Non renseigné"}
                         </Badge>
                       </div>
 
