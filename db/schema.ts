@@ -138,31 +138,51 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
 export const formations = pgTable("formations", {
   id: uuid("id").defaultRandom().primaryKey(),
   formation: text("formation").notNull(),
-  etablissement: text("etablissement").notNull(),
-  ville: text("ville").notNull(),
-  region: text("region").notNull(),
+  etablissementId: uuid("etablissement_id").notNull().references(() => establishments.id),
+  locationId: uuid("location_id").notNull().references(() => locations.id),
   niveau: text("niveau").notNull(),
   type: text("type").notNull(),
   domaines: text("domaines").array().notNull(),
-  cout: jsonb("cout").$type<{
-    montant: number;
-    devise: string;
-    gratuitApprentissage: boolean;
-  }>().notNull(),
+  costId: uuid("cost_id").notNull().references(() => costs.id),
   duree: text("duree").notNull(),
-  pedagogie: jsonb("pedagogie").$type<{
-    tempsPlein: boolean;
-    presentiel: boolean;
-    alternance: boolean;
-  }>().notNull(),
+  pedagogyId: uuid("pedagogy_id").notNull().references(() => pedagogyTypes.id),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const establishments = pgTable("establishments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
   statut: text("statut").notNull(),
   hebergement: boolean("hebergement").notNull(),
   lien: text("lien").notNull(),
-  adresse: text("adresse").notNull(),
-  departement: text("departement").notNull(),
   tel: text("tel").notNull(),
   facebook: text("facebook"),
   instagram: text("instagram"),
   linkedin: text("linkedin"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const locations = pgTable("locations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  ville: text("ville").notNull(),
+  region: text("region").notNull(),
+  departement: text("departement").notNull(),
+  adresse: text("adresse").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const costs = pgTable("costs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  montant: decimal("montant").notNull(),
+  devise: text("devise").notNull(),
+  gratuitApprentissage: boolean("gratuit_apprentissage").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const pedagogyTypes = pgTable("pedagogy_types", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  tempsPlein: boolean("temps_plein").notNull(),
+  presentiel: boolean("presentiel").notNull(),
+  alternance: boolean("alternance").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
