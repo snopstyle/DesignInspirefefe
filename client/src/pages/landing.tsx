@@ -109,11 +109,6 @@ export default function Landing() {
                 <Trophy className="h-5 w-5" />
                 <span>Service d'aide à l'inscription</span>
               </div>
-              <div className="flex gap-2"> {/* Added div for social icons */}
-                <SocialIcon url="https://www.facebook.com" />
-                <SocialIcon url="https://www.instagram.com" />
-                <SocialIcon url="https://www.linkedin.com" />
-              </div> {/* Added div for social icons */}
             </CardContent>
           </Card>
         </motion.div>
