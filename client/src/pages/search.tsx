@@ -120,12 +120,6 @@ export default function SearchPage() {
                     </div>
                   )}
                 </div>
-                  <Button onClick={handleSearch}>
-                    <Search className="h-4 w-4 mr-2" />
-                    Rechercher
-                  </Button>
-                </div>
-                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <select 
                     className="w-full p-2 rounded-md border border-input bg-background"
