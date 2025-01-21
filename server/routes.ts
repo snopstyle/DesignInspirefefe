@@ -1,19 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { setupAuth } from "./auth";
 import { db } from "@db";
 import { quizResults, quizSessions, profileCompletion } from "@db/schema";
 import { eq, desc } from "drizzle-orm";
 import { calculateProfileScores, getMatchedProfile } from "../client/src/lib/profile-logic";
-import type { User } from "@db/schema";
+import { setupAuth } from "./auth";
 import path from 'path';
 import xlsx from 'xlsx';
-
-declare global {
-  namespace Express {
-    interface User extends User {}
-  }
-}
 
 export function registerRoutes(app: Express): Server {
   setupAuth(app);
@@ -507,22 +500,23 @@ export function registerRoutes(app: Express): Server {
   // Get unique formation domains
   app.get('/api/domains', async (req, res) => {
     try {
-      if (!cachedData) {
-        const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
-        const sheetName = workbook.SheetNames[0];
-        const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-        cachedData = rawData.map(transformData);
-      }
+      const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+      const sheetName = workbook.SheetNames[0];
+      const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-      // Extract all unique domains with proper capitalization
+      // Extract all unique domains from the Domaines column
       const uniqueDomains = new Set<string>();
-      cachedData.forEach(item => {
-        if (Array.isArray(item.domaines)) {
-          item.domaines.forEach((domaine: string) => {
-            if (domaine && domaine !== 'Domaine non renseigné') {
-              uniqueDomains.add(domaine);
-            }
-          });
+      rawData.forEach(item => {
+        if (item.Domaines) {
+          const domains = item.Domaines.toString()
+            .split(',')
+            .map(d => {
+              const trimmed = d.trim();
+              return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+            })
+            .filter(d => d.length > 0);
+
+          domains.forEach(domain => uniqueDomains.add(domain));
         }
       });
 
