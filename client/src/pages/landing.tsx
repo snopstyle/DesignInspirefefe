@@ -26,6 +26,12 @@ export default function Landing() {
       description: "Consultez et gérez votre profil personnel",
       icon: User,
       path: "/profile"
+    },
+    {
+      title: "Chat avec le Guru",
+      description: "Obtenez des conseils personnalisés de notre expert en orientation",
+      icon: MessageCircle,
+      path: "/chat"
     }
   ];
 
@@ -43,7 +49,7 @@ export default function Landing() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto">
-            {features.slice(0, 2).map((feature) => (
+            {features.slice(0, 3).map((feature) => (
               <motion.div
                 key={feature.title}
                 whileHover={{ scale: 1.02 }}
