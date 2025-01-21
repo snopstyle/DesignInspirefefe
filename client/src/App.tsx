@@ -10,6 +10,7 @@ import AuthPage from "@/pages/auth-page";
 import Profile from "@/pages/profile";
 import { useUser } from "@/hooks/use-user";
 import { Loader2 } from "lucide-react";
+import { NavButtons } from "@/components/layout/nav-buttons";
 
 function Router() {
   const { user, isLoading } = useUser();
@@ -27,14 +28,17 @@ function Router() {
   }
 
   return (
-    <Switch>
-      <Route path="/" component={Landing} />
-      <Route path="/welcome" component={Home} />
-      <Route path="/quiz" component={Quiz} />
-      <Route path="/results" component={Results} />
-      <Route path="/profile" component={Profile} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <NavButtons />
+      <Switch>
+        <Route path="/" component={Landing} />
+        <Route path="/welcome" component={Home} />
+        <Route path="/quiz" component={Quiz} />
+        <Route path="/results" component={Results} />
+        <Route path="/profile" component={Profile} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
   );
 }
 
