@@ -160,7 +160,7 @@ export default function SearchPage() {
                 <div className="relative">
                   <div className="flex gap-2">
                     <Input
-                      placeholder="Rechercher une formation..."
+                      placeholder="Ex: Master en Data Science, Bachelor en Marketing Digital..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="flex-1"
