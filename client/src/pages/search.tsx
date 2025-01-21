@@ -213,6 +213,18 @@ export default function SearchPage() {
                               <option value="Bac+5">Bac+5</option>
                             </select>
                           </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Diplôme reconnu par l'État</label>
+                            <div className="flex items-center">
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4 rounded border-input"
+                                onChange={(e) => handleFilterChange('diplomeEtat', e.target.checked ? 'true' : '')}
+                                checked={activeFilters['diplomeEtat'] === 'true'}
+                              />
+                              <span className="ml-2 text-sm">Uniquement les diplômes d'État</span>
+                            </div>
+                          </div>
                         </div>
                       </PopoverContent>
                     </Popover>
