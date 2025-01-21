@@ -353,19 +353,38 @@ export function registerRoutes(app: Express): Server {
     try {
       const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
       const sheetName = workbook.SheetNames[0];
-      const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      
+      const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
       const query = req.query.q?.toString().toLowerCase() || '';
-      const results = data.filter((item: any) => 
-        Object.values(item).some(value => 
-          value?.toString().toLowerCase().includes(query)
-        )
-      );
+
+      // Indexation et filtrage améliorés
+      const results = rawData.filter((item: any) => {
+        const searchableFields = [
+          item.name,
+          item.school,
+          item.program,
+          item.description,
+          item.location,
+          item.specialization
+        ].filter(Boolean).map(field => field.toString().toLowerCase());
+
+        return searchableFields.some(field => field.includes(query));
+      }).map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        school: item.school,
+        program: item.program,
+        description: item.description,
+        location: item.location,
+        duration: item.duration,
+        cost: item.cost,
+        specialization: item.specialization
+      }));
 
       res.json(results);
     } catch (error) {
       console.error('Search error:', error);
-      res.status(500).json({ error: 'Search failed' });
+      res.status(500).json({ error: 'Erreur lors de la recherche de formations' });
     }
   });
 
