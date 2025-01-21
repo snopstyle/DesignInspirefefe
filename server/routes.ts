@@ -342,11 +342,14 @@ export function registerRoutes(app: Express): Server {
   // Search endpoint
   app.get('/api/search', async (req, res) => {
     try {
+      console.log('Search request received:', req.query);
       const query = req.query.q?.toString().toLowerCase() || '';
       const ville = req.query.ville?.toString();
       const niveau = req.query.niveau?.toString();
       const diplomeEtat = req.query.diplomeEtat === 'true';
       const selectedDomains = req.query.tags?.toString().split(',').map(d => d.trim().toLowerCase()) || [];
+
+      console.log('Parsed search params:', { query, ville, niveau, diplomeEtat, selectedDomains });
 
       // Build the where clause based on filters
       const whereConditions = [];
@@ -367,6 +370,8 @@ export function registerRoutes(app: Express): Server {
       if (niveau) {
         whereConditions.push(eq(formations.niveau, niveau));
       }
+
+      console.log('Where conditions built:', whereConditions);
 
       const results = await db
         .select({
@@ -407,16 +412,19 @@ export function registerRoutes(app: Express): Server {
         .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
         .limit(50);
 
-      // Filter by domains if any are selected, using case-insensitive comparison
+      console.log('Initial query results count:', results.length);
+
+      // Filter by domains if any are selected
       const filteredResults = selectedDomains.length > 0
         ? results.filter(result =>
             result.domaines.some(domain =>
-              selectedDomains.includes(domain.toLowerCase().replace(/[""]/g, ''))
+              selectedDomains.includes(domain.toLowerCase().replace(/[""]/g, '').trim())
             )
           )
         : results;
 
-      console.log('Search results:', filteredResults);
+      console.log('Final filtered results count:', filteredResults.length);
+
       res.json(filteredResults);
     } catch (error) {
       console.error('Search error:', error);
