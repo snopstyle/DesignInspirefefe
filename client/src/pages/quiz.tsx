@@ -4,6 +4,7 @@ import { ProgressBar } from "@/components/quiz/progress-bar";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Loader2 } from "lucide-react";
 import { QUESTIONS } from "@/lib/quiz-logic";
+import { AnimatePresence } from "framer-motion";
 
 import { useUser } from "@/hooks/use-user";
 
@@ -39,11 +40,14 @@ export default function Quiz() {
   return (
     <GradientBackground className="p-4">
       <div className="container mx-auto py-8">
-        <QuestionCard
-          question={currentQuestion}
-          onAnswer={handleAnswer}
-          currentAnswer={answers[currentQuestion.id]}
-        />
+        <AnimatePresence mode="wait">
+          <QuestionCard
+            key={currentQuestion.id}
+            question={currentQuestion}
+            onAnswer={handleAnswer}
+            currentAnswer={answers[currentQuestion.id]}
+          />
+        </AnimatePresence>
       </div>
     </GradientBackground>
   );
