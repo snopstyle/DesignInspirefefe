@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,15 +35,15 @@ export default function Results() {
     );
   }
 
-  // Trier les traits par score
+  // Sort trait scores by value and keep those > 0
   const sortedTraits = Object.entries(latestResult.traits || {})
     .sort(([, a], [, b]) => (b as number) - (a as number))
-    .filter(([, score]) => score > 0);
+    .filter(([, score]) => (score as number) > 0);
 
-  // Trier les profils par score
+  // Sort profile scores by value and keep only those > 0.65
   const sortedProfiles = Object.entries(latestResult.psychoSocialProfile || {})
     .sort(([, a], [, b]) => (b as number) - (a as number))
-    .filter(([, score]) => score > 0);
+    .filter(([, score]) => (score as number) > 0.65);
 
   return (
     <GradientBackground>
@@ -58,7 +57,7 @@ export default function Results() {
               <h2 className="text-2xl font-semibold mb-2">Profil Dominant</h2>
               <p className="text-xl">{latestResult.dominantProfile}</p>
             </div>
-            
+
             <div>
               <h2 className="text-2xl font-semibold mb-4">Traits Dominants (Top 5)</h2>
               <div className="grid grid-cols-1 gap-2">
