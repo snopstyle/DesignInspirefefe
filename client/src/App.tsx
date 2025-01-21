@@ -1,4 +1,4 @@
-import { Routes, Route } from "wouter";
+import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import Landing from "@/pages/landing";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -32,7 +32,7 @@ function Router() {
   return (
     <>
       <NavButtons />
-      <Routes>
+      <Switch>
         <Route path="/" element={<Landing />} />
         <Route path="/welcome" element={<Home />} />
         <Route path="/quiz" element={<Quiz />} />
@@ -40,7 +40,7 @@ function Router() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<SearchPage />} />
         <Route component={NotFound} />
-      </Routes>
+      </Switch>
     </>
   );
 }
