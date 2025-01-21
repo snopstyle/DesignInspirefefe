@@ -355,32 +355,52 @@ export function registerRoutes(app: Express): Server {
       const sheetName = workbook.SheetNames[0];
       const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
+      console.log('Données brutes:', rawData.length, 'écoles trouvées');
+      
       const query = req.query.q?.toString().toLowerCase() || '';
 
-      // Indexation et filtrage améliorés
+      // Si pas de requête, retourner toutes les écoles
+      if (!query) {
+        const allSchools = rawData.map((item: any) => ({
+          id: item.id || Math.random().toString(36).substr(2, 9),
+          name: item.name || item.Nom || '',
+          school: item.school || item.École || '',
+          program: item.program || item.Programme || '',
+          description: item.description || item.Description || '',
+          location: item.location || item.Ville || '',
+          duration: item.duration || item.Durée || '',
+          cost: item.cost || item.Coût || '',
+          specialization: item.specialization || item.Spécialisation || ''
+        }));
+        console.log('Retour de toutes les écoles:', allSchools.length);
+        return res.json(allSchools);
+      }
+
+      // Recherche avec query
       const results = rawData.filter((item: any) => {
         const searchableFields = [
-          item.name,
-          item.school,
-          item.program,
-          item.description,
-          item.location,
-          item.specialization
+          item.name || item.Nom,
+          item.school || item.École,
+          item.program || item.Programme,
+          item.description || item.Description,
+          item.location || item.Ville,
+          item.specialization || item.Spécialisation
         ].filter(Boolean).map(field => field.toString().toLowerCase());
 
         return searchableFields.some(field => field.includes(query));
       }).map((item: any) => ({
-        id: item.id,
-        name: item.name,
-        school: item.school,
-        program: item.program,
-        description: item.description,
-        location: item.location,
-        duration: item.duration,
-        cost: item.cost,
-        specialization: item.specialization
+        id: item.id || Math.random().toString(36).substr(2, 9),
+        name: item.name || item.Nom || '',
+        school: item.school || item.École || '',
+        program: item.program || item.Programme || '',
+        description: item.description || item.Description || '',
+        location: item.location || item.Ville || '',
+        duration: item.duration || item.Durée || '',
+        cost: item.cost || item.Coût || '',
+        specialization: item.specialization || item.Spécialisation || ''
       }));
 
+      console.log('Résultats de la recherche:', results.length);
       res.json(results);
     } catch (error) {
       console.error('Search error:', error);
