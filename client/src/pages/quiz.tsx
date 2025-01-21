@@ -76,7 +76,8 @@ export default function Quiz() {
     );
   }
 
-  const { currentQuestion, onAnswer, currentAnswer } = quizProps;
+  const { currentQuestion, handleAnswer: onAnswer, answers } = quizProps;
+  const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
 
   if (!currentQuestion) {
     return null;
