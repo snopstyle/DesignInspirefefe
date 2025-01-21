@@ -18,9 +18,7 @@ import {
   Filter,
   X,
   History,
-  BookOpen,
-  UserCircle,
-  MessageCircle
+  BookOpen
 } from "lucide-react";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -34,12 +32,6 @@ export default function SearchPage() {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-
-  // Placeholder function for navigation
-  const setLocation = (path: string) => {
-    // Replace with your actual navigation logic
-    console.log(`Navigating to: ${path}`);
-  };
 
   // Charger les domaines depuis l'API
   const { data: domains = [] } = useQuery({
@@ -166,33 +158,63 @@ export default function SearchPage() {
             <CardContent>
               <div className="space-y-4">
                 <div className="relative">
-                  <div className="flex gap-4">
-                    <div className="flex gap-2 flex-1">
-                      <Input
-                        placeholder="Ex: Master en Data Science, Bachelor en Marketing Digital..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1"
-                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={() => setLocation("/profile")}
-                      >
-                        <UserCircle className="h-4 w-4" />
-                        Profil
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                      >
-                        <MessageCircle className="h-4 w-4" />
-                        Chat expert
-                      </Button>
-                    </div>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Ex: Master en Data Science, Bachelor en Marketing Digital..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="flex-1"
+                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className="gap-2">
+                          <Filter className="h-4 w-4" />
+                          Filtres
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-80">
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Ville</label>
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('ville', e.target.value)}
+                              value={activeFilters['ville'] || ''}
+                            >
+                              <option value="">Toutes les villes</option>
+                              {cities.map((city: string) => (
+                                <option key={city} value={city}>
+                                  {city}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Niveau</label>
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('niveau', e.target.value)}
+                              value={activeFilters['niveau'] || ''}
+                            >
+                              <option value="">Tous les niveaux</option>
+                              <option value="Bac+2">Bac+2</option>
+                              <option value="Bac+3">Bac+3</option>
+                              <option value="Bac+4">Bac+4</option>
+                              <option value="Bac+5">Bac+5</option>
+                            </select>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    <Button onClick={handleSearch} disabled={isLoading}>
+                      {isLoading ? (
+                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                      ) : (
+                        <Search className="h-4 w-4 mr-2" />
+                      )}
+                      Rechercher
+                    </Button>
                   </div>
 
                   {/* Certification d'État */}
