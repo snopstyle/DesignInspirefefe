@@ -64,7 +64,7 @@ export default function Results() {
                 {sortedTraits.map(([trait, score], index) => (
                   <div key={index} className="flex justify-between items-center border-b py-2">
                     <span className="text-lg">{trait}</span>
-                    <span className="font-semibold">{(Number(score)).toFixed(2)}</span>
+                    <span className="font-semibold">{typeof score === 'number' ? score.toFixed(2) : '0.00'}</span>
                   </div>
                 ))}
               </div>
@@ -76,7 +76,7 @@ export default function Results() {
                 {sortedProfiles.map(([profile, score], index) => (
                   <div key={index} className="flex justify-between items-center border-b py-2">
                     <span className="text-lg">{profile}</span>
-                    <span className="font-semibold">{(score as number).toFixed(2)}</span>
+                    <span className="font-semibold">{typeof score === 'number' ? score.toFixed(2) : '0.00'}</span>
                   </div>
                 ))}
               </div>
