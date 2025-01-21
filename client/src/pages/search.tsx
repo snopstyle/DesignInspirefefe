@@ -329,7 +329,7 @@ export default function SearchPage() {
 
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
-              {results?.map((result, index) => (
+              {(results || []).map((result, index) => (
                 <Card key={index} className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex justify-between items-start">
