@@ -78,22 +78,6 @@ export default function Results() {
               </div>
             </div>
 
-            {/* Profils Compatibles */}
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Profils Compatibles (&gt;65%)</h2>
-              <div className="grid grid-cols-1 gap-3">
-                {compatibleProfiles.map(([profile, score], index) => (
-                  <div 
-                    key={index} 
-                    className="bg-accent/10 p-4 rounded-lg flex justify-between items-center"
-                  >
-                    <span className="text-lg font-medium">{profile}</span>
-                    <span className="text-lg font-semibold">{((score as number) * 100).toFixed(1)}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Description */}
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4">Description du Profil</h2>
