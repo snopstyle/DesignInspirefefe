@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,61 +34,41 @@ export default function Results() {
     .sort(([, a], [, b]) => (b as number) - (a as number))
     .slice(0, 5);
 
-  // Calcul des profils compatibles (>65%)
-  const compatibleProfiles = Object.entries(latestResult.profileMatchScores || {})
-    .sort(([, a], [, b]) => (b as number) - (a as number))
-    .filter(([, score]) => (score as number) >= 0.65);
-
   return (
     <GradientBackground>
       <div className="container mx-auto py-12">
         <Card className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-3xl">Votre Profil Personnalisé</CardTitle>
+            <CardTitle className="text-3xl text-center">Votre Profil Personnalisé</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8">
-            {/* Profil Dominant et Sous-Profil */}
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-2xl font-semibold mb-4">Profil Dominant</h2>
-                <div className="bg-primary/10 p-4 rounded-lg">
-                  <p className="text-xl font-semibold text-primary">{latestResult.dominantProfile}</p>
-                </div>
-              </div>
-              <div>
-                <h2 className="text-2xl font-semibold mb-4">Sous-Profil</h2>
-                <div className="bg-secondary/10 p-4 rounded-lg">
-                  <p className="text-xl font-semibold text-secondary">{latestResult.subProfile}</p>
-                </div>
-              </div>
+            {/* Profil Dominant */}
+            <div className="bg-primary/10 p-6 rounded-lg">
+              <h2 className="text-2xl font-semibold mb-4">Profil Dominant</h2>
+              <p className="text-xl font-medium text-primary">{latestResult.dominantProfile}</p>
             </div>
 
-            {/* Traits Dominants */}
-            <div>
+            {/* Sous-profil */}
+            <div className="bg-secondary/10 p-6 rounded-lg">
+              <h2 className="text-2xl font-semibold mb-4">Sous-profil</h2>
+              <p className="text-xl font-medium text-secondary">{latestResult.subProfile}</p>
+            </div>
+
+            {/* Traits Principaux */}
+            <div className="bg-background/10 p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4">Traits Principaux</h2>
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid gap-3">
                 {dominantTraits.map(([trait, score], index) => (
                   <div 
                     key={index} 
-                    className="bg-secondary/10 p-4 rounded-lg flex justify-between items-center"
+                    className="flex justify-between items-center bg-white/5 p-4 rounded-lg"
                   >
                     <span className="text-lg font-medium">{trait}</span>
-                    <span className="text-lg font-semibold">{((score as number) * 100).toFixed(1)}%</span>
+                    <span className="text-lg font-semibold text-primary">
+                      {((score as number) * 100).toFixed(1)}%
+                    </span>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Description */}
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Description du Profil</h2>
-              <div className="bg-secondary/5 p-6 rounded-lg">
-                <p className="text-lg leading-relaxed">
-                  Votre profil dominant est "{latestResult.dominantProfile}" avec un sous-profil de type "{latestResult.subProfile}". 
-                  Ce profil se caractérise par une forte {dominantTraits[0]?.[0]} ({((dominantTraits[0]?.[1] as number) * 100).toFixed(1)}%), 
-                  {dominantTraits[1]?.[0]} ({((dominantTraits[1]?.[1] as number) * 100).toFixed(1)}%) 
-                  et {dominantTraits[2]?.[0]} ({((dominantTraits[2]?.[1] as number) * 100).toFixed(1)}%).
-                </p>
               </div>
             </div>
 
