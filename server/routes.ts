@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { formations, establishments, locations, costs, pedagogyTypes } from "@db/schema";
+import { formations, establishments, locations, costs, pedagogyTypes, quizSessions, quizResults, profileCompletion } from "@db/schema";
 import { eq, desc, ilike, or, and } from "drizzle-orm";
 import { setupAuth } from "./auth";
 import path from 'path';
@@ -467,4 +467,13 @@ export function registerRoutes(app: Express): Server {
 
   const httpServer = createServer(app);
   return httpServer;
+}
+
+// Placeholder functions -  replace with actual implementations
+function calculateProfileScores(answers: any): any {
+  return {};
+}
+
+function getMatchedProfile(profileScores: any): any {
+  return "";
 }
