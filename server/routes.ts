@@ -529,5 +529,31 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Get unique cities
+  app.get('/api/cities', async (req, res) => {
+    try {
+      const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+      const sheetName = workbook.SheetNames[0];
+      const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+      // Extract all unique cities with proper capitalization
+      const uniqueCities = new Set<string>();
+      rawData.forEach(item => {
+        if (item.Ville) {
+          const city = item.Ville.toString().trim();
+          if (city) {
+            uniqueCities.add(city.charAt(0).toUpperCase() + city.slice(1).toLowerCase());
+          }
+        }
+      });
+
+      const citiesList = Array.from(uniqueCities).sort();
+      res.json(citiesList);
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+      res.status(500).json({ error: 'Erreur lors de la récupération des villes' });
+    }
+  });
+
   return httpServer;
 }
