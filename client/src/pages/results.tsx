@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,8 @@ export default function Results() {
     queryKey: ["/api/quiz/results"]
   });
 
-  const latestResult = results?.[results.length - 1];
-  console.log('Latest quiz result:', latestResult); // Ajout de logs pour debug
+  const latestResult = results?.[0];
+  console.log('Latest quiz result:', latestResult);
 
   if (!latestResult) {
     return (
@@ -29,11 +30,6 @@ export default function Results() {
       </GradientBackground>
     );
   }
-
-  // Calcul des traits dominants (top 5)
-  const dominantTraits = Object.entries(latestResult.traitScores || {})
-    .sort(([, a], [, b]) => (b as number) - (a as number))
-    .slice(0, 5);
 
   return (
     <GradientBackground>
@@ -59,14 +55,14 @@ export default function Results() {
             <div className="bg-background/10 p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4">Traits Principaux</h2>
               <div className="grid gap-3">
-                {dominantTraits.map(([trait, score], index) => (
+                {latestResult.traits.map((trait: string, index: number) => (
                   <div 
                     key={index} 
                     className="flex justify-between items-center bg-white/5 p-4 rounded-lg"
                   >
                     <span className="text-lg font-medium">{trait}</span>
                     <span className="text-lg font-semibold text-primary">
-                      {((score as number) * 100).toFixed(1)}%
+                      {((latestResult.traitScores[trait] || 0) * 100).toFixed(1)}%
                     </span>
                   </div>
                 ))}
