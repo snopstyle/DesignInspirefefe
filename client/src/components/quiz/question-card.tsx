@@ -18,9 +18,13 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCardProps) {
-  const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>(
-    Array.isArray(currentAnswer) ? currentAnswer : []
-  );
+  const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<string[]>([]);
+
+useEffect(() => {
+  if (Array.isArray(currentAnswer)) {
+    setMultipleChoiceAnswers(currentAnswer);
+  }
+}, [currentAnswer]);
 
   const isMultipleSelectionQuestion = question.format === "Multiple selection";
 
@@ -52,6 +56,7 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
     }
 
     setMultipleChoiceAnswers(newAnswers);
+    onAnswer(newAnswers, true);
   };
 
   const renderAnswerInput = () => {
