@@ -222,11 +222,10 @@ export default function SearchPage() {
                       className="bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl"
                     >
                       {isLoading ? (
-                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
                       ) : (
-                        <Search className="h-4 w-4 mr-2" />
+                        <Search className="h-4 w-4" />
                       )}
-                      Rechercher
                     </Button>
                   </div>
 
