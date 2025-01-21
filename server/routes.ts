@@ -396,7 +396,7 @@ export function registerRoutes(app: Express): Server {
         return {
           id: `FORM-${Math.random().toString(36).substr(2, 9)}`,
           formation: item['Formation'] || 'Formation non renseignée',
-          etablissement: item['Établissement'] || 'Établissement non renseigné',
+          etablissement: item["Lieu d'enseignement"] || 'Établissement non renseigné',
           ville: item['Ville'] || 'Ville non renseignée',
           region: item['Région'] || 'Région non renseignée',
           niveau: item['Niveau'] || 'Niveau non renseigné',
