@@ -367,22 +367,25 @@ export function registerRoutes(app: Express): Server {
 
       // Transformation simple des données
       const transformData = (item: any) => {
-        const result = {
+        return {
           id: String(Math.random()),
-          name: '',
-          school: '',
-          description: '',
-          location: '',
+          formation: item.Formation || '',
+          etablissement: item.Etablissement || '',
+          ville: item.Ville || '',
+          region: item.Région || '',
+          niveau: item.NIveau || '',
+          type: item["Type Formation"] || '',
+          domaines: item.Domaines || '',
+          cout: item.Coût || '',
+          duree: item.Durée || '',
+          pedagogie: item.Pédagogie || '',
+          statut: item.Statut || '',
+          hebergement: item.Hebergement || '',
+          lien: item["Lien officiel"] || '',
+          adresse: item.Adresse || '',
+          departement: item.Département || '',
+          tel: item.Tel || ''
         };
-
-        // Parcourir toutes les clés de l'item
-        Object.entries(item).forEach(([key, value]) => {
-          if (typeof value === 'string' || typeof value === 'number') {
-            result[key.toLowerCase()] = String(value);
-          }
-        });
-
-        return result;
       };
 
       // Si pas de requête, retourner toutes les écoles
