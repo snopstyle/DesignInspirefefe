@@ -76,10 +76,20 @@ export default function Quiz() {
     );
   }
 
+  const { currentQuestion, onAnswer, currentAnswer } = quizProps;
+
+  if (!currentQuestion) {
+    return null;
+  }
+
   return (
     <GradientBackground>
       <div className="container mx-auto min-h-screen py-8">
-        <QuestionCard {...quizProps} />
+        <QuestionCard 
+          question={currentQuestion}
+          onAnswer={onAnswer}
+          currentAnswer={currentAnswer}
+        />
       </div>
     </GradientBackground>
   );
