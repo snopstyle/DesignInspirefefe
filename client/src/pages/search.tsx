@@ -25,7 +25,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 // Tags des domaines de formation
 const FORMATION_DOMAINS: Tag[] = [
-  { id: "dev", label: "Développement", category: "domaine" },
+  { id: "info", label: "Informatique", category: "domaine" },
+  { id: "web", label: "Développement Web", category: "domaine" },
   { id: "data", label: "Data Science", category: "domaine" },
   { id: "design", label: "Design", category: "domaine" },
   { id: "marketing", label: "Marketing Digital", category: "domaine" },
@@ -34,7 +35,26 @@ const FORMATION_DOMAINS: Tag[] = [
   { id: "communication", label: "Communication", category: "domaine" },
   { id: "langues", label: "Langues", category: "domaine" },
   { id: "sante", label: "Santé", category: "domaine" },
-  { id: "art", label: "Arts & Culture", category: "domaine" }
+  { id: "art", label: "Arts & Culture", category: "domaine" },
+  { id: "commerce", label: "Commerce", category: "domaine" },
+  { id: "finance", label: "Finance", category: "domaine" },
+  { id: "rh", label: "Ressources Humaines", category: "domaine" },
+  { id: "industrie", label: "Industrie", category: "domaine" },
+  { id: "logistique", label: "Logistique", category: "domaine" },
+  { id: "batiment", label: "Bâtiment", category: "domaine" },
+  { id: "hotellerie", label: "Hôtellerie-Restauration", category: "domaine" },
+  { id: "agriculture", label: "Agriculture", category: "domaine" },
+  { id: "environnement", label: "Environnement", category: "domaine" },
+  { id: "social", label: "Social", category: "domaine" },
+  { id: "sport", label: "Sport", category: "domaine" },
+  { id: "tourisme", label: "Tourisme", category: "domaine" },
+  { id: "transport", label: "Transport", category: "domaine" },
+  { id: "securite", label: "Sécurité", category: "domaine" },
+  { id: "juridique", label: "Juridique", category: "domaine" },
+  { id: "immobilier", label: "Immobilier", category: "domaine" },
+  { id: "multimedia", label: "Multimédia", category: "domaine" },
+  { id: "mode", label: "Mode", category: "domaine" },
+  { id: "beaute", label: "Beauté", category: "domaine" }
 ];
 
 export default function SearchPage() {
