@@ -83,45 +83,33 @@ export default function SearchPage() {
                   <CardContent>
                     <div className="space-y-4">
                       <div className="flex flex-wrap gap-2">
-                        {result["Durée "] && (
-                          <Badge variant="outline" className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            {result["Durée "]}
-                          </Badge>
-                        )}
-                        {result["Coût"] && (
-                          <Badge variant="outline" className="flex items-center gap-1">
-                            <Euro className="h-4 w-4" />
-                            {result["Coût"]}
-                          </Badge>
-                        )}
-                        {result["Ville"] && (
-                          <Badge variant="outline" className="flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
-                            {result["Ville"]}
-                          </Badge>
-                        )}
+                        <Badge variant="outline" className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {result["Durée "] || "Non renseigné"}
+                        </Badge>
+                        <Badge variant="outline" className="flex items-center gap-1">
+                          <Euro className="h-4 w-4" />
+                          {result["Coût"] || "Non renseigné"}
+                        </Badge>
+                        <Badge variant="outline" className="flex items-center gap-1">
+                          <MapPin className="h-4 w-4" />
+                          {result["Ville"] || "Non renseigné"}
+                        </Badge>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {result["Type Formation"] && (
-                          <div>
-                            <p className="font-semibold">Type de formation:</p>
-                            <p>{result["Type Formation"]}</p>
-                          </div>
-                        )}
-                        {result["NIveau"] && (
-                          <div>
-                            <p className="font-semibold">Niveau:</p>
-                            <p>{result["NIveau"]}</p>
-                          </div>
-                        )}
-                        {result["Pédagogie"] && (
-                          <div>
-                            <p className="font-semibold">Pédagogie:</p>
-                            <p>{result["Pédagogie"]}</p>
-                          </div>
-                        )}
+                        <div>
+                          <p className="font-semibold">Type de formation:</p>
+                          <p>{result["Type Formation"] || "Non renseigné"}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold">Niveau:</p>
+                          <p>{result["NIveau"] || "Non renseigné"}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold">Pédagogie:</p>
+                          <p>{result["Pédagogie"] || "Non renseigné"}</p>
+                        </div>
                       </div>
 
                       <div className="flex flex-wrap gap-2 pt-2">
