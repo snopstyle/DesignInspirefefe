@@ -74,13 +74,14 @@ export default function Landing() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto h-48">
+          <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              className="h-full"
             >
               <Card 
-                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors"
+                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full"
                 onClick={() => setLocation(features[2].path)}
               >
                 <CardHeader>
@@ -98,9 +99,10 @@ export default function Landing() {
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              className="h-full"
             >
               <Card 
-                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors"
+                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full"
                 onClick={() => setLocation(features[3].path)}
               >
                 <CardHeader>
