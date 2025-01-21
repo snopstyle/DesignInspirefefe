@@ -180,9 +180,10 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 
   return (
     <motion.div
-      initial={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
       className="w-full max-w-2xl mx-auto"
     >
       
@@ -190,10 +191,10 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
         <CardHeader className="space-y-6">
           <motion.div
             key={question.text}
-            initial={{ opacity: 0.8, x: 20 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0.8, x: 0 }}
-            transition={{ duration: 0.2, ease: "linear" }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
           >
             <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
               {question.text}
