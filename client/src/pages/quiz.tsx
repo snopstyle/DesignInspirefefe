@@ -5,7 +5,19 @@ import { GradientBackground } from "@/components/layout/gradient-background";
 import { Loader2 } from "lucide-react";
 import { QUESTIONS } from "@/lib/quiz-logic";
 
+import { useUser } from "@/hooks/use-user";
+
 export default function Quiz() {
+  const { user, isLoading } = useUser();
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!user) {
+    window.location.href = "/auth";
+    return null;
+  }
   const { currentQuestion, answers, handleAnswer, isSubmitting } = useQuiz();
 
   if (isSubmitting) {

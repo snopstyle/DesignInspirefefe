@@ -20,18 +20,20 @@ export function useQuiz() {
   // Start a new session if none exists
   useEffect(() => {
     const initSession = async () => {
-      if (!session && !isLoadingSession && !startSession.isPending) {
-        try {
-          await startSession.mutateAsync();
-          // Refetch the session after starting a new one
-          queryClient.invalidateQueries({ queryKey: ['/api/quiz/session/current'] });
-        } catch (error) {
-          toast({
-            title: "Erreur",
-            description: "Impossible de démarrer la session de quiz. Veuillez réessayer.",
-            variant: "destructive",
-          });
+      try {
+        if (!session && !isLoadingSession && !startSession.isPending) {
+          const newSession = await startSession.mutateAsync();
+          if (newSession) {
+            queryClient.invalidateQueries({ queryKey: ['/api/quiz/session/current'] });
+          }
         }
+      } catch (error) {
+        toast({
+          title: "Session Error",
+          description: "Please make sure you are logged in and try again.",
+          variant: "destructive",
+        });
+        setLocation("/auth");
       }
     };
 
