@@ -1,9 +1,9 @@
-
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Brain, Search, User, Trophy, Crown, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
+import { SocialIcon } from 'react-social-icons'; // Added import
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -109,6 +109,11 @@ export default function Landing() {
                 <Trophy className="h-5 w-5" />
                 <span>Service d'aide à l'inscription</span>
               </div>
+              <div className="flex gap-2"> {/* Added div for social icons */}
+                <SocialIcon url="https://www.facebook.com" />
+                <SocialIcon url="https://www.instagram.com" />
+                <SocialIcon url="https://www.linkedin.com" />
+              </div> {/* Added div for social icons */}
             </CardContent>
           </Card>
         </motion.div>
