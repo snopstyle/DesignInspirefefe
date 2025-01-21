@@ -469,11 +469,12 @@ export function registerRoutes(app: Express): Server {
   return httpServer;
 }
 
-// Placeholder functions -  replace with actual implementations
+import { calculateProfileScores as calculateScores, getMatchedProfile as getProfile } from "../client/src/lib/profile-logic";
+
 function calculateProfileScores(answers: any): any {
-  return {};
+  return calculateScores(answers);
 }
 
 function getMatchedProfile(profileScores: any): any {
-  return "";
+  return getProfile(profileScores);
 }
