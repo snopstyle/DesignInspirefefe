@@ -482,15 +482,14 @@ export function registerRoutes(app: Express): Server {
         return res.json(cachedData);
       }
 
-      const searchableFields = ['formation', 'etablissement', 'ville', 'region', 'niveau', 'type', 'domaines'];
-
+      const primarySearchFields = ['formation', 'etablissement'];
       const results = cachedData.filter((item) => {
-        return searchableFields.some(field => {
+        return primarySearchFields.some(field => {
           const value = item[field];
-          if (Array.isArray(value)) {
-            return value.some(v => v.toLowerCase().includes(query));
+          if (typeof value === 'string') {
+            return value.toLowerCase().includes(query);
           }
-          return value.toLowerCase().includes(query);
+          return false;
         });
       });
 

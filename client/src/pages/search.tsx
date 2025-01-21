@@ -70,7 +70,7 @@ export default function SearchPage() {
     setIsLoading(true);
     try {
       let queryParams = new URLSearchParams();
-      
+
       // Ajouter le terme de recherche
       if (searchTerm) {
         queryParams.append('q', searchTerm);
@@ -166,7 +166,7 @@ export default function SearchPage() {
                 <div className="relative">
                   <div className="flex gap-2">
                     <Input
-                      placeholder="Ex: Master en Data Science, Bachelor en Marketing Digital..."
+                      placeholder="Rechercher une formation ou un établissement..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="flex-1"
