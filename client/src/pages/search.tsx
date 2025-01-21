@@ -148,10 +148,10 @@ export default function SearchPage() {
     <GradientBackground>
       <main className="container mx-auto p-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Card className="border-0 shadow-lg">
+          <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <GraduationCap className="h-6 w-6" />
+              <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500 flex items-center gap-2">
+                <GraduationCap className="h-8 w-8" />
                 Recherche de Formation
               </CardTitle>
             </CardHeader>
@@ -207,7 +207,11 @@ export default function SearchPage() {
                         </div>
                       </PopoverContent>
                     </Popover>
-                    <Button onClick={handleSearch} disabled={isLoading}>
+                    <Button 
+                      onClick={handleSearch} 
+                      disabled={isLoading}
+                      className="bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl"
+                    >
                       {isLoading ? (
                         <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
                       ) : (
@@ -315,7 +319,7 @@ export default function SearchPage() {
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
               {results?.map((result, index) => (
-                <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <Card key={index} className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
