@@ -11,7 +11,7 @@ import { GradientBackground } from "@/components/layout/gradient-background";
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Array<any>>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 

@@ -360,8 +360,8 @@ export function registerRoutes(app: Express): Server {
       }
 
       // Afficher le premier élément pour debug
-      console.log('Premier élément:', JSON.stringify(rawData[0], null, 2));
-      console.log('Données brutes:', rawData.length, 'écoles trouvées');
+      console.log('Premier élément:', JSON.stringify(cachedData[0], null, 2));
+      console.log('Données brutes:', cachedData.length, 'écoles trouvées');
       
       const query = req.query.q?.toString().toLowerCase() || '';
 
@@ -387,13 +387,13 @@ export function registerRoutes(app: Express): Server {
 
       // Si pas de requête, retourner toutes les écoles
       if (!query) {
-        const allSchools = rawData.map(transformData);
+        const allSchools = cachedData.map(transformData);
         console.log('Retour de toutes les écoles:', allSchools.length);
         return res.json(allSchools);
       }
 
       // Recherche simple sur toutes les valeurs
-      const results = rawData.filter((item: any) => {
+      const results = cachedData.filter((item: any) => {
         return Object.values(item).some(value => 
           value && value.toString().toLowerCase().includes(query)
         );
