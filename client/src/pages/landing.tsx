@@ -13,22 +13,19 @@ export default function Landing() {
       title: "Quiz d'orientation",
       description: "Découvrez votre profil unique à travers notre quiz interactif",
       icon: Brain,
-      path: "/quiz",
-      score: "10 pts"
+      path: "/quiz"
     },
     {
       title: "Recherche de formation",
       description: "Trouvez la formation idéale selon vos critères",
       icon: Search,
-      path: "/search",
-      score: "5 pts"
+      path: "/search"
     },
     {
       title: "Profil",
       description: "Consultez et gérez votre profil personnel",
       icon: User,
-      path: "/profile",
-      score: "3 pts"
+      path: "/profile"
     }
   ];
 
@@ -41,9 +38,8 @@ export default function Landing() {
           className="w-full max-w-4xl space-y-8"
         >
           <div className="text-center space-y-4 mb-8">
-            <Trophy className="h-16 w-16 mx-auto text-yellow-500" />
             <h1 className="text-4xl font-bold">Votre Parcours D'orientation</h1>
-            <p className="text-xl text-white/80">Commencez votre aventure et gagnez des points</p>
+            <p className="text-xl text-white/80">Commencez votre aventure</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -60,10 +56,6 @@ export default function Landing() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <feature.icon className="h-8 w-8" />
-                      <div className="flex items-center gap-1">
-                        <Trophy className="h-4 w-4 text-yellow-500" />
-                        <span className="text-sm font-medium">{feature.score}</span>
-                      </div>
                     </div>
                     <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
                     <CardDescription className="text-white/70">
