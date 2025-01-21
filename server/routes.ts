@@ -149,7 +149,8 @@ export function registerRoutes(app: Express): Server {
 
       // Calculate results
       const profileScores = calculateProfileScores(session.answers);
-      const dominantProfile = getMatchedProfile(profileScores);
+      const subProfile = getMatchedProfile(profileScores);
+      const dominantProfile = dominant_profile_mapping[subProfile] || "Profil Non Défini";
 
       // Save quiz results
       const [result] = await db.insert(quizResults)
@@ -163,7 +164,7 @@ export function registerRoutes(app: Express): Server {
           },
           traitScores: profileScores,
           dominantProfile,
-          subProfile: dominantProfile,
+          subProfile: subProfile,
           traits: Object.entries(profileScores)
             .sort(([, a], [, b]) => b - a)
             .slice(0, 5)
@@ -470,6 +471,13 @@ export function registerRoutes(app: Express): Server {
 }
 
 import { calculateProfileScores as calculateScores, getMatchedProfile as getProfile } from "../client/src/lib/profile-logic";
+
+const dominant_profile_mapping = {
+  // Example mapping -  Replace with your actual mapping
+  "SubProfileA": "DominantProfileX",
+  "SubProfileB": "DominantProfileY",
+  "SubProfileC": "DominantProfileZ"
+};
 
 function calculateProfileScores(answers: any): any {
   const scores = calculateScores(answers);
