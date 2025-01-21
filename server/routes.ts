@@ -355,50 +355,47 @@ export function registerRoutes(app: Express): Server {
       const sheetName = workbook.SheetNames[0];
       const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
+      // Afficher le premier élément pour debug
+      console.log('Premier élément:', JSON.stringify(rawData[0], null, 2));
       console.log('Données brutes:', rawData.length, 'écoles trouvées');
       
       const query = req.query.q?.toString().toLowerCase() || '';
 
+      // Transformation simple des données
+      const transformData = (item: any) => {
+        const result = {
+          id: String(Math.random()),
+          name: '',
+          school: '',
+          description: '',
+          location: '',
+        };
+
+        // Parcourir toutes les clés de l'item
+        Object.entries(item).forEach(([key, value]) => {
+          if (typeof value === 'string' || typeof value === 'number') {
+            result[key.toLowerCase()] = String(value);
+          }
+        });
+
+        return result;
+      };
+
       // Si pas de requête, retourner toutes les écoles
       if (!query) {
-        const allSchools = rawData.map((item: any) => ({
-          id: item.id || Math.random().toString(36).substr(2, 9),
-          name: item.name || item.Nom || '',
-          school: item.school || item.École || '',
-          program: item.program || item.Programme || '',
-          description: item.description || item.Description || '',
-          location: item.location || item.Ville || '',
-          duration: item.duration || item.Durée || '',
-          cost: item.cost || item.Coût || '',
-          specialization: item.specialization || item.Spécialisation || ''
-        }));
+        const allSchools = rawData.map(transformData);
         console.log('Retour de toutes les écoles:', allSchools.length);
         return res.json(allSchools);
       }
 
-      // Recherche avec query
+      // Recherche simple sur toutes les valeurs
       const results = rawData.filter((item: any) => {
-        const searchableFields = [
-          item.name || item.Nom,
-          item.school || item.École,
-          item.program || item.Programme,
-          item.description || item.Description,
-          item.location || item.Ville,
-          item.specialization || item.Spécialisation
-        ].filter(Boolean).map(field => field.toString().toLowerCase());
+        return Object.values(item).some(value => 
+          value && value.toString().toLowerCase().includes(query)
+        );
+      }).map(transformData);
 
-        return searchableFields.some(field => field.includes(query));
-      }).map((item: any) => ({
-        id: item.id || Math.random().toString(36).substr(2, 9),
-        name: item.name || item.Nom || '',
-        school: item.school || item.École || '',
-        program: item.program || item.Programme || '',
-        description: item.description || item.Description || '',
-        location: item.location || item.Ville || '',
-        duration: item.duration || item.Durée || '',
-        cost: item.cost || item.Coût || '',
-        specialization: item.specialization || item.Spécialisation || ''
-      }));
+      console.log('Résultats de la recherche:', results.length);
 
       console.log('Résultats de la recherche:', results.length);
       res.json(results);
