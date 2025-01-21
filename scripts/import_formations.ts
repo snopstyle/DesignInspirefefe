@@ -36,6 +36,17 @@ function formatText(text: string, defaultValue: string): string {
     .join(' ');
 }
 
+// Helper function to parse and format domains
+function parseDomains(domainsText: string): string[] {
+  if (!domainsText) return ['Domaine Non Renseigné'];
+
+  return domainsText
+    .split(/[,|]/) // Split on comma OR vertical bar
+    .map(domain => formatText(domain, ''))
+    .filter(domain => domain !== '')
+    .filter((domain, index, self) => self.indexOf(domain) === index); // Remove duplicates
+}
+
 async function importFormations() {
   try {
     const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
@@ -93,10 +104,7 @@ async function importFormations() {
             locationId: location.id,
             niveau: formatText(item.Niveau, 'Niveau Non Renseigné'),
             type: formatText(item['Type de Formation'], 'Type de Formation Non Renseigné'),
-            domaines: item.Domaines ? 
-              item.Domaines.split(',')
-                .map(d => formatText(d, ''))
-                .filter(d => d !== '') : ['Domaine Non Renseigné'],
+            domaines: parseDomains(item.Domaines),
             costId: cost.id,
             duree: formatText(item.Durée, 'Durée Non Renseignée'),
             pedagogyId: pedagogy.id

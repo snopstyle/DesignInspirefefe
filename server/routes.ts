@@ -346,6 +346,7 @@ export function registerRoutes(app: Express): Server {
       const ville = req.query.ville?.toString();
       const niveau = req.query.niveau?.toString();
       const diplomeEtat = req.query.diplomeEtat === 'true';
+      const selectedDomains = req.query.tags?.toString().split(',') || [];
 
       // Build the where clause based on filters
       const whereConditions = [];
@@ -366,6 +367,9 @@ export function registerRoutes(app: Express): Server {
       if (niveau) {
         whereConditions.push(eq(formations.niveau, niveau));
       }
+
+      // Note: We can't directly filter on domains in the where clause since it's an array
+      // We'll filter the results after the query
 
       const results = await db
         .select({
@@ -406,8 +410,17 @@ export function registerRoutes(app: Express): Server {
         .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
         .limit(50);
 
-      console.log('Search results:', results);
-      res.json(results);
+      // Filter by domains if any are selected
+      const filteredResults = selectedDomains.length > 0
+        ? results.filter(result =>
+            result.domaines.some(domain =>
+              selectedDomains.includes(domain)
+            )
+          )
+        : results;
+
+      console.log('Search results:', filteredResults);
+      res.json(filteredResults);
     } catch (error) {
       console.error('Search error:', error);
       res.status(500).json({ error: 'Erreur lors de la recherche de formations' });
