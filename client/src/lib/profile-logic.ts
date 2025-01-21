@@ -619,6 +619,30 @@ export const __testing = {
 };
 
 // Résumés détaillés des profils pour la page de résultats
+// Mapping between Sub-Profiles and their Dominant Profiles
+export const dominant_profile_mapping: Record<string, string> = {
+    "Le Chercheur": "Profil Analytique",
+    "Le Solutionneur": "Profil Analytique",
+    "L'Analyste de Données": "Profil Analytique",
+    "Le Théoricien": "Profil Analytique",
+    "L'Ingénieur": "Profil Technique",
+    "L'Artiste": "Profil Créatif",
+    "L'Innovateur": "Profil Créatif",
+    "Le Narrateur": "Profil Créatif",
+    "L'Interprète": "Profil Créatif",
+    "Le Designer": "Profil Créatif",
+    "L'Aidant": "Profil Social",
+    "L'Activiste": "Profil Social",
+    "Le Communicant": "Profil Social",
+    "L'Éducateur": "Profil Social",
+    "L'Humanitaire": "Profil Social",
+    "L'Entrepreneur": "Profil Entrepreneurial",
+    "Le Leader": "Profil Entrepreneurial",
+    "Le Stratège": "Profil Entrepreneurial",
+    "Le Commercial": "Profil Entrepreneurial",
+    "L'Investisseur": "Profil Entrepreneurial"
+};
+
 export const profile_summaries: Record<string, {
     description: string;           // Description générale du profil
     strengths: string[];          // Points forts caractéristiques
