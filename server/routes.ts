@@ -349,11 +349,15 @@ export function registerRoutes(app: Express): Server {
 
   const httpServer = createServer(app);
   
+  let cachedData = null;
+
   app.get('/api/search', async (req, res) => {
     try {
-      const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
-      const sheetName = workbook.SheetNames[0];
-      const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+      if (!cachedData) {
+        const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+        const sheetName = workbook.SheetNames[0];
+        cachedData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+      }
 
       // Afficher le premier élément pour debug
       console.log('Premier élément:', JSON.stringify(rawData[0], null, 2));

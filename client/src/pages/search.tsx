@@ -11,16 +11,44 @@ import { GradientBackground } from "@/components/layout/gradient-background";
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const debouncedSearch = React.useCallback(
+    debounce(async (term) => {
+      if (!term) return;
+      try {
+        setIsLoading(true);
+        const response = await fetch(`/api/search?q=${encodeURIComponent(term)}`);
+        const data = await response.json();
+        setSuggestions(data.slice(0, 5));
+      } catch (error) {
+        console.error('Search failed:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300),
+    []
+  );
 
   const handleSearch = async () => {
+    if (!searchTerm) return;
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(searchTerm)}`);
       const data = await response.json();
       setResults(data);
+      setSuggestions([]);
     } catch (error) {
       console.error('Search failed:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    debouncedSearch(searchTerm);
+  }, [searchTerm, debouncedSearch]);
 
   const SocialLink = ({ href, icon: Icon, label }) => {
     if (!href || href === "non renseigné") return null;
@@ -55,14 +83,43 @@ export default function SearchPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Rechercher une formation..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1"
-                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  />
+                <div className="relative">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Rechercher une formation..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="flex-1"
+                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    />
+                    <Button onClick={handleSearch} disabled={isLoading}>
+                      {isLoading ? (
+                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                      ) : (
+                        <Search className="h-4 w-4 mr-2" />
+                      )}
+                      Rechercher
+                    </Button>
+                  </div>
+                  
+                  {suggestions.length > 0 && searchTerm && (
+                    <div className="absolute z-10 w-full bg-background border rounded-md mt-1 shadow-lg">
+                      {suggestions.map((suggestion, index) => (
+                        <div
+                          key={index}
+                          className="p-2 hover:bg-accent cursor-pointer"
+                          onClick={() => {
+                            setSearchTerm(suggestion.Formation || suggestion.name);
+                            setSuggestions([]);
+                            handleSearch();
+                          }}
+                        >
+                          {suggestion.Formation || suggestion.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                   <Button onClick={handleSearch}>
                     <Search className="h-4 w-4 mr-2" />
                     Rechercher
