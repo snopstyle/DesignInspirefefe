@@ -44,6 +44,11 @@ export default function SearchPage() {
       }))
   });
 
+  // Charger les villes depuis l'API
+  const { data: cities = [] } = useQuery({
+    queryKey: ["/api/cities"]
+  });
+
   const debouncedSearch = useCallback(
     debounce(async (term: string) => {
       if (!term) return;
@@ -192,11 +197,11 @@ export default function SearchPage() {
                               value={activeFilters['ville'] || ''}
                             >
                               <option value="">Toutes les villes</option>
-                              <option value="Paris">Paris</option>
-                              <option value="Lyon">Lyon</option>
-                              <option value="Marseille">Marseille</option>
-                              <option value="Bordeaux">Bordeaux</option>
-                              <option value="Toulouse">Toulouse</option>
+                              {cities.map((city: string) => (
+                                <option key={city} value={city}>
+                                  {city}
+                                </option>
+                              ))}
                             </select>
                           </div>
                           <div className="space-y-2">
