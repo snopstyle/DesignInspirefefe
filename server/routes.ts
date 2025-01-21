@@ -348,10 +348,29 @@ export function registerRoutes(app: Express): Server {
   });
 
   const httpServer = createServer(app);
+  
   app.get('/api/search', async (req, res) => {
-  try {
-    const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
-    const sheetName = workbook.SheetNames[0];
+    try {
+      const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+      const sheetName = workbook.SheetNames[0];
+      const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+      
+      const query = req.query.q?.toString().toLowerCase() || '';
+      const results = data.filter((item: any) => 
+        Object.values(item).some(value => 
+          value?.toString().toLowerCase().includes(query)
+        )
+      );
+
+      res.json(results);
+    } catch (error) {
+      console.error('Search error:', error);
+      res.status(500).json({ error: 'Search failed' });
+    }
+  });
+
+  return httpServer;
+}
     const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
     
     const query = req.query.q?.toString().toLowerCase() || '';
