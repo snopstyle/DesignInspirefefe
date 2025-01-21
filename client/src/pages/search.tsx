@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,7 +14,7 @@ export default function SearchPage() {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const debouncedSearch = React.useCallback(
+  const debouncedSearch = useCallback(
     debounce(async (term) => {
       if (!term) return;
       try {
