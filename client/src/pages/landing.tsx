@@ -49,7 +49,7 @@ export default function Landing() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto">
-            {features.slice(0, 3).map((feature) => (
+            {features.slice(0, 2).map((feature) => (
               <motion.div
                 key={feature.title}
                 whileHover={{ scale: 1.02 }}
@@ -74,7 +74,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto h-48">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
