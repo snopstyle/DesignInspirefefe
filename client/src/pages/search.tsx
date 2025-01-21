@@ -11,8 +11,8 @@ import { GradientBackground } from "@/components/layout/gradient-background";
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
+  const [results, setResults] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const debouncedSearch = useCallback(
@@ -171,7 +171,7 @@ export default function SearchPage() {
 
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
-              {results.map((result, index) => (
+              {results?.map((result, index) => (
                 <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-xl">{result.Formation}</CardTitle>
