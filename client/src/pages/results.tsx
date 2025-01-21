@@ -44,7 +44,7 @@ export default function Results() {
   // Calcul des profils compatibles (>65%)
   const compatibleProfiles = Object.entries(latestResult.profileMatchScores || {})
     .sort(([, a], [, b]) => (b as number) - (a as number))
-    .filter(([, score]) => (score as number) > 0.65);
+    .filter(([, score]) => (score as number) >= 0.65);
 
   return (
     <GradientBackground>
