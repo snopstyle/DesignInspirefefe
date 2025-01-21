@@ -23,8 +23,12 @@ export function QuestionCard({ question, onAnswer, currentAnswer }: QuestionCard
 useEffect(() => {
   if (Array.isArray(currentAnswer)) {
     setMultipleChoiceAnswers(currentAnswer);
+  } else if (currentAnswer) {
+    setMultipleChoiceAnswers([currentAnswer as string]);
+  } else {
+    setMultipleChoiceAnswers([]);
   }
-}, [currentAnswer]);
+}, [currentAnswer, question.id]);
 
   const isMultipleSelectionQuestion = question.format === "Multiple selection";
 
