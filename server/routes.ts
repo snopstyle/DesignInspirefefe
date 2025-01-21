@@ -346,7 +346,7 @@ export function registerRoutes(app: Express): Server {
       const ville = req.query.ville?.toString();
       const niveau = req.query.niveau?.toString();
       const diplomeEtat = req.query.diplomeEtat === 'true';
-      const selectedDomains = req.query.tags?.toString().split(',') || [];
+      const selectedDomains = req.query.tags?.toString().split(',').map(d => d.trim().toLowerCase()) || [];
 
       // Build the where clause based on filters
       const whereConditions = [];
@@ -367,9 +367,6 @@ export function registerRoutes(app: Express): Server {
       if (niveau) {
         whereConditions.push(eq(formations.niveau, niveau));
       }
-
-      // Note: We can't directly filter on domains in the where clause since it's an array
-      // We'll filter the results after the query
 
       const results = await db
         .select({
@@ -410,11 +407,11 @@ export function registerRoutes(app: Express): Server {
         .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
         .limit(50);
 
-      // Filter by domains if any are selected
+      // Filter by domains if any are selected, using case-insensitive comparison
       const filteredResults = selectedDomains.length > 0
         ? results.filter(result =>
             result.domaines.some(domain =>
-              selectedDomains.includes(domain)
+              selectedDomains.includes(domain.toLowerCase().replace(/[""]/g, ''))
             )
           )
         : results;
@@ -434,10 +431,14 @@ export function registerRoutes(app: Express): Server {
         columns: { domaines: true }
       });
 
-      // Extract unique domains from the results
+      // Extract and clean unique domains from the results
       const uniqueDomains = new Set<string>();
       results.forEach(result => {
-        result.domaines.forEach(domain => uniqueDomains.add(domain));
+        result.domaines.forEach(domain => {
+          // Clean up domain string
+          const cleanDomain = domain.replace(/[""]/g, '').trim();
+          uniqueDomains.add(cleanDomain);
+        });
       });
 
       const domainsList = Array.from(uniqueDomains).sort();
