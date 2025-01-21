@@ -56,6 +56,7 @@ useEffect(() => {
     }
 
     setMultipleChoiceAnswers(newAnswers);
+    onAnswer(newAnswers, true); // Prevent auto-submit
   };
 
   const renderAnswerInput = () => {
@@ -168,7 +169,7 @@ useEffect(() => {
   const hasValidAnswer = () => {
     switch (question.format) {
       case "Multiple selection":
-        return multipleChoiceAnswers.length > 0;
+        return multipleChoiceAnswers.length > 0 && multipleChoiceAnswers.length <= (question.maxSelections || 5);
       case "Single choice":
         return Boolean(currentAnswer);
       case "Multiple choice":
