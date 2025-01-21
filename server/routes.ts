@@ -29,7 +29,7 @@ export function registerRoutes(app: Express): Server {
 
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) => 
+        where: (sessions, { eq, and }) =>
           and(eq(sessions.userId, req.user!.id), eq(sessions.status, 'in_progress')),
         orderBy: desc(quizSessions.startedAt)
       });
@@ -75,7 +75,7 @@ export function registerRoutes(app: Express): Server {
 
     try {
       const session = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) => 
+        where: (sessions, { eq, and }) =>
           and(eq(sessions.id, sessionId), eq(sessions.userId, req.user!.id))
       });
 
@@ -140,7 +140,7 @@ export function registerRoutes(app: Express): Server {
     try {
       // Get session data
       const session = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) => 
+        where: (sessions, { eq, and }) =>
           and(eq(sessions.id, sessionId), eq(sessions.userId, req.user!.id))
       });
 
@@ -173,7 +173,7 @@ export function registerRoutes(app: Express): Server {
           dominantProfile,
           subProfile: dominantProfile,
           traits: Object.entries(profileScores)
-            .sort(([,a], [,b]) => b - a)
+            .sort(([, a], [, b]) => b - a)
             .slice(0, 5)
             .map(([trait]) => trait),
           profileMatchScores: profileScores
@@ -335,7 +335,7 @@ export function registerRoutes(app: Express): Server {
 
     try {
       const session = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) => 
+        where: (sessions, { eq, and }) =>
           and(eq(sessions.userId, req.user!.id), eq(sessions.status, 'in_progress')),
         orderBy: desc(quizSessions.startedAt)
       });
@@ -394,7 +394,7 @@ export function registerRoutes(app: Express): Server {
 
       const query = req.query.q?.toString().toLowerCase() || '';
 
-      // Improved data transformation with validation
+      //Improved data transformation with validation
       function transformData(item: any): FormationData {
         // Map Excel column names to our expected fields
         const columnMap = {
@@ -441,18 +441,18 @@ export function registerRoutes(app: Express): Server {
           alternance: /(altern|apprentissage|dual)/i.test(mappedItem.Pédagogie || '')
         };
 
-        // Improved domain parsing with normalization
-        const domaines = mappedItem.Domaines ? 
+        // Improved domain parsing with proper capitalization
+        const domaines = mappedItem.Domaines ?
           mappedItem.Domaines.split(/[,;|]/)
-            .map((d: string) => d.trim().toLowerCase())
+            .map((d: string) => d.trim())
             .filter(Boolean)
-            .map((d: string) => d.charAt(0).toUpperCase() + d.slice(1)) : 
-          [];
+            .map((d: string) => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()) :
+          ['Domaine non renseigné'];
 
         // Generate consistent ID
-        const id = mappedItem.UAI || 
-                   mappedItem.ID || 
-                   `FORM-${Math.random().toString(36).substr(2, 9)}`;
+        const id = mappedItem.UAI ||
+          mappedItem.ID ||
+          `FORM-${Math.random().toString(36).substr(2, 9)}`;
 
         return {
           id,
@@ -462,7 +462,7 @@ export function registerRoutes(app: Express): Server {
           region: (mappedItem.Région || 'Région non renseignée').trim(),
           niveau: (mappedItem.NIveau || 'Niveau non renseigné').trim(),
           type: (mappedItem["Type Formation"] || 'Type non renseigné').trim(),
-          domaines: domaines.length > 0 ? domaines : ['Domaine non renseigné'],
+          domaines: domaines,
           cout: cost,
           duree: (mappedItem.Durée || 'Durée non renseignée').trim(),
           pedagogie,
@@ -478,6 +478,7 @@ export function registerRoutes(app: Express): Server {
           } : null
         };
       }
+
 
       // Implement efficient search with pre-processed data
       if (!query) {
@@ -513,13 +514,13 @@ export function registerRoutes(app: Express): Server {
         cachedData = rawData.map(transformData);
       }
 
-      // Extraire tous les domaines uniques
+      // Extract all unique domains with proper capitalization
       const uniqueDomains = new Set<string>();
       cachedData.forEach(item => {
         if (Array.isArray(item.domaines)) {
           item.domaines.forEach((domaine: string) => {
             if (domaine && domaine !== 'Domaine non renseigné') {
-              uniqueDomains.add(domaine.trim());
+              uniqueDomains.add(domaine);
             }
           });
         }
