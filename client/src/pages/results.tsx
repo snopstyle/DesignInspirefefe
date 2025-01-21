@@ -64,19 +64,19 @@ export default function Results() {
                 {sortedTraits.slice(0, 5).map(([trait, score], index) => (
                   <div key={index} className="flex justify-between items-center border-b py-2">
                     <span className="text-lg">{trait}</span>
-                    <span className="font-semibold">{typeof score === 'number' ? `${(score * 100).toFixed(0)}%` : '0%'}</span>
+                    <span className="font-semibold">{Number(score).toFixed(2) * 100}%</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Profils les Plus Compatibles (Top 5)</h2>
+              <h2 className="text-2xl font-semibold mb-4">Profils les Plus Compatibles</h2>
               <div className="grid grid-cols-1 gap-2">
-                {sortedProfiles.slice(0, 5).map(([profile, score], index) => (
+                {sortedProfiles.map(([profile, score], index) => (
                   <div key={index} className="flex justify-between items-center border-b py-2">
                     <span className="text-lg">{profile}</span>
-                    <span className="font-semibold">{typeof score === 'number' ? `${(score * 100).toFixed(1)}%` : '0%'}</span>
+                    <span className="font-semibold">{Number(score).toFixed(2) * 100}%</span>
                   </div>
                 ))}
               </div>
