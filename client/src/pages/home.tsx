@@ -17,7 +17,7 @@ export default function Home() {
         <Button
           onClick={() => setLocation("/quiz")}
           size="lg"
-          className="bg-white text-primary hover:bg-gray-100"
+          className="bg-black text-white hover:bg-gray-900 font-bold"
         >
           Commencer le Quiz
         </Button>
