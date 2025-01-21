@@ -40,7 +40,7 @@ export default function Quiz() {
   return (
     <GradientBackground className="p-4">
       <div className="container mx-auto py-8">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <QuestionCard
             key={currentQuestion.id}
             question={currentQuestion}
