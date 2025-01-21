@@ -176,20 +176,6 @@ export default function SearchPage() {
                       <PopoverContent className="w-80">
                         <div className="space-y-4">
                           <div className="space-y-2">
-                            <label className="text-sm font-medium">Durée</label>
-                            <select 
-                              className="w-full p-2 rounded-md border border-input bg-background"
-                              onChange={(e) => handleFilterChange('durée', e.target.value)}
-                              value={activeFilters['durée'] || ''}
-                            >
-                              <option value="">Toutes les durées</option>
-                              <option value="1-3 mois">1-3 mois</option>
-                              <option value="3-6 mois">3-6 mois</option>
-                              <option value="6-12 mois">6-12 mois</option>
-                              <option value="+12 mois">+12 mois</option>
-                            </select>
-                          </div>
-                          <div className="space-y-2">
                             <label className="text-sm font-medium">Ville</label>
                             <select 
                               className="w-full p-2 rounded-md border border-input bg-background"
