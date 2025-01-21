@@ -342,38 +342,20 @@ export function registerRoutes(app: Express): Server {
   // Search endpoint
   app.get('/api/search', async (req, res) => {
     try {
-      console.log('Search request received:', req.query);
       const query = req.query.q?.toString().toLowerCase() || '';
       const ville = req.query.ville?.toString();
       const niveau = req.query.niveau?.toString();
       const diplomeEtat = req.query.diplomeEtat === 'true';
-      const selectedDomains = req.query.tags?.toString().split(',').map(d => d.trim().toLowerCase()) || [];
-
-      console.log('Parsed search params:', { query, ville, niveau, diplomeEtat, selectedDomains });
+      const selectedDomains = req.query.tags?.toString().split(',') || [];
 
       // Build the where clause based on filters
       const whereConditions = [];
 
       if (query) {
-        // Enhanced search to include similar terms and partial matches
-        const searchTerms = query.split(/\s+/).map(term => `%${term}%`);
-        const similarTerms = new Set([...searchTerms]);
-
-        // Add common variations and abbreviations
-        if (query.includes('iae')) {
-          similarTerms.add('%administration%entreprise%');
-          similarTerms.add('%gestion%');
-          similarTerms.add('%management%');
-        }
-
         whereConditions.push(
           or(
-            ...Array.from(similarTerms).map(term =>
-              or(
-                ilike(formations.formation, term),
-                ilike(establishments.name, term)
-              )
-            )
+            ilike(formations.formation, `%${query}%`),
+            ilike(establishments.name, `%${query}%`)
           )
         );
       }
@@ -386,7 +368,8 @@ export function registerRoutes(app: Express): Server {
         whereConditions.push(eq(formations.niveau, niveau));
       }
 
-      console.log('Where conditions built:', whereConditions);
+      // Note: We can't directly filter on domains in the where clause since it's an array
+      // We'll filter the results after the query
 
       const results = await db
         .select({
@@ -427,19 +410,16 @@ export function registerRoutes(app: Express): Server {
         .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
         .limit(50);
 
-      console.log('Initial query results count:', results.length);
-
       // Filter by domains if any are selected
       const filteredResults = selectedDomains.length > 0
         ? results.filter(result =>
             result.domaines.some(domain =>
-              selectedDomains.includes(domain.toLowerCase().replace(/[""]/g, '').trim())
+              selectedDomains.includes(domain)
             )
           )
         : results;
 
-      console.log('Final filtered results count:', filteredResults.length);
-
+      console.log('Search results:', filteredResults);
       res.json(filteredResults);
     } catch (error) {
       console.error('Search error:', error);
@@ -454,14 +434,10 @@ export function registerRoutes(app: Express): Server {
         columns: { domaines: true }
       });
 
-      // Extract and clean unique domains from the results
+      // Extract unique domains from the results
       const uniqueDomains = new Set<string>();
       results.forEach(result => {
-        result.domaines.forEach(domain => {
-          // Clean up domain string
-          const cleanDomain = domain.replace(/[""]/g, '').trim();
-          uniqueDomains.add(cleanDomain);
-        });
+        result.domaines.forEach(domain => uniqueDomains.add(domain));
       });
 
       const domainsList = Array.from(uniqueDomains).sort();

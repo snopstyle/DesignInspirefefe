@@ -151,7 +151,7 @@ export const formations = pgTable("formations", {
 
 export const establishments = pgTable("establishments", {
   id: uuid("id").defaultRandom().primaryKey(),
-  name: text("name").notNull().unique(),
+  name: text("name").notNull(),
   statut: text("statut").notNull(),
   hebergement: boolean("hebergement").notNull(),
   lien: text("lien").notNull(),

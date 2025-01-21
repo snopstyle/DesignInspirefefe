@@ -6,14 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { TagInput, type Tag } from "@/components/ui/tag-input";
-import {
-  GraduationCap,
-  Search,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Clock,
-  Euro,
+import { 
+  GraduationCap, 
+  Search, 
+  Facebook, 
+  Instagram, 
+  Linkedin, 
+  Clock, 
+  Euro, 
   MapPin,
   Filter,
   X,
@@ -23,34 +23,6 @@ import {
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
-  if (!href || href === "non renseigné") return null;
-
-  const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
-
-  const iconColors = {
-    Facebook: "bg-[#1877F2] hover:bg-[#0D65D9]",
-    Instagram: "bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] hover:opacity-90",
-    Linkedin: "bg-[#0A66C2] hover:bg-[#004182]"
-  };
-
-  const iconColor = iconColors[label as keyof typeof iconColors] || "bg-gray-600 hover:bg-gray-700";
-
-  return (
-    <a
-      href={cleanUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center hover:scale-110 transition-transform"
-    >
-      <div className={`p-2 rounded-full ${iconColor} text-white shadow-md`}>
-        <Icon className="h-5 w-5" />
-      </div>
-    </a>
-  );
-};
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,12 +32,11 @@ export default function SearchPage() {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [selectedCity, setSelectedCity] = useState<string>("all");
 
   // Charger les domaines depuis l'API
   const { data: domains = [] } = useQuery({
     queryKey: ["/api/domains"],
-    select: (data: string[]) =>
+    select: (data: string[]) => 
       data.map(domain => ({
         id: domain.toLowerCase().replace(/\s+/g, '-'),
         label: domain,
@@ -110,20 +81,16 @@ export default function SearchPage() {
         queryParams.append('tags', selectedTags.map(tag => tag.label).join(','));
       }
 
-      // Only append ville if it's not "all"
-      if (selectedCity && selectedCity !== "all") {
-        queryParams.append('ville', selectedCity);
-      }
-
-      // Ajouter les autres filtres actifs
+      // Ajouter les filtres actifs
       Object.entries(activeFilters).forEach(([key, value]) => {
-        if (value && value !== "all" && key !== 'ville') {
+        if (value) {
           queryParams.append(key, value);
         }
       });
 
       const response = await fetch(`/api/search?${queryParams.toString()}`);
       const data = await response.json();
+      console.log('Search results:', data);
       setResults(data);
       setSuggestions([]);
 
@@ -146,18 +113,7 @@ export default function SearchPage() {
     setSelectedTags(prev => prev.filter(tag => tag.id !== tagToRemove.id));
   };
 
-  const handleCityChange = (value: string) => {
-    setSelectedCity(value);
-    setActiveFilters(prev => ({
-      ...prev,
-      ville: value
-    }));
-  };
-
   const handleFilterChange = (type: string, value: string) => {
-    if (type === 'ville') {
-      setSelectedCity(value);
-    }
     setActiveFilters(prev => ({
       ...prev,
       [type]: value
@@ -165,17 +121,34 @@ export default function SearchPage() {
   };
 
   const removeFilter = (type: string) => {
-    if (type === 'ville') {
-      setSelectedCity('all');
-    }
     const newFilters = { ...activeFilters };
     delete newFilters[type];
     setActiveFilters(newFilters);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
+
+  const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
+    if (!href || href === "non renseigné") return null;
+
+    const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
+
+    return (
+      <a 
+        href={cleanUrl} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="inline-flex items-center hover:scale-110 transition-transform"
+      >
+        <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-secondary/80">
+          <Icon className="h-4 w-4" />
+          <span className="hidden sm:inline">{label}</span>
+        </Badge>
+      </a>
+    );
+  };
 
   return (
     <GradientBackground>
@@ -201,8 +174,8 @@ export default function SearchPage() {
                     />
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
+                        <Button 
+                          variant="outline" 
                           className="gap-2 hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 hover:text-white transition-colors"
                         >
                           <Filter className="h-4 w-4" />
@@ -213,49 +186,41 @@ export default function SearchPage() {
                         <div className="space-y-4">
                           <div className="space-y-2">
                             <label className="text-sm font-medium">Ville</label>
-                            <Select
-                              value={selectedCity}
-                              onValueChange={handleCityChange}
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('ville', e.target.value)}
+                              value={activeFilters['ville'] || ''}
                             >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Toutes les villes" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="all">Toutes les villes</SelectItem>
-                                {cities?.map((city: string) => (
-                                  <SelectItem key={city} value={city}>
-                                    {city}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                              <option value="">Toutes les villes</option>
+                              {cities.map((city: string) => (
+                                <option key={city} value={city}>
+                                  {city}
+                                </option>
+                              ))}
+                            </select>
                           </div>
                           <div className="space-y-2">
                             <label className="text-sm font-medium">Niveau</label>
-                            <Select
-                              value={activeFilters['niveau'] || 'all'}
-                              onValueChange={(value) => handleFilterChange('niveau', value)}
+                            <select 
+                              className="w-full p-2 rounded-md border border-input bg-background"
+                              onChange={(e) => handleFilterChange('niveau', e.target.value)}
+                              value={activeFilters['niveau'] || ''}
                             >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Tous les niveaux" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="all">Tous les niveaux</SelectItem>
-                                <SelectItem value="Bac+2">Bac+2</SelectItem>
-                                <SelectItem value="Bac+3">Bac+3</SelectItem>
-                                <SelectItem value="Bac+4">Bac+4</SelectItem>
-                                <SelectItem value="Bac+5">Bac+5</SelectItem>
-                              </SelectContent>
-                            </Select>
+                              <option value="">Tous les niveaux</option>
+                              <option value="Bac+2">Bac+2</option>
+                              <option value="Bac+3">Bac+3</option>
+                              <option value="Bac+4">Bac+4</option>
+                              <option value="Bac+5">Bac+5</option>
+                            </select>
                           </div>
                         </div>
                       </PopoverContent>
                     </Popover>
-                    <Button
+                    <Button 
                       onClick={() => {
                         handleSearch();
                         setSuggestions([]); // Clear suggestions when searching
-                      }}
+                      }} 
                       disabled={isLoading}
                       className="bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl"
                     >
@@ -267,50 +232,13 @@ export default function SearchPage() {
                     </Button>
                   </div>
 
-                  {/* Active Filters */}
-                  {((Object.keys(activeFilters).length > 0 && Object.values(activeFilters).some(v => v !== 'all')) ||
-                    (selectedCity && selectedCity !== 'all')) && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {selectedCity && selectedCity !== 'all' && (
-                        <Badge
-                          variant="secondary"
-                          className="flex items-center gap-1"
-                        >
-                          ville: {selectedCity}
-                          <X
-                            className="h-3 w-3 cursor-pointer"
-                            onClick={() => {
-                              setSelectedCity('all');
-                              removeFilter('ville');
-                            }}
-                          />
-                        </Badge>
-                      )}
-                      {Object.entries(activeFilters).map(([type, value]) => (
-                        type !== 'ville' && value && value !== 'all' && (
-                          <Badge
-                            key={type}
-                            variant="secondary"
-                            className="flex items-center gap-1"
-                          >
-                            {type}: {value}
-                            <X
-                              className="h-3 w-3 cursor-pointer"
-                              onClick={() => removeFilter(type)}
-                            />
-                          </Badge>
-                        )
-                      ))}
-                    </div>
-                  )}
-
                   {/* Certification d'État */}
                   <div className="mt-4 flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="diplomeEtat"
                       className="h-4 w-4 rounded border-input"
-                      onChange={(e) => handleFilterChange('diplomeEtat', e.target.checked ? 'true' : 'all')}
+                      onChange={(e) => handleFilterChange('diplomeEtat', e.target.checked ? 'true' : '')}
                       checked={activeFilters['diplomeEtat'] === 'true'}
                     />
                     <label htmlFor="diplomeEtat" className="text-sm">
@@ -355,6 +283,25 @@ export default function SearchPage() {
                           </Badge>
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {/* Active Filters */}
+                  {Object.keys(activeFilters).length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {Object.entries(activeFilters).map(([type, value]) => (
+                        <Badge 
+                          key={type}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {type}: {value}
+                          <X
+                            className="h-3 w-3 cursor-pointer"
+                            onClick={() => removeFilter(type)}
+                          />
+                        </Badge>
+                      ))}
                     </div>
                   )}
 
@@ -427,11 +374,11 @@ export default function SearchPage() {
                         </div>
                         <div>
                           <p className="font-semibold">Pédagogie:</p>
-                          <p>{result.pedagogie ?
+                          <p>{result.pedagogie ? 
                             Object.entries(result.pedagogie)
                               .filter(([_, value]) => value)
                               .map(([key]) => key)
-                              .join(', ')
+                              .join(', ') 
                             : "Non renseigné"}</p>
                         </div>
                       </div>
