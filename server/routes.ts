@@ -374,19 +374,17 @@ export function registerRoutes(app: Express): Server {
     } | null;
   }
 
-  let cachedData: FormationData[] | null = null;
-
   app.get('/api/search', async (req, res) => {
     try {
-      if (!cachedData) {
-        console.log('Loading Excel file...');
-        const excelPath = path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx');
-        console.log('Excel file path:', excelPath);
-        const workbook = xlsx.readFile(excelPath);
-        const sheetName = workbook.SheetNames[0];
-        const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-        cachedData = rawData.map(transformData);
-      }
+      const query = req.query.q?.toString().toLowerCase() || '';
+      const results = await db.query.formations.findMany({
+        where: query ? 
+          (formations, { or, ilike }) => or(
+            ilike(formations.formation, `%${query}%`),
+            ilike(formations.etablissement, `%${query}%`)
+          ) : undefined,
+        limit: 50
+      });
 
       const query = req.query.q?.toString().toLowerCase() || '';
 

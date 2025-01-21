@@ -134,3 +134,35 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
     references: [users.id],
   })
 }));
+
+export const formations = pgTable("formations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  formation: text("formation").notNull(),
+  etablissement: text("etablissement").notNull(),
+  ville: text("ville").notNull(),
+  region: text("region").notNull(),
+  niveau: text("niveau").notNull(),
+  type: text("type").notNull(),
+  domaines: text("domaines").array().notNull(),
+  cout: jsonb("cout").$type<{
+    montant: number;
+    devise: string;
+    gratuitApprentissage: boolean;
+  }>().notNull(),
+  duree: text("duree").notNull(),
+  pedagogie: jsonb("pedagogie").$type<{
+    tempsPlein: boolean;
+    presentiel: boolean;
+    alternance: boolean;
+  }>().notNull(),
+  statut: text("statut").notNull(),
+  hebergement: boolean("hebergement").notNull(),
+  lien: text("lien").notNull(),
+  adresse: text("adresse").notNull(),
+  departement: text("departement").notNull(),
+  tel: text("tel").notNull(),
+  facebook: text("facebook"),
+  instagram: text("instagram"),
+  linkedin: text("linkedin"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
