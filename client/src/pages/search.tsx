@@ -22,21 +22,25 @@ export default function SearchPage() {
     }
   };
 
-  const SocialLink = ({ href, icon: Icon, label }: { href: string, icon: any, label: string }) => {
-  if (!href || href === "non renseigné") return null;
-  
-  // Nettoyer l'URL si nécessaire
-  const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
-  
-  return (
-    <a href={cleanUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center hover:scale-110 transition-transform">
-      <Badge variant="outline" className="gap-1 cursor-pointer bg-background/60 hover:bg-background">
-        <Icon className="h-4 w-4" />
-        <span className="hidden sm:inline">{label}</span>
-      </Badge>
-    </a>
-  );
-};
+  const SocialLink = ({ href, icon: Icon, label }) => {
+    if (!href || href === "non renseigné") return null;
+    
+    const cleanUrl = href.startsWith('http') ? href : `https://${href}`;
+    
+    return (
+      <a 
+        href={cleanUrl} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="inline-flex items-center hover:scale-110 transition-transform"
+      >
+        <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-secondary/80">
+          <Icon className="h-4 w-4" />
+          <span className="hidden sm:inline">{label}</span>
+        </Badge>
+      </a>
+    );
+  };
 
   return (
     <GradientBackground>
@@ -56,6 +60,7 @@ export default function SearchPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="flex-1"
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
                 <Button onClick={handleSearch}>
                   <Search className="h-4 w-4 mr-2" />
@@ -68,7 +73,7 @@ export default function SearchPage() {
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
               {results.map((result, index) => (
-                <Card key={index} className="overflow-hidden">
+                <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-xl">{result.Formation}</CardTitle>
                     <CardDescription className="text-lg font-medium">
@@ -78,33 +83,45 @@ export default function SearchPage() {
                   <CardContent>
                     <div className="space-y-4">
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="outline" className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          {result["Durée "]}
-                        </Badge>
-                        <Badge variant="outline" className="flex items-center gap-1">
-                          <Euro className="h-4 w-4" />
-                          {result["Coût"]}
-                        </Badge>
-                        <Badge variant="outline" className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
-                          {result["Ville"]}
-                        </Badge>
+                        {result["Durée "] && (
+                          <Badge variant="outline" className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            {result["Durée "]}
+                          </Badge>
+                        )}
+                        {result["Coût"] && (
+                          <Badge variant="outline" className="flex items-center gap-1">
+                            <Euro className="h-4 w-4" />
+                            {result["Coût"]}
+                          </Badge>
+                        )}
+                        {result["Ville"] && (
+                          <Badge variant="outline" className="flex items-center gap-1">
+                            <MapPin className="h-4 w-4" />
+                            {result["Ville"]}
+                          </Badge>
+                        )}
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <div>
-                          <p className="font-semibold">Type de formation:</p>
-                          <p>{result["Type Formation"]}</p>
-                        </div>
-                        <div>
-                          <p className="font-semibold">Niveau:</p>
-                          <p>{result["NIveau"]}</p>
-                        </div>
-                        <div>
-                          <p className="font-semibold">Pédagogie:</p>
-                          <p>{result["Pédagogie"]}</p>
-                        </div>
+                        {result["Type Formation"] && (
+                          <div>
+                            <p className="font-semibold">Type de formation:</p>
+                            <p>{result["Type Formation"]}</p>
+                          </div>
+                        )}
+                        {result["NIveau"] && (
+                          <div>
+                            <p className="font-semibold">Niveau:</p>
+                            <p>{result["NIveau"]}</p>
+                          </div>
+                        )}
+                        {result["Pédagogie"] && (
+                          <div>
+                            <p className="font-semibold">Pédagogie:</p>
+                            <p>{result["Pédagogie"]}</p>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex flex-wrap gap-2 pt-2">
