@@ -23,13 +23,14 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
   };
 
   return (
-    <div className="space-y-6">
-      <Reorder.Group 
-        axis="y" 
-        values={items} 
-        onReorder={handleReorder}
-        className="space-y-2"
-      >
+    <div className="flex flex-col h-[calc(100vh-300px)]">
+      <div className="flex-1 overflow-auto">
+        <Reorder.Group 
+          axis="y" 
+          values={items} 
+          onReorder={handleReorder}
+          className="space-y-2"
+        >
         {items.map((item) => (
           <Reorder.Item
             key={item}
@@ -45,16 +46,18 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
           </Reorder.Item>
         ))}
       </Reorder.Group>
+      </div>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
+        className="mt-4"
       >
         <Button
           className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
           onClick={handleUpdate}
         >
-          Validate Ranking
+          Valider le Classement
         </Button>
       </motion.div>
     </div>
