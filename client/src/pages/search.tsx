@@ -217,7 +217,10 @@ export default function SearchPage() {
                       </PopoverContent>
                     </Popover>
                     <Button 
-                      onClick={handleSearch} 
+                      onClick={() => {
+                        handleSearch();
+                        setSuggestions([]); // Clear suggestions when searching
+                      }} 
                       disabled={isLoading}
                       className="bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl"
                     >
