@@ -503,5 +503,35 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Get unique formation domains
+  app.get('/api/domains', async (req, res) => {
+    try {
+      if (!cachedData) {
+        const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+        const sheetName = workbook.SheetNames[0];
+        const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+        cachedData = rawData.map(transformData);
+      }
+
+      // Extraire tous les domaines uniques
+      const uniqueDomains = new Set<string>();
+      cachedData.forEach(item => {
+        if (Array.isArray(item.domaines)) {
+          item.domaines.forEach((domaine: string) => {
+            if (domaine && domaine !== 'Domaine non renseigné') {
+              uniqueDomains.add(domaine.trim());
+            }
+          });
+        }
+      });
+
+      const domainsList = Array.from(uniqueDomains).sort();
+      res.json(domainsList);
+    } catch (error) {
+      console.error('Error fetching domains:', error);
+      res.status(500).json({ error: 'Erreur lors de la récupération des domaines' });
+    }
+  });
+
   return httpServer;
 }

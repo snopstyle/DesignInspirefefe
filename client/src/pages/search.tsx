@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import debounce from "lodash/debounce";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,40 +22,7 @@ import {
 } from "lucide-react";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-
-// Tags des domaines de formation
-const FORMATION_DOMAINS: Tag[] = [
-  { id: "info", label: "Informatique", category: "domaine" },
-  { id: "web", label: "Développement Web", category: "domaine" },
-  { id: "data", label: "Data Science", category: "domaine" },
-  { id: "design", label: "Design", category: "domaine" },
-  { id: "marketing", label: "Marketing Digital", category: "domaine" },
-  { id: "business", label: "Business", category: "domaine" },
-  { id: "management", label: "Management", category: "domaine" },
-  { id: "communication", label: "Communication", category: "domaine" },
-  { id: "langues", label: "Langues", category: "domaine" },
-  { id: "sante", label: "Santé", category: "domaine" },
-  { id: "art", label: "Arts & Culture", category: "domaine" },
-  { id: "commerce", label: "Commerce", category: "domaine" },
-  { id: "finance", label: "Finance", category: "domaine" },
-  { id: "rh", label: "Ressources Humaines", category: "domaine" },
-  { id: "industrie", label: "Industrie", category: "domaine" },
-  { id: "logistique", label: "Logistique", category: "domaine" },
-  { id: "batiment", label: "Bâtiment", category: "domaine" },
-  { id: "hotellerie", label: "Hôtellerie-Restauration", category: "domaine" },
-  { id: "agriculture", label: "Agriculture", category: "domaine" },
-  { id: "environnement", label: "Environnement", category: "domaine" },
-  { id: "social", label: "Social", category: "domaine" },
-  { id: "sport", label: "Sport", category: "domaine" },
-  { id: "tourisme", label: "Tourisme", category: "domaine" },
-  { id: "transport", label: "Transport", category: "domaine" },
-  { id: "securite", label: "Sécurité", category: "domaine" },
-  { id: "juridique", label: "Juridique", category: "domaine" },
-  { id: "immobilier", label: "Immobilier", category: "domaine" },
-  { id: "multimedia", label: "Multimédia", category: "domaine" },
-  { id: "mode", label: "Mode", category: "domaine" },
-  { id: "beaute", label: "Beauté", category: "domaine" }
-];
+import { useQuery } from "@tanstack/react-query";
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,6 +32,17 @@ export default function SearchPage() {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
+  // Charger les domaines depuis l'API
+  const { data: domains = [] } = useQuery({
+    queryKey: ["/api/domains"],
+    select: (data: string[]) => 
+      data.map(domain => ({
+        id: domain.toLowerCase().replace(/\s+/g, '-'),
+        label: domain,
+        category: "domaine"
+      }))
+  });
 
   const debouncedSearch = useCallback(
     debounce(async (term: string) => {
@@ -255,7 +233,7 @@ export default function SearchPage() {
                       Domaines de formation
                     </div>
                     <TagInput
-                      tags={FORMATION_DOMAINS}
+                      tags={domains}
                       selectedTags={selectedTags}
                       onTagSelect={handleTagSelect}
                       onTagRemove={handleTagRemove}
@@ -337,9 +315,9 @@ export default function SearchPage() {
                     <div className="flex justify-between items-start">
                       <div>
                         <CardTitle className="text-xl">{result.formation}</CardTitle>
-                        <CardDescription className="text-lg font-medium">
+                        <p className="text-lg font-medium">
                           {result.etablissement}
-                        </CardDescription>
+                        </p>
                       </div>
                       <div className="flex gap-2">
                         <SocialLink href={result.facebook} icon={Facebook} label="Facebook" />
