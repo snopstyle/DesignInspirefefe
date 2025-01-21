@@ -355,10 +355,25 @@ export function registerRoutes(app: Express): Server {
       const whereConditions = [];
 
       if (query) {
+        // Enhanced search to include similar terms and partial matches
+        const searchTerms = query.split(/\s+/).map(term => `%${term}%`);
+        const similarTerms = new Set([...searchTerms]);
+
+        // Add common variations and abbreviations
+        if (query.includes('iae')) {
+          similarTerms.add('%administration%entreprise%');
+          similarTerms.add('%gestion%');
+          similarTerms.add('%management%');
+        }
+
         whereConditions.push(
           or(
-            ilike(formations.formation, `%${query}%`),
-            ilike(establishments.name, `%${query}%`)
+            ...Array.from(similarTerms).map(term =>
+              or(
+                ilike(formations.formation, term),
+                ilike(establishments.name, term)
+              )
+            )
           )
         );
       }
