@@ -54,10 +54,10 @@ export default function SearchPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background/50 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-background to-background/50 py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Card className="bg-background/80 border-white/10 shadow-xl">
+          <Card className="backdrop-blur-xl bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-3xl font-bold flex items-center gap-2">
                 <GraduationCap className="h-8 w-8 text-orange-500" />
@@ -73,19 +73,19 @@ export default function SearchPage() {
                     placeholder="Rechercher une formation..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 bg-background/50 border-white/20"
+                    className="flex-1 bg-white/5 border-white/10"
                   />
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button 
                         variant="outline" 
-                        className="gap-2"
+                        className="gap-2 border-white/10 bg-white/5 hover:bg-white/10"
                       >
                         <Filter className="h-4 w-4" />
                         Filtres
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-80 bg-background/95 border-white/20">
+                    <PopoverContent className="backdrop-blur-xl bg-white/5 border-white/10">
                       <SearchFilters
                         villes={cities}
                         selectedVille={selectedVille}
@@ -135,7 +135,7 @@ export default function SearchPage() {
                   />
                 ))
               ) : searchTerm || selectedVille || selectedDomaines.length > 0 ? (
-                <Card className="p-8 text-center text-muted-foreground bg-background/80 border-white/10">
+                <Card className="p-8 text-center text-muted-foreground backdrop-blur-xl bg-white/5 border-white/10">
                   Aucun résultat trouvé
                 </Card>
               ) : null}

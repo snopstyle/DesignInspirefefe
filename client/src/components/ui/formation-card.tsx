@@ -26,7 +26,7 @@ export function FormationCard({
   socialLinks
 }: FormationCardProps) {
   return (
-    <Card className="w-full max-w-2xl bg-background/80 border-white/10 shadow-xl hover:shadow-lg transition-all duration-300">
+    <Card className="w-full max-w-2xl backdrop-blur-xl bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
       <CardHeader>
         <CardTitle className="text-xl font-bold">
           <span className="bg-gradient-neo from-orange-500/80 to-purple-500/80 bg-clip-text text-transparent">
@@ -42,7 +42,7 @@ export function FormationCard({
             <Badge 
               key={index} 
               variant="secondary"
-              className="bg-accent/50 hover:bg-accent/70 transition-colors"
+              className="bg-white/5 hover:bg-white/10 transition-colors border-white/10"
             >
               {domaine}
             </Badge>
