@@ -9,30 +9,7 @@ export const tempUsers = pgTable("temp_users", {
 });
 
 // Profile traits table schema
-export const profileTraits = pgTable("profile_traits", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name", { length: 100 }).notNull().unique(),
-  baseScore: decimal("base_score").default("0").notNull(),
-  category: varchar("category", { length: 50 }),
-  description: text("description"),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
 
-export const subProfiles = pgTable("sub_profiles", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name", { length: 100 }).notNull().unique(),
-  traits: jsonb("traits").$type<string[]>().notNull(),
-  weights: jsonb("weights").$type<Record<string, number>>().notNull(),
-  description: text("description"),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
-
-export const questionWeights = pgTable("question_weights", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  questionId: varchar("question_id", { length: 10 }).notNull(),
-  weights: jsonb("weights").$type<Record<string, number>>().notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
 
 
 
@@ -140,20 +117,7 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
 }));
 
 // Schema generation for all tables
-export const insertProfileTraitsSchema = createInsertSchema(profileTraits);
-export const selectProfileTraitsSchema = createSelectSchema(profileTraits);
-export type ProfileTrait = typeof profileTraits.$inferSelect;
-export type NewProfileTrait = typeof profileTraits.$inferInsert;
 
-export const insertSubProfilesSchema = createInsertSchema(subProfiles);
-export const selectSubProfilesSchema = createSelectSchema(subProfiles);
-export type SubProfile = typeof subProfiles.$inferSelect;
-export type NewSubProfile = typeof subProfiles.$inferInsert;
-
-export const insertQuestionWeightsSchema = createInsertSchema(questionWeights);
-export const selectQuestionWeightsSchema = createSelectSchema(questionWeights);
-export type QuestionWeight = typeof questionWeights.$inferSelect;
-export type NewQuestionWeight = typeof questionWeights.$inferInsert;
 
 export const insertTempUserSchema = createInsertSchema(tempUsers);
 export const selectTempUserSchema = createSelectSchema(tempUsers);
