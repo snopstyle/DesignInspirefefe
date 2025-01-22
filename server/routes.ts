@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { quizSessions } from "@db/schema";
+import { quizSessions, tempUsers } from "@db/schema";
 import { eq, desc, and } from "drizzle-orm";
 
 declare module 'express-session' {
