@@ -26,63 +26,69 @@ export function FormationCard({
   socialLinks
 }: FormationCardProps) {
   return (
-    <Card className="w-full max-w-2xl hover:shadow-lg transition-shadow">
+    <Card className="w-full max-w-2xl bg-background/80 border-white/10 shadow-xl hover:shadow-lg transition-all duration-300">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">{formation}</CardTitle>
+        <CardTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
+          {formation}
+        </CardTitle>
         <div className="text-lg text-muted-foreground">{etablissement}</div>
         <div className="text-sm text-muted-foreground">{ville}</div>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2 mb-4">
           {domaines.map((domaine, index) => (
-            <Badge key={index} variant="secondary">
+            <Badge 
+              key={index} 
+              variant="secondary"
+              className="bg-accent/50 hover:bg-accent/70 transition-colors"
+            >
               {domaine}
             </Badge>
           ))}
         </div>
-        
+
         <div className="flex items-center gap-4 mt-4">
           {officialLink && (
             <Button 
               variant="outline" 
               size="sm"
               onClick={() => window.open(officialLink, '_blank')}
-              className="gap-2"
+              className="gap-2 hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 hover:text-white transition-colors"
             >
               <ExternalLink className="h-4 w-4" />
               Site officiel
             </Button>
           )}
-          
+
           <div className="flex gap-2 ml-auto">
             {socialLinks?.linkedin && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(socialLinks.linkedin, '_blank')}
-                className="hover:text-[#0A66C2]"
+                className="hover:text-[#0A66C2] hover:bg-[#0A66C2]/10"
               >
                 <SiLinkedin className="h-5 w-5" />
               </Button>
             )}
-            
+
             {socialLinks?.facebook && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(socialLinks.facebook, '_blank')}
-                className="hover:text-[#1877F2]"
+                className="hover:text-[#1877F2] hover:bg-[#1877F2]/10"
               >
                 <SiFacebook className="h-5 w-5" />
               </Button>
             )}
-            
+
             {socialLinks?.instagram && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(socialLinks.instagram, '_blank')}
-                className="hover:text-[#E4405F]"
+                className="hover:text-[#E4405F] hover:bg-[#E4405F]/10"
               >
                 <SiInstagram className="h-5 w-5" />
               </Button>
