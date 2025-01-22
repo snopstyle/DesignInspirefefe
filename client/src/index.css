@@ -39,6 +39,7 @@
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient 15s ease infinite;
+  background-image: linear-gradient(45deg, var(--tw-gradient-from) 0%, var(--tw-gradient-via) 50%, var(--tw-gradient-to) 100%);
 }
 
 /* Animations de transition */
@@ -64,4 +65,15 @@
 
 .hover-scale:hover {
   transform: scale(1.05);
+}
+
+/* Make sure animations work */
+@layer utilities {
+  .animate-gradient {
+    animation: gradient 15s ease infinite;
+  }
+
+  .slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
 }
