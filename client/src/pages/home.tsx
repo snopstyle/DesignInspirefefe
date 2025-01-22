@@ -12,7 +12,7 @@ export default function Home() {
   const features = [
     {
       title: "Découvrez-vous",
-      description: "Un questionnaire unique pour révéler votre profil professionnel",
+      description: "Un questionnaire unique pour révéler votre profil ",
       icon: Brain
     },
     {
