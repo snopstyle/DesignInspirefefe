@@ -1,5 +1,5 @@
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
@@ -60,7 +60,7 @@ export default function Home() {
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <feature.icon className="h-6 w-6 text-purple-400" />
-                      <CardTitle className="text-xl">{feature.title}</CardTitle>
+                      <CardTitle className="text-xl text-white">{feature.title}</CardTitle>
                     </div>
                     <CardDescription className="text-white/70">
                       {feature.description}
