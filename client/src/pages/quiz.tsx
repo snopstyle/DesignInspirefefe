@@ -28,9 +28,18 @@ export default function Quiz() {
     );
   }
 
-  if (!user) {
-    window.location.href = "/auth";
-    return null;
+  if (!user && !req.session?.tempUserId) {
+    return (
+      <GradientBackground>
+        <div className="container mx-auto min-h-screen flex flex-col items-center justify-center">
+          <Card className="w-full max-w-2xl p-8 bg-background/80 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-4">
+              <p>Session temporaire créée pour le quiz</p>
+            </div>
+          </Card>
+        </div>
+      </GradientBackground>
+    );
   }
 
   if (showWelcome) {

@@ -25,7 +25,10 @@ function Router() {
     );
   }
 
-  if (!user && window.location.pathname !== '/quiz') {
+  if (!user) {
+    if (window.location.pathname === '/quiz') {
+      return <Quiz />;
+    }
     return <AuthPage />;
   }
 
