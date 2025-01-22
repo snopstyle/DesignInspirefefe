@@ -2,18 +2,24 @@ import { defineConfig } from "drizzle-kit";
 import * as dotenv from "dotenv";
 dotenv.config();
 
+// Vérification des variables d'environnement requises
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL must be set. Did you forget to provision a database?");
+  throw new Error("DATABASE_URL (formations) must be set");
+}
+
+if (!process.env.AUTH_DATABASE_URL) {
+  throw new Error("AUTH_DATABASE_URL (users) must be set");
+}
+
+if (!process.env.QUIZ_DATABASE_URL) {
+  throw new Error("QUIZ_DATABASE_URL (quiz) must be set");
 }
 
 export default defineConfig({
-  out: "./drizzle",
   schema: "./db/schema.ts",
-  dialect: "postgresql",
+  out: "./migrations",
+  driver: "pg",
   dbCredentials: {
-    host: process.env.PGHOST || "",
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    database: process.env.PGDATABASE || "",
+    url: process.env.DATABASE_URL,
   },
-}) satisfies Config;
+});

@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
 import ws from "ws";
-import * as formationSchema from "@db/schemas/formation";
-import * as authSchema from "@db/schemas/auth";
-import * as quizSchema from "@db/schemas/quiz";
+import * as formationSchema from "./schemas/formation";
+import * as authSchema from "./schemas/auth";
+import * as quizSchema from "./schemas/quiz";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL must be set for formations database");
