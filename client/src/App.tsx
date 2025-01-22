@@ -20,6 +20,7 @@ function Router() {
         <Route path="/results" component={Results} />
         <Route path="/profile" component={Profile} />
         <Route path="/search" component={SearchPage} />
+        <Route path="/auth" component={Landing} />
         <Route component={NotFound} />
       </Switch>
     </>
