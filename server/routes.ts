@@ -29,7 +29,7 @@ export function registerRoutes(app: Express): Server {
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) =>
-          and(eq(sessions.userId, req.user!.id), eq(sessions.status, 'in_progress')),
+          and(eq(sessions.userId, userId), eq(sessions.status, 'in_progress')),
         orderBy: desc(quizSessions.startedAt)
       });
 
@@ -41,7 +41,7 @@ export function registerRoutes(app: Express): Server {
       // Create new session
       const [newSession] = await db.insert(quizSessions)
         .values({
-          userId: req.user!.id,
+          userId: userId,
           status: 'in_progress',
           currentQuestionId: 'Q1', // Start with first question
           completedQuestions: [],
@@ -145,7 +145,7 @@ export function registerRoutes(app: Express): Server {
       // Get session data
       const session = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) =>
-          and(eq(sessions.id, sessionId), eq(sessions.userId, req.user!.id))
+          and(eq(sessions.id, sessionId), eq(sessions.userId, userId))
       });
 
       if (!session) {
@@ -167,7 +167,7 @@ export function registerRoutes(app: Express): Server {
       // Save quiz results
       const [result] = await db.insert(quizResults)
         .values({
-          userId: req.user!.id,
+          userId: userId,
           sessionId: session.id,
           answers: session.answers,
           adaptiveFlow: {
@@ -195,14 +195,14 @@ export function registerRoutes(app: Express): Server {
 
       // Get current completion status
       const currentCompletion = await db.query.profileCompletion.findFirst({
-        where: (pc) => eq(pc.userId, req.user!.id),
+        where: (pc) => eq(pc.userId, userId),
       });
 
       if (!currentCompletion) {
         // Create initial profile completion status
         await db.insert(profileCompletion)
           .values({
-            userId: req.user!.id,
+            userId: userId,
             personalityQuizCompleted: true,
             overallProgress: 20, // 20% for completing personality quiz
           });
@@ -214,7 +214,7 @@ export function registerRoutes(app: Express): Server {
             lastUpdated: new Date(),
             overallProgress: currentCompletion.overallProgress + (!currentCompletion.personalityQuizCompleted ? 20 : 0)
           })
-          .where(eq(profileCompletion.userId, req.user!.id));
+          .where(eq(profileCompletion.userId, userId));
       }
 
       console.log('Quiz submitted successfully:', result.id);
@@ -254,14 +254,14 @@ export function registerRoutes(app: Express): Server {
     try {
       const [status] = await db.select()
         .from(profileCompletion)
-        .where(eq(profileCompletion.userId, req.user!.id))
+        .where(eq(profileCompletion.userId, userId))
         .limit(1);
 
       if (!status) {
         // Create initial profile completion status if it doesn't exist
         const [newStatus] = await db.insert(profileCompletion)
           .values({
-            userId: req.user!.id,
+            userId: userId,
             basicInfoCompleted: false,
             traitsAssessmentCompleted: false,
             personalityQuizCompleted: false,

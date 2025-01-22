@@ -28,7 +28,7 @@ export default function Quiz() {
     );
   }
 
-  if (!user && !req.session?.tempUserId) {
+  if (!user) {
     return (
       <GradientBackground>
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center">
