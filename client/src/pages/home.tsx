@@ -11,58 +11,59 @@ export default function Home() {
 
   const features = [
     {
-      title: "Profil Unique",
-      description: "Découvrez vos traits de personnalité et vos aptitudes naturelles",
+      title: "Découvrez-vous",
+      description: "Un questionnaire unique pour révéler votre profil professionnel",
       icon: Brain
     },
     {
-      title: "Ambitions",
-      description: "Identifiez vos domaines de prédilection et aspirations",
+      title: "Orientez-vous",
+      description: "Identifiez les formations qui vous correspondent",
       icon: Target
     },
     {
-      title: "Orientation",
-      description: "Trouvez votre voie professionnelle idéale",
+      title: "Projetez-vous",
+      description: "Explorez les métiers qui vous passionnent",
       icon: Compass
     },
     {
-      title: "Potentiel",
-      description: "Révélez vos talents cachés et vos forces",
+      title: "Lancez-vous",
+      description: "Des recommandations personnalisées pour votre avenir",
       icon: Sparkles
     }
   ];
 
   return (
     <GradientBackground>
-      <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-4xl space-y-8"
-        >
-          <div className="text-center space-y-4 mb-8">
-            <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-              Révélez Votre Potentiel
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="max-w-4xl w-full space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center space-y-4"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold text-white">
+              Votre Avenir, Votre Choix
             </h1>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              Un questionnaire intelligent pour découvrir votre profil et construire votre avenir
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+              Commencez votre voyage vers une orientation professionnelle éclairée
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
-            {features.map((feature) => (
+          <div className="grid gap-6 md:grid-cols-2">
+            {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                <Card className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full">
+                <Card className="bg-white/10 hover:bg-white/20 transition-colors border-white/20 h-full">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <feature.icon className="h-6 w-6 text-purple-400" />
+                      <feature.icon className="h-8 w-8 text-purple-400" />
                       <CardTitle className="text-xl text-white">{feature.title}</CardTitle>
                     </div>
-                    <CardDescription className="text-white/70">
+                    <CardDescription className="text-white/70 text-base">
                       {feature.description}
                     </CardDescription>
                   </CardHeader>
@@ -71,14 +72,20 @@ export default function Home() {
             ))}
           </div>
 
-          <Button
-            onClick={() => setLocation("/quiz")}
-            size="lg"
-            className="w-full max-w-md mx-auto bg-white/20 hover:bg-white/30 text-white font-bold backdrop-blur-sm"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
           >
-            Commencer le Quiz
-          </Button>
-        </motion.div>
+            <Button
+              onClick={() => setLocation("/quiz")}
+              size="lg"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-6 text-lg rounded-xl shadow-lg"
+            >
+              Démarrer le Questionnaire
+            </Button>
+          </motion.div>
+        </div>
       </div>
     </GradientBackground>
   );
