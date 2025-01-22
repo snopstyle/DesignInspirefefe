@@ -13,6 +13,18 @@ import { SearchFilters } from "@/components/search/filters";
 import { FormationCard } from "@/components/ui/formation-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
+interface FormationResult {
+  id: string;
+  formation: string;
+  etablissement: string;
+  domaines: string[];
+  ville: string;
+  lien?: string;
+  facebook?: string;
+  instagram?: string;
+  linkedin?: string;
+}
+
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVille, setSelectedVille] = useState("");
@@ -28,7 +40,7 @@ export default function SearchPage() {
   });
 
   // Search results query
-  const { data: results = [], isLoading } = useQuery({
+  const { data: results = [], isLoading } = useQuery<FormationResult[]>({
     queryKey: ['/api/search', searchTerm, selectedVille, selectedDomaines],
     enabled: Boolean(searchTerm) || Boolean(selectedVille) || selectedDomaines.length > 0
   });
@@ -101,7 +113,7 @@ export default function SearchPage() {
                 <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
               </div>
             ) : results.length > 0 ? (
-              results.map((result: any) => (
+              results.map((result) => (
                 <FormationCard
                   key={result.id}
                   formation={result.formation}
