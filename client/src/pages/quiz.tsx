@@ -39,11 +39,11 @@ export default function Quiz() {
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
           <Card className="w-full max-w-3xl bg-transparent backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-3xl text-center">Révélez Votre Potentiel, Construisez Votre Avenir</CardTitle>
+              <CardTitle className="text-3xl text-center font-bold text-white">Révélez Votre Potentiel, Construisez Votre Avenir</CardTitle>
               <CardDescription className="text-lg text-center mt-2 space-y-4">
-                <div className="text-white/90 space-y-2">
-                  <p className="font-medium">15 minutes pour découvrir votre voie professionnelle idéale !</p>
-                  <ul className="list-disc list-inside text-white/80 space-y-1">
+                <div className="text-white space-y-2">
+                  <p className="font-bold">15 minutes pour découvrir votre voie professionnelle idéale !</p>
+                  <ul className="list-disc list-inside text-white font-medium space-y-1">
                     <li>Analyse précise de votre personnalité et vos talents</li>
                     <li>Identification de vos véritables motivations</li>
                     <li>Parcours d'études personnalisé et sur mesure</li>
@@ -58,23 +58,23 @@ export default function Quiz() {
                     <Brain className="w-8 h-8 text-orange-400/90" />
                     <h3 className="text-xl font-bold">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
                   </div>
-                  <p className="text-white/70">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
+                  <p className="text-white">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
                 </div>
 
                 <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <Flame className="w-8 h-8 text-purple-400/90" />
-                    <h3 className="text-xl font-bold">PASSIONS & INTÉRÊTS</h3>
+                    <Flame className="w-8 h-8 text-purple-400" />
+                    <h3 className="text-xl font-bold text-white">PASSIONS & INTÉRÊTS</h3>
                   </div>
-                  <p className="text-white/70">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
+                  <p className="text-white">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
                 </div>
 
                 <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <GraduationCap className="w-8 h-8 text-blue-400/90" />
-                    <h3 className="text-xl font-bold">PROJET D'ÉTUDES</h3>
+                    <GraduationCap className="w-8 h-8 text-blue-400" />
+                    <h3 className="text-xl font-bold text-white">PROJET D'ÉTUDES</h3>
                   </div>
-                  <p className="text-white/70">Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
+                  <p className="text-white">Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
                 </div>
               </div>
 
