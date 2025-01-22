@@ -36,12 +36,16 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
             value={item}
             className={cn(
               "flex items-center gap-3 p-4 rounded-lg cursor-move",
-              "bg-white/15 hover:bg-white/30 shadow-md hover:shadow-lg transition-all",
-              "transition-colors duration-200"
+              "bg-gradient-to-r from-white/10 to-white/5",
+              "hover:from-white/20 hover:to-white/10",
+              "shadow-lg hover:shadow-xl",
+              "border border-white/10 hover:border-white/20",
+              "transform hover:scale-[1.02] active:scale-[0.98]",
+              "transition-all duration-200"
             )}
           >
-            <GripVertical className="h-5 w-5 text-white/50" />
-            <span className="text-white/90">{item}</span>
+            <GripVertical className="h-5 w-5 text-orange-400/80" />
+            <span className="text-white font-medium tracking-wide">{item}</span>
           </Reorder.Item>
         ))}
       </Reorder.Group>
