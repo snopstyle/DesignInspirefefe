@@ -437,6 +437,24 @@ export function registerRoutes(app: Express): Server {
   });
 
   const httpServer = createServer(app);
+  // Get table statistics
+  app.get('/api/stats', async (req, res) => {
+    try {
+      const stats = {
+        formations: await db.select({ count: sql`count(*)` }).from(formations),
+        establishments: await db.select({ count: sql`count(*)` }).from(establishments),
+        locations: await db.select({ count: sql`count(*)` }).from(locations),
+        costs: await db.select({ count: sql`count(*)` }).from(costs),
+        pedagogy_types: await db.select({ count: sql`count(*)` }).from(pedagogyTypes)
+      };
+      
+      res.json(stats);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      res.status(500).json({ error: 'Failed to fetch table statistics' });
+    }
+  });
+
   return httpServer;
 }
 
