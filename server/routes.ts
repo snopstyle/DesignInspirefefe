@@ -328,9 +328,9 @@ export function registerRoutes(app: Express): Server {
     try {
       const query = req.query.q?.toString().toLowerCase() || '';
       const ville = req.query.ville?.toString();
-      const niveau = req.query.niveau?.toString();
-      const diplomeEtat = req.query.diplomeEtat === 'true';
-      const selectedDomains = req.query.tags?.toString().split(',') || [];
+      const selectedDomains = req.query.tags?.toString().split(',').filter(Boolean) || [];
+
+      console.log('Search params:', { query, ville, selectedDomains }); // Debug log
 
       // Build the where clause based on filters
       const whereConditions = [];
@@ -339,7 +339,9 @@ export function registerRoutes(app: Express): Server {
         whereConditions.push(
           or(
             ilike(formations.formation, `%${query}%`),
-            ilike(establishments.name, `%${query}%`)
+            ilike(establishments.name, `%${query}%`),
+            ilike(locations.ville, `%${query}%`),
+            ilike(locations.region, `%${query}%`)
           )
         );
       }
@@ -348,9 +350,8 @@ export function registerRoutes(app: Express): Server {
         whereConditions.push(eq(locations.ville, ville));
       }
 
-      if (niveau) {
-        whereConditions.push(eq(formations.niveau, niveau));
-      }
+      // Log the SQL query being executed
+      console.log('Query conditions:', whereConditions);
 
       const results = await db
         .select({
@@ -399,6 +400,10 @@ export function registerRoutes(app: Express): Server {
             )
           )
         : results;
+
+      // Log the number of results before and after filtering
+      console.log('Results before domain filtering:', results.length);
+      console.log('Results after domain filtering:', filteredResults.length);
 
       res.json(filteredResults);
     } catch (error) {
