@@ -32,12 +32,19 @@ export default function Quiz() {
     // Create temporary session
     fetch('/api/temp-user', {
       method: 'POST',
-      credentials: 'include'
-    }).then(response => response.json())
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      if (!response.ok) throw new Error('Failed to create temp user');
+      return response.json();
+    })
     .then(data => {
       sessionStorage.setItem('tempUser', JSON.stringify(data));
       window.location.reload();
-    });
+    })
+    .catch(error => console.error('Error:', error));
 
     return (
       <GradientBackground>

@@ -10,6 +10,14 @@ import xlsx from 'xlsx';
 export function registerRoutes(app: Express): Server {
   setupAuth(app);
 
+  // Create temporary user
+  app.post("/api/temp-user", async (req, res) => {
+    if (!req.session.tempUserId) {
+      req.session.tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+    res.json({ id: req.session.tempUserId });
+  });
+
   // Start or resume a quiz session
   app.post("/api/quiz/session", async (req, res) => {
     let userId;
