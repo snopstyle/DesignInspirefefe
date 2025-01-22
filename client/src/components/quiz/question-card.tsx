@@ -175,10 +175,9 @@ useEffect(() => {
   const hasValidAnswer = () => {
     switch (question.format) {
       case "Multiple selection":
-      case "Multiple choice":
         return multipleChoiceAnswers.length > 0 && multipleChoiceAnswers.length <= (question.maxSelections || 5);
       case "Single choice":
-        return Boolean(currentAnswer);
+        return false; // Ne pas afficher le bouton pour les questions à choix simple
       case "Drag-and-drop ranking":
         return Array.isArray(currentAnswer) && currentAnswer.length === question.options.length;
       case "Text":
