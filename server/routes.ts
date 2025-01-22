@@ -323,20 +323,20 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  // Search endpoint
+  // Formation search endpoint
   app.get('/api/search', async (req, res) => {
     try {
-      const query = req.query.q?.toString().toLowerCase() || '';
+      const query = req.query.q?.toString() || '';
       const ville = req.query.ville?.toString();
       const selectedDomains = req.query.tags?.toString().split(',').filter(Boolean) || [];
 
-      console.log('Search params:', { query, ville, selectedDomains }); // Debug log
+      console.log('Search params:', { query, ville, selectedDomains });
 
-      // Build the where clause based on filters
-      const whereConditions = [];
+      // Build where conditions
+      const conditions = [];
 
       if (query) {
-        whereConditions.push(
+        conditions.push(
           or(
             ilike(formations.formation, `%${query}%`),
             ilike(establishments.name, `%${query}%`),
@@ -347,12 +347,17 @@ export function registerRoutes(app: Express): Server {
       }
 
       if (ville) {
-        whereConditions.push(eq(locations.ville, ville));
+        conditions.push(eq(locations.ville, ville));
       }
 
-      // Log the SQL query being executed
-      console.log('Query conditions:', whereConditions);
+      // Handle domain filtering at the SQL level
+      if (selectedDomains.length > 0) {
+        conditions.push(
+          sql`array[${sql.join(selectedDomains)}]::text[] && ${formations.domaines}`
+        );
+      }
 
+      // Execute the query
       const results = await db
         .select({
           id: formations.id,
@@ -364,22 +369,7 @@ export function registerRoutes(app: Express): Server {
           type: formations.type,
           domaines: formations.domaines,
           duree: formations.duree,
-          cout: {
-            montant: costs.montant,
-            devise: costs.devise,
-            gratuitApprentissage: costs.gratuitApprentissage
-          },
-          pedagogie: {
-            tempsPlein: pedagogyTypes.tempsPlein,
-            presentiel: pedagogyTypes.presentiel,
-            alternance: pedagogyTypes.alternance
-          },
-          statut: establishments.statut,
-          hebergement: establishments.hebergement,
           lien: establishments.lien,
-          adresse: locations.adresse,
-          departement: locations.departement,
-          tel: establishments.tel,
           facebook: establishments.facebook,
           instagram: establishments.instagram,
           linkedin: establishments.linkedin
@@ -387,25 +377,13 @@ export function registerRoutes(app: Express): Server {
         .from(formations)
         .leftJoin(establishments, eq(formations.etablissementId, establishments.id))
         .leftJoin(locations, eq(formations.locationId, locations.id))
-        .leftJoin(costs, eq(formations.costId, costs.id))
-        .leftJoin(pedagogyTypes, eq(formations.pedagogyId, pedagogyTypes.id))
-        .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
         .limit(50);
 
-      // Filter by domains if any are selected
-      const filteredResults = selectedDomains.length > 0
-        ? results.filter(result =>
-            result.domaines.some(domain =>
-              selectedDomains.includes(domain)
-            )
-          )
-        : results;
+      // Log query results
+      console.log(`Found ${results.length} results`);
 
-      // Log the number of results before and after filtering
-      console.log('Results before domain filtering:', results.length);
-      console.log('Results after domain filtering:', filteredResults.length);
-
-      res.json(filteredResults);
+      res.json(results);
     } catch (error) {
       console.error('Search error:', error);
       res.status(500).json({ error: 'Erreur lors de la recherche de formations' });

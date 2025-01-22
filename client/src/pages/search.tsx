@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,13 @@ export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVille, setSelectedVille] = useState("");
   const [selectedDomaines, setSelectedDomaines] = useState<string[]>([]);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearchTerm(searchTerm), 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   // Fetch cities and domains
   const { data: cities = [] } = useQuery<string[]>({
@@ -39,10 +46,19 @@ export default function SearchPage() {
     queryKey: ['/api/domains']
   });
 
+  // Build search URL with params
+  const buildSearchUrl = () => {
+    const params = new URLSearchParams();
+    if (debouncedSearchTerm) params.set('q', debouncedSearchTerm);
+    if (selectedVille) params.set('ville', selectedVille);
+    if (selectedDomaines.length > 0) params.set('tags', selectedDomaines.join(','));
+    return `/api/search?${params.toString()}`;
+  };
+
   // Search results query
   const { data: results = [], isLoading } = useQuery<FormationResult[]>({
-    queryKey: ['/api/search', searchTerm, selectedVille, selectedDomaines],
-    enabled: Boolean(searchTerm) || Boolean(selectedVille) || selectedDomaines.length > 0
+    queryKey: [buildSearchUrl()],
+    enabled: Boolean(debouncedSearchTerm) || Boolean(selectedVille) || selectedDomaines.length > 0
   });
 
   const handleDomaineToggle = (domaine: string) => {
@@ -134,7 +150,7 @@ export default function SearchPage() {
                     }}
                   />
                 ))
-              ) : searchTerm || selectedVille || selectedDomaines.length > 0 ? (
+              ) : debouncedSearchTerm || selectedVille || selectedDomaines.length > 0 ? (
                 <Card className="p-8 text-center text-muted-foreground backdrop-blur-xl bg-white/5 border-white/10">
                   Aucun résultat trouvé
                 </Card>
