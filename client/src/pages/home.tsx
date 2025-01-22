@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
@@ -6,13 +7,12 @@ import { Brain, Target, Compass, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
-  console.log("Home component mounting");
   const [, setLocation] = useLocation();
 
   const features = [
     {
       title: "Découvrez-vous",
-      description: "Un questionnaire unique pour révéler votre profil ",
+      description: "Un questionnaire unique pour révéler votre profil",
       icon: Brain
     },
     {
@@ -33,60 +33,63 @@ export default function Home() {
   ];
 
   return (
-    <GradientBackground>
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="max-w-4xl w-full space-y-8">
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center space-y-4"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Votre Avenir, Votre Choix - Test
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
-              Commencez votre voyage vers une orientation professionnelle éclairée
-            </p>
-          </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+      <div className="container mx-auto px-4 py-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-6">
+            Votre Avenir, Votre Choix
+          </h1>
+          <p className="text-2xl text-gray-300">
+            Commencez votre voyage vers une orientation professionnelle éclairée
+          </p>
+        </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="bg-white/10 hover:bg-white/20 transition-colors border-white/20 h-full">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <feature.icon className="h-8 w-8 text-purple-400" />
-                      <CardTitle className="text-xl text-white">{feature.title}</CardTitle>
-                    </div>
-                    <CardDescription className="text-white/70 text-base">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.2 }}
+            >
+              <Card className="bg-white/10 backdrop-blur-lg border-none hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                <CardHeader className="flex flex-row items-center gap-4">
+                  <div className="p-2 rounded-full bg-purple-500/20">
+                    <feature.icon className="h-8 w-8 text-purple-400" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl font-bold text-white mb-2">
+                      {feature.title}
+                    </CardTitle>
+                    <CardDescription className="text-gray-300 text-lg">
                       {feature.description}
                     </CardDescription>
-                  </CardHeader>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Button
-              onClick={() => setLocation("/quiz")}
-              size="lg"
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-6 text-lg rounded-xl shadow-lg"
-            >
-              Démarrer le Questionnaire
-            </Button>
-          </motion.div>
+                  </div>
+                </CardHeader>
+              </Card>
+            </motion.div>
+          ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="text-center"
+        >
+          <Button
+            onClick={() => setLocation("/quiz")}
+            size="lg"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 px-12 text-xl rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
+          >
+            Démarrer le Questionnaire
+          </Button>
+        </motion.div>
       </div>
-    </GradientBackground>
+    </div>
   );
 }
