@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
 import ws from "ws";
-import * as formationSchema from "./schemas/formation";
+import * as formationSchema from "./schemas/formations";
 import * as authSchema from "./schemas/auth";
 import * as quizSchema from "./schemas/quiz";
 
