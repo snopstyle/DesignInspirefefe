@@ -31,23 +31,19 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 animate-gradient"
-      />
-
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 transition-all duration-1000 bg-[length:400%_400%] animate-[gradient_15s_ease_infinite]">
       <div className="relative container mx-auto px-4 py-16">
         <AnimatePresence>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16 slide-up"
+            className="text-center mb-16"
           >
-            <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-6 filter drop-shadow-lg">
+            <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-6 drop-shadow-lg">
               Votre Avenir, Votre Choix
             </h1>
-            <p className="text-2xl text-gray-300 text-shadow">
+            <p className="text-2xl text-gray-300 drop-shadow">
               Commencez votre voyage vers une orientation professionnelle éclairée
             </p>
           </motion.div>
@@ -59,9 +55,9 @@ export default function Home() {
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.2, duration: 0.6 }}
-                className="transform transition-all duration-300 hover-scale"
+                className="group transition-all duration-300"
               >
-                <Card className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl hover:bg-white/20">
+                <Card className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl group-hover:bg-white/20 group-hover:scale-105 transition-all duration-300">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <div className="p-2 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30">
                       <feature.icon className="h-8 w-8 text-purple-300" />
@@ -89,7 +85,7 @@ export default function Home() {
             <Button
               onClick={() => setLocation("/quiz")}
               size="lg"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 px-12 text-xl rounded-full shadow-xl transform hover-scale transition-all duration-300 hover:shadow-2xl"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 px-12 text-xl rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
             >
               Démarrer le Questionnaire
             </Button>
