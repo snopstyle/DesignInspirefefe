@@ -3,49 +3,47 @@ import { QuestionCard } from "@/components/quiz/question-card";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Loader2, Brain, Flame, GraduationCap } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useUser } from "@/hooks/use-user";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Quiz() {
-  const { user, isLoading } = useUser();
   const [showWelcome, setShowWelcome] = useState(true);
   const quizProps = useQuiz();
+  const [isCreatingTempUser, setIsCreatingTempUser] = useState(false);
 
-  if (isLoading) {
-    return (
-      <GradientBackground>
-        <div className="container mx-auto min-h-screen flex flex-col items-center justify-center">
-          <Card className="w-full max-w-2xl p-8 bg-background/80 backdrop-blur-sm">
-            <div className="flex flex-col items-center gap-4">
-              <Loader2 className="w-8 h-8 animate-spin" />
-              <p>Chargement...</p>
-            </div>
-          </Card>
-        </div>
-      </GradientBackground>
-    );
-  }
+  useEffect(() => {
+    // Function to create temporary user
+    const createTempUser = async () => {
+      if (isCreatingTempUser) return; // Prevent multiple calls
 
-  if (!user && !isLoading) {
-    // Create temporary session
-    fetch('/api/temp-user', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
+      setIsCreatingTempUser(true);
+      try {
+        const response = await fetch('/api/temp-user', {
+          method: 'POST',
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create temporary user');
+        }
+
+        const data = await response.json();
+        sessionStorage.setItem('tempUser', JSON.stringify(data));
+      } catch (error) {
+        console.error('Error creating temp user:', error);
+      } finally {
+        setIsCreatingTempUser(false);
       }
-    }).then(response => {
-      if (!response.ok) throw new Error('Failed to create temp user');
-      return response.json();
-    })
-    .then(data => {
-      sessionStorage.setItem('tempUser', JSON.stringify(data));
-      window.location.reload();
-    })
-    .catch(error => console.error('Error:', error));
+    };
 
+    // Check if we need to create a temp user
+    if (!sessionStorage.getItem('tempUser')) {
+      createTempUser();
+    }
+  }, []); // Empty dependency array - run once on mount
+
+  if (isCreatingTempUser) {
     return (
       <GradientBackground>
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center">

@@ -13,8 +13,16 @@ declare module 'express-session' {
 export function registerRoutes(app: Express): Server {
   // Create temporary user
   app.post("/api/temp-user", async (req, res) => {
+    // Only create new temp ID if one doesn't exist
     if (!req.session.tempUserId) {
       req.session.tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Save session immediately
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          resolve();
+        });
+      });
     }
     res.json({ id: req.session.tempUserId });
   });
@@ -22,18 +30,16 @@ export function registerRoutes(app: Express): Server {
   // Start or resume a quiz session
   app.post("/api/quiz/session", async (req, res) => {
     if (!req.session.tempUserId) {
-      req.session.tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      return res.status(400).send("No valid user ID found. Please refresh the page.");
     }
-    const tempUserId = req.session.tempUserId;
 
     try {
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
         where: (sessions, { and, eq }) =>
           and(
-            eq(sessions.tempUserId, tempUserId),
-            eq(sessions.status, 'in_progress'),
-            isNull(sessions.userId)
+            eq(sessions.tempUserId, req.session.tempUserId),
+            eq(sessions.status, 'in_progress')
           ),
         orderBy: desc(quizSessions.startedAt)
       });
@@ -45,7 +51,7 @@ export function registerRoutes(app: Express): Server {
       // Create new session
       const [newSession] = await db.insert(quizSessions)
         .values({
-          tempUserId: tempUserId,
+          tempUserId: req.session.tempUserId,
           status: 'in_progress',
           currentQuestionId: 'Q1',
           completedQuestions: [],
