@@ -16,6 +16,7 @@ export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 
 // Profile traits table schema
 export const profileTraits = pgTable("profile_traits", {

@@ -52,19 +52,6 @@ async function fetchUser(): Promise<User | null> {
       if (tempUser) {
         return JSON.parse(tempUser);
       }
-
-      // Créer un nouvel utilisateur temporaire
-      const tempResponse = await fetch('/api/temp-user', {
-        method: 'POST',
-        credentials: 'include'
-      });
-
-      if (tempResponse.ok) {
-        const tempUserData = await tempResponse.json();
-        sessionStorage.setItem('tempUser', JSON.stringify(tempUserData));
-        return tempUserData;
-      }
-
       return null;
     }
 
@@ -79,27 +66,7 @@ async function fetchUser(): Promise<User | null> {
   if (user.isTemporary) {
     sessionStorage.setItem('tempUser', JSON.stringify(user));
   } else if (sessionStorage.getItem('tempUser')) {
-    const tempUser = JSON.parse(sessionStorage.getItem('tempUser')!);
     sessionStorage.removeItem('tempUser');
-    try {
-      // Fusionner les données du quiz et le profil
-      await Promise.all([
-        fetch('/api/quiz/merge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tempUserId: tempUser.id }),
-          credentials: 'include'
-        }),
-        fetch('/api/profile/merge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tempUserId: tempUser.id }),
-          credentials: 'include'
-        })
-      ]);
-    } catch (error) {
-      console.error('Erreur lors de la fusion des données:', error);
-    }
   }
   return user;
 }
@@ -115,67 +82,9 @@ export function useUser() {
     retry: false
   });
 
-  const loginMutation = useMutation<RequestResult, Error, InsertUser>({
-    mutationFn: (userData) => handleAuthRequest('/api/login', 'POST', userData),
-    onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      toast({
-        title: "Success",
-        description: result.message || "Logged in successfully",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  });
-
-  const logoutMutation = useMutation<RequestResult, Error>({
-    mutationFn: () => handleAuthRequest('/api/logout', 'POST'),
-    onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      toast({
-        title: "Success",
-        description: result.message || "Logged out successfully",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  });
-
-  const registerMutation = useMutation<RequestResult, Error, InsertUser>({
-    mutationFn: (userData) => handleAuthRequest('/api/register', 'POST', userData),
-    onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      toast({
-        title: "Success",
-        description: result.message || "Registration successful",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  });
-
   return {
     user,
     isLoading,
     error,
-    login: loginMutation.mutateAsync,
-    logout: logoutMutation.mutateAsync,
-    register: registerMutation.mutateAsync,
-    isAuthenticating: loginMutation.isPending || registerMutation.isPending,
   };
 }

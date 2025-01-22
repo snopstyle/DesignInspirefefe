@@ -11,7 +11,6 @@ import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
 
 function Router() {
-
   return (
     <>
       <NavButtons />
