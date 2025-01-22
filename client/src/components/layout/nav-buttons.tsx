@@ -13,18 +13,18 @@ export function NavButtons() {
   };
 
   return (
-    <div className="fixed top-4 left-4 flex gap-2 z-50">
+    <div className="fixed top-6 left-6 flex gap-3 z-[100]">
       <Card 
-        className="w-10 h-10 flex items-center justify-center cursor-pointer bg-background/80 backdrop-blur-sm hover:bg-accent transition-colors"
+        className="w-10 h-10 flex items-center justify-center cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
         onClick={() => setLocation("/")}
       >
-        <Home className="h-4 w-4" />
+        <Home className="h-4 w-4 text-white" />
       </Card>
       <Card 
-        className="w-10 h-10 flex items-center justify-center cursor-pointer bg-background/80 backdrop-blur-sm hover:bg-accent transition-colors"
+        className="w-10 h-10 flex items-center justify-center cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
         onClick={handleLogout}
       >
-        <LogOut className="h-4 w-4" />
+        <LogOut className="h-4 w-4 text-white" />
       </Card>
     </div>
   );
