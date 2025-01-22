@@ -29,7 +29,7 @@ export function registerRoutes(app: Express): Server {
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) =>
-          and(eq(sessions.userId, userId), eq(sessions.status, 'in_progress')),
+          and(eq(sessions.userId, userId || 'temp_user'), eq(sessions.status, 'in_progress')),
         orderBy: desc(quizSessions.startedAt)
       });
 

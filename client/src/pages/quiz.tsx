@@ -28,13 +28,24 @@ export default function Quiz() {
     );
   }
 
-  if (!user) {
+  if (!user && !isLoading) {
+    // Create temporary session
+    fetch('/api/temp-user', {
+      method: 'POST',
+      credentials: 'include'
+    }).then(response => response.json())
+    .then(data => {
+      sessionStorage.setItem('tempUser', JSON.stringify(data));
+      window.location.reload();
+    });
+
     return (
       <GradientBackground>
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center">
           <Card className="w-full max-w-2xl p-8 bg-background/80 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-4">
-              <p>Session temporaire créée pour le quiz</p>
+              <Loader2 className="w-8 h-8 animate-spin" />
+              <p>Création d'une session temporaire...</p>
             </div>
           </Card>
         </div>
