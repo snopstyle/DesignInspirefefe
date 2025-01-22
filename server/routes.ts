@@ -14,29 +14,21 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
-      // First create temp user in database
-      const [tempUser] = await db.insert(tempUsers).values({}).returning();
+      // First create temp user in database with explicit timestamp
+      const [tempUser] = await db.insert(tempUsers)
+        .values({
+          createdAt: new Date()
+        })
+        .returning();
       
       if (!tempUser || !tempUser.id) {
         throw new Error('Failed to create temp user in database');
       }
 
-      // Regenerate session to ensure clean state
-      await new Promise<void>((resolve, reject) => {
-        req.session.regenerate((err) => {
-          if (err) {
-            console.error('Session regeneration error:', err);
-            reject(err);
-            return;
-          }
-          resolve();
-        });
-      });
-
-      // Set the temp user ID in the new session
+      // Set session data first
       req.session.tempUserId = tempUser.id;
-      
-      // Save session explicitly
+
+      // Save session with error handling
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
@@ -44,7 +36,7 @@ export function registerRoutes(app: Express): Server {
             reject(err);
             return;
           }
-          console.log('Session saved with temp user ID:', tempUser.id);
+          console.log('Created temp user:', tempUser.id, 'with session:', req.sessionID);
           resolve();
         });
       });
