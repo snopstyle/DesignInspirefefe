@@ -148,8 +148,6 @@ export type NewProfileCompletion = typeof profileCompletion.$inferInsert;
 export const formations = pgTable("formations", {
   id: uuid("id").defaultRandom().primaryKey(),
   formation: text("formation").notNull(),
-  etablissementId: uuid("etablissement_id").notNull().references(() => establishments.id),
-  locationId: uuid("location_id").notNull().references(() => locations.id),
   niveau: text("niveau").notNull(),
   type: text("type").notNull(),
   domaines: text("domaines").array().notNull(),
@@ -157,40 +155,8 @@ export const formations = pgTable("formations", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-export const establishments = pgTable("establishments", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  name: text("name").notNull(),
-  statut: text("statut").notNull(),
-  hebergement: boolean("hebergement").notNull(),
-  lien: text("lien").notNull(),
-  tel: text("tel").notNull(),
-  facebook: text("facebook"),
-  instagram: text("instagram"),
-  linkedin: text("linkedin"),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
-
-export const locations = pgTable("locations", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  ville: text("ville").notNull(),
-  region: text("region").notNull(),
-  departement: text("departement").notNull(),
-  adresse: text("adresse").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
-
 export const insertFormationsSchema = createInsertSchema(formations);
 export const selectFormationsSchema = createSelectSchema(formations);
 export type Formation = typeof formations.$inferSelect;
 export type NewFormation = typeof formations.$inferInsert;
-
-export const insertEstablishmentsSchema = createInsertSchema(establishments);
-export const selectEstablishmentsSchema = createSelectSchema(establishments);
-export type Establishment = typeof establishments.$inferSelect;
-export type NewEstablishment = typeof establishments.$inferInsert;
-
-export const insertLocationsSchema = createInsertSchema(locations);
-export const selectLocationsSchema = createSelectSchema(locations);
-export type Location = typeof locations.$inferSelect;
-export type NewLocation = typeof locations.$inferInsert;
 
