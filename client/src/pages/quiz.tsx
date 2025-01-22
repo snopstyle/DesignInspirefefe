@@ -39,14 +39,16 @@ export default function Quiz() {
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
           <Card className="w-full max-w-3xl bg-transparent backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-3xl text-center">Découvrez Votre Véritable Voie Professionnelle</CardTitle>
+              <CardTitle className="text-3xl text-center">Révélez Votre Potentiel, Construisez Votre Avenir</CardTitle>
               <CardDescription className="text-lg text-center mt-2 space-y-4">
-                <p className="text-white/90">
-                  Ce questionnaire personnalisé va révéler vos talents cachés et vous guider vers des opportunités professionnelles qui vous correspondent vraiment. En moins de 15 minutes, explorez vos aspirations et définissez votre avenir avec précision.
-                </p>
-                <p className="text-white/80">
-                  Notre approche unique en trois étapes analyse votre personnalité, vos passions et vos objectifs pour vous proposer un parcours d'études sur mesure.
-                </p>
+                <div className="text-white/90 space-y-2">
+                  <p className="font-medium">15 minutes pour découvrir votre voie professionnelle idéale !</p>
+                  <ul className="list-disc list-inside text-white/80 space-y-1">
+                    <li>Analyse précise de votre personnalité et vos talents</li>
+                    <li>Identification de vos véritables motivations</li>
+                    <li>Parcours d'études personnalisé et sur mesure</li>
+                  </ul>
+                </div>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
