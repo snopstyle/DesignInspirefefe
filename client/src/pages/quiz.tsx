@@ -1,7 +1,7 @@
 import { useQuiz } from "@/hooks/use-quiz";
 import { QuestionCard } from "@/components/quiz/question-card";
 import { GradientBackground } from "@/components/layout/gradient-background";
-import { Loader2 } from "lucide-react";
+import { Loader2, Brain, Flame, GraduationCap } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUser } from "@/hooks/use-user";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -52,17 +52,26 @@ export default function Quiz() {
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
-                  <h3 className="text-xl font-bold mb-2">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Brain className="w-8 h-8 text-orange-400/90" />
+                    <h3 className="text-xl font-bold">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
+                  </div>
                   <p className="text-white/70">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
                 </div>
 
                 <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
-                  <h3 className="text-xl font-bold mb-2">PASSIONS & INTÉRÊTS</h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Flame className="w-8 h-8 text-purple-400/90" />
+                    <h3 className="text-xl font-bold">PASSIONS & INTÉRÊTS</h3>
+                  </div>
                   <p className="text-white/70">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
                 </div>
 
                 <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
-                  <h3 className="text-xl font-bold mb-2">PROJET D'ÉTUDES</h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <GraduationCap className="w-8 h-8 text-blue-400/90" />
+                    <h3 className="text-xl font-bold">PROJET D'ÉTUDES</h3>
+                  </div>
                   <p className="text-white/70">Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
                 </div>
               </div>
