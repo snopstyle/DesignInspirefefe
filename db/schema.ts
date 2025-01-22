@@ -123,6 +123,7 @@ export type NewCost = typeof costs.$inferInsert;
 export type PedagogyType = typeof pedagogyTypes.$inferSelect;
 export type NewPedagogyType = typeof pedagogyTypes.$inferInsert;
 
+// Temporary users for quiz sessions
 export const tempUsers = pgTable("temp_users", {
   id: uuid("id").defaultRandom().primaryKey(),
   createdAt: timestamp("created_at").notNull().defaultNow()
@@ -140,8 +141,8 @@ export const users = pgTable("users", {
 // Quiz session table
 export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
+  userId: integer("user_id"),
+  tempUserId: uuid("temp_user_id"),
   status: text("status").notNull().default('in_progress'),
   currentQuestionId: text("current_question_id"),
   completedQuestions: jsonb("completed_questions").$type<string[]>().default([]).notNull(),
@@ -156,7 +157,7 @@ export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id"),
   tempUserId: uuid("temp_user_id"),
-  sessionId: uuid("session_id").notNull().references(() => quizSessions.id),
+  sessionId: uuid("session_id").references(() => quizSessions.id),
   answers: jsonb("answers").$type<Record<string, string>>().notNull(),
   adaptiveFlow: jsonb("adaptive_flow").$type<{
     path: string[];
@@ -221,6 +222,10 @@ export const quizResultsRelations = relations(quizResults, ({ one }) => ({
   session: one(quizSessions, {
     fields: [quizResults.sessionId],
     references: [quizSessions.id],
+  }),
+  tempUser: one(tempUsers, {
+    fields: [quizResults.tempUserId],
+    references: [tempUsers.id],
   })
 }));
 
@@ -230,6 +235,7 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
     references: [users.id],
   })
 }));
+
 
 // Schema generation for all tables
 export const insertTempUserSchema = createInsertSchema(tempUsers);
