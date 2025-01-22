@@ -3,13 +3,10 @@ import { createServer, type Server } from "http";
 import { db } from "@db";
 import { formations, establishments, locations, costs, pedagogyTypes, quizSessions, quizResults, profileCompletion } from "@db/schema";
 import { eq, desc, ilike, or, and } from "drizzle-orm";
-import { setupAuth } from "./auth";
 import path from 'path';
 import xlsx from 'xlsx';
 
 export function registerRoutes(app: Express): Server {
-  setupAuth(app);
-
   // Create temporary user
   app.post("/api/temp-user", async (req, res) => {
     if (!req.session.tempUserId) {
@@ -21,28 +18,23 @@ export function registerRoutes(app: Express): Server {
   // Start or resume a quiz session
   app.post("/api/quiz/session", async (req, res) => {
     let userId;
-    if (req.isAuthenticated()) {
-      userId = req.user!.id;
-    } else {
-      // Créer un ID temporaire si l'utilisateur n'est pas authentifié
-      if (!req.session.tempUserId) {
-        req.session.tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      }
+    if (req.session.tempUserId) {
       userId = req.session.tempUserId;
+    } else {
+      //this should never happen, but handle it to avoid errors
+      userId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      req.session.tempUserId = userId;
     }
 
     try {
-      console.log('Creating quiz session for user:', req.user!.id);
-
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) =>
-          and(eq(sessions.userId, userId || 'temp_user'), eq(sessions.status, 'in_progress')),
+          and(eq(sessions.userId, userId), eq(sessions.status, 'in_progress')),
         orderBy: desc(quizSessions.startedAt)
       });
 
       if (existingSession) {
-        console.log('Found existing session:', existingSession.id);
         return res.json(existingSession);
       }
 
@@ -61,7 +53,6 @@ export function registerRoutes(app: Express): Server {
         })
         .returning();
 
-      console.log('Created new session:', newSession.id);
       res.json(newSession);
     } catch (error) {
       console.error('Error managing quiz session:', error);
@@ -71,27 +62,24 @@ export function registerRoutes(app: Express): Server {
 
   // Update quiz session with new answer
   app.patch("/api/quiz/session/:sessionId", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
-    }
-
     const { sessionId } = req.params;
     const { questionId, answer, nextQuestionId } = req.body;
-
-    console.log('Updating session:', { sessionId, questionId, answer, nextQuestionId });
+    let userId;
+    if(req.session.tempUserId){
+        userId = req.session.tempUserId;
+    } else {
+        return res.status(400).send("No valid user ID found");
+    }
 
     try {
       const session = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) =>
-          and(eq(sessions.id, sessionId), eq(sessions.userId, req.user!.id))
+          and(eq(sessions.id, sessionId), eq(sessions.userId, userId))
       });
 
       if (!session) {
-        console.log('Session not found:', sessionId);
         return res.status(404).send("Session not found");
       }
-
-      console.log('Found session:', session.id);
 
       if (session.status !== 'in_progress') {
         return res.status(400).send("Session is already completed");
@@ -123,7 +111,6 @@ export function registerRoutes(app: Express): Server {
         .where(eq(quizSessions.id, sessionId))
         .returning();
 
-      console.log('Updated session successfully:', updatedSession.id);
       res.json(updatedSession);
     } catch (error) {
       console.error('Error updating quiz session:', error);
@@ -134,9 +121,7 @@ export function registerRoutes(app: Express): Server {
   // Submit quiz and save results
   app.post("/api/quiz/submit", async (req, res) => {
     let userId;
-    if (req.isAuthenticated()) {
-      userId = req.user!.id;
-    } else if (req.session.tempUserId) {
+    if (req.session.tempUserId) {
       userId = req.session.tempUserId;
     } else {
       return res.status(400).send("No valid user ID found");
@@ -147,8 +132,6 @@ export function registerRoutes(app: Express): Server {
       return res.status(400).send("Session ID is required");
     }
 
-    console.log('Submitting quiz for session:', sessionId);
-
     try {
       // Get session data
       const session = await db.query.quizSessions.findFirst({
@@ -157,11 +140,8 @@ export function registerRoutes(app: Express): Server {
       });
 
       if (!session) {
-        console.log('Submit: Session not found:', sessionId);
         return res.status(404).send("Session not found");
       }
-
-      console.log('Submit: Found session:', session.id);
 
       if (session.status !== 'in_progress') {
         return res.status(400).send("Session is already completed");
@@ -225,7 +205,6 @@ export function registerRoutes(app: Express): Server {
           .where(eq(profileCompletion.userId, userId));
       }
 
-      console.log('Quiz submitted successfully:', result.id);
       res.json(result);
     } catch (error) {
       console.error('Quiz submission error:', error);
@@ -235,13 +214,15 @@ export function registerRoutes(app: Express): Server {
 
   // Get quiz results history
   app.get("/api/quiz/results", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
+    let userId;
+    if(req.session.tempUserId){
+        userId = req.session.tempUserId;
+    } else {
+        return res.status(400).send("No valid user ID found");
     }
-
     try {
       const results = await db.query.quizResults.findMany({
-        where: (results, { eq }) => eq(results.userId, req.user!.id),
+        where: (results, { eq }) => eq(results.userId, userId),
         orderBy: desc(quizResults.createdAt)
       });
 
@@ -254,9 +235,11 @@ export function registerRoutes(app: Express): Server {
 
   // Get profile completion status
   app.get("/api/profile/completion", async (req, res) => {
-    let userId = req.isAuthenticated() ? req.user!.id : req.session.tempUserId;
-    if (!userId) {
-      return res.status(401).send("No valid user ID found");
+    let userId;
+    if(req.session.tempUserId){
+        userId = req.session.tempUserId;
+    } else {
+        return res.status(400).send("No valid user ID found");
     }
 
     try {
@@ -291,8 +274,11 @@ export function registerRoutes(app: Express): Server {
 
   // Update specific completion fields
   app.patch("/api/profile/completion", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
+    let userId;
+    if(req.session.tempUserId){
+        userId = req.session.tempUserId;
+    } else {
+        return res.status(400).send("No valid user ID found");
     }
 
     try {
@@ -331,7 +317,7 @@ export function registerRoutes(app: Express): Server {
             END
           `)
         })
-        .where(eq(profileCompletion.userId, req.user!.id))
+        .where(eq(profileCompletion.userId, userId))
         .returning();
 
       res.json(updated);
@@ -343,14 +329,16 @@ export function registerRoutes(app: Express): Server {
 
   // Get current quiz session
   app.get("/api/quiz/session/current", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
+    let userId;
+    if(req.session.tempUserId){
+        userId = req.session.tempUserId;
+    } else {
+        return res.status(400).send("No valid user ID found");
     }
-
     try {
       const session = await db.query.quizSessions.findFirst({
         where: (sessions, { eq, and }) =>
-          and(eq(sessions.userId, req.user!.id), eq(sessions.status, 'in_progress')),
+          and(eq(sessions.userId, userId), eq(sessions.status, 'in_progress')),
         orderBy: desc(quizSessions.startedAt)
       });
 
@@ -389,9 +377,6 @@ export function registerRoutes(app: Express): Server {
       if (niveau) {
         whereConditions.push(eq(formations.niveau, niveau));
       }
-
-      // Note: We can't directly filter on domains in the where clause since it's an array
-      // We'll filter the results after the query
 
       const results = await db
         .select({
@@ -441,7 +426,6 @@ export function registerRoutes(app: Express): Server {
           )
         : results;
 
-      console.log('Search results:', filteredResults);
       res.json(filteredResults);
     } catch (error) {
       console.error('Search error:', error);
@@ -502,12 +486,10 @@ const dominant_profile_mapping = {
 
 function calculateProfileScores(answers: any): any {
   const scores = calculateScores(answers);
-  console.log('Calculated scores:', scores); // Ajout de logs pour debug
   return scores;
 }
 
 function getMatchedProfile(profileScores: any): any {
   const profile = getProfile(profileScores);
-  console.log('Matched profile:', profile); // Ajout de logs pour debug
   return profile;
 }
