@@ -14,45 +14,29 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
-      // Begin transaction
-      const result = await db.transaction(async (tx) => {
-        // Create temp user
-        const [tempUser] = await tx.insert(tempUsers)
-          .values({
-            createdAt: new Date()
-          })
-          .returning();
+      // Create temp user directly
+      const [tempUser] = await db.insert(tempUsers)
+        .values({
+          createdAt: new Date()
+        })
+        .returning();
 
-        if (!tempUser?.id) {
-          throw new Error('Failed to create temp user');
-        }
-
-        // Set session data immediately
-        req.session.tempUserId = tempUser.id;
-
-        // Force session save
-        await new Promise<void>((resolve, reject) => {
-          req.session.save((err) => {
-            if (err) {
-              console.error('Session save error:', err);
-              reject(err);
-            } else {
-              resolve();
-            }
-          });
-        });
-
-        return tempUser;
-      });
-
-      // Verify session was saved
-      if (req.session.tempUserId !== result.id) {
-        throw new Error('Session validation failed');
+      if (!tempUser?.id) {
+        throw new Error('Failed to create temp user');
       }
 
-      console.log('Created temp user:', result.id, 'Session ID:', req.sessionID, 'TempUserId:', req.session.tempUserId);
-      res.status(201).json({ 
-        id: result.id, 
+      // Set session data
+      req.session.tempUserId = tempUser.id;
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      console.log('Created temp user:', tempUser.id, 'Session ID:', req.sessionID);
+      res.status(201).json({
+        id: tempUser.id,
         sessionId: req.sessionID,
         timestamp: new Date().toISOString()
       });

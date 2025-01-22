@@ -47,12 +47,22 @@ export default function Quiz() {
         }
 
         const data = await response.json();
-        if (!data?.id) {
+        if (!data.id) {
           throw new Error('Invalid server response: missing user ID');
         }
 
-        // Store user data and reload
+        // Store user data
         sessionStorage.setItem('tempUser', JSON.stringify(data));
+
+        // Verify session
+        const verify = await fetch('/api/user', {
+          credentials: 'include'
+        });
+
+        if (!verify.ok) {
+          throw new Error('Session verification failed');
+        }
+
         window.location.reload();
       } catch (error) {
         console.error('Error creating temp user:', error);
