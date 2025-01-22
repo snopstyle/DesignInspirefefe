@@ -107,8 +107,8 @@ export default function Quiz() {
             </p>
           </motion.div>
 
-          <Card className="w-full max-w-4xl bg-background/80 backdrop-blur-sm">
-            <CardContent className="space-y-6 p-8">
+          <Card className="w-full max-w-4xl bg-transparent backdrop-blur-sm">
+            <CardContent className="space-y-4 p-6">
               <motion.div 
                 className="space-y-4"
                 variants={containerVariants}
