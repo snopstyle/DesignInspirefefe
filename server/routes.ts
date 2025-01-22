@@ -1,10 +1,14 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { formations, establishments, locations, costs, pedagogyTypes, quizSessions, quizResults, profileCompletion } from "@db/schema";
-import { eq, desc, ilike, or, and } from "drizzle-orm";
-import path from 'path';
-import xlsx from 'xlsx';
+import { quizSessions, quizResults, profileCompletion } from "@db/schema";
+import { eq, desc, and, or, isNull } from "drizzle-orm";
+
+declare module 'express-session' {
+  interface SessionData {
+    tempUserId: string;
+  }
+}
 
 export function registerRoutes(app: Express): Server {
   // Create temporary user
@@ -17,20 +21,20 @@ export function registerRoutes(app: Express): Server {
 
   // Start or resume a quiz session
   app.post("/api/quiz/session", async (req, res) => {
-    let userId;
-    if (req.session.tempUserId) {
-      userId = req.session.tempUserId;
-    } else {
-      //this should never happen, but handle it to avoid errors
-      userId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      req.session.tempUserId = userId;
+    if (!req.session.tempUserId) {
+      req.session.tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
+    const tempUserId = req.session.tempUserId;
 
     try {
       // Check for existing incomplete session
       const existingSession = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) =>
-          and(eq(sessions.userId, userId), eq(sessions.status, 'in_progress')),
+        where: (sessions, { and, eq }) =>
+          and(
+            eq(sessions.tempUserId, tempUserId),
+            eq(sessions.status, 'in_progress'),
+            isNull(sessions.userId)
+          ),
         orderBy: desc(quizSessions.startedAt)
       });
 
@@ -41,9 +45,9 @@ export function registerRoutes(app: Express): Server {
       // Create new session
       const [newSession] = await db.insert(quizSessions)
         .values({
-          userId: userId,
+          tempUserId: tempUserId,
           status: 'in_progress',
-          currentQuestionId: 'Q1', // Start with first question
+          currentQuestionId: 'Q1',
           completedQuestions: [],
           answers: {},
           adaptivePath: {
@@ -329,16 +333,18 @@ export function registerRoutes(app: Express): Server {
 
   // Get current quiz session
   app.get("/api/quiz/session/current", async (req, res) => {
-    let userId;
-    if(req.session.tempUserId){
-        userId = req.session.tempUserId;
-    } else {
-        return res.status(400).send("No valid user ID found");
+    if (!req.session.tempUserId) {
+      return res.status(400).send("No valid user ID found");
     }
+
     try {
       const session = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) =>
-          and(eq(sessions.userId, userId), eq(sessions.status, 'in_progress')),
+        where: (sessions, { and, eq }) =>
+          and(
+            eq(sessions.tempUserId, req.session.tempUserId),
+            eq(sessions.status, 'in_progress'),
+            isNull(sessions.userId)
+          ),
         orderBy: desc(quizSessions.startedAt)
       });
 

@@ -46,7 +46,8 @@ export const questionWeights = pgTable("question_weights", {
 // Quiz session table for tracking ongoing quizzes
 export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id").notNull(),
+  userId: integer("user_id"),  // For registered users
+  tempUserId: text("temp_user_id"), // For temporary users
   status: varchar("status", { length: 20 }).notNull().default('in_progress'),
   currentQuestionId: varchar("current_question_id", { length: 10 }),
   completedQuestions: jsonb("completed_questions").$type<string[]>().default([]).notNull(),
@@ -67,7 +68,8 @@ export const quizSessions = pgTable("quiz_sessions", {
 // Quiz results table for storing completed quiz results
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id").notNull(),
+  userId: integer("user_id"),  // For registered users
+  tempUserId: text("temp_user_id"), // For temporary users
   sessionId: uuid("session_id").notNull().references(() => quizSessions.id),
   answers: jsonb("answers").$type<Record<string, string>>().notNull(),
   adaptiveFlow: jsonb("adaptive_flow").$type<{
