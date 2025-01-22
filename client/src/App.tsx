@@ -9,6 +9,7 @@ import Profile from "@/pages/profile";
 import { NavButtons } from "@/components/layout/nav-buttons";
 import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
+import Stats from "./pages/stats";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/profile" component={Profile} />
         <Route path="/search" component={SearchPage} />
         <Route path="/auth" component={Landing} />
+        <Route path="/stats" component={Stats} />
         <Route component={NotFound} />
       </Switch>
     </>
