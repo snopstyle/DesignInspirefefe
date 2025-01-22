@@ -99,11 +99,11 @@ export default function Quiz() {
             initial="hidden"
             animate="visible"
           >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-6 drop-shadow-lg">
-              Bienvenue dans votre Parcours d'Orientation
+            <h1 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 mb-4">
+              Découvrez Votre Voie
             </h1>
-            <p className="text-xl md:text-2xl text-white/80">
-              Découvrez votre profil à travers trois étapes essentielles
+            <p className="text-lg md:text-xl text-white/80">
+              Trois étapes pour révéler votre potentiel
             </p>
           </motion.div>
 
