@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,7 @@ export default function Results() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+              <div className="cursor-pointer bg-white/10 hover:bg-white/15 hover:scale-[1.02] transition-all rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Brain className="w-8 h-8 text-orange-400/90" />
                   <h3 className="text-xl font-bold">PROFIL DOMINANT</h3>
@@ -53,7 +52,7 @@ export default function Results() {
                 <p className="text-white/70">{latestResult.dominantProfile}</p>
               </div>
 
-              <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+              <div className="cursor-pointer bg-white/10 hover:bg-white/15 hover:scale-[1.02] transition-all rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Target className="w-8 h-8 text-purple-400/90" />
                   <h3 className="text-xl font-bold">SOUS-PROFIL</h3>
@@ -61,7 +60,7 @@ export default function Results() {
                 <p className="text-white/70">{latestResult.subProfile}</p>
               </div>
 
-              <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+              <div className="cursor-pointer bg-white/10 hover:bg-white/15 hover:scale-[1.02] transition-all rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Sparkles className="w-8 h-8 text-blue-400/90" />
                   <h3 className="text-xl font-bold">TRAITS PRINCIPAUX</h3>

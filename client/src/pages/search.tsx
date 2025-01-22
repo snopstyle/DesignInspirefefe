@@ -154,7 +154,7 @@ export default function SearchPage() {
     <GradientBackground>
       <main className="container mx-auto p-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl">
+          <Card className="bg-background/80 border-white/10 shadow-xl rounded-2xl"> {/* Removed backdrop-blur-sm */}
             <CardHeader>
               <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500 flex items-center gap-2">
                 <GraduationCap className="h-8 w-8" />
@@ -330,7 +330,7 @@ export default function SearchPage() {
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
               {Array.isArray(results) ? results.map((result, index) => (
-                <Card key={index} className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                <Card key={index} className="bg-background/80 border-white/10 shadow-xl rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"> {/* Removed backdrop-blur-sm */}
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>

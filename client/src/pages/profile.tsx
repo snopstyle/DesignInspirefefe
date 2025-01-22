@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -79,7 +78,7 @@ export default function ProfilePage() {
     <GradientBackground>
       <div className="container mx-auto py-8 px-4">
         <div className="max-w-4xl mx-auto space-y-8">
-          <Card className="bg-transparent backdrop-blur-sm border-white/10">
+          <Card className="bg-transparent border-white/10">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-white">Profile Completion</CardTitle>
               <div className="space-y-2">
@@ -94,7 +93,7 @@ export default function ProfilePage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             {sections.map((section) => (
-              <Card key={section.title} className="bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors">
+              <Card key={section.title} className="bg-white/10 hover:bg-white/15 hover:scale-[1.02] transition-colors">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
