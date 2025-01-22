@@ -53,7 +53,7 @@ export default function Quiz() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/15 transition-colors rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Brain className="w-8 h-8 text-orange-400/90" />
                     <h3 className="text-xl font-bold">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
@@ -61,7 +61,7 @@ export default function Quiz() {
                   <p className="text-white">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
                 </div>
 
-                <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/15 transition-colors rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Flame className="w-8 h-8 text-purple-400" />
                     <h3 className="text-xl font-bold text-white">PASSIONS & INTÉRÊTS</h3>
@@ -69,7 +69,7 @@ export default function Quiz() {
                   <p className="text-white">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
                 </div>
 
-                <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/15 transition-colors rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <GraduationCap className="w-8 h-8 text-blue-400" />
                     <h3 className="text-xl font-bold text-white">PROJET D'ÉTUDES</h3>
