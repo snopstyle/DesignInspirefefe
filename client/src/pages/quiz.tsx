@@ -1,16 +1,13 @@
 import { useQuiz } from "@/hooks/use-quiz";
 import { QuestionCard } from "@/components/quiz/question-card";
 import { GradientBackground } from "@/components/layout/gradient-background";
-import { Loader2, Brain, Flame, GraduationCap } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 
 export default function Quiz() {
-  const [showWelcome, setShowWelcome] = useState(true);
-  const quizProps = useQuiz();
   const [isCreatingTempUser, setIsCreatingTempUser] = useState(false);
+  const quizProps = useQuiz();
 
   useEffect(() => {
     const createTempUser = async () => {
@@ -37,7 +34,7 @@ export default function Quiz() {
     };
 
     createTempUser();
-  }, []);
+  }, [isCreatingTempUser]);
 
   if (isCreatingTempUser) {
     return (
@@ -54,11 +51,22 @@ export default function Quiz() {
     );
   }
 
-  const { currentQuestion, handleAnswer: onAnswer, answers } = quizProps;
+  const { currentQuestion, handleAnswer, answers } = quizProps;
   const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
 
   if (!currentQuestion) {
-    return null;
+    return (
+      <GradientBackground>
+        <div className="flex items-center justify-center min-h-screen">
+          <Card className="w-full max-w-2xl p-8 bg-background/80 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="h-8 w-8 animate-spin" />
+              <p>Chargement du questionnaire...</p>
+            </div>
+          </Card>
+        </div>
+      </GradientBackground>
+    );
   }
 
   return (
@@ -66,7 +74,7 @@ export default function Quiz() {
       <div className="container mx-auto min-h-screen py-8">
         <QuestionCard 
           question={currentQuestion}
-          onAnswer={onAnswer}
+          onAnswer={handleAnswer}
           currentAnswer={currentAnswer}
         />
       </div>

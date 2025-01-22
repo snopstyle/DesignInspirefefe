@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
 import { quizSessions, quizResults, profileCompletion } from "@db/schema";
-import { eq, desc, and, or, isNull } from "drizzle-orm";
+import { eq, desc, and, or, isNull, SQL } from "drizzle-orm";
 
 declare module 'express-session' {
   interface SessionData {
@@ -74,17 +74,18 @@ export function registerRoutes(app: Express): Server {
   app.patch("/api/quiz/session/:sessionId", async (req, res) => {
     const { sessionId } = req.params;
     const { questionId, answer, nextQuestionId } = req.body;
-    let userId;
-    if(req.session.tempUserId){
-        userId = req.session.tempUserId;
-    } else {
-        return res.status(400).send("No valid user ID found");
+
+    if (!req.session.tempUserId) {
+      return res.status(400).send("No valid user ID found");
     }
 
     try {
       const session = await db.query.quizSessions.findFirst({
-        where: (sessions, { eq, and }) =>
-          and(eq(sessions.id, sessionId), eq(sessions.userId, userId))
+        where: (sessions, { and, eq }) =>
+          and(
+            eq(sessions.id, sessionId),
+            eq(sessions.tempUserId, req.session.tempUserId)
+          )
       });
 
       if (!session) {
@@ -348,8 +349,7 @@ export function registerRoutes(app: Express): Server {
         where: (sessions, { and, eq }) =>
           and(
             eq(sessions.tempUserId, req.session.tempUserId),
-            eq(sessions.status, 'in_progress'),
-            isNull(sessions.userId)
+            eq(sessions.status, 'in_progress')
           ),
         orderBy: desc(quizSessions.startedAt)
       });
