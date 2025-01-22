@@ -120,11 +120,11 @@ export default function Quiz() {
                   <motion.div
                     key={feature.title}
                     variants={itemVariants}
-                    className="p-4 rounded-lg bg-white/10 hover:bg-white/20 transition-colors transform hover:scale-[1.02] transition-all duration-300"
+                    className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors transform hover:scale-[1.02] transition-all duration-300"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-2 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30">
-                        <feature.icon className="h-8 w-8 text-purple-300" />
+                      <div className="p-2 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-500/20">
+                        <feature.icon className="h-8 w-8 text-orange-300" />
                       </div>
                       <div>
                         <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
