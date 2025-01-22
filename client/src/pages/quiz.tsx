@@ -18,14 +18,22 @@ export default function Quiz() {
         const response = await fetch('/api/temp-user', {
           method: 'POST',
           credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
 
         if (!response.ok) {
-          throw new Error('Failed to create temporary user');
+          throw new Error(`Failed to create temporary user: ${response.status}`);
         }
 
         const data = await response.json();
+        if (!data.id) {
+          throw new Error('No user ID returned from server');
+        }
+
         sessionStorage.setItem('tempUser', JSON.stringify(data));
+        window.location.reload(); // Reload to ensure session is properly initialized
       } catch (error) {
         console.error('Error creating temp user:', error);
       } finally {

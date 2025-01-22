@@ -14,7 +14,7 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
-      // First create temp user in database with explicit timestamp
+      // Create temp user in database
       const [tempUser] = await db.insert(tempUsers)
         .values({
           createdAt: new Date()
@@ -25,13 +25,14 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Failed to create temp user in database');
       }
 
-      // Set session data first
+      // Set session data
       req.session.tempUserId = tempUser.id;
 
-      // Save session with error handling
+      // Save session explicitly
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
+            console.error('Failed to save session:', err);
             console.error('Session save error:', err);
             reject(err);
             return;
