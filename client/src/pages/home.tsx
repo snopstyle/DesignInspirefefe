@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
@@ -43,7 +42,7 @@ export default function Home() {
             className="text-center space-y-4"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Votre Avenir, Votre Choix
+              Votre Avenir, Votre Choix - Test
             </h1>
             <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
               Commencez votre voyage vers une orientation professionnelle éclairée
