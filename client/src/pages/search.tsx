@@ -57,11 +57,13 @@ export default function SearchPage() {
     <main className="min-h-screen bg-background/50 py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Card className="bg-background/80 border-white/10 shadow-xl rounded-2xl">
+          <Card className="bg-background/80 border-white/10 shadow-xl">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500 flex items-center gap-2">
-                <GraduationCap className="h-8 w-8" />
-                Recherche de Formation
+              <CardTitle className="text-3xl font-bold flex items-center gap-2">
+                <GraduationCap className="h-8 w-8 text-orange-500" />
+                <span className="bg-gradient-neo from-orange-500/80 to-purple-500/80 bg-clip-text text-transparent">
+                  Recherche de Formation
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -77,7 +79,7 @@ export default function SearchPage() {
                     <PopoverTrigger asChild>
                       <Button 
                         variant="outline" 
-                        className="gap-2 hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 hover:text-white transition-colors"
+                        className="gap-2"
                       >
                         <Filter className="h-4 w-4" />
                         Filtres
@@ -97,7 +99,7 @@ export default function SearchPage() {
                   <Button
                     onClick={() => {}}
                     disabled={isLoading}
-                    className="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white transition-colors"
+                    className="bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white"
                   >
                     {isLoading ? (
                       <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />

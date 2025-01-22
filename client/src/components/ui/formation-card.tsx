@@ -28,8 +28,10 @@ export function FormationCard({
   return (
     <Card className="w-full max-w-2xl bg-background/80 border-white/10 shadow-xl hover:shadow-lg transition-all duration-300">
       <CardHeader>
-        <CardTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500">
-          {formation}
+        <CardTitle className="text-xl font-bold">
+          <span className="bg-gradient-neo from-orange-500/80 to-purple-500/80 bg-clip-text text-transparent">
+            {formation}
+          </span>
         </CardTitle>
         <div className="text-lg text-muted-foreground">{etablissement}</div>
         <div className="text-sm text-muted-foreground">{ville}</div>
@@ -53,7 +55,7 @@ export function FormationCard({
               variant="outline" 
               size="sm"
               onClick={() => window.open(officialLink, '_blank')}
-              className="gap-2 hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 hover:text-white transition-colors"
+              className="gap-2 bg-gradient-neo from-orange-500/80 to-purple-500/80 text-white border-none"
             >
               <ExternalLink className="h-4 w-4" />
               Site officiel
