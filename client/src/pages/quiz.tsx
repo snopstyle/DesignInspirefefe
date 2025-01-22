@@ -39,9 +39,14 @@ export default function Quiz() {
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
           <Card className="w-full max-w-3xl bg-transparent backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-3xl text-center">Bienvenue dans votre Parcours d'Orientation</CardTitle>
-              <CardDescription className="text-lg text-center mt-2">
-                Découvrez votre profil à travers trois étapes essentielles
+              <CardTitle className="text-3xl text-center">Découvrez Votre Véritable Voie Professionnelle</CardTitle>
+              <CardDescription className="text-lg text-center mt-2 space-y-4">
+                <p className="text-white/90">
+                  Ce questionnaire personnalisé va révéler vos talents cachés et vous guider vers des opportunités professionnelles qui vous correspondent vraiment. En moins de 15 minutes, explorez vos aspirations et définissez votre avenir avec précision.
+                </p>
+                <p className="text-white/80">
+                  Notre approche unique en trois étapes analyse votre personnalité, vos passions et vos objectifs pour vous proposer un parcours d'études sur mesure.
+                </p>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
