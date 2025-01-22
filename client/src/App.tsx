@@ -18,8 +18,7 @@ function AuthenticatedRoutes() {
     <>
       <NavButtons />
       <Switch>
-        <Route path="/" component={Landing} />
-        <Route path="/quiz" component={Quiz} />
+        <Route path="/" component={Quiz} />
         <Route path="/results" component={Results} />
         <Route path="/profile" component={Profile} />
         <Route path="/search" component={SearchPage} />
