@@ -347,7 +347,7 @@ export function registerRoutes(app: Express): Server {
       }
 
       if (ville) {
-        conditions.push(eq(locations.ville, ville));
+        conditions.push(ilike(locations.ville, ville)); // Changed to ilike for case-insensitive comparison
       }
 
       // Handle domain filtering at the SQL level
