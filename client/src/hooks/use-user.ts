@@ -78,6 +78,28 @@ async function fetchUser(): Promise<User | null> {
   const user = await response.json();
   if (user.isTemporary) {
     sessionStorage.setItem('tempUser', JSON.stringify(user));
+  } else if (sessionStorage.getItem('tempUser')) {
+    const tempUser = JSON.parse(sessionStorage.getItem('tempUser')!);
+    sessionStorage.removeItem('tempUser');
+    try {
+      // Fusionner les données du quiz et le profil
+      await Promise.all([
+        fetch('/api/quiz/merge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tempUserId: tempUser.id }),
+          credentials: 'include'
+        }),
+        fetch('/api/profile/merge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tempUserId: tempUser.id }),
+          credentials: 'include'
+        })
+      ]);
+    } catch (error) {
+      console.error('Erreur lors de la fusion des données:', error);
+    }
   }
   return user;
 }

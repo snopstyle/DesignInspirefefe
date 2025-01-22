@@ -246,8 +246,9 @@ export function registerRoutes(app: Express): Server {
 
   // Get profile completion status
   app.get("/api/profile/completion", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
+    let userId = req.isAuthenticated() ? req.user!.id : req.session.tempUserId;
+    if (!userId) {
+      return res.status(401).send("No valid user ID found");
     }
 
     try {
