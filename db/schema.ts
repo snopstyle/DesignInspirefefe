@@ -3,6 +3,11 @@ import { pgTable, text, timestamp, uuid, jsonb, varchar, decimal, boolean, seria
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export const tempUsers = pgTable("temp_users", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at").notNull().defaultNow()
+});
+
 // Profile traits table schema
 export const profileTraits = pgTable("profile_traits", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -29,11 +34,7 @@ export const questionWeights = pgTable("question_weights", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Temporary user table
-export const tempUsers = pgTable("temp_users", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
+
 
 // Regular user table 
 export const users = pgTable("users", {
