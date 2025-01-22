@@ -1,8 +1,17 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
+import { sql } from "drizzle-orm";
+import {
+  establishments,
+  locations,
+  formations,
+  costs,
+  pedagogyTypes
+} from "@db/schemas/formations";
+import { eq, and, or, ilike, asc } from "drizzle-orm";
 import { quizSessions, tempUsers } from "@db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 
 declare module 'express-session' {
   interface SessionData {
@@ -42,7 +51,7 @@ export function registerRoutes(app: Express): Server {
       });
     } catch (error) {
       console.error('Error creating temporary user:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to create temporary user",
         details: error instanceof Error ? error.message : 'Unknown error'
       });
@@ -202,10 +211,10 @@ export function registerRoutes(app: Express): Server {
   // Get quiz results history
   app.get("/api/quiz/results", async (req, res) => {
     let userId;
-    if(req.session.tempUserId){
-        userId = req.session.tempUserId;
+    if (req.session.tempUserId) {
+      userId = req.session.tempUserId;
     } else {
-        return res.status(400).send("No valid user ID found");
+      return res.status(400).send("No valid user ID found");
     }
     try {
       const results = await db.query.quizResults.findMany({
@@ -223,10 +232,10 @@ export function registerRoutes(app: Express): Server {
   // Get profile completion status
   app.get("/api/profile/completion", async (req, res) => {
     let userId;
-    if(req.session.tempUserId){
-        userId = req.session.tempUserId;
+    if (req.session.tempUserId) {
+      userId = req.session.tempUserId;
     } else {
-        return res.status(400).send("No valid user ID found");
+      return res.status(400).send("No valid user ID found");
     }
 
     try {
@@ -262,10 +271,10 @@ export function registerRoutes(app: Express): Server {
   // Update specific completion fields
   app.patch("/api/profile/completion", async (req, res) => {
     let userId;
-    if(req.session.tempUserId){
-        userId = req.session.tempUserId;
+    if (req.session.tempUserId) {
+      userId = req.session.tempUserId;
     } else {
-        return res.status(400).send("No valid user ID found");
+      return res.status(400).send("No valid user ID found");
     }
 
     try {
@@ -424,7 +433,7 @@ export function registerRoutes(app: Express): Server {
     try {
       const results = await db.query.locations.findMany({
         columns: { ville: true },
-        orderBy: locations.ville
+        orderBy: asc(locations.ville)
       });
 
       const uniqueCities = new Set(results.map(r => r.ville));
@@ -436,7 +445,6 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  const httpServer = createServer(app);
   // Get table statistics
   app.get('/api/stats', async (req, res) => {
     try {
@@ -447,7 +455,7 @@ export function registerRoutes(app: Express): Server {
         costs: await db.select({ count: sql`count(*)` }).from(costs),
         pedagogy_types: await db.select({ count: sql`count(*)` }).from(pedagogyTypes)
       };
-      
+
       res.json(stats);
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -455,24 +463,6 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  const httpServer = createServer(app);
   return httpServer;
-}
-
-import { calculateProfileScores as calculateScores, getMatchedProfile as getProfile } from "../client/src/lib/profile-logic";
-
-const dominant_profile_mapping = {
-  // Example mapping -  Replace with your actual mapping
-  "SubProfileA": "DominantProfileX",
-  "SubProfileB": "DominantProfileY",
-  "SubProfileC": "DominantProfileZ"
-};
-
-function calculateProfileScores(answers: any): any {
-  const scores = calculateScores(answers);
-  return scores;
-}
-
-function getMatchedProfile(profileScores: any): any {
-  const profile = getProfile(profileScores);
-  return profile;
 }
