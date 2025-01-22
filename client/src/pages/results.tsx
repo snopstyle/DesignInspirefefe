@@ -1,9 +1,10 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
+import { Brain, Target, Sparkles } from "lucide-react";
 
 export default function Results() {
   const [, setLocation] = useLocation();
@@ -12,13 +13,12 @@ export default function Results() {
   });
 
   const latestResult = results?.[0];
-  console.log('Latest quiz result:', latestResult);
 
   if (!latestResult) {
     return (
       <GradientBackground>
         <div className="container mx-auto py-12">
-          <Card className="max-w-2xl mx-auto bg-background/80 backdrop-blur-sm">
+          <Card className="max-w-2xl mx-auto bg-transparent backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-3xl">Erreur</CardTitle>
             </CardHeader>
@@ -33,47 +33,60 @@ export default function Results() {
 
   return (
     <GradientBackground>
-      <div className="container mx-auto py-12">
-        <Card className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm">
+      <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
+        <Card className="w-full max-w-3xl bg-transparent backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-3xl text-center">Votre Profil Personnalisé</CardTitle>
+            <CardTitle className="text-3xl text-center">Découvrez Votre Profil</CardTitle>
+            <CardDescription className="text-lg text-center mt-2">
+              <div className="text-white/90">
+                <p className="font-medium">Voici l'analyse détaillée de vos réponses</p>
+              </div>
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-8">
-            {/* Profil Dominant */}
-            <div className="bg-primary/10 p-6 rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4">Profil Dominant</h2>
-              <p className="text-xl font-medium text-primary">{latestResult.dominantProfile}</p>
-            </div>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Brain className="w-8 h-8 text-orange-400/90" />
+                  <h3 className="text-xl font-bold">PROFIL DOMINANT</h3>
+                </div>
+                <p className="text-white/70">{latestResult.dominantProfile}</p>
+              </div>
 
-            {/* Sous-profil */}
-            <div className="bg-secondary/10 p-6 rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4">Sous-profil</h2>
-              <p className="text-xl font-medium text-secondary">{latestResult.subProfile}</p>
-            </div>
+              <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Target className="w-8 h-8 text-purple-400/90" />
+                  <h3 className="text-xl font-bold">SOUS-PROFIL</h3>
+                </div>
+                <p className="text-white/70">{latestResult.subProfile}</p>
+              </div>
 
-            {/* Traits Principaux */}
-            <div className="bg-background/10 p-6 rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4">Traits Principaux</h2>
-              <div className="grid gap-3">
-                {latestResult.traits.map((trait: string, index: number) => (
-                  <div 
-                    key={index} 
-                    className="flex justify-between items-center bg-white/5 p-4 rounded-lg"
-                  >
-                    <span className="text-lg font-medium">{trait}</span>
-                    <span className="text-lg font-semibold text-primary">
-                      {((latestResult.traitScores[trait] || 0) * 100).toFixed(1)}%
-                    </span>
-                  </div>
-                ))}
+              <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Sparkles className="w-8 h-8 text-blue-400/90" />
+                  <h3 className="text-xl font-bold">TRAITS PRINCIPAUX</h3>
+                </div>
+                <div className="space-y-2">
+                  {latestResult.traits.map((trait: string, index: number) => (
+                    <div 
+                      key={index} 
+                      className="flex justify-between items-center bg-white/5 p-3 rounded-lg"
+                    >
+                      <span className="text-white/70">{trait}</span>
+                      <span className="text-white/90 font-medium">
+                        {((latestResult.traitScores[trait] || 0) * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
             <Button
               onClick={() => setLocation("/search")}
-              className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+              className="w-full bg-gradient-to-r from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white py-6 text-lg"
             >
-              En savoir plus
+              Découvrir les Formations
             </Button>
           </CardContent>
         </Card>
