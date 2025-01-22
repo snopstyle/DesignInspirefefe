@@ -53,31 +53,7 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Try multiple ports if the default port is in use
-  const tryPort = (port: number): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      server.listen(port, "0.0.0.0")
-        .once('listening', () => {
-          log(`serving on port ${port}`);
-          resolve();
-        })
-        .once('error', (err: any) => {
-          if (err.code === 'EADDRINUSE') {
-            log(`Port ${port} is in use, trying ${port + 1}`);
-            server.close();
-            tryPort(port + 1).then(resolve).catch(reject);
-          } else {
-            reject(err);
-          }
-        });
-    });
-  };
-
-  // Start with port 5000 and try subsequent ports if needed
-  try {
-    await tryPort(5000);
-  } catch (err) {
-    console.error('Failed to start server:', err);
-    process.exit(1);
-  }
+  server.listen(3000, "0.0.0.0", () => {
+    log(`Server running on port 3000`);
+  });
 })();
