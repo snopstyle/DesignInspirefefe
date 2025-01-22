@@ -8,7 +8,7 @@ interface GradientBackgroundProps {
 export function GradientBackground({ children, className }: GradientBackgroundProps) {
   return (
     <div className={cn(
-      "min-h-screen w-full bg-gradient-to-br from-orange-500/90 via-purple-500/90 to-purple-800/90",
+      "min-h-screen w-full bg-gradient-to-br from-orange-500/90 via-purple-500/90 to-purple-800/90 animate-gradient",
       "relative overflow-hidden backdrop-blur-sm",
       className
     )}>
