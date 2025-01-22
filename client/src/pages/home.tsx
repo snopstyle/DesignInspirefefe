@@ -41,10 +41,10 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-6 drop-shadow-lg">
+            <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 mb-6">
               Votre Avenir, Votre Choix
             </h1>
-            <p className="text-2xl text-white/80">
+            <p className="text-xl text-white/80">
               Commencez votre voyage vers une orientation professionnelle éclairée
             </p>
           </motion.div>
@@ -61,8 +61,8 @@ export default function Home() {
               >
                 <Card className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full">
                   <CardHeader className="flex flex-row items-center gap-4">
-                    <div className="p-2 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30">
-                      <feature.icon className="h-8 w-8 text-purple-300" />
+                    <div className="p-2 rounded-full bg-gradient-to-r from-orange-500/30 to-pink-500/30">
+                      <feature.icon className="h-8 w-8 text-orange-300" />
                     </div>
                     <div>
                       <CardTitle className="text-2xl font-bold text-white mb-2">
