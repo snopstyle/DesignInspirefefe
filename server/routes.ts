@@ -14,7 +14,11 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
-      // Create temp user directly
+      // Verify table exists first
+      const tables = await db.query.tempUsers.findMany().execute();
+      console.log('Temp users table exists, proceeding with creation');
+      
+      // Create temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({
           createdAt: new Date()
