@@ -5,16 +5,18 @@ async function migrateTables() {
   try {
     console.log('Starting table migration...');
 
-    // Formation tables
+    // Formation tables migration
     console.log('Migrating formation tables...');
     await db.execute(sql`
-      -- Create tables without constraints first
+      -- Create new establishments table with institution support
       CREATE TABLE IF NOT EXISTS formation_establishments (
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         name text NOT NULL,
         statut text NOT NULL,
         hebergement boolean DEFAULT false,
-        lien text,
+        institution_name text,  -- Name of the parent institution
+        institution_website text, -- Website of the parent institution
+        campus_name text,      -- Specific campus/location name
         tel text,
         facebook text,
         instagram text,
@@ -22,61 +24,64 @@ async function migrateTables() {
         created_at timestamp NOT NULL DEFAULT now()
       );
 
-      -- Create a temporary table to store links with duplicates
-      CREATE TEMP TABLE duplicate_links AS
-      SELECT lien, COUNT(*) as count
-      FROM establishments
-      WHERE lien != 'Non Renseigné'
-      GROUP BY lien
-      HAVING COUNT(*) > 1;
+      -- Extract institution names and websites
+      WITH establishments_parsed AS (
+        SELECT 
+          e.*,
+          CASE 
+            WHEN lien != 'Non Renseigné' THEN
+              SPLIT_PART(
+                REGEXP_REPLACE(
+                  name, 
+                  '- Campus.*|, Site.*', 
+                  ''
+                ),
+                ' - ',
+                1
+              )
+            ELSE name
+          END as institution_name,
+          NULLIF(lien, 'Non Renseigné') as institution_website,
+          CASE 
+            WHEN name ~ '- Campus.*|, Site.*' 
+            THEN REGEXP_REPLACE(
+              name, 
+              '.*?(- Campus|, Site)(.*)', 
+              '\2'
+            )
+          END as campus_name
+        FROM establishments e
+      )
+      INSERT INTO formation_establishments (
+        id,
+        name,
+        statut,
+        hebergement,
+        institution_name,
+        institution_website,
+        campus_name,
+        tel,
+        facebook,
+        instagram,
+        linkedin,
+        created_at
+      )
+      SELECT 
+        id,
+        name,
+        statut,
+        hebergement,
+        institution_name,
+        institution_website,
+        campus_name,
+        NULLIF(tel, 'Non Renseigné'),
+        NULLIF(facebook, ''),
+        NULLIF(instagram, ''),
+        NULLIF(linkedin, ''),
+        created_at
+      FROM establishments_parsed;
 
-      -- Create another temporary table for primary establishments
-      CREATE TEMP TABLE primary_establishments AS
-      SELECT DISTINCT ON (e.lien) e.id as primary_id, e.lien
-      FROM establishments e
-      INNER JOIN duplicate_links d ON e.lien = d.lien
-      ORDER BY e.lien, e.created_at;
-
-      -- Insert non-duplicate establishments first
-      INSERT INTO formation_establishments 
-      SELECT e.*
-      FROM establishments e
-      LEFT JOIN duplicate_links d ON e.lien = d.lien
-      WHERE d.lien IS NULL OR e.id IN (
-        SELECT primary_id FROM primary_establishments
-      );
-
-      -- Clean data
-      UPDATE formation_establishments 
-      SET lien = NULL 
-      WHERE lien = 'Non Renseigné';
-
-      UPDATE formation_establishments 
-      SET tel = NULL 
-      WHERE tel = 'Non Renseigné';
-
-      UPDATE formation_establishments 
-      SET facebook = NULL 
-      WHERE facebook = '';
-
-      UPDATE formation_establishments 
-      SET instagram = NULL 
-      WHERE instagram = '';
-
-      UPDATE formation_establishments 
-      SET linkedin = NULL 
-      WHERE linkedin = '';
-
-      -- Add constraints after cleaning
-      CREATE UNIQUE INDEX formation_establishments_lien_key 
-      ON formation_establishments (lien) 
-      WHERE lien IS NOT NULL;
-
-      CREATE UNIQUE INDEX formation_establishments_tel_key 
-      ON formation_establishments (tel) 
-      WHERE tel IS NOT NULL;
-
-      -- Locations
+      -- Locations table
       CREATE TABLE IF NOT EXISTS formation_locations (
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         ville text NOT NULL,
@@ -86,7 +91,6 @@ async function migrateTables() {
         created_at timestamp NOT NULL DEFAULT now()
       );
 
-      -- Copy data first
       INSERT INTO formation_locations 
       SELECT * FROM locations;
 
@@ -107,8 +111,8 @@ async function migrateTables() {
       SET adresse = 'Adresse ' || id::text 
       WHERE adresse = 'Adresse Non Renseignée';
 
-      -- Add constraints after cleaning
-      CREATE UNIQUE INDEX formation_locations_adresse_key 
+      -- Add constraints for locations
+      CREATE UNIQUE INDEX IF NOT EXISTS formation_locations_adresse_key 
       ON formation_locations (adresse);
 
       -- Costs
@@ -135,7 +139,7 @@ async function migrateTables() {
       INSERT INTO formation_pedagogy_types 
       SELECT * FROM pedagogy_types;
 
-      -- Finally Formations with foreign key constraints
+      -- Formations
       CREATE TABLE IF NOT EXISTS formation_formations (
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         formation text NOT NULL,
@@ -150,19 +154,9 @@ async function migrateTables() {
         created_at timestamp NOT NULL DEFAULT now()
       );
 
-      -- Insert formations, updating establishment references for duplicates
+      -- Direct copy of formations with same establishment references
       INSERT INTO formation_formations
-      SELECT f.id, f.formation,
-        COALESCE(p.primary_id, f.etablissement_id) as etablissement_id,
-        f.location_id, f.niveau, f.type, f.domaines,
-        f.cost_id, f.duree, f.pedagogy_id, f.created_at
-      FROM formations f
-      LEFT JOIN establishments e ON f.etablissement_id = e.id
-      LEFT JOIN primary_establishments p ON e.lien = p.lien;
-
-      -- Drop temporary tables
-      DROP TABLE duplicate_links;
-      DROP TABLE primary_establishments;
+      SELECT * FROM formations;
 
       -- Drop old tables after successful migration
       DROP TABLE IF EXISTS formations CASCADE;
@@ -250,12 +244,6 @@ async function migrateTables() {
       INSERT INTO quiz_profile_completion
       SELECT * FROM profile_completion;
 
-      -- Drop old tables after successful migration
-      DROP TABLE IF EXISTS users CASCADE;
-      DROP TABLE IF EXISTS temp_users CASCADE;
-      DROP TABLE IF EXISTS quiz_sessions CASCADE;
-      DROP TABLE IF EXISTS quiz_results CASCADE;
-      DROP TABLE IF EXISTS profile_completion CASCADE;
     `);
 
     console.log('Migration completed successfully!');
