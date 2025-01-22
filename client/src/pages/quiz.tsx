@@ -11,10 +11,27 @@ export default function Quiz() {
 
   useEffect(() => {
     const createTempUser = async () => {
-      if (isCreatingTempUser || sessionStorage.getItem('tempUser')) return;
+      const existingUser = sessionStorage.getItem('tempUser');
+      if (isCreatingTempUser || existingUser) {
+        return;
+      }
 
       setIsCreatingTempUser(true);
       try {
+        // First attempt to validate existing session
+        const sessionCheck = await fetch('/api/user', {
+          credentials: 'include'
+        });
+
+        if (sessionCheck.ok) {
+          const userData = await sessionCheck.json();
+          if (userData?.id) {
+            sessionStorage.setItem('tempUser', JSON.stringify(userData));
+            return;
+          }
+        }
+
+        // Create new temp user if needed
         const response = await fetch('/api/temp-user', {
           method: 'POST',
           credentials: 'include',
@@ -24,21 +41,18 @@ export default function Quiz() {
         });
 
         if (!response.ok) {
-          console.error('Server response:', await response.text());
+          const errorText = await response.text();
+          console.error('Server response:', errorText);
           throw new Error(`Failed to create temporary user: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('Temp user created:', data);
-        
-        if (!data.id) {
-          throw new Error('No user ID returned from server');
+        if (!data?.id) {
+          throw new Error('Invalid server response: missing user ID');
         }
 
+        // Store user data and reload
         sessionStorage.setItem('tempUser', JSON.stringify(data));
-        
-        // Wait for session to be properly saved
-        await new Promise(resolve => setTimeout(resolve, 100));
         window.location.reload();
       } catch (error) {
         console.error('Error creating temp user:', error);

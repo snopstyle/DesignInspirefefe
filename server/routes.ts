@@ -14,34 +14,48 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
-      // Create temp user in database
-      const [tempUser] = await db.insert(tempUsers)
-        .values({
-          createdAt: new Date()
-        })
-        .returning();
-      
-      if (!tempUser || !tempUser.id) {
-        throw new Error('Failed to create temp user in database');
-      }
+      // Begin transaction
+      const result = await db.transaction(async (tx) => {
+        // Create temp user
+        const [tempUser] = await tx.insert(tempUsers)
+          .values({
+            createdAt: new Date()
+          })
+          .returning();
 
-      // Set session data
-      req.session.tempUserId = tempUser.id;
-      
-      // Save session with Promise
-      await new Promise<void>((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) {
-            console.error('Session save error:', err);
-            reject(err);
-            return;
-          }
-          resolve();
+        if (!tempUser?.id) {
+          throw new Error('Failed to create temp user');
+        }
+
+        // Set session data immediately
+        req.session.tempUserId = tempUser.id;
+
+        // Force session save
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((err) => {
+            if (err) {
+              console.error('Session save error:', err);
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
         });
+
+        return tempUser;
       });
 
-      console.log('Created temp user:', tempUser.id, 'Session ID:', req.sessionID, 'TempUserId:', req.session.tempUserId);
-      res.status(200).json({ id: tempUser.id, sessionId: req.sessionID });
+      // Verify session was saved
+      if (req.session.tempUserId !== result.id) {
+        throw new Error('Session validation failed');
+      }
+
+      console.log('Created temp user:', result.id, 'Session ID:', req.sessionID, 'TempUserId:', req.session.tempUserId);
+      res.status(201).json({ 
+        id: result.id, 
+        sessionId: req.sessionID,
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
       console.error('Error creating temporary user:', error);
       res.status(500).json({ 
