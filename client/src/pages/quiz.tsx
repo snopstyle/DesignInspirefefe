@@ -47,19 +47,19 @@ export default function Quiz() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <div className="p-4 rounded-lg bg-white/10">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
-                  <p>Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
+                  <p className="text-white/70">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
                 </div>
                 
-                <div className="p-4 rounded-lg bg-white/10">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">PASSIONS & INTÉRÊTS</h3>
-                  <p>Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
+                  <p className="text-white/70">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
                 </div>
                 
-                <div className="p-4 rounded-lg bg-white/10">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">PROJET D'ÉTUDES</h3>
-                  <p>Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
+                  <p className="text-white/70">Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
                 </div>
               </div>
               
