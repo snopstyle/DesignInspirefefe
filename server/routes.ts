@@ -12,8 +12,15 @@ export function registerRoutes(app: Express): Server {
 
   // Start or resume a quiz session
   app.post("/api/quiz/session", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
+    let userId;
+    if (req.isAuthenticated()) {
+      userId = req.user!.id;
+    } else {
+      // Créer un ID temporaire si l'utilisateur n'est pas authentifié
+      if (!req.session.tempUserId) {
+        req.session.tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      }
+      userId = req.session.tempUserId;
     }
 
     try {
@@ -118,8 +125,13 @@ export function registerRoutes(app: Express): Server {
 
   // Submit quiz and save results
   app.post("/api/quiz/submit", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
+    let userId;
+    if (req.isAuthenticated()) {
+      userId = req.user!.id;
+    } else if (req.session.tempUserId) {
+      userId = req.session.tempUserId;
+    } else {
+      return res.status(400).send("No valid user ID found");
     }
 
     const { sessionId } = req.body;
