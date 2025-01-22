@@ -203,4 +203,13 @@ export function setupAuth(app: Express) {
 
     res.status(401).send("Not logged in");
   });
+
+  app.post("/api/temp-user", (req, res) => {
+    const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    req.session.tempUserId = tempId;
+    res.json({
+      id: tempId,
+      isTemporary: true
+    });
+  });
 }

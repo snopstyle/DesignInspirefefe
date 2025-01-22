@@ -47,10 +47,24 @@ async function fetchUser(): Promise<User | null> {
 
   if (!response.ok) {
     if (response.status === 401) {
+      // Vérifier s'il y a un utilisateur temporaire
       const tempUser = sessionStorage.getItem('tempUser');
       if (tempUser) {
         return JSON.parse(tempUser);
       }
+
+      // Créer un nouvel utilisateur temporaire
+      const tempResponse = await fetch('/api/temp-user', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (tempResponse.ok) {
+        const tempUserData = await tempResponse.json();
+        sessionStorage.setItem('tempUser', JSON.stringify(tempUserData));
+        return tempUserData;
+      }
+
       return null;
     }
 
