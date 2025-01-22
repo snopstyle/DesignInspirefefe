@@ -25,7 +25,7 @@ function Router() {
     );
   }
 
-  if (!user) {
+  if (!user && window.location.pathname !== '/quiz') {
     return <AuthPage />;
   }
 

@@ -47,6 +47,10 @@ async function fetchUser(): Promise<User | null> {
 
   if (!response.ok) {
     if (response.status === 401) {
+      const tempUser = sessionStorage.getItem('tempUser');
+      if (tempUser) {
+        return JSON.parse(tempUser);
+      }
       return null;
     }
 
@@ -57,7 +61,11 @@ async function fetchUser(): Promise<User | null> {
     throw new Error(`${response.status}: ${await response.text()}`);
   }
 
-  return response.json();
+  const user = await response.json();
+  if (user.isTemporary) {
+    sessionStorage.setItem('tempUser', JSON.stringify(user));
+  }
+  return user;
 }
 
 export function useUser() {
