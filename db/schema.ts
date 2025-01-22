@@ -3,21 +3,6 @@ import { pgTable, text, timestamp, uuid, jsonb, varchar, decimal, boolean, seria
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// User table schema
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  email: varchar("email", { length: 255 }).notNull(),
-  password: text("password").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
-
-export const insertUserSchema = createInsertSchema(users);
-export const selectUserSchema = createSelectSchema(users);
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
-export type InsertUser = z.infer<typeof insertUserSchema>;
-
 // Profile traits table schema
 export const profileTraits = pgTable("profile_traits", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -44,23 +29,30 @@ export const questionWeights = pgTable("question_weights", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Quiz session table for tracking ongoing quizzes
+// Temporary user table
+export const tempUsers = pgTable("temp_users", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// Regular user table 
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  email: varchar("email", { length: 255 }).notNull(),
+  password: text("password").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// Quiz session table
 export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id"),  // For registered users
-  tempUserId: text("temp_user_id"), // For temporary users
+  userId: integer("user_id").references(() => users.id),
+  tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
   status: varchar("status", { length: 20 }).notNull().default('in_progress'),
   currentQuestionId: varchar("current_question_id", { length: 10 }),
   completedQuestions: jsonb("completed_questions").$type<string[]>().default([]).notNull(),
   answers: jsonb("answers").$type<Record<string, string>>().default({}).notNull(),
-  adaptivePath: jsonb("adaptive_path").$type<{
-    currentPath: string[];
-    branchingPoints: Record<string, {
-      question: string;
-      answer: string;
-      nextQuestion: string;
-    }>
-  }>().default({ currentPath: [], branchingPoints: {} }).notNull(),
   startedAt: timestamp("started_at").defaultNow().notNull(),
   lastUpdated: timestamp("last_updated").defaultNow().notNull(),
   completedAt: timestamp("completed_at")
@@ -69,8 +61,8 @@ export const quizSessions = pgTable("quiz_sessions", {
 // Quiz results table for storing completed quiz results
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id"),  // For registered users
-  tempUserId: text("temp_user_id"), // For temporary users
+  userId: integer("user_id"),  
+  tempUserId: uuid("temp_user_id"), 
   sessionId: uuid("session_id").notNull().references(() => quizSessions.id),
   answers: jsonb("answers").$type<Record<string, string>>().notNull(),
   adaptiveFlow: jsonb("adaptive_flow").$type<{
@@ -113,10 +105,18 @@ export const userRelations = relations(users, ({ many, one }) => ({
   })
 }));
 
+export const tempUserRelations = relations(tempUsers, ({ many }) => ({
+  quizSessions: many(quizSessions)
+}));
+
 export const quizSessionsRelations = relations(quizSessions, ({ one }) => ({
   user: one(users, {
     fields: [quizSessions.userId],
     references: [users.id],
+  }),
+  tempUser: one(tempUsers, {
+    fields: [quizSessions.tempUserId],
+    references: [tempUsers.id],
   })
 }));
 
@@ -137,6 +137,48 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
     references: [users.id],
   })
 }));
+
+// Schema generation for all tables
+export const insertProfileTraitsSchema = createInsertSchema(profileTraits);
+export const selectProfileTraitsSchema = createSelectSchema(profileTraits);
+export type ProfileTrait = typeof profileTraits.$inferSelect;
+export type NewProfileTrait = typeof profileTraits.$inferInsert;
+
+export const insertSubProfilesSchema = createInsertSchema(subProfiles);
+export const selectSubProfilesSchema = createSelectSchema(subProfiles);
+export type SubProfile = typeof subProfiles.$inferSelect;
+export type NewSubProfile = typeof subProfiles.$inferInsert;
+
+export const insertQuestionWeightsSchema = createInsertSchema(questionWeights);
+export const selectQuestionWeightsSchema = createSelectSchema(questionWeights);
+export type QuestionWeight = typeof questionWeights.$inferSelect;
+export type NewQuestionWeight = typeof questionWeights.$inferInsert;
+
+export const insertTempUserSchema = createInsertSchema(tempUsers);
+export const selectTempUserSchema = createSelectSchema(tempUsers);
+export type TempUser = typeof tempUsers.$inferSelect;
+export type NewTempUser = typeof tempUsers.$inferInsert;
+
+export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+export type InsertUser = z.infer<typeof insertUserSchema>;
+
+export const insertQuizSessionsSchema = createInsertSchema(quizSessions);
+export const selectQuizSessionsSchema = createSelectSchema(quizSessions);
+export type QuizSession = typeof quizSessions.$inferSelect;
+export type NewQuizSession = typeof quizSessions.$inferInsert;
+
+export const insertQuizResultsSchema = createInsertSchema(quizResults);
+export const selectQuizResultsSchema = createSelectSchema(quizResults);
+export type QuizResult = typeof quizResults.$inferSelect;
+export type NewQuizResult = typeof quizResults.$inferInsert;
+
+export const insertProfileCompletionSchema = createInsertSchema(profileCompletion);
+export const selectProfileCompletionSchema = createSelectSchema(profileCompletion);
+export type ProfileCompletion = typeof profileCompletion.$inferSelect;
+export type NewProfileCompletion = typeof profileCompletion.$inferInsert;
 
 export const formations = pgTable("formations", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -189,3 +231,28 @@ export const pedagogyTypes = pgTable("pedagogy_types", {
   alternance: boolean("alternance").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
+
+export const insertFormationsSchema = createInsertSchema(formations);
+export const selectFormationsSchema = createSelectSchema(formations);
+export type Formation = typeof formations.$inferSelect;
+export type NewFormation = typeof formations.$inferInsert;
+
+export const insertEstablishmentsSchema = createInsertSchema(establishments);
+export const selectEstablishmentsSchema = createSelectSchema(establishments);
+export type Establishment = typeof establishments.$inferSelect;
+export type NewEstablishment = typeof establishments.$inferInsert;
+
+export const insertLocationsSchema = createInsertSchema(locations);
+export const selectLocationsSchema = createSelectSchema(locations);
+export type Location = typeof locations.$inferSelect;
+export type NewLocation = typeof locations.$inferInsert;
+
+export const insertCostsSchema = createInsertSchema(costs);
+export const selectCostsSchema = createSelectSchema(costs);
+export type Cost = typeof costs.$inferSelect;
+export type NewCost = typeof costs.$inferInsert;
+
+export const insertPedagogyTypesSchema = createInsertSchema(pedagogyTypes);
+export const selectPedagogyTypesSchema = createSelectSchema(pedagogyTypes);
+export type PedagogyType = typeof pedagogyTypes.$inferSelect;
+export type NewPedagogyType = typeof pedagogyTypes.$inferInsert;
