@@ -24,16 +24,22 @@ export default function Quiz() {
         });
 
         if (!response.ok) {
+          console.error('Server response:', await response.text());
           throw new Error(`Failed to create temporary user: ${response.status}`);
         }
 
         const data = await response.json();
+        console.log('Temp user created:', data);
+        
         if (!data.id) {
           throw new Error('No user ID returned from server');
         }
 
         sessionStorage.setItem('tempUser', JSON.stringify(data));
-        window.location.reload(); // Reload to ensure session is properly initialized
+        
+        // Wait for session to be properly saved
+        await new Promise(resolve => setTimeout(resolve, 100));
+        window.location.reload();
       } catch (error) {
         console.error('Error creating temp user:', error);
       } finally {

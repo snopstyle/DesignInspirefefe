@@ -27,23 +27,21 @@ export function registerRoutes(app: Express): Server {
 
       // Set session data
       req.session.tempUserId = tempUser.id;
-
-      // Save session explicitly
+      
+      // Save session with Promise
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
-            console.error('Failed to save session:', err);
             console.error('Session save error:', err);
             reject(err);
             return;
           }
-          console.log('Created temp user:', tempUser.id, 'with session:', req.sessionID);
           resolve();
         });
       });
 
-      console.log('Created temp user:', tempUser.id, 'Session ID:', req.sessionID);
-      res.json({ id: tempUser.id, sessionId: req.sessionID });
+      console.log('Created temp user:', tempUser.id, 'Session ID:', req.sessionID, 'TempUserId:', req.session.tempUserId);
+      res.status(200).json({ id: tempUser.id, sessionId: req.sessionID });
     } catch (error) {
       console.error('Error creating temporary user:', error);
       res.status(500).json({ 
