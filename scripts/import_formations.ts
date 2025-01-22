@@ -49,7 +49,9 @@ function parseDomains(domainsText: string): string[] {
 
 async function importFormations() {
   try {
-    const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Non_Public.xlsx'));
+    const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Lightened.xlsx'), {
+  codepage: 65001 // UTF-8 encoding
+});
     const sheetName = workbook.SheetNames[0];
     const rawData = xlsx.utils.sheet_to_json<ExcelRow>(workbook.Sheets[sheetName]);
 
