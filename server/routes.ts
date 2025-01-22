@@ -14,9 +14,12 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
-      const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      req.session.tempUserId = tempId;
-
+      // First create temp user in database
+      const [tempUser] = await db.insert(tempUsers).values({}).returning();
+      
+      // Set the ID in session
+      req.session.tempUserId = tempUser.id;
+      
       // Save session explicitly
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
@@ -28,8 +31,8 @@ export function registerRoutes(app: Express): Server {
         });
       });
 
-      console.log('Created temp user:', tempId);
-      res.json({ id: tempId });
+      console.log('Created temp user:', tempUser.id);
+      res.json({ id: tempUser.id });
     } catch (error) {
       console.error('Error creating temporary user:', error);
       res.status(500).json({ error: "Failed to create temporary user" });
