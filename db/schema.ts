@@ -8,7 +8,8 @@ import {
   boolean,
   serial,
   integer,
-  jsonb
+  jsonb,
+  varchar
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -20,7 +21,7 @@ export const establishments = pgTable("establishments", {
   statut: text("statut").notNull(),
   hebergement: boolean("hebergement").default(false),
   lien: text("lien"),
-  tel: text("tel"), // Changé de varchar à text
+  tel: text("tel"),
   facebook: text("facebook"),
   instagram: text("instagram"),
   linkedin: text("linkedin"),
@@ -40,8 +41,8 @@ export const locations = pgTable("locations", {
 // Coûts
 export const costs = pgTable("costs", {
   id: uuid("id").defaultRandom().primaryKey(),
-  montant: decimal("montant").notNull(), // Supprimé la précision pour utiliser le type numeric par défaut
-  devise: text("devise").default("EUR"), // Changé de varchar à text
+  montant: decimal("montant").notNull(),
+  devise: text("devise").default("EUR"),
   gratuitApprentissage: boolean("gratuit_apprentissage").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
@@ -127,14 +128,11 @@ export const tempUsers = pgTable("temp_users", {
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
 
-// Profile traits table schema
-
-
 // Regular user table 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
-  email: varchar("email", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(), // Maintenu comme varchar(255)
   password: text("password").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
@@ -144,8 +142,8 @@ export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id").references(() => users.id),
   tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
-  status: varchar("status", { length: 20 }).notNull().default('in_progress'),
-  currentQuestionId: varchar("current_question_id", { length: 10 }),
+  status: text("status").notNull().default('in_progress'),
+  currentQuestionId: text("current_question_id"),
   completedQuestions: jsonb("completed_questions").$type<string[]>().default([]).notNull(),
   answers: jsonb("answers").$type<Record<string, string>>().default({}).notNull(),
   startedAt: timestamp("started_at").defaultNow().notNull(),
@@ -153,11 +151,11 @@ export const quizSessions = pgTable("quiz_sessions", {
   completedAt: timestamp("completed_at")
 });
 
-// Quiz results table for storing completed quiz results
+// Quiz results table
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id"),  
-  tempUserId: uuid("temp_user_id"), 
+  userId: integer("user_id"),
+  tempUserId: uuid("temp_user_id"),
   sessionId: uuid("session_id").notNull().references(() => quizSessions.id),
   answers: jsonb("answers").$type<Record<string, string>>().notNull(),
   adaptiveFlow: jsonb("adaptive_flow").$type<{
@@ -169,8 +167,8 @@ export const quizResults = pgTable("quiz_results", {
     }>
   }>().notNull(),
   traitScores: jsonb("trait_scores").$type<Record<string, number>>().notNull(),
-  dominantProfile: varchar("dominant_profile", { length: 100 }).notNull(),
-  subProfile: varchar("sub_profile", { length: 100 }).notNull(),
+  dominantProfile: text("dominant_profile").notNull(),
+  subProfile: text("sub_profile").notNull(),
   traits: jsonb("traits").$type<string[]>().notNull(),
   profileMatchScores: jsonb("profile_match_scores").$type<Record<string, number>>().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
@@ -190,7 +188,7 @@ export const profileCompletion = pgTable("profile_completion", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Define relations
+// Relations
 export const userRelations = relations(users, ({ many, one }) => ({
   quizSessions: many(quizSessions),
   quizResults: many(quizResults),
@@ -234,7 +232,6 @@ export const profileCompletionRelations = relations(profileCompletion, ({ one })
 }));
 
 // Schema generation for all tables
-
 export const insertTempUserSchema = createInsertSchema(tempUsers);
 export const selectTempUserSchema = createSelectSchema(tempUsers);
 export type TempUser = typeof tempUsers.$inferSelect;

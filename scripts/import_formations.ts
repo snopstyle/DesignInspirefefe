@@ -49,9 +49,7 @@ function parseDomains(domainsText: string): string[] {
 
 async function importFormations() {
   try {
-    const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Lightened.xlsx'), {
-  codepage: 65001 // UTF-8 encoding
-});
+    const workbook = xlsx.readFile(path.join(process.cwd(), 'attached_assets/Top_250_Cities_Lightened.xlsx'));
     const sheetName = workbook.SheetNames[0];
     const rawData = xlsx.utils.sheet_to_json<ExcelRow>(workbook.Sheets[sheetName]);
 
@@ -85,9 +83,8 @@ async function importFormations() {
           }).returning();
 
           // Create cost record
-          const montantMatch = (item.Coût || '0').match(/\d+/);
           const [cost] = await db.insert(costs).values({
-            montant: montantMatch ? parseFloat(montantMatch[0]) : 0,
+            montant: parseFloat(item.Coût?.match(/\d+/)?.[0] || '0'),
             devise: 'EUR',
             gratuitApprentissage: /gratuit|apprentissage/i.test(item.Coût || '')
           }).returning();
