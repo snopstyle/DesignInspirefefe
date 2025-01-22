@@ -189,9 +189,7 @@ export const formations = pgTable("formations", {
   niveau: text("niveau").notNull(),
   type: text("type").notNull(),
   domaines: text("domaines").array().notNull(),
-  costId: uuid("cost_id").notNull().references(() => costs.id),
   duree: text("duree").notNull(),
-  pedagogyId: uuid("pedagogy_id").notNull().references(() => pedagogyTypes.id),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
@@ -217,22 +215,6 @@ export const locations = pgTable("locations", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-export const costs = pgTable("costs", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  montant: decimal("montant").notNull(),
-  devise: text("devise").notNull(),
-  gratuitApprentissage: boolean("gratuit_apprentissage").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
-
-export const pedagogyTypes = pgTable("pedagogy_types", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  tempsPlein: boolean("temps_plein").notNull(),
-  presentiel: boolean("presentiel").notNull(),
-  alternance: boolean("alternance").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
-});
-
 export const insertFormationsSchema = createInsertSchema(formations);
 export const selectFormationsSchema = createSelectSchema(formations);
 export type Formation = typeof formations.$inferSelect;
@@ -248,12 +230,3 @@ export const selectLocationsSchema = createSelectSchema(locations);
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
 
-export const insertCostsSchema = createInsertSchema(costs);
-export const selectCostsSchema = createSelectSchema(costs);
-export type Cost = typeof costs.$inferSelect;
-export type NewCost = typeof costs.$inferInsert;
-
-export const insertPedagogyTypesSchema = createInsertSchema(pedagogyTypes);
-export const selectPedagogyTypesSchema = createSelectSchema(pedagogyTypes);
-export type PedagogyType = typeof pedagogyTypes.$inferSelect;
-export type NewPedagogyType = typeof pedagogyTypes.$inferInsert;
