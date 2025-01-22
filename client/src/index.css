@@ -11,3 +11,15 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+.text-white {
+  color: rgb(255, 255, 255) !important;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+}
+
+.text-white\/70 {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+  font-weight: 400;
+}
