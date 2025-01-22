@@ -1,9 +1,9 @@
-import { pgTable, text, timestamp, uuid, integer, jsonb, boolean, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, integer, jsonb, boolean, decimal, relations } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { users } from "./auth";
 
 // Temporary users for quiz sessions
-export const tempUsers = pgTable("temp_users", {
+export const tempUsers = pgTable("quiz_temp_users", {
   id: uuid("id").defaultRandom().primaryKey(),
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
@@ -11,7 +11,7 @@ export const tempUsers = pgTable("temp_users", {
 // Quiz session table
 export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id"), // Optional reference to auth db user
+  userId: integer("user_id").references(() => users.id),
   tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
   status: text("status").notNull().default('in_progress'),
   currentQuestionId: text("current_question_id"),
@@ -25,9 +25,9 @@ export const quizSessions = pgTable("quiz_sessions", {
 // Quiz results table
 export const quizResults = pgTable("quiz_results", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id"),
-  tempUserId: uuid("temp_user_id"),
-  sessionId: uuid("session_id").notNull().references(() => quizSessions.id),
+  userId: integer("user_id").references(() => users.id),
+  tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
+  sessionId: uuid("session_id").references(() => quizSessions.id),
   answers: jsonb("answers").$type<Record<string, string>>().notNull(),
   adaptiveFlow: jsonb("adaptive_flow").$type<{
     path: string[];
@@ -46,9 +46,9 @@ export const quizResults = pgTable("quiz_results", {
 });
 
 // Profile completion tracking
-export const profileCompletion = pgTable("profile_completion", {
+export const profileCompletion = pgTable("quiz_profile_completion", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id").notNull().unique(),
+  userId: integer("user_id").references(() => users.id).notNull().unique(),
   basicInfoCompleted: boolean("basic_info_completed").default(false).notNull(),
   traitsAssessmentCompleted: boolean("traits_assessment_completed").default(false).notNull(),
   personalityQuizCompleted: boolean("personality_quiz_completed").default(false).notNull(),
@@ -59,22 +59,67 @@ export const profileCompletion = pgTable("profile_completion", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Relations
+export const tempUserRelations = relations(tempUsers, ({ many }) => ({
+  quizSessions: many(quizSessions),
+  quizResults: many(quizResults)
+}));
+
+export const quizSessionRelations = relations(quizSessions, ({ one }) => ({
+  user: one(users, {
+    fields: [quizSessions.userId],
+    references: [users.id],
+  }),
+  tempUser: one(tempUsers, {
+    fields: [quizSessions.tempUserId],
+    references: [tempUsers.id],
+  })
+}));
+
+export const quizResultRelations = relations(quizResults, ({ one }) => ({
+  user: one(users, {
+    fields: [quizResults.userId],
+    references: [users.id],
+  }),
+  tempUser: one(tempUsers, {
+    fields: [quizResults.tempUserId],
+    references: [tempUsers.id],
+  }),
+  session: one(quizSessions, {
+    fields: [quizResults.sessionId],
+    references: [quizSessions.id],
+  })
+}));
+
+export const profileCompletionRelations = relations(profileCompletion, ({ one }) => ({
+  user: one(users, {
+    fields: [profileCompletion.userId],
+    references: [users.id],
+  })
+}));
+
 // Schema generation
 export const insertTempUserSchema = createInsertSchema(tempUsers);
 export const selectTempUserSchema = createSelectSchema(tempUsers);
+
 export const insertQuizSessionSchema = createInsertSchema(quizSessions);
 export const selectQuizSessionSchema = createSelectSchema(quizSessions);
+
 export const insertQuizResultSchema = createInsertSchema(quizResults);
 export const selectQuizResultSchema = createSelectSchema(quizResults);
+
 export const insertProfileCompletionSchema = createInsertSchema(profileCompletion);
 export const selectProfileCompletionSchema = createSelectSchema(profileCompletion);
 
 // Types
 export type TempUser = typeof tempUsers.$inferSelect;
 export type NewTempUser = typeof tempUsers.$inferInsert;
+
 export type QuizSession = typeof quizSessions.$inferSelect;
 export type NewQuizSession = typeof quizSessions.$inferInsert;
+
 export type QuizResult = typeof quizResults.$inferSelect;
 export type NewQuizResult = typeof quizResults.$inferInsert;
+
 export type ProfileCompletion = typeof profileCompletion.$inferSelect;
 export type NewProfileCompletion = typeof profileCompletion.$inferInsert;

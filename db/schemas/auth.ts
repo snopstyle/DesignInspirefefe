@@ -3,7 +3,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Regular user table 
-export const users = pgTable("users", {
+export const users = pgTable("auth_users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   email: varchar("email", { length: 255 }).notNull(),

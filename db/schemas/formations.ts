@@ -10,13 +10,13 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 // Établissements
-export const establishments = pgTable("establishments", {
+export const establishments = pgTable("formation_establishments", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   statut: text("statut").notNull(),
   hebergement: boolean("hebergement").default(false),
-  lien: text("lien"),
-  tel: text("tel"),
+  lien: text("lien"), // Nullable and unique when not null
+  tel: text("tel"), // Nullable and unique when not null
   facebook: text("facebook"),
   instagram: text("instagram"),
   linkedin: text("linkedin"),
@@ -24,17 +24,17 @@ export const establishments = pgTable("establishments", {
 });
 
 // Localisations
-export const locations = pgTable("locations", {
+export const locations = pgTable("formation_locations", {
   id: uuid("id").defaultRandom().primaryKey(),
   ville: text("ville").notNull(),
   region: text("region").notNull(),
   departement: text("departement").notNull(),
-  adresse: text("adresse").notNull(),
+  adresse: text("adresse").notNull(), // Unique when not null
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 // Coûts
-export const costs = pgTable("costs", {
+export const costs = pgTable("formation_costs", {
   id: uuid("id").defaultRandom().primaryKey(),
   montant: decimal("montant").notNull(),
   devise: text("devise").default("EUR"),
@@ -43,7 +43,7 @@ export const costs = pgTable("costs", {
 });
 
 // Types de pédagogie
-export const pedagogyTypes = pgTable("pedagogy_types", {
+export const pedagogyTypes = pgTable("formation_pedagogy_types", {
   id: uuid("id").defaultRandom().primaryKey(),
   tempsPlein: boolean("temps_plein").default(false),
   presentiel: boolean("presentiel").default(false),
@@ -52,7 +52,7 @@ export const pedagogyTypes = pgTable("pedagogy_types", {
 });
 
 // Formations (table principale)
-export const formations = pgTable("formations", {
+export const formations = pgTable("formation_formations", {
   id: uuid("id").defaultRandom().primaryKey(),
   formation: text("formation").notNull(),
   etablissementId: uuid("etablissement_id").references(() => establishments.id),
