@@ -1,4 +1,3 @@
-
 import { useQuiz } from "@/hooks/use-quiz";
 import { QuestionCard } from "@/components/quiz/question-card";
 import { GradientBackground } from "@/components/layout/gradient-background";
@@ -47,22 +46,22 @@ export default function Quiz() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <div className="cursor-pointer bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
                   <p className="text-white/70">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
                 </div>
-                
-                <div className="cursor-pointer bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 transition-colors rounded-lg p-4">
+
+                <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">PASSIONS & INTÉRÊTS</h3>
                   <p className="text-white/70">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
                 </div>
-                
-                <div className="cursor-pointer bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 transition-colors rounded-lg p-4">
+
+                <div className="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">PROJET D'ÉTUDES</h3>
                   <p className="text-white/70">Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
                 </div>
               </div>
-              
+
               <Button 
                 onClick={() => setShowWelcome(false)}
                 className="w-full bg-gradient-to-r from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white py-6 text-lg"
