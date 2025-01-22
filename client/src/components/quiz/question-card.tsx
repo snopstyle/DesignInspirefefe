@@ -45,7 +45,7 @@ useEffect(() => {
   const shouldUseTagLayout = (question.format === "Multiple choice" || question.format === "Multiple selection") && question.options.length > 8;
 
   const answerElementStyle =
-    "flex items-center justify-center rounded-2xl border border-white/10 p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30";
+    "flex items-center justify-center rounded-2xl border border-white/10 p-4 transition-all duration-300 cursor-pointer text-center text-lg font-medium w-full h-full hover:bg-gradient-to-r hover:from-orange-500/30 hover:to-purple-500/30 hover:border-white/50";
 
   const handleMultipleSelection = (option: string) => {
     let newAnswers;
@@ -132,7 +132,7 @@ useEffect(() => {
                   <div
                     className={`${answerElementStyle} ${
                       multipleChoiceAnswers.includes(option) 
-                        ? "bg-gradient-to-r from-orange-500/20 to-purple-500/20 border-white/30" 
+                        ? "bg-gradient-to-r from-orange-500/30 to-purple-500/30 border-white/50" 
                         : ""
                     }`}
                     onClick={() => handleMultipleSelection(option)}
@@ -195,8 +195,8 @@ useEffect(() => {
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className="w-full max-w-2xl mx-auto"
     >
-      
-      <Card className="bg-background/80 backdrop-blur-sm border-white/10 shadow-xl rounded-2xl">
+
+      <Card className="bg-background/80 backdrop-blur-sm border-white/20 shadow-xl rounded-2xl">
         <CardHeader className="space-y-6">
           <motion.div
             key={question.text}
@@ -222,7 +222,7 @@ useEffect(() => {
               className="px-6"
             >
               <Button
-                className="w-full bg-gradient-neo from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 text-white rounded-2xl p-6 text-lg font-medium"
+                className="w-full bg-gradient-neo from-orange-500/90 to-purple-500/90 hover:from-orange-600 hover:to-purple-600 text-white rounded-2xl p-6 text-lg font-medium shadow-md"
                 onClick={() => {
                   if (isMultipleSelectionQuestion) {
                     onAnswer(multipleChoiceAnswers, false);

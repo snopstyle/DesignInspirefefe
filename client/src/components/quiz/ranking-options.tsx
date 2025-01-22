@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion, Reorder } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -37,7 +36,7 @@ export function RankingOptions({ options, onRankingChange, currentRanking = [] }
             value={item}
             className={cn(
               "flex items-center gap-3 p-4 rounded-lg cursor-move",
-              "bg-white/5 hover:bg-white/10 border border-white/10",
+              "bg-white/15 hover:bg-white/30 shadow-md hover:shadow-lg transition-all",
               "transition-colors duration-200"
             )}
           >

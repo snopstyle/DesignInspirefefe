@@ -25,12 +25,33 @@
 
 .text-white {
   color: rgb(255, 255, 255) !important;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+}
+
+.text-white\/70 {
+  color: rgba(255, 255, 255, 0.95) !important;
   text-shadow: 0 0 1px rgba(255, 255, 255, 0.2);
   font-weight: 500;
 }
 
-.text-white\/70 {
-  color: rgba(255, 255, 255, 0.9) !important;
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
-  font-weight: 400;
+.bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(8px);
+}
+
+.bg-white\/10:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.bg-gradient-to-r {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

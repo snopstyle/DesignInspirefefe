@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -22,11 +21,11 @@ export function TagOptions({ options, selectedOptions, onToggle }: TagOptionsPro
             transition={{ delay: index * 0.03 }}
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
-              "border border-white/10",
-              "focus:outline-none focus:ring-2 focus:ring-white/20",
+              "border border-white/20", // Increased border opacity
+              "focus:outline-none focus:ring-2 focus:ring-white/40", // Increased focus ring opacity
               isSelected ? 
-                "bg-gradient-to-r from-orange-500/20 to-purple-500/20 text-white border-white/30" :
-                "bg-white/5 hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-purple-500/20 hover:border-white/30 text-white/70 hover:text-white"
+                "bg-gradient-to-r from-orange-500/40 to-purple-500/40 text-white border-white/50 shadow-md" : // Increased opacity and added shadow
+                "bg-white/10 hover:bg-gradient-to-r hover:from-orange-500/40 hover:to-purple-500/40 hover:border-white/50 text-white/80 hover:text-white shadow-sm hover:shadow-md" // Increased opacity, added shadow and hover effects
             )}
           >
             {option}
