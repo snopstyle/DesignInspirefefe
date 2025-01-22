@@ -17,25 +17,39 @@ export function registerRoutes(app: Express): Server {
       // First create temp user in database
       const [tempUser] = await db.insert(tempUsers).values({}).returning();
       
+      if (!tempUser || !tempUser.id) {
+        throw new Error('Failed to create temp user in database');
+      }
+
       // Set the ID in session
       req.session.tempUserId = tempUser.id;
       
-      // Save session explicitly
+      // Save session with better error handling
       await new Promise<void>((resolve, reject) => {
+        if (!req.session) {
+          reject(new Error('No session found'));
+          return;
+        }
+        
         req.session.save((err) => {
           if (err) {
             console.error('Session save error:', err);
             reject(err);
+            return;
           }
+          console.log('Session saved successfully with temp user:', tempUser.id);
           resolve();
         });
       });
 
-      console.log('Created temp user:', tempUser.id);
-      res.json({ id: tempUser.id });
+      console.log('Created temp user:', tempUser.id, 'Session ID:', req.sessionID);
+      res.json({ id: tempUser.id, sessionId: req.sessionID });
     } catch (error) {
       console.error('Error creating temporary user:', error);
-      res.status(500).json({ error: "Failed to create temporary user" });
+      res.status(500).json({ 
+        error: "Failed to create temporary user",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
