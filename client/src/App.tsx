@@ -1,4 +1,3 @@
-
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -15,21 +14,7 @@ import { NavButtons } from "@/components/layout/nav-buttons";
 import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
 
-function Router() {
-  const { user, isLoading } = useUser();
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-border" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <AuthPage />;
-  }
-
+function AuthenticatedRoutes() {
   return (
     <>
       <NavButtons />
@@ -45,6 +30,24 @@ function Router() {
       </Switch>
     </>
   );
+}
+
+function Router() {
+  const { user, isLoading } = useUser();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-border" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage />;
+  }
+
+  return <AuthenticatedRoutes />;
 }
 
 function App() {
