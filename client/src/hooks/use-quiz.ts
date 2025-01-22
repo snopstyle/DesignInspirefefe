@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useLocation } from 'wouter';
 import quizData from '../lib/quiz-data.json';
@@ -7,16 +8,15 @@ export function useQuiz() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [, setLocation] = useLocation();
 
-  const currentQuestion = quizData[currentQuestionIndex];
+  const currentQuestion = quizData.questions[currentQuestionIndex];
 
   const handleAnswer = (answer: string) => {
     const newAnswers = { ...answers, [currentQuestion.id]: answer };
     setAnswers(newAnswers);
 
-    if (currentQuestionIndex < quizData.length - 1) {
+    if (currentQuestionIndex < quizData.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Store answers in sessionStorage for results page
       sessionStorage.setItem('quizAnswers', JSON.stringify(newAnswers));
       setLocation('/results');
     }
