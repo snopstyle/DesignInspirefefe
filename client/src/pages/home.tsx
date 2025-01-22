@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Brain, Target, Compass, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { GradientBackground } from "@/components/layout/gradient-background";
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -31,8 +32,8 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 transition-all duration-1000 bg-[length:400%_400%] animate-[gradient_15s_ease_infinite]">
-      <div className="relative container mx-auto px-4 py-16">
+    <GradientBackground>
+      <div className="container mx-auto px-4 py-16">
         <AnimatePresence>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -43,7 +44,7 @@ export default function Home() {
             <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-6 drop-shadow-lg">
               Votre Avenir, Votre Choix
             </h1>
-            <p className="text-2xl text-gray-300 drop-shadow">
+            <p className="text-2xl text-white/80">
               Commencez votre voyage vers une orientation professionnelle éclairée
             </p>
           </motion.div>
@@ -55,9 +56,10 @@ export default function Home() {
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.2, duration: 0.6 }}
-                className="group transition-all duration-300"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <Card className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl group-hover:bg-white/20 group-hover:scale-105 transition-all duration-300">
+                <Card className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <div className="p-2 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30">
                       <feature.icon className="h-8 w-8 text-purple-300" />
@@ -92,6 +94,6 @@ export default function Home() {
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
+    </GradientBackground>
   );
 }
