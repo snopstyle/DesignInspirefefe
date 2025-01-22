@@ -21,23 +21,30 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Failed to create temp user in database');
       }
 
-      // Set the ID in session
+      // Regenerate session to ensure clean state
+      await new Promise<void>((resolve, reject) => {
+        req.session.regenerate((err) => {
+          if (err) {
+            console.error('Session regeneration error:', err);
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      });
+
+      // Set the temp user ID in the new session
       req.session.tempUserId = tempUser.id;
       
-      // Save session with better error handling
+      // Save session explicitly
       await new Promise<void>((resolve, reject) => {
-        if (!req.session) {
-          reject(new Error('No session found'));
-          return;
-        }
-        
         req.session.save((err) => {
           if (err) {
             console.error('Session save error:', err);
             reject(err);
             return;
           }
-          console.log('Session saved successfully with temp user:', tempUser.id);
+          console.log('Session saved with temp user ID:', tempUser.id);
           resolve();
         });
       });
