@@ -38,7 +38,7 @@ export default function Quiz() {
     return (
       <GradientBackground>
         <div className="container mx-auto min-h-screen flex flex-col items-center justify-center p-4">
-          <Card className="w-full max-w-3xl bg-background/80 backdrop-blur-sm">
+          <Card className="w-full max-w-3xl bg-transparent backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-3xl text-center">Bienvenue dans votre Parcours d'Orientation</CardTitle>
               <CardDescription className="text-lg text-center mt-2">
@@ -47,17 +47,17 @@ export default function Quiz() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <div className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">QUESTIONNAIRE DU PROFIL PSYCHO-SOCIAL</h3>
                   <p className="text-white/70">Explorez vos traits de personnalité, vos préférences de travail et vos aptitudes naturelles pour mieux comprendre votre façon d'être et d'interagir.</p>
                 </div>
                 
-                <div className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">PASSIONS & INTÉRÊTS</h3>
                   <p className="text-white/70">Identifiez vos domaines de prédilection, vos motivations profondes et vos aspirations professionnelles pour orienter votre parcours vers des domaines qui vous passionnent.</p>
                 </div>
                 
-                <div className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors rounded-lg p-4">
+                <div className="cursor-pointer bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 transition-colors rounded-lg p-4">
                   <h3 className="text-xl font-bold mb-2">PROJET D'ÉTUDES</h3>
                   <p className="text-white/70">Définissez les aspects pratiques de votre formation : budget, durée, localisation et critères prioritaires pour choisir votre établissement idéal.</p>
                 </div>
