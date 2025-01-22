@@ -32,39 +32,20 @@ export function registerRoutes(app: Express): Server {
       res.json({ id: tempId });
     } catch (error) {
       console.error('Error creating temporary user:', error);
-      res.status(500).json({ 
-        error: "Failed to create temporary user",
-        details: error instanceof Error ? error.message : String(error)
-      });
+      res.status(500).json({ error: "Failed to create temporary user" });
     }
   });
 
   // Start a new quiz session
   app.post("/api/quiz/session", async (req, res) => {
+    console.log('Session data:', req.session);
     if (!req.session.tempUserId) {
       console.error('No temp user ID in session');
-      return res.status(400).json({
-        error: "No valid user ID found. Please refresh the page."
-      });
+      return res.status(400).json({ error: "No valid user ID found" });
     }
 
     try {
-      console.log('Starting quiz session for temp user:', req.session.tempUserId);
-
-      // Check for existing incomplete session
-      const existingSession = await db.query.quizSessions.findFirst({
-        where: (sessions, { and, eq }) =>
-          and(
-            eq(sessions.tempUserId, req.session.tempUserId),
-            eq(sessions.status, 'in_progress')
-          ),
-        orderBy: desc(quizSessions.startedAt)
-      });
-
-      if (existingSession) {
-        console.log('Found existing session:', existingSession.id);
-        return res.json(existingSession);
-      }
+      console.log('Creating quiz session for temp user:', req.session.tempUserId);
 
       // Create new session
       const [newSession] = await db.insert(quizSessions)
@@ -80,26 +61,71 @@ export function registerRoutes(app: Express): Server {
       console.log('Created new session:', newSession.id);
       res.json(newSession);
     } catch (error) {
-      console.error('Error managing quiz session:', error);
-      res.status(500).json({
-        error: "Failed to manage quiz session",
-        details: error instanceof Error ? error.message : String(error)
+      console.error('Error creating quiz session:', error);
+      res.status(500).json({ error: "Failed to create quiz session" });
+    }
+  });
+
+  // Update quiz session with answer
+  app.patch("/api/quiz/session/:sessionId", async (req, res) => {
+    console.log('Update session - Session data:', req.session);
+    console.log('Update session - Request body:', req.body);
+
+    const { sessionId } = req.params;
+    const { questionId, answer, nextQuestionId } = req.body;
+
+    if (!req.session.tempUserId) {
+      console.error('No temp user ID in session during update');
+      return res.status(400).json({ error: "No valid user ID found" });
+    }
+
+    try {
+      // First, verify the session belongs to this user
+      const session = await db.query.quizSessions.findFirst({
+        where: (sessions, { and, eq }) =>
+          and(
+            eq(sessions.id, sessionId),
+            eq(sessions.tempUserId, req.session.tempUserId),
+            eq(sessions.status, 'in_progress')
+          )
       });
+
+      if (!session) {
+        console.error('Session not found or not accessible:', sessionId);
+        return res.status(404).json({ error: "Session not found" });
+      }
+
+      console.log('Updating session:', sessionId, 'with answer for question:', questionId);
+
+      // Update the session
+      const [updatedSession] = await db.update(quizSessions)
+        .set({
+          answers: { ...session.answers, [questionId]: answer },
+          completedQuestions: [...session.completedQuestions, questionId],
+          currentQuestionId: nextQuestionId,
+          lastUpdated: new Date()
+        })
+        .where(eq(quizSessions.id, sessionId))
+        .returning();
+
+      console.log('Session updated successfully');
+      res.json(updatedSession);
+    } catch (error) {
+      console.error('Error updating quiz session:', error);
+      res.status(500).json({ error: "Failed to update quiz session" });
     }
   });
 
   // Get current quiz session
   app.get("/api/quiz/session/current", async (req, res) => {
+    console.log('Get current session - Session data:', req.session);
+
     if (!req.session.tempUserId) {
-      console.error('No temp user ID in session for current session request');
-      return res.status(400).json({
-        error: "No valid user ID found"
-      });
+      console.error('No temp user ID in session during get current');
+      return res.status(400).json({ error: "No valid user ID found" });
     }
 
     try {
-      console.log('Fetching current session for temp user:', req.session.tempUserId);
-
       const session = await db.query.quizSessions.findFirst({
         where: (sessions, { and, eq }) =>
           and(
@@ -109,13 +135,11 @@ export function registerRoutes(app: Express): Server {
         orderBy: desc(quizSessions.startedAt)
       });
 
+      console.log('Found current session:', session?.id);
       res.json(session || null);
     } catch (error) {
       console.error('Error fetching current session:', error);
-      res.status(500).json({
-        error: "Failed to fetch current session",
-        details: error instanceof Error ? error.message : String(error)
-      });
+      res.status(500).json({ error: "Failed to fetch current session" });
     }
   });
 
@@ -276,8 +300,6 @@ export function registerRoutes(app: Express): Server {
       res.status(500).send("Failed to update profile completion status");
     }
   });
-
-  // Get current quiz session (duplicate removed)
 
   // Search endpoint
   app.get('/api/search', async (req, res) => {
