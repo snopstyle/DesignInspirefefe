@@ -19,6 +19,7 @@ interface FormationResult {
   etablissement: string;
   domaines: string[];
   ville: string;
+  duree: string;
   lien?: string;
   facebook?: string;
   instagram?: string;
@@ -142,6 +143,7 @@ export default function SearchPage() {
                     etablissement={result.etablissement}
                     domaines={result.domaines}
                     ville={result.ville}
+                    duree={result.duree}
                     officialLink={result.lien}
                     socialLinks={{
                       linkedin: result.linkedin,

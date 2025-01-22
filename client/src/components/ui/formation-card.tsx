@@ -2,13 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SiLinkedin, SiFacebook, SiInstagram } from "react-icons/si";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Clock } from "lucide-react";
 
 interface FormationCardProps {
   formation: string;
   etablissement: string;
   domaines: string[];
   ville: string;
+  duree: string;
   officialLink?: string;
   socialLinks?: {
     linkedin?: string;
@@ -22,6 +23,7 @@ export function FormationCard({
   etablissement,
   domaines,
   ville,
+  duree,
   officialLink,
   socialLinks
 }: FormationCardProps) {
@@ -34,7 +36,18 @@ export function FormationCard({
           </span>
         </CardTitle>
         <div className="text-lg text-muted-foreground">{etablissement}</div>
-        <div className="text-sm text-muted-foreground">{ville}</div>
+        <div className="text-sm text-muted-foreground flex items-center gap-2">
+          <span>{ville}</span>
+          {duree && (
+            <>
+              <span className="text-muted-foreground/50">•</span>
+              <span className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                {duree}
+              </span>
+            </>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2 mb-4">
