@@ -7,6 +7,7 @@ import { Brain, Target, Compass, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
+  console.log("Home component mounting");
   const [, setLocation] = useLocation();
 
   const features = [
