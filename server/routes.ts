@@ -69,15 +69,18 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/users/temp", async (req, res) => {
     try {
+      const { username } = req.body;
+      
       // Check if user already exists in session
       if (req.session.tempUserId) {
         console.log('Using existing temp user:', req.session.tempUserId);
-        return res.json({ id: req.session.tempUserId });
+        return res.json({ success: true, id: req.session.tempUserId });
       }
 
       // Create temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({
+          username: username || 'Anonymous',
           createdAt: new Date()
         })
         .returning();
@@ -86,9 +89,8 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Failed to create temp user');
       }
 
-      // Set session data
+      // Set session data and save immediately
       req.session.tempUserId = tempUser.id;
-      req.session.createdAt = new Date();
       
       // Force session save and wait for completion
       await new Promise<void>((resolve, reject) => {

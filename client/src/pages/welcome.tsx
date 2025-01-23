@@ -31,10 +31,13 @@ export default function WelcomePage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username })
+        body: JSON.stringify({ username }),
+        credentials: 'include'
       });
 
-      if (!response.ok) throw new Error();
+      if (!response.ok) {
+        throw new Error('Failed to create temporary user');
+      }
 
       const { id } = await response.json();
       setTempUserId(id);
