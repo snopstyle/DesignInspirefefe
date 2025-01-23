@@ -99,6 +99,11 @@ export default function About() {
           </p>
 
           <h4 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Quelques chiffres sur GURU</h4>
+          <ul className="list-disc pl-6 text-gray-200 space-y-2">
+            <li className="text-justify">4 575 371 842 541 461 504 possibilités de réponses à notre questionnaire</li>
+            <li className="text-justify">8942 formations</li>
+            <li className="text-justify">1768 établissements référencés</li>
+          </ul>
           
         </CardContent>
       </Card>
