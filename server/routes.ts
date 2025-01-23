@@ -20,11 +20,20 @@ declare module 'express-session' {
 
   app.post('/api/users/temp', async (req, res) => {
     try {
+      if (req.session.tempUserId) {
+        console.log('Using existing temp user:', req.session.tempUserId);
+        return res.json({ success: true, id: req.session.tempUserId });
+      }
+
       const { username } = req.body;
       const [user] = await db.insert(tempUsers).values({
         username: username || 'Anonymous',
         createdAt: new Date()
       }).returning();
+
+      if (!user?.id) {
+        throw new Error('Failed to create temp user');
+      }
       
       req.session.tempUserId = user.id;
       await new Promise<void>((resolve, reject) => {

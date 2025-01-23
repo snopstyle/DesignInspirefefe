@@ -18,8 +18,8 @@ app.use(session({
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
   name: 'quiz.sid',
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie: {
     secure: false,
     httpOnly: true,
