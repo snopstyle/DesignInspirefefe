@@ -36,7 +36,7 @@ export default function WelcomePage() {
       >
         <Button 
           onClick={() => navigate("/landing")} 
-          className="w-32 h-16 flex items-center justify-center text-2xl rounded-full bg-black hover:bg-gradient-to-r hover:from-purple-500/80 hover:via-gray-600/80 hover:to-purple-700/80 text-white transition-all duration-300 transform hover:scale-105"
+          className="w-32 h-16 flex items-center justify-center text-2xl rounded-full bg-black text-white transition-all duration-500 transform hover:scale-105 hover:bg-[length:400%_400%] hover:animate-gradient-fast bg-gradient-to-r from-purple-500/60 via-gray-600/60 to-purple-700/60 bg-[length:100%_100%]"
         >
           🚀 🚀 🚀
         </Button>
