@@ -19,16 +19,15 @@ app.use(session({
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
   name: 'quiz.sid',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   rolling: true,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // Set to false for development
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
     sameSite: 'lax',
-    path: '/',
-    domain: process.env.NODE_ENV === 'production' ? '.replit.dev' : undefined
+    path: '/'
   }
 }));
 
