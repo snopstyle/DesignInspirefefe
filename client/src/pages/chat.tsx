@@ -13,6 +13,26 @@ interface Message {
   content: string;
 }
 
+const formatLine = (line: string) => {
+  // Format bullet points and numbered lists
+  if (line.match(/^[-*]\s/) || line.match(/^\d+\.\s/)) {
+    return <strong>{line}</strong>;
+  }
+
+  // Format titles (lines ending with ":")
+  if (line.endsWith(':')) {
+    return <strong>{line}</strong>;
+  }
+
+  // Format proper nouns (words starting with capital letters)
+  return line.split(' ').map((word, i) => {
+    if (word.match(/^[A-Z][a-z]{2,}/)) {
+      return <span key={i}><strong>{word}</strong>{' '}</span>;
+    }
+    return <span key={i}>{word}{' '}</span>;
+  });
+};
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -91,11 +111,18 @@ export default function ChatPage() {
                         }`}
                       >
                         <div className="whitespace-pre-wrap">
-                          {message.content.split('\n').map((line, i) => (
-                            <p key={i} className="mb-2 last:mb-0">
-                              {line}
-                            </p>
-                          ))}
+                          {message.role === 'assistant' 
+                            ? message.content.split('\n').map((line, i) => (
+                                <p key={i} className="mb-2 last:mb-0 leading-relaxed">
+                                  {formatLine(line)}
+                                </p>
+                              ))
+                            : message.content.split('\n').map((line, i) => (
+                                <p key={i} className="mb-2 last:mb-0">
+                                  {line}
+                                </p>
+                              ))
+                          }
                         </div>
                       </div>
                     </motion.div>
