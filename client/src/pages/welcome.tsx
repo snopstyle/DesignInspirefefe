@@ -44,9 +44,20 @@ export default function WelcomePage() {
       if (data.success && data.id) {
         await setTempUserId(data.id);
         setIsOpen(false);
-        setTimeout(() => {
+        
+        // Wait for session to be properly saved
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Verify session before navigation
+        const verifyResponse = await fetch('/api/users/verify', {
+          credentials: 'include'
+        });
+        
+        if (verifyResponse.ok) {
           navigate("/landing");
-        }, 100);
+        } else {
+          throw new Error('Session verification failed');
+        }
       } else {
         throw new Error('Invalid server response');
       }

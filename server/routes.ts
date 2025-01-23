@@ -18,6 +18,15 @@ declare module 'express-session' {
     tempUserId: string | undefined;
   }
 
+  // Verify session endpoint
+  app.get('/api/users/verify', (req, res) => {
+    if (req.session?.tempUserId) {
+      res.status(200).json({ valid: true });
+    } else {
+      res.status(401).json({ valid: false });
+    }
+  });
+
   app.post('/api/users/temp', async (req, res) => {
     try {
       // Check existing session
