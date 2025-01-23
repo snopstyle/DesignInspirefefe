@@ -6,9 +6,11 @@ export default function About() {
     <div className="min-h-screen w-full flex items-center justify-center bg-black">
       <Card className="w-full max-w-4xl mx-auto my-8 bg-black/40 backdrop-blur-sm border border-white/10">
         <CardContent className="prose prose-lg dark:prose-invert max-w-3xl mx-auto p-8">
-          <h1 className="text-4xl font-bold text-center mb-8 text-orange-400">Manifeste : HumanEdTech</h1>
-          <h2 className="text-2xl font-semibold text-center mb-10 text-white/90">(Éducation, Technologie, Humanité)</h2>
-
+          <h1 className="text-4xl font-bold text-center mb-8 text-orange-400">PYRO</h1>
+          <p className="text-gray-200 mb-8 text-justify italic">
+            "Parce qu'éduquer, ce n'est pas formater des esprits pour un marché — c'est allumer des feux."
+          </p>
+          <h2 className="text-2xl font-semibold text-center mb-10 text-white/90">Éducation, Humanité, Technologie</h2>
           <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Préambule</h3>
           <p className="text-gray-200 mb-6 text-justify">
             Nous sommes à un carrefour historique. L'attention de nos enfants est capturée par des écrans conçus pour hypnotiser, 
@@ -17,7 +19,7 @@ export default function About() {
             Notre mission n'est pas de résister, mais de réinventer.
           </p>
           <p className="text-gray-200 mb-8 text-justify">
-            HumanEdTech naît de cette conviction : la technologie doit servir l'humain, jamais l'asservir.
+            Pyro naît de cette conviction : la technologie doit servir l'humain, jamais l'asservir.
           </p>
 
           <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Le constat</h3>
@@ -88,24 +90,16 @@ export default function About() {
             </div>
           </div>
 
-          <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Notre appel</h3>
+          <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Nos Projets</h3>
           <p className="text-gray-200 mb-6 text-justify">
-            À tous les enseignants fatigués de se sentir dépassés, aux développeurs rêvant de donner un sens à leur code, 
-            aux parents inquiets mais lucides, rejoignez <strong>HumanEdTech</strong>.
+            Au travers de projets d'avant-garde, nous entendons tirer pleinement profit des avancées technologiques pour continuer à favoriser l'épanouissement des apprenants de tout horizon et en les dotants d'outils contemporains et intemporels pour déchiffrer et défrîcher le monde.
           </p>
           <p className="text-gray-200 mb-8 text-justify">
-            Ensemble, nous bâtirons des lieux où l'on apprend à la fois à coder et à méditer, à analyser des données et à écrire des poèmes, 
-            à collaborer avec des IA sans oublier de regarder le ciel.
+            GURU, premier projet que nous lançons remet les aspirations de l'étudiant au centre en lui proposant un test de personnalité poussée et complet lui permettant de développer une conscience de soi décisive dans l'élaboration d'un projet de formation. La détermination de son profil, nous permet via l'utilisation de l'IA de lui faire des propositions sur mesures via une algorithmie fine qui repose sur des études poussées en neurosciences. 
           </p>
 
-          <p className="text-gray-200 mb-8 text-justify italic">
-            Parce qu'éduquer, ce n'est pas formater des esprits pour un marché — c'est allumer des feux.
-          </p>
-
-          <blockquote className="border-l-4 border-purple-500 pl-6 my-8 text-xl italic text-white/90">
-            « La technologie a rétréci le monde, mais elle ne doit pas rétrécir notre humanité. »
-            <footer className="text-right text-gray-400 mt-2">— HumanEdTech</footer>
-          </blockquote>
+          <h4 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Quelques chiffres sur GURU</h4>
+          
         </CardContent>
       </Card>
     </div>
