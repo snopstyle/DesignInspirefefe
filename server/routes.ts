@@ -75,6 +75,22 @@ export function registerRoutes(app: Express): Server {
           tempUserId: req.session.tempUserId,
           status: 'in_progress',
           currentQuestionId: 'Q1',
+
+  app.post('/api/users/temp', async (req, res) => {
+    try {
+      const { username } = req.body;
+      const [user] = await db.insert(tempUsers).values({
+        username,
+        createdAt: new Date()
+      }).returning();
+      
+      res.json({ id: user.id });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
           completedQuestions: [],
           answers: {}
         })

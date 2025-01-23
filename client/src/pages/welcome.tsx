@@ -1,9 +1,53 @@
+
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useUser } from "@/hooks/use-user";
+import { useToast } from "@/hooks/use-toast";
 
 export default function WelcomePage() {
   const [_, navigate] = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const { setTempUserId } = useUser();
+  const { toast } = useToast();
+
+  const handleSubmit = async () => {
+    if (!username.trim()) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez entrer un pseudo",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/users/temp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username })
+      });
+
+      if (!response.ok) throw new Error();
+
+      const { id } = await response.json();
+      setTempUserId(id);
+      setIsOpen(false);
+      navigate("/landing");
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
@@ -35,12 +79,37 @@ export default function WelcomePage() {
         transition={{ delay: 0.6, duration: 0.8 }}
       >
         <Button 
-          onClick={() => navigate("/landing")} 
+          onClick={() => setIsOpen(true)} 
           className="w-32 h-16 flex items-center justify-center text-2xl rounded-full bg-black text-white transition-all duration-500 transform hover:scale-105 hover:bg-gradient-to-r hover:from-purple-500/60 hover:via-gray-600/60 hover:to-purple-700/60 hover:animate-gradient-fast hover:bg-[length:400%_400%]"
         >
           🚀 🚀 🚀
         </Button>
       </motion.div>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="bg-black/80 backdrop-blur-sm border-white/20">
+          <DialogHeader>
+            <DialogTitle>Choisis ton pseudo</DialogTitle>
+            <DialogDescription>
+              Entre un pseudo pour commencer ton voyage
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Input
+              placeholder="Ton pseudo"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="bg-black/50 border-white/20"
+            />
+            <Button 
+              onClick={handleSubmit}
+              className="w-full bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500"
+            >
+              Commencer
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
