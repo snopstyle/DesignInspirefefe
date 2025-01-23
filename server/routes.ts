@@ -22,22 +22,34 @@ declare module 'express-session' {
     try {
       const { username } = req.body;
       const [user] = await db.insert(tempUsers).values({
-        username,
+        username: username || 'Anonymous',
         createdAt: new Date()
       }).returning();
       
       req.session.tempUserId = user.id;
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
-          if (err) reject(err);
-          else resolve();
+          if (err) {
+            console.error('Session save error:', err);
+            reject(err);
+          } else {
+            console.log('Session saved successfully:', req.sessionID, 'tempUserId:', user.id);
+            resolve();
+          }
         });
       });
       
-      res.json({ id: user.id, sessionId: req.sessionID });
+      res.json({ 
+        success: true,
+        id: user.id, 
+        sessionId: req.sessionID 
+      });
     } catch (error) {
       console.error('Error creating temp user:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ 
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
