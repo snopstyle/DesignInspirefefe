@@ -14,6 +14,8 @@ import Welcome from "@/pages/welcome";
 import Chat from "@/pages/chat";
 import { Layout } from "@/components/layout/layout";
 import About from "@/pages/about";
+import { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
 
 function Router() {
   return (
@@ -37,9 +39,33 @@ function Router() {
 }
 
 function App() {
+  const [isSessionInitialized, setIsSessionInitialized] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Only initialize session if we're not on the welcome page
+    if (location[0] !== '/') {
+      fetch('/api/users/temp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ username: 'Anonymous' })
+      })
+      .then(res => res.json())
+      .then(() => setIsSessionInitialized(true))
+      .catch(console.error);
+    } else {
+      setIsSessionInitialized(true);
+    }
+  }, [location]);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
+      {isSessionInitialized ? (
+        <Router />
+      ) : (
+        <div>Loading...</div>
+      )}
       <Toaster />
     </QueryClientProvider>
   );
