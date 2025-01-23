@@ -29,7 +29,11 @@ declare module 'express-session' {
 
   app.post('/api/users/temp', async (req, res) => {
     try {
-      // Check existing session
+      if (!req.session) {
+        throw new Error('Session not initialized');
+      }
+
+      // Check existing session and return if valid
       if (req.session.tempUserId) {
         const existingUser = await db.query.tempUsers.findFirst({
           where: (users, { eq }) => eq(users.id, req.session.tempUserId)
@@ -40,6 +44,31 @@ declare module 'express-session' {
           return res.json({ success: true, id: existingUser.id });
         }
       }
+
+      // Only create new user if no valid session exists
+      const { username } = req.body;
+      const [user] = await db.insert(tempUsers)
+        .values({
+          username: username || 'Anonymous',
+          createdAt: new Date()
+        })
+        .returning();
+
+      if (!user?.id) {
+        throw new Error('Failed to create temp user');
+      }
+
+      // Save session synchronously
+      req.session.tempUserId = user.id;
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      console.log('New temp user created:', user.id);
+      res.json({ success: true, id: user.id });
 
       // Create new user only if no valid session exists
       const { username } = req.body;
