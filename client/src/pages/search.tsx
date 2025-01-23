@@ -79,7 +79,7 @@ export default function SearchPage() {
               <CardTitle className="text-3xl font-bold flex items-center gap-2">
                 <GraduationCap className="h-8 w-8 text-orange-500" />
                 <span className="bg-gradient-neo from-orange-500/80 to-purple-500/80 bg-clip-text text-transparent">
-                  Recherche de Formation
+                  Formations & Etablissements
                 </span>
               </CardTitle>
             </CardHeader>
@@ -87,7 +87,7 @@ export default function SearchPage() {
               <div className="space-y-4">
                 <div className="flex gap-2">
                   <Input
-                    placeholder="Rechercher une formation..."
+                    placeholder="Ex: Master Finance ou IAE Bordeaux..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="flex-1 bg-white/5 border-white/10"
