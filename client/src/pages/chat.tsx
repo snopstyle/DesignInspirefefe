@@ -74,7 +74,7 @@ export default function ChatPage() {
       const data = await response.json();
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: data.message 
+        content: data.message.replace(/\*\*/g, '') // Remove asterisks from the response
       }]);
     } catch (error) {
       console.error('Error:', error);
