@@ -15,7 +15,7 @@ import { desc } from "drizzle-orm";
 
 declare module 'express-session' {
   interface SessionData {
-    tempUserId: string;
+    tempUserId: string | undefined;
   }
 
   app.post('/api/users/temp', async (req, res) => {
@@ -34,7 +34,7 @@ declare module 'express-session' {
       if (!user?.id) {
         throw new Error('Failed to create temp user');
       }
-      
+
       req.session.tempUserId = user.id;
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
@@ -47,7 +47,7 @@ declare module 'express-session' {
           }
         });
       });
-      
+
       res.json({ 
         success: true,
         id: user.id, 
@@ -70,7 +70,7 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/users/temp", async (req, res) => {
     try {
       const { username } = req.body;
-      
+
       if (!req.session) {
         throw new Error('Session not initialized');
       }
@@ -108,7 +108,7 @@ export function registerRoutes(app: Express): Server {
 
       // Set session data and save immediately
       req.session.tempUserId = tempUser.id;
-      
+
       // Force session save and wait for completion
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {

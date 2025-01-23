@@ -48,7 +48,7 @@ export const quizResults = pgTable("quiz_results", {
 // Profile completion tracking
 export const profileCompletion = pgTable("quiz_profile_completion", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: integer("user_id").references(() => users.id).notNull().unique(),
+  userId: uuid("user_id").references(() => tempUsers.id).notNull().unique(),
   basicInfoCompleted: boolean("basic_info_completed").default(false).notNull(),
   traitsAssessmentCompleted: boolean("traits_assessment_completed").default(false).notNull(),
   personalityQuizCompleted: boolean("personality_quiz_completed").default(false).notNull(),
