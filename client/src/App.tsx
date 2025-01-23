@@ -12,10 +12,11 @@ import Landing from "@/pages/landing";
 import Stats from "./pages/stats";
 import Welcome from "@/pages/welcome";
 import Chat from "@/pages/chat";
+import { Layout } from "@/components/layout/layout";
 
 function Router() {
   return (
-    <>
+    <Layout>
       <NavButtons />
       <Switch>
         <Route path="/" component={Welcome} />
@@ -29,7 +30,7 @@ function Router() {
         <Route path="/chat" component={Chat} />
         <Route component={NotFound} />
       </Switch>
-    </>
+    </Layout>
   );
 }
 
