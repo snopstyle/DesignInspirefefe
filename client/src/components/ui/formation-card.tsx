@@ -63,7 +63,7 @@ export function FormationCard({
         </div>
 
         <div className="flex items-center gap-4 mt-4">
-          {officialLink && (
+          {officialLink && officialLink !== 'Non Renseigné' && (
             <Button 
               variant="outline" 
               size="sm"

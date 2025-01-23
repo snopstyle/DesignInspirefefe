@@ -67,7 +67,7 @@ async function importFormations() {
             name: formatText(item.Etablissement, 'Établissement Non Renseigné'),
             statut: formatText(item.Statut, 'Statut Non Renseigné'),
             hebergement: Boolean(item.Hébergement),
-            lien: item.Lien || 'Non Renseigné',
+            lien: item.Lien?.trim() || 'Non Renseigné',
             tel: item.Téléphone || 'Non Renseigné',
             facebook: item.Facebook || '',
             instagram: item.Instagram || '',
