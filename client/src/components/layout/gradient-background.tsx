@@ -14,9 +14,9 @@ export function GradientBackground({ children, className }: GradientBackgroundPr
 
   return (
     <div className={cn(
-      "min-h-screen w-full bg-gradient-to-br from-orange-400/90 via-purple-500/90 to-orange-500/90",
+      "fixed inset-0 w-full h-full bg-gradient-to-br from-orange-400/90 via-purple-500/90 to-orange-500/90",
       isAnimated && "animate-gradient",
-      "relative overflow-hidden backdrop-blur-sm",
+      "overflow-hidden backdrop-blur-sm -z-10",
       className
     )}>
       <Button 
