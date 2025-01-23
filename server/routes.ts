@@ -60,6 +60,12 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/temp-user", async (req, res) => {
     try {
+      // Check if user already exists in session
+      if (req.session.tempUserId) {
+        console.log('Using existing temp user:', req.session.tempUserId);
+        return res.json({ id: req.session.tempUserId });
+      }
+
       // Create temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({
@@ -73,18 +79,24 @@ export function registerRoutes(app: Express): Server {
 
       // Set session data
       req.session.tempUserId = tempUser.id;
+      
+      // Force session save
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
-          if (err) reject(err);
-          else resolve();
+          if (err) {
+            console.error('Session save error:', err);
+            reject(err);
+          } else {
+            console.log('Session saved successfully. ID:', req.sessionID, 'TempUserId:', tempUser.id);
+            resolve();
+          }
         });
       });
 
-      console.log('Created temp user:', tempUser.id, 'Session ID:', req.sessionID);
       res.status(201).json({
+        success: true,
         id: tempUser.id,
-        sessionId: req.sessionID,
-        timestamp: new Date().toISOString()
+        sessionId: req.sessionID
       });
     } catch (error) {
       console.error('Error creating temporary user:', error);
