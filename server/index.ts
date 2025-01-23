@@ -13,14 +13,16 @@ app.use(express.urlencoded({ extended: false }));
 // Improved session configuration
 app.use(session({
   store: new SessionStore({
-    checkPeriod: 86400000,
-    ttl: 24 * 60 * 60 * 1000
+    checkPeriod: 86400000, // prune expired entries every 24h
+    ttl: 24 * 60 * 60 * 1000,
+    stale: false
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
   name: 'quiz.sid',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   rolling: true,
+  proxy: true,
   cookie: {
     secure: false,
     httpOnly: true,
@@ -29,6 +31,14 @@ app.use(session({
     path: '/'
   }
 }));
+
+// Force synchronous session initialization
+app.use((req, res, next) => {
+  if (!req.session) {
+    return next(new Error('Session initialization failed'));
+  }
+  next();
+});
 
 // Enhanced logging middleware
 app.use((req, res, next) => {
