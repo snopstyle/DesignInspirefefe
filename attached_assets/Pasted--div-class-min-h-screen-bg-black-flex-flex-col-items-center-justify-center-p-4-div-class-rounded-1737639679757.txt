@@ -1,0 +1,18 @@
+<div class="min-h-screen bg-black flex flex-col items-center justify-center p-4"><div class="rounded-lg border text-card-foreground shadow-sm w-full max-w-4xl bg-transparent border-white/10"><div class="flex flex-col space-y-1.5 p-6 border-b border-white/10 pb-4"><h3 class="tracking-tight text-[85px] font-black text-center"><span class="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-['Unbounded']">GURU</span></h3><p class="text-center max-w-xl mx-auto text-xl text-gray-400 leading-relaxed">Hey ! Je suis ton conseiller d'orientation personnel. Pose-moi tes questions sur les formations, les métiers ou ton avenir, et je t'aide à y voir plus clair avec des réponses personnalisées. 🎯</p></div><div class="p-6"><div dir="ltr" class="relative overflow-hidden h-[500px] pr-4 mb-6" style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"><style>
+[data-radix-scroll-area-viewport] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+[data-radix-scroll-area-viewport]::-webkit-scrollbar {
+  display: none;
+}
+:where([data-radix-scroll-area-viewport]) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+:where([data-radix-scroll-area-content]) {
+  flex-grow: 1;
+}
+</style><div data-radix-scroll-area-viewport="" class="h-full w-full rounded-[inherit]" style="overflow: hidden scroll;"><div data-radix-scroll-area-content=""><div class="space-y-4"></div></div></div></div><form class="relative mt-4"><input class="flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-24 bg-white/5 border-white/10 text-white placeholder:text-white/50 h-12" placeholder="Pose ta question au Guru..." value=""><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-primary/90 absolute right-1.5 top-1.5 bg-transparent hover:bg-gradient-to-r hover:from-orange-500 hover:via-purple-500 hover:to-pink-500 h-9 w-9 text-white" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send h-4 w-4"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg></button></form></div></div></div>
