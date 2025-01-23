@@ -9,8 +9,8 @@ export function Footer({ className }: { className?: string }) {
       className
     )}>
       <div className="container mx-auto">
-        <div className="text-center">
-          <Link href="/about" className="text-lg font-semibold hover:underline text-foreground">
+        <div className="text-left pl-4">
+          <Link href="/about" className="text-sm italic hover:underline text-foreground/70">
             À propos
           </Link>
         </div>
