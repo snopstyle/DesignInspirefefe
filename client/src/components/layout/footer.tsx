@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Link } from "wouter";
 
@@ -9,8 +8,8 @@ export function Footer({ className }: { className?: string }) {
       className
     )}>
       <div className="container mx-auto">
-        <div className="text-left pl-4">
-          <Link href="/about" className="text-sm italic hover:underline text-foreground/70">
+        <div className="text-center">
+          <Link href="/about" className="text-lg font-semibold hover:underline text-foreground">
             À propos
           </Link>
         </div>

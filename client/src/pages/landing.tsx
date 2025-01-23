@@ -1,9 +1,9 @@
-
 import { useLocation } from "wouter";
 import { GradientBackground } from "@/components/layout/gradient-background";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Brain, Search, User, Trophy, Crown, BookOpen, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { SocialIcon } from 'react-social-icons'; // Added import
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -57,23 +57,22 @@ export default function Landing() {
                 transition={{ duration: 1, delay: index * 0.4 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                className="h-full"
               >
-                <button 
+                <Card 
+                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full"
                   onClick={() => setLocation(feature.path)}
-                  className="w-full"
                 >
-                  <Card className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <feature.icon className="h-8 w-8" />
-                      </div>
-                      <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
-                      <CardDescription className="text-white/70">
-                        {feature.description}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                </button>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <feature.icon className="h-8 w-8" />
+                    </div>
+                    <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
+                    <CardDescription className="text-white/70">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -87,23 +86,22 @@ export default function Landing() {
                 transition={{ duration: 1, delay: index * 0.4 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                className="h-full"
               >
-                <button 
+                <Card 
+                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full"
                   onClick={() => setLocation(feature.path)}
-                  className="w-full"
                 >
-                  <Card className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <feature.icon className="h-8 w-8" />
-                      </div>
-                      <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
-                      <CardDescription className="text-white/70">
-                        {feature.description}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                </button>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <feature.icon className="h-8 w-8" />
+                    </div>
+                    <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
+                    <CardDescription className="text-white/70">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
               </motion.div>
             ))}
           </div>
