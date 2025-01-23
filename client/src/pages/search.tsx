@@ -29,6 +29,7 @@ interface FormationResult {
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVille, setSelectedVille] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   //const [selectedDomaines, setSelectedDomaines] = useState<string[]>([]);
 
   // Debounce search term
