@@ -29,8 +29,7 @@ interface FormationResult {
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVille, setSelectedVille] = useState("");
-  const [selectedDomaines, setSelectedDomaines] = useState<string[]>([]);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  //const [selectedDomaines, setSelectedDomaines] = useState<string[]>([]);
 
   // Debounce search term
   useEffect(() => {
@@ -44,32 +43,32 @@ export default function SearchPage() {
     staleTime: Infinity
   });
 
-  const { data: domains = [] } = useQuery<string[]>({
-    queryKey: ['/api/domains']
-  });
+  //const { data: domains = [] } = useQuery<string[]>({
+  //  queryKey: ['/api/domains']
+  //});
 
   // Build search URL with params
   const buildSearchUrl = () => {
     const params = new URLSearchParams();
     if (debouncedSearchTerm) params.set('q', debouncedSearchTerm);
     if (selectedVille) params.set('ville', selectedVille);
-    if (selectedDomaines.length > 0) params.set('tags', selectedDomaines.join(','));
+    //if (selectedDomaines.length > 0) params.set('tags', selectedDomaines.join(','));
     return `/api/search?${params.toString()}`;
   };
 
   // Search results query
   const { data: results = [], isLoading } = useQuery<FormationResult[]>({
     queryKey: [buildSearchUrl()],
-    enabled: Boolean(debouncedSearchTerm) || Boolean(selectedVille) || selectedDomaines.length > 0
+    enabled: Boolean(debouncedSearchTerm) || Boolean(selectedVille) //|| selectedDomaines.length > 0
   });
 
-  const handleDomaineToggle = (domaine: string) => {
-    setSelectedDomaines(prev =>
-      prev.includes(domaine)
-        ? prev.filter(d => d !== domaine)
-        : [...prev, domaine]
-    );
-  };
+  //const handleDomaineToggle = (domaine: string) => {
+  //  setSelectedDomaines(prev =>
+  //    prev.includes(domaine)
+  //      ? prev.filter(d => d !== domaine)
+  //      : [...prev, domaine]
+  //  );
+  //};
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-background/50 py-8">
@@ -108,9 +107,9 @@ export default function SearchPage() {
                         villes={cities}
                         selectedVille={selectedVille}
                         onVilleChange={setSelectedVille}
-                        domaines={domains}
-                        selectedDomaines={selectedDomaines}
-                        onDomaineToggle={handleDomaineToggle}
+                        //domaines={domains}
+                        //selectedDomaines={selectedDomaines}
+                        //onDomaineToggle={handleDomaineToggle}
                       />
                     </PopoverContent>
                   </Popover>
@@ -153,7 +152,7 @@ export default function SearchPage() {
                     }}
                   />
                 ))
-              ) : debouncedSearchTerm || selectedVille || selectedDomaines.length > 0 ? (
+              ) : debouncedSearchTerm || selectedVille ? (
                 <Card className="p-8 text-center text-muted-foreground backdrop-blur-xl bg-white/5 border-white/10">
                   Aucun résultat trouvé
                 </Card>
