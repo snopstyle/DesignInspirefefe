@@ -20,38 +20,52 @@ declare module 'express-session' {
 
   app.post('/api/users/temp', async (req, res) => {
     try {
+      // Check existing session
       if (req.session.tempUserId) {
-        console.log('Using existing temp user:', req.session.tempUserId);
-        return res.json({ success: true, id: req.session.tempUserId });
+        const existingUser = await db.query.tempUsers.findFirst({
+          where: (users, { eq }) => eq(users.id, req.session.tempUserId)
+        });
+
+        if (existingUser) {
+          console.log('Using existing temp user:', existingUser.id);
+          return res.json({ success: true, id: existingUser.id });
+        }
       }
 
+      // Create new user only if no valid session exists
       const { username } = req.body;
-      const [user] = await db.insert(tempUsers).values({
-        username: username || 'Anonymous',
-        createdAt: new Date()
-      }).returning();
+      const [user] = await db.insert(tempUsers)
+        .values({
+          username: username || 'Anonymous',
+          createdAt: new Date()
+        })
+        .returning();
 
       if (!user?.id) {
         throw new Error('Failed to create temp user');
       }
 
-      req.session.tempUserId = user.id;
+      // Regenerate session before saving new user ID
       await new Promise<void>((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) {
-            console.error('Session save error:', err);
-            reject(err);
-          } else {
-            console.log('Session saved successfully:', req.sessionID, 'tempUserId:', user.id);
-            resolve();
-          }
+        req.session.regenerate((err) => {
+          if (err) reject(err);
+          req.session.tempUserId = user.id;
+          req.session.save((err) => {
+            if (err) {
+              console.error('Session save error:', err);
+              reject(err);
+            } else {
+              console.log('New session created with tempUserId:', user.id);
+              resolve();
+            }
+          });
         });
       });
 
       res.json({ 
         success: true,
-        id: user.id, 
-        sessionId: req.sessionID 
+        id: user.id,
+        sessionId: req.sessionID
       });
     } catch (error) {
       console.error('Error creating temp user:', error);
