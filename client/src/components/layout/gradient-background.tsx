@@ -14,7 +14,7 @@ export function GradientBackground({ children, className }: GradientBackgroundPr
 
   return (
     <div className={cn(
-      "min-h-screen w-full bg-gradient-to-br from-red-500/90 via-orange-500/90 to-yellow-500/90",
+      "min-h-screen w-full bg-gradient-to-br from-amber-500/90 via-orange-400/90 to-yellow-400/90",
       isAnimated && "animate-gradient",
       "relative overflow-hidden backdrop-blur-sm",
       className
