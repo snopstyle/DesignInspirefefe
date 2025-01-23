@@ -15,7 +15,7 @@ export function NavButtons() {
     <div className="fixed top-6 left-6 flex gap-3 z-[100]">
       <Card 
         className="w-10 h-10 flex items-center justify-center cursor-pointer bg-white/10 hover:bg-white/20 hover:scale-[1.05] transition-all"
-        onClick={() => setLocation("/")}
+        onClick={() => setLocation("/landing")}
       >
         <Home className="h-4 w-4 text-white" />
       </Card>
