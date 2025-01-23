@@ -6,10 +6,10 @@ export default function About() {
     <div className="min-h-screen w-full flex items-center justify-center bg-black">
       <Card className="w-full max-w-4xl mx-auto my-8 bg-black/40 backdrop-blur-sm border border-white/10">
         <CardContent className="prose prose-lg dark:prose-invert max-w-3xl mx-auto p-8">
-          <h1 className="text-4xl font-bold text-center mb-8 text-white">Manifeste : HumanEdTech</h1>
+          <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Manifeste : HumanEdTech</h1>
           <h2 className="text-2xl font-semibold text-center mb-10 text-white/90">(Éducation, Technologie, Humanité)</h2>
 
-          <h3 className="text-2xl font-semibold mt-8 mb-4 text-white">Préambule</h3>
+          <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Préambule</h3>
           <p className="text-gray-200 mb-6">
             Nous sommes à un carrefour historique. L'attention de nos enfants est capturée par des écrans conçus pour hypnotiser, 
             les savoirs se fragmentent en algorithmes, et l'érudition semble céder face à la dopamine des notifications. 
@@ -20,7 +20,7 @@ export default function About() {
             HumanEdTech naît de cette conviction : la technologie doit servir l'humain, jamais l'asservir.
           </p>
 
-          <h3 className="text-2xl font-semibold mb-4 text-white">Le constat</h3>
+          <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Le constat</h3>
           <ul className="space-y-4 text-gray-200 mb-8">
             <li className="flex items-start">
               <span className="mr-2">•</span>
@@ -45,7 +45,7 @@ export default function About() {
             </li>
           </ul>
 
-          <h3 className="text-2xl font-semibold mb-4 text-white">Notre vision</h3>
+          <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Notre vision</h3>
           <p className="text-gray-200 font-semibold mb-4">Une pédagogie augmentée, jamais diminuée.</p>
           <p className="text-gray-200 mb-6">
             Nous voulons des salles de classe où l'IA personnalise les apprentissages sans remplacer le regard bienveillant du professeur. 
