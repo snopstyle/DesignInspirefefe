@@ -458,16 +458,14 @@ export function registerRoutes(app: Express): Server {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": `${req.protocol}://${req.get('host')}`,
-          "X-Title": "GURU Chat Assistant"
         },
         body: JSON.stringify({
-          model: "deepseek-ai/deepseek-chat-33b",
+          model: "deepseek-chat",
           messages: [
             {
               role: "system",
@@ -477,14 +475,16 @@ export function registerRoutes(app: Express): Server {
               role: "user",
               content: message
             }
-          ]
+          ],
+          temperature: 0.7,
+          max_tokens: 1000
         })
       });
 
       if (!response.ok) {
         const error = await response.text();
-        console.error('OpenRouter API error:', error);
-        throw new Error('Failed to get response from OpenRouter API');
+        console.error('Deepseek API error:', error);
+        throw new Error('Failed to get response from Deepseek API');
       }
 
       const data = await response.json();
