@@ -10,13 +10,15 @@ import { NavButtons } from "@/components/layout/nav-buttons";
 import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
 import Stats from "./pages/stats";
+import Welcome from "@/pages/welcome";
 
 function Router() {
   return (
     <>
       <NavButtons />
       <Switch>
-        <Route path="/" component={Landing} />
+        <Route path="/" component={Welcome} />
+        <Route path="/landing" component={Landing} />
         <Route path="/quiz" component={Quiz} />
         <Route path="/results" component={Results} />
         <Route path="/profile" component={Profile} />
