@@ -44,7 +44,7 @@ export default function Landing() {
           className="w-full max-w-4xl space-y-8"
         >
           <div className="text-center space-y-4 mb-8">
-            <h1 className="text-4xl font-bold">Votre Parcours D'orientation</h1>
+            <h1 className="text-4xl font-bold">Trouve ta Voie</h1>
             <p className="text-xl text-white/80">Commencez votre aventure</p>
           </div>
 
