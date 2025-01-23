@@ -15,7 +15,7 @@ export default function Quiz() {
 
   return (
     <GradientBackground>
-      <div className="container mx-auto min-h-screen py-8">
+      <div className="container mx-auto min-h-screen flex items-center justify-center">
         <QuestionCard 
           question={currentQuestion}
           onAnswer={handleAnswer}
