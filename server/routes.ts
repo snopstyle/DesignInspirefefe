@@ -93,12 +93,18 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Failed to create temp user');
       }
 
-      // Set session data
+      // Set session data and force save
       req.session.tempUserId = tempUser.id;
+      req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
-          if (err) reject(err);
-          else resolve();
+          if (err) {
+            console.error('Session save error:', err);
+            reject(err);
+          } else {
+            console.log('Session saved with tempUserId:', tempUser.id);
+            resolve();
+          }
         });
       });
 
