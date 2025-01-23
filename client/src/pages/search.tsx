@@ -3,11 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Search,
-  Filter,
-  GraduationCap
-} from "lucide-react";
+import { Search, Filter, GraduationCap } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SearchFilters } from "@/components/search/filters";
 import { FormationCard } from "@/components/ui/formation-card";
@@ -29,47 +25,29 @@ interface FormationResult {
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVille, setSelectedVille] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-  //const [selectedDomaines, setSelectedDomaines] = useState<string[]>([]);
+  const [debouncedValue, setDebouncedValue] = useState("");
 
-  // Debounce search term
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearchTerm(searchTerm), 300);
+    const timer = setTimeout(() => setDebouncedValue(searchTerm), 300);
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Fetch cities and domains
   const { data: cities = [] } = useQuery<string[]>({
     queryKey: ['/api/cities'],
     staleTime: Infinity
   });
 
-  //const { data: domains = [] } = useQuery<string[]>({
-  //  queryKey: ['/api/domains']
-  //});
-
-  // Build search URL with params
   const buildSearchUrl = () => {
     const params = new URLSearchParams();
-    if (debouncedSearchTerm) params.set('q', debouncedSearchTerm);
+    if (debouncedValue) params.set('q', debouncedValue);
     if (selectedVille) params.set('ville', selectedVille);
-    //if (selectedDomaines.length > 0) params.set('tags', selectedDomaines.join(','));
     return `/api/search?${params.toString()}`;
   };
 
-  // Search results query
   const { data: results = [], isLoading } = useQuery<FormationResult[]>({
     queryKey: [buildSearchUrl()],
-    enabled: Boolean(debouncedSearchTerm) || Boolean(selectedVille) //|| selectedDomaines.length > 0
+    enabled: Boolean(debouncedValue) || Boolean(selectedVille)
   });
-
-  //const handleDomaineToggle = (domaine: string) => {
-  //  setSelectedDomaines(prev =>
-  //    prev.includes(domaine)
-  //      ? prev.filter(d => d !== domaine)
-  //      : [...prev, domaine]
-  //  );
-  //};
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-background/50 py-8">
@@ -108,9 +86,6 @@ export default function SearchPage() {
                         villes={cities}
                         selectedVille={selectedVille}
                         onVilleChange={setSelectedVille}
-                        //domaines={domains}
-                        //selectedDomaines={selectedDomaines}
-                        //onDomaineToggle={handleDomaineToggle}
                       />
                     </PopoverContent>
                   </Popover>
@@ -153,7 +128,7 @@ export default function SearchPage() {
                     }}
                   />
                 ))
-              ) : debouncedSearchTerm || selectedVille ? (
+              ) : debouncedValue || selectedVille ? (
                 <Card className="p-8 text-center text-muted-foreground backdrop-blur-xl bg-white/5 border-white/10">
                   Aucun résultat trouvé
                 </Card>
