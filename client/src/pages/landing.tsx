@@ -60,12 +60,14 @@ export default function Landing() {
                 className="h-full"
               >
                 <Card 
-                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full"
+                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full relative"
                   onClick={() => setLocation(feature.path)}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && setLocation(feature.path)}
+                  style={{ zIndex: 10 }}
                 >
+                  <div className="absolute inset-0" />
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <feature.icon className="h-8 w-8" />
@@ -92,12 +94,14 @@ export default function Landing() {
                 className="h-full"
               >
                 <Card 
-                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full"
+                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full relative"
                   onClick={() => setLocation(feature.path)}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && setLocation(feature.path)}
+                  style={{ zIndex: 10 }}
                 >
+                  <div className="absolute inset-0" />
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <feature.icon className="h-8 w-8" />
