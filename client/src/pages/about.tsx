@@ -2,13 +2,13 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function About() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <Card className="max-w-4xl mx-auto">
+    <div className="min-h-screen w-full flex items-center justify-center bg-background">
+      <Card className="w-full max-w-4xl mx-4 bg-card">
         <CardContent className="prose prose-sm sm:prose lg:prose-lg dark:prose-invert pt-6">
-          <h1>Manifeste : HumanEdTech</h1>
-          <h2>(Éducation, Technologie, Humanité)</h2>
+          <h1 className="text-4xl font-bold text-center mb-8">Manifeste : HumanEdTech</h1>
+          <h2 className="text-2xl font-semibold text-center mb-6">(Éducation, Technologie, Humanité)</h2>
 
-          <h3>Préambule</h3>
+          <h3 className="text-xl font-semibold mt-8">Préambule</h3>
           <p>
             Nous sommes à un carrefour historique. L'attention de nos enfants est capturée par des écrans conçus pour hypnotiser, 
             les savoirs se fragmentent en algorithmes, et l'érudition semble céder face à la dopamine des notifications. 
@@ -19,7 +19,7 @@ export default function About() {
             HumanEdTech naît de cette conviction : la technologie doit servir l'humain, jamais l'asservir.
           </p>
 
-          <h3>Le constat</h3>
+          <h3 className="text-xl font-semibold mt-8">Le constat</h3>
           <ul>
             <li>
               <strong>L'urgence cognitive :</strong> Nos cerveaux, modelés par des interfaces addictives, 
@@ -35,7 +35,7 @@ export default function About() {
             </li>
           </ul>
 
-          <h3>Notre vision</h3>
+          <h3 className="text-xl font-semibold mt-8">Notre vision</h3>
           <p>Une pédagogie augmentée, jamais diminuée.</p>
           <p>
             Nous voulons des salles de classe où l'IA personnalise les apprentissages sans remplacer le regard bienveillant du professeur. 
@@ -46,14 +46,14 @@ export default function About() {
             La technologie n'est pas une fin, mais un pont : vers des vocations révélées, des savoirs incarnés, une érudition joyeuse.
           </p>
 
-          <h3>Nos principes</h3>
-          <h4>La tech comme outil, jamais comme maître</h4>
+          <h3 className="text-xl font-semibold mt-8">Nos principes</h3>
+          <h4 className="text-lg font-semibold mt-6">La tech comme outil, jamais comme maître</h4>
           <ul>
             <li>Concevoir des algorithmes éthiques, transparents, qui respectent les rythmes biologiques et cognitifs.</li>
             <li>Bannir les designs prédateurs (autoplay, likes compulsifs) des espaces éducatifs.</li>
           </ul>
 
-          <h4>L'humain d'abord</h4>
+          <h4 className="text-lg font-semibold mt-6">L'humain d'abord</h4>
           <ul>
             <li>
               Cultiver l'intelligence sociale, l'esprit critique, la pensée paradoxale — des compétences 
@@ -64,7 +64,7 @@ export default function About() {
             </li>
           </ul>
 
-          <h4>L'école laboratoire</h4>
+          <h4 className="text-lg font-semibold mt-6">L'école laboratoire</h4>
           <ul>
             <li>Former les enseignants à co-créer avec la tech, non à la subir.</li>
             <li>
@@ -72,7 +72,7 @@ export default function About() {
             </li>
           </ul>
 
-          <h4>Éduquer à la liberté attentionnelle</h4>
+          <h4 className="text-lg font-semibold mt-6">Éduquer à la liberté attentionnelle</h4>
           <ul>
             <li>
               Enseigner la « diététique numérique » : comment concentrer son attention comme on muscle un organe.
@@ -82,7 +82,7 @@ export default function About() {
             </li>
           </ul>
 
-          <h3>Notre appel</h3>
+          <h3 className="text-xl font-semibold mt-8">Notre appel</h3>
           <p>
             À tous les enseignants fatigués de se sentir dépassés, aux développeurs rêvant de donner un sens à leur code, 
             aux parents inquiets mais lucides, rejoignez HumanEdTech.
@@ -95,9 +95,9 @@ export default function About() {
             Parce qu'éduquer, ce n'est pas formater des esprits pour un marché — c'est allumer des feux.
           </p>
 
-          <blockquote>
+          <blockquote className="my-8 text-lg font-medium italic">
             « La technologie a rétréci le monde, mais elle ne doit pas rétrécir notre humanité. »
-            — HumanEdTech
+            <footer className="text-right">— HumanEdTech</footer>
           </blockquote>
         </CardContent>
       </Card>
