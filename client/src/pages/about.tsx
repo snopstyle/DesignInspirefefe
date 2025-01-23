@@ -4,7 +4,7 @@ export default function About() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-background">
       <Card className="w-full max-w-4xl mx-4 bg-card">
-        <CardContent className="prose prose-sm sm:prose lg:prose-lg dark:prose-invert pt-6">
+        <CardContent className="prose prose-sm sm:prose lg:prose-lg dark:prose-invert pt-6 text-justify">
           <h1 className="text-4xl font-bold text-center mb-8">Manifeste : HumanEdTech</h1>
           <h2 className="text-2xl font-semibold text-center mb-6">(Éducation, Technologie, Humanité)</h2>
 
