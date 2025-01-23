@@ -71,6 +71,10 @@ export function registerRoutes(app: Express): Server {
     try {
       const { username } = req.body;
       
+      if (!req.session) {
+        throw new Error('Session not initialized');
+      }
+
       // Check if user already exists in session
       if (req.session.tempUserId) {
         console.log('Using existing temp user:', req.session.tempUserId);
@@ -84,6 +88,19 @@ export function registerRoutes(app: Express): Server {
           createdAt: new Date()
         })
         .returning();
+
+      if (!tempUser?.id) {
+        throw new Error('Failed to create temp user');
+      }
+
+      // Set session data
+      req.session.tempUserId = tempUser.id;
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
 
       if (!tempUser?.id) {
         throw new Error('Failed to create temp user');

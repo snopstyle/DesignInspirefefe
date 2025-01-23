@@ -20,11 +20,13 @@ app.use(session({
   name: 'quiz.sid',
   resave: true,
   saveUninitialized: true,
+  rolling: true,
   cookie: {
     secure: false,
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'lax'
+    sameSite: 'lax',
+    path: '/'
   }
 }));
 
