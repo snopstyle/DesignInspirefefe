@@ -70,41 +70,6 @@ declare module 'express-session' {
       console.log('New temp user created:', user.id);
       res.json({ success: true, id: user.id });
 
-      // Create new user only if no valid session exists
-      const { username } = req.body;
-      const [user] = await db.insert(tempUsers)
-        .values({
-          username: username || 'Anonymous',
-          createdAt: new Date()
-        })
-        .returning();
-
-      if (!user?.id) {
-        throw new Error('Failed to create temp user');
-      }
-
-      // Regenerate session before saving new user ID
-      await new Promise<void>((resolve, reject) => {
-        req.session.regenerate((err) => {
-          if (err) reject(err);
-          req.session.tempUserId = user.id;
-          req.session.save((err) => {
-            if (err) {
-              console.error('Session save error:', err);
-              reject(err);
-            } else {
-              console.log('New session created with tempUserId:', user.id);
-              resolve();
-            }
-          });
-        });
-      });
-
-      res.json({ 
-        success: true,
-        id: user.id,
-        sessionId: req.sessionID
-      });
     } catch (error) {
       console.error('Error creating temp user:', error);
       res.status(500).json({ 
