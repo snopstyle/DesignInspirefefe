@@ -106,10 +106,11 @@ export function registerRoutes(app: Express): Server {
       req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
       req.session.cookie.secure = process.env.NODE_ENV === 'production';
       req.session.cookie.httpOnly = true;
+      req.session.cookie.sameSite = 'lax';
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
-            console.error('Session save error:', err);
+            console.error('Failed to save session:', err);
             reject(err);
           } else {
             console.log('Session saved with tempUserId:', tempUser.id);

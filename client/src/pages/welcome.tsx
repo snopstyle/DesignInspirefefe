@@ -36,13 +36,18 @@ export default function WelcomePage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create temporary user');
+        const error = await response.text();
+        throw new Error(error);
       }
 
-      const { id } = await response.json();
-      setTempUserId(id);
-      setIsOpen(false);
-      navigate("/landing");
+      const data = await response.json();
+      if (data.success && data.id) {
+        setTempUserId(data.id);
+        setIsOpen(false);
+        navigate("/landing");
+      } else {
+        throw new Error('Invalid server response');
+      }
     } catch (error) {
       toast({
         title: "Erreur",
