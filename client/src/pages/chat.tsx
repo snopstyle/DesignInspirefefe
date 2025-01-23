@@ -4,8 +4,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Send } from 'lucide-react';
+import { Send, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -61,47 +62,77 @@ export default function ChatPage() {
     <GradientBackground>
       <div className="container mx-auto py-8 px-4">
         <Card className="max-w-4xl mx-auto bg-black/40 backdrop-blur-sm border-white/10">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-white">Chat avec le Guru</CardTitle>
+          <CardHeader className="border-b border-white/10">
+            <CardTitle className="text-2xl font-bold text-white flex items-center gap-2">
+              <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">
+                Chat avec le Guru
+              </span>
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[500px] pr-4">
-              <div className="space-y-4">
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${
-                      message.role === 'user' ? 'justify-end' : 'justify-start'
-                    }`}
-                  >
-                    <div
-                      className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                        message.role === 'user'
-                          ? 'bg-gradient-to-r from-purple-500/80 to-orange-500/80 text-white'
-                          : 'bg-white/10 text-white'
+          <CardContent className="p-6">
+            <ScrollArea className="h-[500px] pr-4 mb-6">
+              <AnimatePresence initial={false}>
+                <div className="space-y-4">
+                  {messages.map((message, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`flex ${
+                        message.role === 'user' ? 'justify-end' : 'justify-start'
                       }`}
                     >
-                      {message.content}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                      <div
+                        className={`max-w-[80%] rounded-2xl px-6 py-3 shadow-lg ${
+                          message.role === 'user'
+                            ? 'bg-gradient-to-r from-purple-500/80 to-orange-500/80 text-white'
+                            : 'bg-white/10 text-white border border-white/10'
+                        }`}
+                      >
+                        <div className="whitespace-pre-wrap">
+                          {message.content.split('\n').map((line, i) => (
+                            <p key={i} className="mb-2 last:mb-0">
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                  {isLoading && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex justify-start"
+                    >
+                      <div className="bg-white/10 rounded-2xl px-6 py-3 border border-white/10">
+                        <Loader2 className="h-5 w-5 animate-spin text-white/70" />
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              </AnimatePresence>
             </ScrollArea>
 
-            <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
+            <form onSubmit={handleSubmit} className="relative">
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Pose ta question au Guru..."
-                className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="pr-24 bg-white/10 border-white/20 text-white placeholder:text-white/50 h-12"
                 disabled={isLoading}
               />
               <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="bg-gradient-to-r from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500"
+                className="absolute right-1.5 top-1.5 bg-gradient-to-r from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 h-9"
               >
-                <Send className="h-4 w-4" />
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
               </Button>
             </form>
           </CardContent>
