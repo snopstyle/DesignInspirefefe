@@ -100,7 +100,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <Card className="bg-black/20 border-gray-500/30 backdrop-blur-sm mt-8 mx-auto max-w-2xl">
+          <Card className="bg-black border-gray-500/30 backdrop-blur-sm mt-8 mx-auto max-w-2xl">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <Crown className="h-6 w-6 text-purple-400" />
