@@ -449,6 +449,58 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Add the chat endpoint
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+
+      if (!message) {
+        return res.status(400).json({ error: "Message is required" });
+      }
+
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": `${req.protocol}://${req.get('host')}`,
+          "X-Title": "GURU Chat Assistant"
+        },
+        body: JSON.stringify({
+          model: "deepseek-ai/deepseek-chat-33b",
+          messages: [
+            {
+              role: "system",
+              content: "Tu es un assistant spécialisé dans l'orientation scolaire et professionnelle, nommé GURU. Tu dois répondre en français de manière concise et pertinente aux questions des utilisateurs concernant leur orientation."
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        console.error('OpenRouter API error:', error);
+        throw new Error('Failed to get response from OpenRouter API');
+      }
+
+      const data = await response.json();
+      res.json({
+        message: data.choices[0].message.content
+      });
+    } catch (error) {
+      console.error('Chat error:', error);
+      res.status(500).json({ 
+        error: "Une erreur est survenue lors du traitement de votre message",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+
   const httpServer = createServer(app);
   return httpServer;
 }
