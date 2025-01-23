@@ -77,11 +77,19 @@ export function registerRoutes(app: Express): Server {
 
       // Check if user already exists in session
       if (req.session.tempUserId) {
-        console.log('Using existing temp user:', req.session.tempUserId);
-        return res.json({ success: true, id: req.session.tempUserId });
+        const existingUser = await db.query.tempUsers.findFirst({
+          where: (users, { eq }) => eq(users.id, req.session.tempUserId)
+        });
+
+        if (existingUser) {
+          console.log('Using existing temp user:', existingUser.id);
+          return res.json({ success: true, id: existingUser.id });
+        }
+        // If user not found in DB, clear the session
+        delete req.session.tempUserId;
       }
 
-      // Create temp user
+      // Create new temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({
           username: username || 'Anonymous',
@@ -93,9 +101,11 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Failed to create temp user');
       }
 
-      // Set session data and force save
+      // Set session data with stronger configuration
       req.session.tempUserId = tempUser.id;
       req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
+      req.session.cookie.secure = process.env.NODE_ENV === 'production';
+      req.session.cookie.httpOnly = true;
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
