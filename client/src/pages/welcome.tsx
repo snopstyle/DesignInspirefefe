@@ -42,9 +42,11 @@ export default function WelcomePage() {
 
       const data = await response.json();
       if (data.success && data.id) {
-        setTempUserId(data.id);
+        await setTempUserId(data.id);
         setIsOpen(false);
-        navigate("/landing");
+        setTimeout(() => {
+          navigate("/landing");
+        }, 100);
       } else {
         throw new Error('Invalid server response');
       }
