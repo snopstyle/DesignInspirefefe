@@ -11,6 +11,7 @@ import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
 import Stats from "./pages/stats";
 import Welcome from "@/pages/welcome";
+import Chat from "@/pages/chat";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
         <Route path="/search" component={SearchPage} />
         <Route path="/auth" component={Landing} />
         <Route path="/stats" component={Stats} />
+        <Route path="/chat" component={Chat} />
         <Route component={NotFound} />
       </Switch>
     </>
