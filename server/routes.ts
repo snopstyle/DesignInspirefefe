@@ -26,8 +26,17 @@ declare module 'express-session' {
         createdAt: new Date()
       }).returning();
       
-      res.json({ id: user.id });
+      req.session.tempUserId = user.id;
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+      
+      res.json({ id: user.id, sessionId: req.sessionID });
     } catch (error) {
+      console.error('Error creating temp user:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   });
