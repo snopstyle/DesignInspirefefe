@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -90,11 +90,16 @@ export default function ChatPage() {
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
       <Card className="w-full max-w-4xl bg-transparent border-white/10">
         <CardHeader className="border-b border-white/10 pb-4">
-          <CardTitle className="text-[120px] font-black text-center">
+          <CardTitle className="text-[85px] font-black text-center">
             <span className="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-['Unbounded']">
               GURU
             </span>
           </CardTitle>
+          <CardDescription className="text-center max-w-xl mx-auto text-xl text-gray-400 leading-relaxed">
+            Hey ! Je suis ton conseiller d'orientation personnel. 
+            Pose-moi tes questions sur les formations, les métiers ou ton avenir, 
+            et je t'aide à y voir plus clair avec des réponses personnalisées. 🎯
+          </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
           <ScrollArea className="h-[500px] pr-4 mb-6">
