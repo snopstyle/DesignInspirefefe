@@ -16,6 +16,16 @@ interface Message {
 const formatLine = (line: string) => {
   // Format bullet points and numbered lists
   if (line.match(/^[-*]\s/) || line.match(/^\d+\.\s/)) {
+    const parts = line.split(':');
+    if (parts.length > 1) {
+      // If there's a colon, make the part before it bold
+      return (
+        <>
+          <strong className="font-semibold">{parts[0]}:</strong>
+          <span className="font-extralight">{parts.slice(1).join(':')}</span>
+        </>
+      );
+    }
     return <strong className="font-semibold">{line}</strong>;
   }
 
