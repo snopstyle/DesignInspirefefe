@@ -49,9 +49,12 @@ export default function Landing() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto">
-            {features.slice(0, 2).map((feature) => (
+            {features.slice(0, 2).map((feature, index) => (
               <motion.div
                 key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: index * 0.4 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="h-full"
@@ -75,9 +78,12 @@ export default function Landing() {
           </div>
 
           <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {features.slice(2, 4).map((feature) => (
+            {features.slice(2, 4).map((feature, index) => (
               <motion.div
                 key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: index * 0.4 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="h-full"
