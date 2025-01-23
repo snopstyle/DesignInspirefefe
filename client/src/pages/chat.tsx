@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { GradientBackground } from '@/components/layout/gradient-background';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
@@ -18,7 +17,6 @@ const formatLine = (line: string) => {
   if (line.match(/^[-*]\s/) || line.match(/^\d+\.\s/)) {
     const parts = line.split(':');
     if (parts.length > 1) {
-      // If there's a colon, make the part before it bold
       return (
         <>
           <strong>{parts[0]}:</strong>
@@ -89,95 +87,93 @@ export default function ChatPage() {
   };
 
   return (
-    <GradientBackground>
-      <div className="container mx-auto py-8 px-4">
-        <Card className="max-w-4xl mx-auto bg-black/40 backdrop-blur-xl border-white/10">
-          <CardHeader className="border-b border-white/10 pb-4">
-            <CardTitle className="text-2xl font-bold">
-              <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">
-                Chat avec le Guru
-              </span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <ScrollArea className="h-[500px] pr-4 mb-6">
-              <AnimatePresence initial={false}>
-                <div className="space-y-4">
-                  {messages.map((message, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={`flex ${
-                        message.role === 'user' ? 'justify-end' : 'justify-start'
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+      <Card className="w-full max-w-4xl bg-transparent border-white/10">
+        <CardHeader className="border-b border-white/10 pb-4">
+          <CardTitle className="text-[120px] font-black text-center">
+            <span className="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-['Unbounded']">
+              GURU
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <ScrollArea className="h-[500px] pr-4 mb-6">
+            <AnimatePresence initial={false}>
+              <div className="space-y-4">
+                {messages.map((message, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className={`flex ${
+                      message.role === 'user' ? 'justify-end' : 'justify-start'
+                    }`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-2xl px-6 py-4 ${
+                        message.role === 'user'
+                          ? 'bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 text-white'
+                          : 'bg-white/5 border border-white/10 text-white/90'
                       }`}
                     >
-                      <div
-                        className={`max-w-[80%] rounded-2xl px-6 py-4 ${
-                          message.role === 'user'
-                            ? 'bg-gradient-to-r from-orange-500/80 to-purple-500/80 text-white shadow-lg'
-                            : 'bg-white/5 border border-white/10 text-white/90 backdrop-blur-sm'
-                        }`}
-                      >
-                        <div className={`whitespace-pre-wrap text-sm leading-relaxed ${
-                          message.role === 'assistant' ? 'font-extralight' : ''
-                        }`}>
-                          {message.role === 'assistant' 
-                            ? message.content.split('\n').map((line, i) => (
-                                <p key={i} className="mb-2 last:mb-0">
-                                  {formatLine(line)}
-                                </p>
-                              ))
-                            : message.content.split('\n').map((line, i) => (
-                                <p key={i} className="mb-2 last:mb-0">
-                                  {line}
-                                </p>
-                              ))
-                          }
-                        </div>
+                      <div className={`whitespace-pre-wrap text-sm leading-relaxed ${
+                        message.role === 'assistant' ? 'font-extralight' : ''
+                      }`}>
+                        {message.role === 'assistant' 
+                          ? message.content.split('\n').map((line, i) => (
+                              <p key={i} className="mb-2 last:mb-0">
+                                {formatLine(line)}
+                              </p>
+                            ))
+                          : message.content.split('\n').map((line, i) => (
+                              <p key={i} className="mb-2 last:mb-0">
+                                {line}
+                              </p>
+                            ))
+                        }
                       </div>
-                    </motion.div>
-                  ))}
-                  {isLoading && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex justify-start"
-                    >
-                      <div className="bg-white/5 backdrop-blur-sm rounded-2xl px-6 py-4 border border-white/10">
-                        <Loader2 className="h-5 w-5 animate-spin text-white/70" />
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-              </AnimatePresence>
-            </ScrollArea>
-
-            <form onSubmit={handleSubmit} className="relative mt-4">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Pose ta question au Guru..."
-                className="pr-24 bg-white/5 border-white/10 text-white placeholder:text-white/50 h-12 backdrop-blur-sm"
-                disabled={isLoading}
-              />
-              <Button 
-                type="submit" 
-                size="icon"
-                disabled={isLoading}
-                className="absolute right-1.5 top-1.5 bg-gradient-to-r from-orange-500/80 to-purple-500/80 hover:from-orange-500 hover:to-purple-500 h-9 w-9"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
+                    </div>
+                  </motion.div>
+                ))}
+                {isLoading && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex justify-start"
+                  >
+                    <div className="bg-white/5 rounded-2xl px-6 py-4 border border-white/10">
+                      <Loader2 className="h-5 w-5 animate-spin text-white/70" />
+                    </div>
+                  </motion.div>
                 )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </GradientBackground>
+              </div>
+            </AnimatePresence>
+          </ScrollArea>
+
+          <form onSubmit={handleSubmit} className="relative mt-4">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Pose ta question au Guru..."
+              className="pr-24 bg-white/5 border-white/10 text-white placeholder:text-white/50 h-12"
+              disabled={isLoading}
+            />
+            <Button 
+              type="submit" 
+              size="icon"
+              disabled={isLoading}
+              className="absolute right-1.5 top-1.5 bg-transparent hover:bg-gradient-to-r hover:from-orange-500 hover:via-purple-500 hover:to-pink-500 h-9 w-9 text-white"
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
