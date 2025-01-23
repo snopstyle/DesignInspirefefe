@@ -4,7 +4,7 @@ import { Link } from "wouter";
 export function Footer({ className }: { className?: string }) {
   return (
     <footer className={cn(
-      "w-full py-6 px-4 mt-auto bg-transparent border-t border-white/20", 
+      "w-full py-6 px-4 mt-auto bg-transparent", 
       className
     )}>
       <div className="container mx-auto">
