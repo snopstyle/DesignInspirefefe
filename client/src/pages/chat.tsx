@@ -16,18 +16,18 @@ interface Message {
 const formatLine = (line: string) => {
   // Format bullet points and numbered lists
   if (line.match(/^[-*]\s/) || line.match(/^\d+\.\s/)) {
-    return <strong>{line}</strong>;
+    return <strong className="font-semibold">{line}</strong>;
   }
 
   // Format titles (lines ending with ":")
   if (line.endsWith(':')) {
-    return <strong>{line}</strong>;
+    return <strong className="font-semibold">{line}</strong>;
   }
 
   // Format proper nouns (words starting with capital letters)
   return line.split(' ').map((word, i) => {
     if (word.match(/^[A-Z][a-z]{2,}/)) {
-      return <span key={i}><strong>{word}</strong>{' '}</span>;
+      return <span key={i}><strong className="font-semibold">{word}</strong>{' '}</span>;
     }
     return <span key={i}>{word}{' '}</span>;
   });
@@ -110,7 +110,7 @@ export default function ChatPage() {
                             : 'bg-white/10 text-white border border-white/10'
                         }`}
                       >
-                        <div className="whitespace-pre-wrap">
+                        <div className="whitespace-pre-wrap font-light text-justify">
                           {message.role === 'assistant' 
                             ? message.content.split('\n').map((line, i) => (
                                 <p key={i} className="mb-2 last:mb-0 leading-relaxed">
