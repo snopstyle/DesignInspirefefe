@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* Keep current gradient theme as default */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -24,23 +25,24 @@
   }
 
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 72.2% 50.6%;
-    --primary-foreground: 0 85.7% 97.3%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    /* New stark dark theme */
+    --background: 0 0% 0%;  /* Pure black */
+    --foreground: 35 100% 50%;  /* Strong orange */
+    --card: 0 0% 15%;  /* Dark grey */
+    --card-foreground: 35 100% 50%;  /* Strong orange */
+    --popover: 0 0% 10%;  /* Slightly lighter black */
+    --popover-foreground: 35 100% 50%;  /* Strong orange */
+    --primary: 35 100% 50%;  /* Strong orange */
+    --primary-foreground: 0 0% 0%;  /* Pure black */
+    --secondary: 0 0% 20%;  /* Medium grey */
+    --secondary-foreground: 35 100% 50%;  /* Strong orange */
+    --muted: 0 0% 25%;  /* Light grey */
+    --muted-foreground: 35 85% 40%;  /* Muted orange */
+    --accent: 35 100% 50%;  /* Strong orange */
+    --accent-foreground: 0 0% 0%;  /* Pure black */
+    --border: 0 0% 20%;  /* Dark grey */
+    --input: 0 0% 20%;  /* Dark grey */
+    --ring: 35 100% 50%;  /* Strong orange */
   }
 
   * {
@@ -48,6 +50,33 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
+}
+
+/* Keep existing gradient styles */
+.bg-gradient-neo {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+/* Dark mode specific overrides */
+.dark .bg-white\/10 {
+  background-color: hsl(0 0% 15%) !important;  /* Dark grey boxes */
+}
+
+.dark .bg-white\/5 {
+  background-color: hsl(0 0% 12%) !important;  /* Slightly darker grey */
+}
+
+.dark .border-white\/10 {
+  border-color: hsl(35 100% 50% / 0.2) !important;  /* Orange tinted borders */
+}
+
+.dark .text-white {
+  color: hsl(35 100% 50%) !important;  /* Strong orange text */
+  text-shadow: none;
+}
+
+.dark .text-white\/70 {
+  color: hsl(35 85% 40%) !important;  /* Muted orange text */
 }
