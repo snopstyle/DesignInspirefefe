@@ -110,7 +110,7 @@ export default function ChatPage() {
                             : 'bg-white/10 text-white border border-white/10'
                         }`}
                       >
-                        <div className="whitespace-pre-wrap font-light text-justify">
+                        <div className="whitespace-pre-wrap font-extralight text-justify opacity-80">
                           {message.role === 'assistant' 
                             ? message.content.split('\n').map((line, i) => (
                                 <p key={i} className="mb-2 last:mb-0 leading-relaxed">
