@@ -40,35 +40,16 @@ async function handleAuthRequest(
   }
 }
 
-async function fetchUser(): Promise<User | null> {
-  const response = await fetch('/api/user', {
+async function fetchUser(): Promise<{ isAuthenticated: boolean }> {
+  const response = await fetch('/api/user/status', {
     credentials: 'include'
   });
 
   if (!response.ok) {
-    if (response.status === 401) {
-      // Vérifier s'il y a un utilisateur temporaire
-      const tempUser = sessionStorage.getItem('tempUser');
-      if (tempUser) {
-        return JSON.parse(tempUser);
-      }
-      return null;
-    }
-
-    if (response.status >= 500) {
-      throw new Error(`${response.status}: ${response.statusText}`);
-    }
-
-    throw new Error(`${response.status}: ${await response.text()}`);
+    return { isAuthenticated: false };
   }
 
-  const user = await response.json();
-  if (user.isTemporary) {
-    sessionStorage.setItem('tempUser', JSON.stringify(user));
-  } else if (sessionStorage.getItem('tempUser')) {
-    sessionStorage.removeItem('tempUser');
-  }
-  return user;
+  return { isAuthenticated: true };
 }
 
 export function useUser() {
