@@ -58,7 +58,7 @@ declare module 'express-session' {
 
 export function registerRoutes(app: Express): Server {
   // Create temporary user session
-  app.post("/api/temp-user", async (req, res) => {
+  app.post("/api/users/temp", async (req, res) => {
     try {
       // Check if user already exists in session
       if (req.session.tempUserId) {
@@ -79,15 +79,20 @@ export function registerRoutes(app: Express): Server {
 
       // Set session data
       req.session.tempUserId = tempUser.id;
+      req.session.createdAt = new Date();
       
-      // Force session save
+      // Force session save and wait for completion
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
             console.error('Session save error:', err);
             reject(err);
           } else {
-            console.log('Session saved successfully. ID:', req.sessionID, 'TempUserId:', tempUser.id);
+            console.log('Session saved successfully:', {
+              sessionId: req.sessionID,
+              tempUserId: tempUser.id,
+              createdAt: req.session.createdAt
+            });
             resolve();
           }
         });
