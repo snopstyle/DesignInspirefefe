@@ -6,7 +6,7 @@ export default function About() {
     <div className="min-h-screen w-full flex items-center justify-center bg-black">
       <Card className="w-full max-w-4xl mx-auto my-8 bg-black/40 backdrop-blur-sm border border-white/10">
         <CardContent className="prose prose-lg dark:prose-invert max-w-3xl mx-auto p-8">
-          <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Manifeste : HumanEdTech</h1>
+          <h1 className="text-4xl font-bold text-center mb-8 text-orange-400">Manifeste : HumanEdTech</h1>
           <h2 className="text-2xl font-semibold text-center mb-10 text-white/90">(Éducation, Technologie, Humanité)</h2>
 
           <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-orange-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">Préambule</h3>
