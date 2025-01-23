@@ -43,20 +43,27 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    // Only initialize session if we're not on the welcome page
-    if (location[0] !== '/') {
-      fetch('/api/users/temp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ username: 'Anonymous' })
-      })
-      .then(res => res.json())
-      .then(() => setIsSessionInitialized(true))
-      .catch(console.error);
-    } else {
-      setIsSessionInitialized(true);
-    }
+    const initSession = async () => {
+      if (location[0] === '/') {
+        setIsSessionInitialized(true);
+        return;
+      }
+      
+      try {
+        await fetch('/api/users/temp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ username: 'Anonymous' })
+        });
+        setIsSessionInitialized(true);
+      } catch (error) {
+        console.error('Session initialization failed:', error);
+        window.location.href = '/';
+      }
+    };
+    
+    initSession();
   }, [location]);
 
   return (
