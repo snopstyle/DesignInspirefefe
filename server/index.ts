@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 // Improved session configuration
 app.use(session({
   store: new SessionStore({
-    checkPeriod: 86400000, // prune expired entries every 24h
+    checkPeriod: 86400000,
     ttl: 24 * 60 * 60 * 1000,
     stale: false
   }),
@@ -22,13 +22,13 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   rolling: true,
-  proxy: true,
   cookie: {
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
     sameSite: 'lax',
-    path: '/'
+    path: '/',
+    domain: process.env.NODE_ENV === 'production' ? '.replit.dev' : undefined
   }
 }));
 
