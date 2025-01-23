@@ -68,9 +68,9 @@ export function FormationCard({
               variant="outline" 
               size="sm"
               onClick={() => window.open(officialLink, '_blank')}
-              className="gap-2 bg-gradient-neo from-orange-500/80 to-purple-500/80 text-white border-none"
+              className="gap-2 bg-gradient-neo from-orange-500/80 to-purple-500/80 text-white border-none h-8 text-xs"
             >
-              <ExternalLink className="h-4 w-4" />
+              <ExternalLink className="h-3 w-3" />
               Site officiel
             </Button>
           )}
@@ -81,9 +81,9 @@ export function FormationCard({
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(socialLinks.linkedin, '_blank')}
-                className="h-10 w-10 hover:text-[#0A66C2] hover:bg-[#0A66C2]/10"
+                className="h-12 w-12 hover:text-[#0A66C2] hover:bg-[#0A66C2]/10"
               >
-                <SiLinkedin className="h-6 w-6" />
+                <SiLinkedin className="h-7 w-7" />
               </Button>
             )}
 
@@ -92,9 +92,9 @@ export function FormationCard({
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(socialLinks.facebook, '_blank')}
-                className="h-10 w-10 hover:text-[#1877F2] hover:bg-[#1877F2]/10"
+                className="h-12 w-12 hover:text-[#1877F2] hover:bg-[#1877F2]/10"
               >
-                <SiFacebook className="h-6 w-6" />
+                <SiFacebook className="h-7 w-7" />
               </Button>
             )}
 
@@ -103,9 +103,9 @@ export function FormationCard({
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(socialLinks.instagram, '_blank')}
-                className="h-10 w-10 hover:text-[#E4405F] hover:bg-[#E4405F]/10"
+                className="h-12 w-12 hover:text-[#E4405F] hover:bg-[#E4405F]/10"
               >
-                <SiInstagram className="h-6 w-6" />
+                <SiInstagram className="h-7 w-7" />
               </Button>
             )}
           </div>
