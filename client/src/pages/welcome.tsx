@@ -8,7 +8,7 @@ export default function WelcomePage() {
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
       <motion.h1 
-        className="text-[120px] font-black text-transparent bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text mb-12"
+        className="text-[120px] font-black text-transparent bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text bg-[300%] mb-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
