@@ -10,7 +10,7 @@ import { NavButtons } from "@/components/layout/nav-buttons";
 import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
 import Stats from "./pages/stats";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/lib/theme";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 function Router() {
@@ -36,7 +36,7 @@ function Router() {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" enableSystem>
+    <ThemeProvider defaultTheme="system">
       <QueryClientProvider client={queryClient}>
         <Router />
         <Toaster />
