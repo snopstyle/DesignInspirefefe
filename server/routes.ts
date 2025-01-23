@@ -414,14 +414,13 @@ export function registerRoutes(app: Express): Server {
   // Get unique cities
   app.get('/api/cities', async (req, res) => {
     try {
-      const results = await db.query.locations.findMany({
-        columns: { ville: true },
-        orderBy: asc(locations.ville)
-      });
+      const results = await db
+        .select({ ville: locations.ville })
+        .from(locations)
+        .orderBy(asc(locations.ville));
 
-      const uniqueCities = new Set(results.map(r => r.ville));
-      const citiesList = Array.from(uniqueCities);
-      res.json(citiesList);
+      const uniqueCities = [...new Set(results.map(r => r.ville))];
+      res.json(uniqueCities);
     } catch (error) {
       console.error('Error fetching cities:', error);
       res.status(500).json({ error: 'Erreur lors de la récupération des villes' });

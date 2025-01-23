@@ -40,7 +40,8 @@ export default function SearchPage() {
 
   // Fetch cities and domains
   const { data: cities = [] } = useQuery<string[]>({
-    queryKey: ['/api/cities']
+    queryKey: ['/api/cities'],
+    staleTime: Infinity
   });
 
   const { data: domains = [] } = useQuery<string[]>({
