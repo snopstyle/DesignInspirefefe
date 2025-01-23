@@ -10,10 +10,15 @@ import { NavButtons } from "@/components/layout/nav-buttons";
 import SearchPage from './pages/search';
 import Landing from "@/pages/landing";
 import Stats from "./pages/stats";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function Router() {
   return (
     <>
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
       <NavButtons />
       <Switch>
         <Route path="/" component={Landing} />
@@ -31,10 +36,12 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
-    </QueryClientProvider>
+    <ThemeProvider defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
+        <Router />
+        <Toaster />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
