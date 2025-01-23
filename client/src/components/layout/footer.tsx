@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Link } from "wouter";
 
 export function Footer({ className }: { className?: string }) {
   return (
@@ -8,19 +9,9 @@ export function Footer({ className }: { className?: string }) {
     )}>
       <div className="container mx-auto">
         <div className="text-sm text-muted-foreground">
-          <h3 className="font-semibold mb-2 text-foreground">À propos</h3>
-          <p className="mb-2">
-            HumanEdTech naît d'une conviction : la technologie doit servir l'humain, jamais l'asservir.
-            Notre mission est de réinventer l'éducation à l'ère numérique.
-          </p>
-          <p className="mb-2">
-            Notre vision : Une pédagogie augmentée, jamais diminuée. Des outils qui stimulent la curiosité
-            plutôt que l'addiction, qui reconnectent les élèves à leur corps, à leur intuition, à leur désir de créer.
-          </p>
-          <p>
-            « La technologie a rétréci le monde, mais elle ne doit pas rétrécir notre humanité. »
-            — HumanEdTech
-          </p>
+          <Link href="/about" className="hover:underline text-foreground">
+            À propos
+          </Link>
         </div>
       </div>
     </footer>

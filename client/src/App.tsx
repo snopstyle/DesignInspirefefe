@@ -13,6 +13,7 @@ import Stats from "./pages/stats";
 import Welcome from "@/pages/welcome";
 import Chat from "@/pages/chat";
 import { Layout } from "@/components/layout/layout";
+import About from "@/pages/about";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/auth" component={Landing} />
         <Route path="/stats" component={Stats} />
         <Route path="/chat" component={Chat} />
+        <Route path="/about" component={About} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
