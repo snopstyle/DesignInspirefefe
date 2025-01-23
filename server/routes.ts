@@ -335,19 +335,23 @@ export function registerRoutes(app: Express): Server {
       // Build where conditions
       const conditions = [];
 
-      if (query) {
-        conditions.push(
-          or(
-            ilike(formations.formation, `%${query}%`),
-            ilike(establishments.name, `%${query}%`),
-            ilike(locations.ville, `%${query}%`),
-            ilike(locations.region, `%${query}%`)
-          )
-        );
+      if (query?.trim()) {
+        const terms = query.trim().split(/\s+/).filter(Boolean);
+        terms.forEach(term => {
+          conditions.push(
+            or(
+              ilike(formations.formation, `%${term}%`),
+              ilike(establishments.name, `%${term}%`),
+              ilike(locations.ville, `%${term}%`),
+              ilike(locations.region, `%${term}%`),
+              sql`${formations.domaines}::text[] && ARRAY[${term}]::text[]`
+            )
+          );
+        });
       }
 
-      if (ville) {
-        conditions.push(ilike(locations.ville, ville)); // Changed to ilike for case-insensitive comparison
+      if (ville?.trim()) {
+        conditions.push(eq(locations.ville, ville.trim()));
       }
 
       // Handle domain filtering at the SQL level

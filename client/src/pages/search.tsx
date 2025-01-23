@@ -39,14 +39,15 @@ export default function SearchPage() {
 
   const buildSearchUrl = () => {
     const params = new URLSearchParams();
-    if (debouncedValue) params.set('q', debouncedValue);
-    if (selectedVille) params.set('ville', selectedVille);
+    if (debouncedValue?.trim()) params.set('q', debouncedValue.trim());
+    if (selectedVille?.trim()) params.set('ville', selectedVille.trim());
     return `/api/search?${params.toString()}`;
   };
 
   const { data: results = [], isLoading } = useQuery<FormationResult[]>({
     queryKey: [buildSearchUrl()],
-    enabled: Boolean(debouncedValue) || Boolean(selectedVille)
+    enabled: Boolean(debouncedValue?.trim()) || Boolean(selectedVille?.trim()),
+    staleTime: 1000
   });
 
   return (
