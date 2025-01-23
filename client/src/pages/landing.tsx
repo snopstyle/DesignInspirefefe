@@ -57,7 +57,7 @@ export default function Landing() {
                 className="h-full"
               >
                 <Card 
-                  className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full"
+                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full"
                   onClick={() => setLocation(feature.path)}
                 >
                   <CardHeader>
@@ -75,50 +75,32 @@ export default function Landing() {
           </div>
 
           <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="h-full"
-            >
-              <Card 
-                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full"
-                onClick={() => setLocation(features[2].path)}
+            {features.slice(2, 4).map((feature) => (
+              <motion.div
+                key={feature.title}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="h-full"
               >
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <User className="h-8 w-8" />
-                  </div>
-                  <CardTitle className="text-xl mt-4">{features[2].title}</CardTitle>
-                  <CardDescription className="text-white/70">
-                    {features[2].description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="h-full"
-            >
-              <Card 
-                className="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border-white/20 transition-colors h-full"
-                onClick={() => setLocation(features[3].path)}
-              >
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <MessageCircle className="h-8 w-8" />
-                  </div>
-                  <CardTitle className="text-xl mt-4">{features[3].title}</CardTitle>
-                  <CardDescription className="text-white/70">
-                    {features[3].description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </motion.div>
+                <Card 
+                  className="cursor-pointer bg-black/40 hover:bg-black/60 backdrop-blur-sm border-white/20 transition-colors h-full"
+                  onClick={() => setLocation(feature.path)}
+                >
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <feature.icon className="h-8 w-8" />
+                    </div>
+                    <CardTitle className="text-xl mt-4">{feature.title}</CardTitle>
+                    <CardDescription className="text-white/70">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
+            ))}
           </div>
 
-          <Card className="bg-gray-900/20 border-gray-500/30 backdrop-blur-sm mt-8 mx-auto max-w-2xl">
+          <Card className="bg-black/20 border-gray-500/30 backdrop-blur-sm mt-8 mx-auto max-w-2xl">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <Crown className="h-6 w-6 text-purple-400" />
