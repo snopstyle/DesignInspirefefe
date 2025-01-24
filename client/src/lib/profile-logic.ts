@@ -61,43 +61,31 @@ export const sub_profiles: Record<string, string[]> = {
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
-  "Q1": { "Collaboration": 0.4, "Adaptabilité": 0.3 },
-  "Q2": { "Raisonnement Analytique": 0.5, "Expression Créative": 0.3 },
-  "Q3": { "Pensée Interdisciplinaire": 0.4, "Pensée à Long Terme": 0.3 },
-  "Q4": { "Conscience Sociale": 0.6, "État d'Esprit de Croissance": 0.2 },
-  "Q5": { "Évaluation des Risques": 0.5, "Prise de Risque": 0.3 },
-  "Q6": { "Interprétation des Données": 0.6, "Précision": 0.2 },
-  "Q7": { "Expression Créative": 0.7, "Expertise Technique": 0.3 },
-  "Q8": { "Efficacité": 0.5, "Organisation": 0.3 },
-  "Q9": { "Plaidoyer Engagé": 0.7, "Leadership Stratégique": 0.2 },
-  "Q10": { "Perspective Globale": 0.5, "Pensée Interdisciplinaire": 0.3 },
-  "Q11": { "Précision": 0.6, "Souci du Détail": 0.2 },
-  "Q12": { "Curiosité Intellectuelle": 0.5, "État d'Esprit de Croissance": 0.3 },
-  "Q13": { "Leadership Stratégique": 0.6, "Prise de Décision": 0.2 },
-  "Q14": { "Focus sur la Durabilité": 0.7, "Innovation": 0.2 },
-  "Q15": { "Adaptabilité": 0.4, "Résolution de Problèmes": 0.3 },
-  "Q16": { "Expertise Technique": 0.7, "Compétences Techniques": 0.2 },
-  "Q17": { "Sensibilité Esthétique": 0.6, "Expression Créative": 0.2 },
-  "Q18": { "Diplomatie": 0.5, "Compétences en Communication": 0.3 },
-  "Q19": { "Exécution Stratégique": 0.6, "Organisation": 0.2 },
-  "Q20": { "Compétences en Communication": 0.5, "Leadership Stratégique": 0.3 },
-  "Q21": { "Expertise Technique": 0.5, "Innovation": 0.3 },
-  "Q22": { "Adaptabilité": 0.6, "Polyvalence": 0.2 },
-  "Q23": { "Pensée à Long Terme": 0.5, "Vision": 0.3 },
-  "Q24": { "Polyvalence": 0.5, "Large Éventail de Compétences": 0.3 },
-  "Q25": { "Plaidoyer Engagé": 0.6, "Impact Social": 0.2 },
-  "Q26": { "Expression Créative": 0.4, "Curiosité Intellectuelle": 0.4 },
-  "Q27": { "Pensée Interdisciplinaire": 0.5, "État d'Esprit de Croissance": 0.3 },
-  "Q28": { "Adaptabilité": 0.4, "Polyvalence": 0.4 },
-  "Q29": { "Organisation": 0.5, "Innovation": 0.3 },
-  "Q30": { "Motivation": 0.5, "Vision": 0.3 },
-  "Q31": { "État d'Esprit de Croissance": 0.6, "Adaptabilité": 0.2 },
-  "Q32": { "Vision": 0.5, "Impact Social": 0.3 },
-  "Q33": { "Planification": 0.4, "Organisation": 0.4 },
-  "Q34": { "Engagement": 0.5, "Vision à Long Terme": 0.3 },
-  "Q35": { "Adaptabilité": 0.4, "Mobilité": 0.4 },
-  "Q36": { "Ouverture d'Esprit": 0.5, "Adaptabilité": 0.3 },
-  "Q37": { "Priorités": 0.5, "Vision": 0.3 }
+  "1": { "Collaboration": 0.4, "Adaptabilité": 0.3 },
+  "2": { "Raisonnement Analytique": 0.5, "Expression Créative": 0.3 },
+  "3": { "Pensée Interdisciplinaire": 0.4, "Pensée à Long Terme": 0.3 },
+  "4": { "Conscience Sociale": 0.6, "État d'Esprit de Croissance": 0.2 },
+  "5": { "Évaluation des Risques": 0.5, "Prise de Risque": 0.3 },
+  "6": { "Interprétation des Données": 0.6, "Précision": 0.2 },
+  "7": { "Expression Créative": 0.7, "Expertise Technique": 0.3 },
+  "8": { "Efficacité": 0.5, "Organisation": 0.3 },
+  "9": { "Plaidoyer Engagé": 0.7, "Leadership Stratégique": 0.2 },
+  "10": { "Perspective Globale": 0.5, "Pensée Interdisciplinaire": 0.3 },
+  "11": { "Précision": 0.6, "Organisation": 0.2 },
+  "12": { "Curiosité Intellectuelle": 0.5, "État d'Esprit de Croissance": 0.3 },
+  "13": { "Leadership Stratégique": 0.6, "Prise de Décision": 0.2 },
+  "14": { "Focus sur la Durabilité": 0.7, "Innovation": 0.2 },
+  "15": { "Adaptabilité": 0.4, "Résolution de Problèmes": 0.3 },
+  "16": { "Expertise Technique": 0.7, "Résolution de Problèmes": 0.2 },
+  "17": { "Sensibilité Esthétique": 0.6, "Expression Créative": 0.2 },
+  "18": { "Diplomatie": 0.5, "Compétences en Communication": 0.3 },
+  "19": { "Exécution Stratégique": 0.6, "Organisation": 0.2 },
+  "20": { "Compétences en Communication": 0.5, "Leadership Stratégique": 0.3 },
+  "21": { "Expertise Technique": 0.5, "Innovation": 0.3 },
+  "22": { "Adaptabilité": 0.6, "Polyvalence": 0.2 },
+  "23": { "Pensée à Long Terme": 0.5, "Vision": 0.3 },
+  "24": { "Polyvalence": 0.5, "Large Éventail de Compétences": 0.3 },
+  "25": { "Plaidoyer Engagé": 0.6, "Conscience Sociale": 0.2 }
 };
 
 export const dominant_profile_mapping: Record<string, string> = {
@@ -449,22 +437,22 @@ export function answerValue(answer: string, questionId: string): number {
 
 export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
     const profileScores: Record<string, number> = { ...key_traits };
-
-    // Validation des réponses
+    
     console.log('Calculating scores for answers:', userAnswers);
 
     for (const [questionId, answer] of Object.entries(userAnswers)) {
-        if (!question_weights[questionId]) {
-            console.warn(`No weights defined for question ${questionId}`);
+        // Only process questions 1-25 for trait calculation
+        const qNum = questionId.toString();
+        if (parseInt(qNum) > 25 || !question_weights[qNum]) {
             continue;
         }
 
-        const value = answerValue(answer, questionId);
-        console.log(`Question ${questionId} answer "${answer}" has value ${value}`);
+        const value = answerValue(answer, qNum);
+        console.log(`Question ${qNum} answer "${answer}" has value ${value}`);
 
-        for (const [trait, weight] of Object.entries(question_weights[questionId])) {
+        for (const [trait, weight] of Object.entries(question_weights[qNum])) {
             if (!(trait in profileScores)) {
-                console.warn(`Unknown trait "${trait}" in question ${questionId}`);
+                console.warn(`Unknown trait "${trait}" in question ${qNum}`);
                 continue;
             }
             const score = weight * value;
