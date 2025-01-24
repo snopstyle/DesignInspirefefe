@@ -175,8 +175,8 @@ export const sub_profile_weights: Record<string, Record<string, number>> = {
   "Organisateur": {
     "Organisation": 0.35,
     "Efficacité": 0.25,
-    "Planification Stratégique": 0.20,
-    "Planification Stratégique": 0.10
+    "Planification Stratégique": 0.30,
+    "Mentalité Orientée Résultats": 0.10
   },
   "Généraliste": {
     "Adaptabilité": 0.35,
