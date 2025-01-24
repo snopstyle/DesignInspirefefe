@@ -449,7 +449,7 @@ export function calculateProfileScores(userAnswers: Record<string, string>): Rec
             continue;
         }
 
-        const value = answerValue(answer, qNum);
+        const value = answerValue(answer, `Q${qNum}`);
         console.log(`Question ${qNum} answer "${answer}" has value ${value}`);
 
         for (const [trait, weight] of Object.entries(question_weights[qNum])) {
