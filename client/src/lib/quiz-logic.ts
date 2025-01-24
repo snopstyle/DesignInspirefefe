@@ -158,7 +158,7 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
   Object.entries(answers).forEach(([key, value]) => {
     const questionId = parseInt(key);
     if (questionId <= 25) {
-      psychoSocialAnswers[`Q${key}`] = Array.isArray(value) ? value[0] : value;
+      psychoSocialAnswers[`Q${questionId}`] = Array.isArray(value) ? value[0] : value;
     }
   });
 
