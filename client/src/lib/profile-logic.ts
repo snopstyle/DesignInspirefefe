@@ -92,12 +92,9 @@ export const sub_profiles: Record<string, string[]> = {
     "Le Codeur": ["Compétences techniques", "Résolution de problèmes", "Passion pour le code", "Pensée logique", "Innovation"],
     "Le Passionné de Technologie": ["Compétences techniques", "Créativité", "Passion pour le bricolage", "Résolution pratique", "Curiosité"],
     "Le Créateur Numérique": ["Créativité", "Compétences techniques", "Approche centrée utilisateur", "Innovation", "Adaptabilité"],
-    "Le Conservateur": ["Passion pour la nature", "Résolution de problèmes", "Perspective globale", "Plaidoyer", "Résilience"],
+    "Le protecteur de l'environnement": ["Passion pour la nature", "Résolution de problèmes", "Perspective globale", "Plaidoyer", "Résilience"],
     "L'Aventurier": ["Condition physique", "Adaptabilité", "Amour de la nature", "Résolution de problèmes", "Curiosité"],
-    "L'Innovateur Durable": ["Créativité", "Compétences techniques", "Passion pour la durabilité", "Résolution de problèmes", "Innovation"],
-    "L'Organisateur": ["Organisation", "Planification", "Leadership", "Communication", "Efficacité"],
-    "Le Communicateur": ["Communication", "Empathie", "Adaptabilité", "Ecoute active", "Diplomatie"],
-    "L'Auto-Perfectionniste": ["Développement personnel", "Amour de l'apprentissage", "Résilience", "Adaptabilité", "Curiosité"]
+    "L'Innovateur Durable": ["Créativité", "Compétences techniques", "Passion pour la durabilité", "Résolution de problèmes", "Innovation"]
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
@@ -672,7 +669,7 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Analyste de Données": "Le Penseur Analytique",
     "Le Théoricien": "Le Penseur Analytique",
     "L'Ingénieur": "Le Penseur Analytique",
-
+    
     // The Creative Visionary - Le Visionnaire Créatif
     "L'Artiste": "Le Visionnaire Créatif",
     "L'Innovateur": "Le Visionnaire Créatif",
@@ -680,28 +677,27 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Interprète": "Le Visionnaire Créatif",
     "Le Designer": "Le Visionnaire Créatif",
 
-    // The Social Impact Maker - L'Agent de Changement Social
-    "L'Aidant": "L'Agent de Changement Social",
-    "L'Activiste": "L'Agent de Changement Social",
-    "Le Communicant": "L'Agent de Changement Social",
-    "L'Éducateur": "L'Agent de Changement Social",
-    "L'Humanitaire": "L'Agent de Changement Social",
+    // The Social Advocate - L'Acteur du social
+    "L'Aidant": "L'Acteur du social",
+    "L'Activiste": "L'Acteur du social",
+    "Le Communicant": "L'Acteur du social",
+    "L'Éducateur": "L'Acteur du social",
+    "L'Humanitaire": ""L'Acteur du social,
 
-    // The Strategic Leader - Le Leader Stratégique
-    "L'Entrepreneur": "Le Leader Stratégique",
-    "Le Leader": "Le Leader Stratégique",
-    "Le Stratège": "Le Leader Stratégique",
-    "Le Commercial": "Le Leader Stratégique",
-    "L'Investisseur": "Le Leader Stratégique",
+    // The Strategic Leader - Le Leader Pragmatique
+    "L'Entrepreneur": "Le Leader Pragmatique",
+    "Le Leader": "Le Leader Pragmatique",
+    "Le Stratège": "Le Leader Pragmatique",
+    "Le Commercial": "Le Leader Pragmatique",
+    "L'Investisseur": "Le Leader Pragmatique",
 
     // The Technical Expert - L'Expert Technique
-    "L'Ingénieur": "L'Expert Technique",
     "Le Codeur": "L'Expert Technique",
     "Le Passionné de Technologie": "L'Expert Technique",
     "Le Créateur Numérique": "L'Expert Technique",
 
     // The Sustainable Innovator - L'Innovateur Durable
-    "Le Conservateur": "L'Innovateur Durable",
+    "Le protecteur de l'environnement": "L'Innovateur Durable",
     "L'Aventurier": "L'Innovateur Durable",
     "L'Innovateur Durable": "L'Innovateur Durable",
 
@@ -710,17 +706,22 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Intégrateur": "L'Explorateur Polyvalent",
     "L'Apprenant Perpétuel": "L'Explorateur Polyvalent",
     "Le Multipotentiel": "L'Explorateur Polyvalent",
-    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent",
+    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent"
 
-    // Adding the three new profiles
     // The Organizer - L'Organisateur
-    "L'Organisateur": "Le Leader Stratégique",
+    "Le Chef de Projet": "L'Organisateur",
+    "L'organisateur d'Événements": "L'Organisateur",
+    "Le Penseur Systémique": "L'Organisateur",
 
     // The Communicator - Le Communicateur
-    "Le Communicateur": "L'Agent de Changement Social",
+    "L'Orateur Public": "Le Communicateur",
+    "L'Écrivain": "Le Communicateur",
+    "Le Négociateur": "Le Communicateur",
 
-    // The Self-Improver - L'Auto-Perfectionniste
-    "L'Auto-Perfectionniste": "L'Explorateur Polyvalent"
+    // The Self-Improver - L'Améliorateur de Soi
+    "L'Apprenant à Vie": "Le Développeur personnel",
+    "Le Mentor": "Le Développeur personnel",
+    "Le Défenseur du Bien-Être": "Le Développeur personnel",
 };
 
 export const profile_summaries: Record<string, {
