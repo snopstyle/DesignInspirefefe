@@ -238,6 +238,23 @@ export const profile_summaries: Record<string, {
 
 // Helper functions
 export function answerValue(answer: string, questionId: string): number {
+    // Default scale for most questions
+    const defaultScale = {
+        "Très important": 1.0,
+        "Important": 0.75,
+        "Neutre": 0.5,
+        "Peu important": 0.25,
+        "Pas important": 0.0,
+        "J'adore ça": 1.0,
+        "J'aime bien": 0.75,
+        "Je n'aime pas": 0.25,
+        "Je déteste": 0.0,
+        "Très bien": 1.0,
+        "Bien": 0.75,
+        "Mal": 0.25,
+        "Très mal": 0.0
+    };
+
     const answerScales: Record<string, Record<string, number>> = {
         "Q1": {
             "Forte préférence pour le travail d'équipe": 1.0,
