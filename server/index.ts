@@ -10,26 +10,37 @@ const SessionStore = MemoryStore(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Configure session before any routes
-app.use(session({
+// Configure session middleware with strict settings
+const sessionMiddleware = session({
   store: new SessionStore({
-    checkPeriod: 86400000 // prune expired entries every 24h
+    checkPeriod: 86400000, // prune expired entries every 24h
+    ttl: 86400000, // 24 hours
+    stale: false
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
   name: 'sid',
-  resave: false,
+  resave: true, // Changed to true to ensure session is saved
   saveUninitialized: true,
+  rolling: true, // Refresh session with each request
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax'
+    sameSite: 'lax',
+    path: '/'
   }
-}));
+});
+
+app.use(sessionMiddleware);
 
 // Debug middleware for session tracking
 app.use((req, res, next) => {
-  console.log(`Session ID: ${req.sessionID}, TempUserID: ${req.session.tempUserId}`);
+  console.log('Session debug:', {
+    sessionID: req.sessionID,
+    tempUserId: req.session?.tempUserId,
+    isNew: req.session?.isNew,
+    cookie: req.session?.cookie
+  });
   next();
 });
 
@@ -44,7 +55,6 @@ app.use((req, res, next) => {
   });
   next();
 });
-
 
 (async () => {
   const server = registerRoutes(app);
