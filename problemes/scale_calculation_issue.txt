@@ -1,0 +1,31 @@
+
+Problem: Quiz Score Calculation Issue
+Date: January 2024
+
+Issue Description:
+The quiz score calculation was incorrect due to a mismatch between the answer scale and question format. The answerValue function was using a default 10-point scale when most questions actually use a 5-point scale, resulting in scores of 0 for valid answers.
+
+Symptoms:
+- All trait scores were calculating as 0
+- Console logs showed "value 0" for valid answers
+- Profile matching was inaccurate due to zero scores
+
+Fix Applied:
+1. Updated the answerValue function in profile-logic.ts to use correct 5-point scale
+2. Added proper answer value mappings for each question type
+3. Ensured question IDs are properly formatted with "Q" prefix when looking up scales
+
+Code Changes:
+- Modified the default scale in answerValue function
+- Added specific scale mappings for each question format
+- Fixed question ID formatting in calculateProfileScores
+
+Impact:
+- Correct score calculation for all answer types
+- Accurate trait scoring
+- Proper profile matching based on actual user responses
+
+Future Prevention:
+- Add input validation for answer scales
+- Implement unit tests for score calculation
+- Add logging for scale mismatches
