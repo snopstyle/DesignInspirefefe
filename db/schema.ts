@@ -12,6 +12,7 @@ export const users = pgTable("users", {
 
 export const tempUsers = pgTable("temp_users", {
   id: uuid("id").defaultRandom().primaryKey(),
+  username: text("username").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
 

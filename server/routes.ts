@@ -17,8 +17,9 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Session not initialized');
       }
 
-      console.log('Session verification:', req.session);
-      res.json({ valid: !!req.session.tempUserId, id: req.session.tempUserId });
+      const isValid = !!req.session.tempUserId;
+      res.json({ valid: isValid, id: req.session.tempUserId });
+
     } catch (error) {
       console.error('Session verification error:', error);
       res.status(500).json({ error: true, message: 'Session verification failed' });
@@ -32,33 +33,52 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Session not initialized');
       }
 
-      // Return existing temp user if already in session
+      const { username = 'Anonymous' } = req.body;
+
+      // Check for existing session
       if (req.session.tempUserId) {
-        console.log('Using existing temp user:', req.session.tempUserId);
-        return res.json({ id: req.session.tempUserId });
+        const existingUser = await db.query.tempUsers.findFirst({
+          where: (tempUsers, { eq }) => eq(tempUsers.id, req.session.tempUserId)
+        });
+
+        if (existingUser) {
+          console.log('Using existing temp user:', existingUser.id);
+          return res.json({ id: existingUser.id });
+        }
       }
 
-      // Create new temp user
+      // Create new temp user with username
       const [tempUser] = await db.insert(tempUsers)
-        .values({})
+        .values({
+          username: username
+        })
         .returning();
 
       if (!tempUser?.id) {
         throw new Error('Failed to create temp user');
       }
 
-      // Save temp user ID to session
+      // Store in session
       req.session.tempUserId = tempUser.id;
 
-      // Save session and wait for completion
+      // Save session explicitly
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
-          if (err) reject(err);
-          else resolve();
+          if (err) {
+            console.error('Session save error:', err);
+            reject(err);
+          } else {
+            resolve();
+          }
         });
       });
 
-      console.log('Created new temp user:', { id: tempUser.id, session: req.sessionID });
+      console.log('Created temp user:', {
+        id: tempUser.id,
+        username: tempUser.username,
+        session: req.sessionID
+      });
+
       res.json({ id: tempUser.id });
 
     } catch (error) {
