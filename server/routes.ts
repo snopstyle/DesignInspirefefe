@@ -1,90 +1,19 @@
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
 import { sql } from "drizzle-orm";
-import {
-  establishments,
-  locations,
-  formations,
-  costs,
-  pedagogyTypes
-} from "@db/schemas/formations";
-import { eq, and, or, ilike, asc } from "drizzle-orm";
-import { quizSessions, tempUsers } from "@db/schema";
-import { desc } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
+import { tempUsers, quizSessions } from "@db/schema";
 
 declare module 'express-session' {
   interface SessionData {
-    tempUserId: string | undefined;
+    tempUserId?: string;
   }
-
-  // Verify session endpoint
-  app.get('/api/users/verify', (req, res) => {
-    if (req.session?.tempUserId) {
-      res.status(200).json({ valid: true });
-    } else {
-      res.status(401).json({ valid: false });
-    }
-  });
-
-  app.post('/api/users/temp', async (req, res) => {
-    try {
-      if (!req.session) {
-        throw new Error('Session not initialized');
-      }
-
-      // Check existing session and return if valid
-      if (req.session.tempUserId) {
-        const existingUser = await db.query.tempUsers.findFirst({
-          where: (users, { eq }) => eq(users.id, req.session.tempUserId)
-        });
-
-        if (existingUser) {
-          console.log('Using existing temp user:', existingUser.id);
-          return res.json({ success: true, id: existingUser.id });
-        }
-      }
-
-      // Only create new user if no valid session exists
-      const { username } = req.body;
-      const [user] = await db.insert(tempUsers)
-        .values({
-          username: username || 'Anonymous',
-          createdAt: new Date()
-        })
-        .returning();
-
-      if (!user?.id) {
-        throw new Error('Failed to create temp user');
-      }
-
-      // Save session synchronously
-      req.session.tempUserId = user.id;
-      await new Promise<void>((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
-
-      console.log('New temp user created:', user.id);
-      res.json({ success: true, id: user.id });
-
-    } catch (error) {
-      console.error('Error creating temp user:', error);
-      res.status(500).json({ 
-        error: 'Internal server error',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  });
-
-
 }
 
 export function registerRoutes(app: Express): Server {
   // Create temporary user session
-  app.post("/api/users/temp", async (req, res) => {
+  app.post("/api/users/temp", async (req: Request, res: Response) => {
     try {
       const { username } = req.body;
 
@@ -95,7 +24,7 @@ export function registerRoutes(app: Express): Server {
       // Check if user already exists in session
       if (req.session.tempUserId) {
         const existingUser = await db.query.tempUsers.findFirst({
-          where: (users, { eq }) => eq(users.id, req.session.tempUserId)
+          where: eq(tempUsers.id, req.session.tempUserId)
         });
 
         if (existingUser) {
@@ -109,7 +38,6 @@ export function registerRoutes(app: Express): Server {
       // Create new temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({
-          username: username || 'Anonymous',
           createdAt: new Date()
         })
         .returning();
@@ -124,36 +52,16 @@ export function registerRoutes(app: Express): Server {
       req.session.cookie.secure = process.env.NODE_ENV === 'production';
       req.session.cookie.httpOnly = true;
       req.session.cookie.sameSite = 'lax';
+
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
             console.error('Failed to save session:', err);
             reject(err);
           } else {
-            console.log('Session saved with tempUserId:', tempUser.id);
-            resolve();
-          }
-        });
-      });
-
-      if (!tempUser?.id) {
-        throw new Error('Failed to create temp user');
-      }
-
-      // Set session data and save immediately
-      req.session.tempUserId = tempUser.id;
-
-      // Force session save and wait for completion
-      await new Promise<void>((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) {
-            console.error('Session save error:', err);
-            reject(err);
-          } else {
             console.log('Session saved successfully:', {
               sessionId: req.sessionID,
-              tempUserId: tempUser.id,
-              createdAt: req.session.createdAt
+              tempUserId: tempUser.id
             });
             resolve();
           }
@@ -175,7 +83,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Start a new quiz session
-  app.post("/api/quiz/session", async (req, res) => {
+  app.post("/api/quiz/session", async (req: Request, res: Response) => {
     console.log('Session data:', req.session);
     if (!req.session.tempUserId) {
       console.error('No temp user ID in session');
@@ -192,7 +100,9 @@ export function registerRoutes(app: Express): Server {
           status: 'in_progress',
           currentQuestionId: 'Q1',
           completedQuestions: [],
-          answers: {}
+          answers: {},
+          startedAt: new Date(),
+          lastUpdated: new Date()
         })
         .returning();
 
@@ -204,8 +114,17 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Verify session endpoint
+  app.get('/api/users/verify', (req: Request, res: Response) => {
+    if (req.session?.tempUserId) {
+      res.status(200).json({ valid: true });
+    } else {
+      res.status(401).json({ valid: false });
+    }
+  });
+
   // Update quiz session with answer
-  app.patch("/api/quiz/session/:sessionId", async (req, res) => {
+  app.patch("/api/quiz/session/:sessionId", async (req: Request, res: Response) => {
     console.log('Update session - Session data:', req.session);
     console.log('Update session - Request body:', req.body);
 
@@ -255,7 +174,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Get current quiz session
-  app.get("/api/quiz/session/current", async (req, res) => {
+  app.get("/api/quiz/session/current", async (req: Request, res: Response) => {
     console.log('Get current session - Session data:', req.session);
 
     if (!req.session.tempUserId) {
@@ -282,7 +201,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Submit quiz
-  app.post("/api/quiz/submit", async (req, res) => {
+  app.post("/api/quiz/submit", async (req: Request, res: Response) => {
     if (!req.session.tempUserId) {
       return res.status(400).send("No valid user ID found");
     }
@@ -325,7 +244,7 @@ export function registerRoutes(app: Express): Server {
     }
   });
   // Get quiz results history
-  app.get("/api/quiz/results", async (req, res) => {
+  app.get("/api/quiz/results", async (req: Request, res: Response) => {
     let userId;
     if (req.session.tempUserId) {
       userId = req.session.tempUserId;
@@ -346,7 +265,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Get profile completion status
-  app.get("/api/profile/completion", async (req, res) => {
+  app.get("/api/profile/completion", async (req: Request, res: Response) => {
     let userId;
     if (req.session.tempUserId) {
       userId = req.session.tempUserId;
@@ -385,7 +304,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Update specific completion fields
-  app.patch("/api/profile/completion", async (req, res) => {
+  app.patch("/api/profile/completion", async (req: Request, res: Response) => {
     let userId;
     if (req.session.tempUserId) {
       userId = req.session.tempUserId;
@@ -440,7 +359,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Formation search endpoint
-  app.get('/api/search', async (req, res) => {
+  app.get('/api/search', async (req: Request, res: Response) => {
     try {
       const query = req.query.q?.toString() || '';
       const ville = req.query.ville?.toString();
@@ -511,7 +430,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Get unique formation domains
-  app.get('/api/domains', async (req, res) => {
+  app.get('/api/domains', async (req: Request, res: Response) => {
     try {
       const results = await db.query.formations.findMany({
         columns: { domaines: true }
@@ -532,7 +451,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Get unique cities
-  app.get('/api/cities', async (req, res) => {
+  app.get('/api/cities', async (req: Request, res: Response) => {
     try {
       const results = await db
         .select({ ville: locations.ville })
@@ -548,7 +467,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Get table statistics
-  app.get('/api/stats', async (req, res) => {
+  app.get('/api/stats', async (req: Request, res: Response) => {
     try {
       const stats = {
         formations: await db.select({ count: sql`count(*)` }).from(formations),
@@ -566,7 +485,7 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Add the chat endpoint
-  app.post("/api/chat", async (req, res) => {
+  app.post("/api/chat", async (req: Request, res: Response) => {
     try {
       const { message } = req.body;
 

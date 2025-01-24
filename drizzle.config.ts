@@ -2,9 +2,8 @@ import { defineConfig } from "drizzle-kit";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-// Vérification des variables d'environnement requises
-if (!process.env.PGHOST || !process.env.PGPORT || !process.env.PGDATABASE || !process.env.PGUSER || !process.env.PGPASSWORD) {
-  throw new Error("Les variables d'environnement PostgreSQL ne sont pas toutes définies");
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL environment variable is required");
 }
 
 export default defineConfig({
@@ -12,10 +11,12 @@ export default defineConfig({
   out: "./migrations",
   dialect: "postgresql",
   dbCredentials: {
-    host: process.env.PGHOST,
-    port: parseInt(process.env.PGPORT),
-    database: process.env.PGDATABASE,
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? {
+      rejectUnauthorized: false,
+      mode: "require"
+    } : false
   },
+  verbose: true,
+  strict: true
 });
