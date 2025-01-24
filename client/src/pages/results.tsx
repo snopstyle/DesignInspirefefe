@@ -11,6 +11,7 @@ export default function Results() {
   const [profile, setProfile] = useState<string | null>(null);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [dominantProfile, setDominantProfile] = useState<string>('');
+  const [matchPercentage, setMatchPercentage] = useState<number>(0);
 
   useEffect(() => {
     const answers = sessionStorage.getItem('quizAnswers');
@@ -21,24 +22,22 @@ export default function Results() {
 
     const calculatedScores = calculateProfileScores(JSON.parse(answers));
     const matchedProfile = getMatchedProfile(calculatedScores);
+    const nonZeroScores = Object.entries(calculatedScores)
+      .filter(([, score]) => score > 0)
+      .sort(([, a], [, b]) => b - a);
+    
+    const totalScore = nonZeroScores.reduce((sum, [, score]) => sum + score, 0);
+    const calculatedPercentage = Math.round((nonZeroScores[0]?.[1] || 0) / totalScore * 100);
+
     setProfile(matchedProfile);
     setScores(calculatedScores);
     setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
+    setMatchPercentage(calculatedPercentage);
   }, [setLocation]);
 
   if (!profile || !scores) {
     return <div>Loading...</div>;
   }
-
-  const calculateMatchPercentage = (profile: string, scores: Record<string, number>): number => {
-    const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
-    const profileScore = Object.entries(scores)
-      .filter(([, score]) => score > 0)
-      .reduce((sum, [, score]) => sum + score, 0);
-    return Math.round((profileScore / totalScore) * 100);
-  };
-
-  const matchPercentage = calculateMatchPercentage(profile, scores);
 
   return (
     <GradientBackground>
@@ -73,6 +72,44 @@ export default function Results() {
           <DialogContent className="max-w-4xl">
             <h2 className="text-2xl font-bold mb-4">Sous-Profil: {profile}</h2>
             <p className="text-lg">Pourcentage de correspondance: {matchPercentage}%</p>
+          </DialogContent>
+        </Dialog>
+
+        {/* Key Traits Card */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Card className="bg-white/10 backdrop-blur-sm cursor-pointer hover:bg-white/20 transition">
+              <CardHeader>
+                <CardTitle>Traits Clés</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-2">
+                  {Object.entries(scores)
+                    .filter(([, score]) => score > 0)
+                    .sort(([, a], [, b]) => b - a)
+                    .map(([trait, score]) => (
+                      <div key={trait} className="flex justify-between items-center">
+                        <span>{trait}</span>
+                        <span className="font-mono">{(score * 100).toFixed(1)}%</span>
+                      </div>
+                    ))}
+                </div>
+              </CardContent>
+            </Card>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl">
+            <h2 className="text-2xl font-bold mb-4">Traits Clés</h2>
+            <div className="space-y-4">
+              {Object.entries(scores)
+                .filter(([, score]) => score > 0)
+                .sort(([, a], [, b]) => b - a)
+                .map(([trait, score]) => (
+                  <div key={trait} className="flex justify-between items-center text-lg">
+                    <span>{trait}</span>
+                    <span className="font-mono">{(score * 100).toFixed(1)}%</span>
+                  </div>
+                ))}
+            </div>
           </DialogContent>
         </Dialog>
       </div>
