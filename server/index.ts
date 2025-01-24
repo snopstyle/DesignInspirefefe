@@ -10,73 +10,69 @@ const SessionStore = MemoryStore(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Configure session middleware
-const sessionMiddleware = session({
+// Simple session configuration with only essential options
+app.use(session({
   store: new SessionStore({
-    checkPeriod: 86400000, // prune expired entries every 24h
-    ttl: 86400000, // 24 hours
-    stale: false,
-    noDisposeOnSet: true,
-    touchAfter: 24 * 3600 // time period in seconds for touch
+    checkPeriod: 86400000 // prune expired entries every 24h
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
-  name: 'sid',
   resave: true,
-  saveUninitialized: false,
-  rolling: true,
-  unset: 'destroy',
-  cookie: {
+  saveUninitialized: true,
+  cookie: { 
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax',
-    path: '/'
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
-});
+}));
 
-// Apply session middleware
-app.use(sessionMiddleware);
-
-// Session debug middleware
+// Session debug middleware (integrated with request logging)
 app.use((req, res, next) => {
   if (!req.session) {
     console.error('No session available');
     return next(new Error('No session available'));
   }
 
-  console.log('Session debug:', {
-    sessionID: req.sessionID,
-    tempUserId: req.session.tempUserId,
-    cookie: req.session.cookie
-  });
-  next();
-});
-
-// Request logging middleware
-app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
 
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
-      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
+      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
+      if (req.session?.tempUserId) {
+        logLine += ` [TempUserId: ${req.session.tempUserId}]`;
+      }
+      log(logLine);
     }
   });
+
   next();
 });
+
+
+// Request logging middleware - No changes needed here as logging is enhanced above.
+// app.use((req, res, next) => {
+//   const start = Date.now();
+//   const path = req.path;
+
+//   res.on("finish", () => {
+//     const duration = Date.now() - start;
+//     if (path.startsWith("/api")) {
+//       log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
+//     }
+//   });
+//   next();
+// });
 
 (async () => {
   const server = registerRoutes(app);
 
-  // Global error handler
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error('Server Error:', err);
     res.status(500).json({ 
       error: true,
-      message: process.env.NODE_ENV === 'production' 
-        ? 'An internal server error occurred' 
-        : err.message
+      message: 'An unexpected error occurred',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   });
 
