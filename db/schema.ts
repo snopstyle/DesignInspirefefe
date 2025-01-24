@@ -10,10 +10,10 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Using temp_users table name to match database
+// Minimal temp users table
 export const tempUsers = pgTable("temp_users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  createdAt: timestamp("created_at").notNull().defaultNow()
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull()
 });
 
 export const quizSessions = pgTable("quiz_sessions", {
@@ -36,17 +36,6 @@ export const userRelations = relations(users, ({ many }) => ({
 
 export const tempUserRelations = relations(tempUsers, ({ many }) => ({
   quizSessions: many(quizSessions)
-}));
-
-export const quizSessionRelations = relations(quizSessions, ({ one }) => ({
-  user: one(users, {
-    fields: [quizSessions.userId],
-    references: [users.id],
-  }),
-  tempUser: one(tempUsers, {
-    fields: [quizSessions.tempUserId],
-    references: [tempUsers.id],
-  })
 }));
 
 // Schema generation
