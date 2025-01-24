@@ -34,8 +34,6 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Session not initialized');
       }
 
-      const { username = 'Anonymous' } = req.body;
-
       // Check for existing session
       if (req.session.tempUserId) {
         const existingUser = await db.select().from(tempUsers)
@@ -48,10 +46,10 @@ export function registerRoutes(app: Express): Server {
         }
       }
 
-      // Create new temp user with username
+      // Create new temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({
-          username: username
+          createdAt: new Date()
         })
         .returning();
 
@@ -76,7 +74,6 @@ export function registerRoutes(app: Express): Server {
 
       console.log('Created temp user:', {
         id: tempUser.id,
-        username: tempUser.username,
         session: req.sessionID
       });
 

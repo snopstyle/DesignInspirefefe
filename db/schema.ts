@@ -10,9 +10,9 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Using temp_users table name to match database
 export const tempUsers = pgTable("temp_users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  username: text("username").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
 
