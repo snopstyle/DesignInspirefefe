@@ -594,10 +594,10 @@ export function calculateProfileScores(userAnswers: Record<string, string>): Rec
             console.warn(`No weights defined for question ${questionId}`);
             continue;
         }
-
+        
         const value = answerValue(answer, questionId);
         console.log(`Question ${questionId} answer "${answer}" has value ${value}`);
-
+        
         for (const [trait, weight] of Object.entries(question_weights[questionId])) {
             if (!(trait in key_traits)) {
                 console.warn(`Unknown trait "${trait}" in question ${questionId}`);
@@ -617,7 +617,7 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
     let maxScore = -1;
     let matchedProfile = "";
     console.log('Matching profile for scores:', profileScores);
-
+    
     for (const [profile, traits] of Object.entries(sub_profiles)) {
         let score = 0;
         let validTraits = 0;
@@ -635,7 +635,7 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
             
             console.log(`Profile ${profile} - Trait ${trait}: score=${traitScore} (value=${profileScores[trait]} * weight=${weight})`);
         }
-
+        
         // Normalize score based on valid traits
         if (validTraits > 0) {
             score = score / validTraits;
@@ -663,26 +663,50 @@ export const __testing = {
 // Résumés détaillés des profils pour la page de résultats
 // Mapping between Sub-Profiles and their Dominant Profiles
 export const dominant_profile_mapping: Record<string, string> = {
-    "Le Chercheur": "Profil Analytique",
-    "Le Solutionneur": "Profil Analytique",
-    "L'Analyste de Données": "Profil Analytique",
-    "Le Théoricien": "Profil Analytique",
-    "L'Ingénieur": "Profil Technique",
-    "L'Artiste": "Profil Créatif",
-    "L'Innovateur": "Profil Créatif",
-    "Le Narrateur": "Profil Créatif",
-    "L'Interprète": "Profil Créatif",
-    "Le Designer": "Profil Créatif",
-    "L'Aidant": "Profil Social",
-    "L'Activiste": "Profil Social",
-    "Le Communicant": "Profil Social",
-    "L'Éducateur": "Profil Social",
-    "L'Humanitaire": "Profil Social",
-    "L'Entrepreneur": "Profil Entrepreneurial",
-    "Le Leader": "Profil Entrepreneurial",
-    "Le Stratège": "Profil Entrepreneurial",
-    "Le Commercial": "Profil Entrepreneurial",
-    "L'Investisseur": "Profil Entrepreneurial"
+    // The Analytical Thinker - Le Penseur Analytique
+    "Le Chercheur": "Le Penseur Analytique",
+    "Le Solutionneur": "Le Penseur Analytique",
+    "L'Analyste de Données": "Le Penseur Analytique",
+    "Le Théoricien": "Le Penseur Analytique",
+
+    // The Creative Visionary - Le Visionnaire Créatif
+    "L'Artiste": "Le Visionnaire Créatif",
+    "L'Innovateur": "Le Visionnaire Créatif",
+    "Le Narrateur": "Le Visionnaire Créatif",
+    "L'Interprète": "Le Visionnaire Créatif",
+    "Le Designer": "Le Visionnaire Créatif",
+
+    // The Social Impact Maker - L'Agent de Changement Social
+    "L'Aidant": "L'Agent de Changement Social",
+    "L'Activiste": "L'Agent de Changement Social",
+    "Le Communicant": "L'Agent de Changement Social",
+    "L'Éducateur": "L'Agent de Changement Social",
+    "L'Humanitaire": "L'Agent de Changement Social",
+
+    // The Strategic Leader - Le Leader Stratégique
+    "L'Entrepreneur": "Le Leader Stratégique",
+    "Le Leader": "Le Leader Stratégique",
+    "Le Stratège": "Le Leader Stratégique",
+    "Le Commercial": "Le Leader Stratégique",
+    "L'Investisseur": "Le Leader Stratégique",
+
+    // The Technical Expert - L'Expert Technique
+    "L'Ingénieur": "L'Expert Technique",
+    "Le Codeur": "L'Expert Technique",
+    "Le Passionné de Technologie": "L'Expert Technique",
+    "Le Créateur Numérique": "L'Expert Technique",
+
+    // The Sustainable Innovator - L'Innovateur Durable
+    "Le Conservateur": "L'Innovateur Durable",
+    "L'Aventurier": "L'Innovateur Durable",
+    "L'Innovateur Durable": "L'Innovateur Durable",
+
+    // The Versatile Explorer - L'Explorateur Polyvalent
+    "Le Généraliste": "L'Explorateur Polyvalent",
+    "L'Intégrateur": "L'Explorateur Polyvalent",
+    "L'Apprenant Perpétuel": "L'Explorateur Polyvalent",
+    "Le Multipotentiel": "L'Explorateur Polyvalent",
+    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent"
 };
 
 export const profile_summaries: Record<string, {
