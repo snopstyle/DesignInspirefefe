@@ -10,54 +10,49 @@ const SessionStore = MemoryStore(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Improved session configuration
+// Session configuration
 app.use(session({
   store: new SessionStore({
-    checkPeriod: 86400000,
-    ttl: 24 * 60 * 60 * 1000,
-    stale: false
+    checkPeriod: 86400000, // Prune expired entries every 24h
+    ttl: 24 * 60 * 60 * 1000 // Session TTL (24 hours)
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
   name: 'quiz.sid',
   resave: false,
   saveUninitialized: false,
-  rolling: true,
   cookie: {
-    secure: false, // Set to false for development
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'lax',
-    path: '/'
+    sameSite: 'lax'
   }
 }));
 
-// Force synchronous session initialization
-app.use((req, res, next) => {
-  if (!req.session) {
-    return next(new Error('Session initialization failed'));
-  }
-  next();
-});
-
-// Enhanced logging middleware
+// Request logging middleware with type-safe response.end override
 app.use((req, res, next) => {
   const start = Date.now();
-  log(`[${new Date().toLocaleTimeString()}] Session ID: ${req.sessionID}`);
-  log(`[${new Date().toLocaleTimeString()}] Temp User ID: ${req.session.tempUserId}`);
+  const path = req.path;
 
+  // Type-safe override of res.end
   const originalEnd = res.end;
-  res.end = function(...args) {
+  const newEnd: typeof originalEnd = function(this: Response, ...args) {
     const duration = Date.now() - start;
-    log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.path} completed in ${duration}ms`);
-    originalEnd.apply(res, args);
+    if (path.startsWith("/api")) {
+      log(`${req.method} ${path} completed in ${duration}ms`);
+    }
+    return originalEnd.apply(this, args);
   };
+  res.end = newEnd;
+
   next();
 });
+
 
 (async () => {
   const server = registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  // Error handling middleware
+  app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error('Error:', err);
     res.status(500).json({ 
       error: true,
@@ -71,7 +66,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  server.listen(5000, "0.0.0.0", () => {
-    log('Server running on port 5000');
+  const PORT = 5000;
+  server.listen(PORT, "0.0.0.0", () => {
+    log(`Server running on port ${PORT}`);
   });
 })();

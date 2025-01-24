@@ -1,12 +1,12 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { sql, eq, and, desc } from "drizzle-orm";
-import { users, tempUsers, quizSessions } from "@db/schema";
+import { eq } from "drizzle-orm";
+import { tempUsers, quizSessions } from "@db/schema";
 
 declare module 'express-session' {
   interface SessionData {
-    tempUserId?: string;
+    tempUserId: string | undefined;
   }
 }
 
@@ -14,11 +14,7 @@ export function registerRoutes(app: Express): Server {
   // Create temporary user session
   app.post("/api/users/temp", async (req: Request, res: Response) => {
     try {
-      if (!req.session) {
-        throw new Error('Session not initialized');
-      }
-
-      // Check if user already exists in session
+      // Check if user already has a temp ID in their session
       if (req.session.tempUserId) {
         const existingUser = await db.query.tempUsers.findFirst({
           where: eq(tempUsers.id, req.session.tempUserId)
@@ -42,13 +38,8 @@ export function registerRoutes(app: Express): Server {
         throw new Error('Failed to create temp user');
       }
 
-      // Set session data
+      // Store temp user ID in session
       req.session.tempUserId = tempUser.id;
-      req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
-      req.session.cookie.secure = process.env.NODE_ENV === 'production';
-      req.session.cookie.httpOnly = true;
-      req.session.cookie.sameSite = 'lax';
-
       await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) reject(err);
@@ -77,10 +68,7 @@ export function registerRoutes(app: Express): Server {
 
     try {
       const session = await db.query.quizSessions.findFirst({
-        where: and(
-          eq(quizSessions.tempUserId, req.session.tempUserId),
-          eq(quizSessions.status, 'in_progress')
-        ),
+        where: eq(quizSessions.tempUserId, req.session.tempUserId),
         orderBy: [desc(quizSessions.startedAt)]
       });
 
@@ -199,11 +187,10 @@ export function registerRoutes(app: Express): Server {
 
   // Verify session endpoint
   app.get('/api/users/verify', (req: Request, res: Response) => {
-    if (req.session?.tempUserId) {
-      res.status(200).json({ valid: true });
-    } else {
-      res.status(401).json({ valid: false });
-    }
+    res.json({ 
+      valid: Boolean(req.session?.tempUserId),
+      tempUserId: req.session?.tempUserId 
+    });
   });
 
   const httpServer = createServer(app);
