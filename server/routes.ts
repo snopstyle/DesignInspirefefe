@@ -159,6 +159,27 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Chat endpoint
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ error: "Message is required" });
+      }
+
+      // For now, return a simple response
+      const response = {
+        message: "I understand your message. I'm here to help with any questions about education, careers, or your future path."
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Error in chat endpoint:', error);
+      res.status(500).json({ error: "Failed to process chat message" });
+    }
+  });
+
   app.post("/api/quiz/submit", async (req, res) => {
     try {
       const { sessionId } = req.body;
