@@ -168,25 +168,27 @@ export function registerRoutes(app: Express): Server {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      // Generate contextual responses in French
-      let response;
-      if (message.toLowerCase().includes('formation') || message.toLowerCase().includes('étude')) {
-        response = {
-          message: "Je peux vous aider à trouver la formation qui vous correspond. Quels sont vos centres d'intérêt ?"
-        };
-      } else if (message.toLowerCase().includes('métier') || message.toLowerCase().includes('carrière')) {
-        response = {
-          message: "Il existe de nombreuses opportunités professionnelles. Parlons de vos compétences et de vos aspirations."
-        };
-      } else if (message.toLowerCase().includes('profil') || message.toLowerCase().includes('personnalité')) {
-        response = {
-          message: "Votre profil est unique. Je peux vous aider à mieux comprendre vos points forts et vos domaines de développement."
-        };
-      } else {
-        response = {
-          message: "Je suis là pour vous guider dans votre orientation. Posez-moi des questions sur les formations, les métiers ou votre profil."
-        };
-      }
+      // Using DeepSeek API
+      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "deepseek-chat",
+          messages: [{
+            role: "system",
+            content: "Tu es un conseiller d'orientation professionnel français. Tu dois aider les utilisateurs à trouver leur voie en fonction de leurs intérêts, compétences et aspirations."
+          }, {
+            role: "user",
+            content: message
+          }],
+          temperature: 0.7
+        })
+      });
+
+      const data = await response.json();
 
       res.json(response);
     } catch (error) {
