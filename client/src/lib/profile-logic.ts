@@ -585,19 +585,19 @@ export function answerValue(answer: string, questionId: string): number {
 
 export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
     const profileScores: Record<string, number> = { ...key_traits };
-    
+
     // Validation des réponses
     console.log('Calculating scores for answers:', userAnswers);
-    
+
     for (const [questionId, answer] of Object.entries(userAnswers)) {
         if (!question_weights[questionId]) {
             console.warn(`No weights defined for question ${questionId}`);
             continue;
         }
-        
+
         const value = answerValue(answer, questionId);
         console.log(`Question ${questionId} answer "${answer}" has value ${value}`);
-        
+
         for (const [trait, weight] of Object.entries(question_weights[questionId])) {
             if (!(trait in key_traits)) {
                 console.warn(`Unknown trait "${trait}" in question ${questionId}`);
@@ -608,7 +608,7 @@ export function calculateProfileScores(userAnswers: Record<string, string>): Rec
             console.log(`Adding score ${score} to trait ${trait} (weight: ${weight})`);
         }
     }
-    
+
     console.log('Final profile scores:', profileScores);
     return profileScores;
 }
@@ -617,38 +617,38 @@ export function getMatchedProfile(profileScores: Record<string, number>): string
     let maxScore = -1;
     let matchedProfile = "";
     console.log('Matching profile for scores:', profileScores);
-    
+
     for (const [profile, traits] of Object.entries(sub_profiles)) {
         let score = 0;
         let validTraits = 0;
-        
+
         for (const trait of traits) {
             if (!(trait in profileScores)) {
                 console.warn(`Missing trait "${trait}" for profile "${profile}"`);
                 continue;
             }
-            
+
             const weight = sub_profile_weights[profile][trait] || 0;
             const traitScore = profileScores[trait] * weight;
             score += traitScore;
             validTraits++;
-            
+
             console.log(`Profile ${profile} - Trait ${trait}: score=${traitScore} (value=${profileScores[trait]} * weight=${weight})`);
         }
-        
+
         // Normalize score based on valid traits
         if (validTraits > 0) {
             score = score / validTraits;
         }
-        
+
         console.log(`Profile ${profile} total score: ${score}`);
-        
+
         if (score > maxScore) {
             maxScore = score;
             matchedProfile = profile;
         }
     }
-    
+
     console.log('Best matching profile:', matchedProfile, 'with score:', maxScore);
     return matchedProfile;
 }
@@ -669,7 +669,7 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Analyste de Données": "Le Penseur Analytique",
     "Le Théoricien": "Le Penseur Analytique",
     "L'Ingénieur": "Le Penseur Analytique",
-    
+
     // The Creative Visionary - Le Visionnaire Créatif
     "L'Artiste": "Le Visionnaire Créatif",
     "L'Innovateur": "Le Visionnaire Créatif",
@@ -682,7 +682,7 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Activiste": "L'Acteur du social",
     "Le Communicant": "L'Acteur du social",
     "L'Éducateur": "L'Acteur du social",
-    "L'Humanitaire": ""L'Acteur du social,
+    "L'Humanitaire": "L'Acteur du social",
 
     // The Strategic Leader - Le Leader Pragmatique
     "L'Entrepreneur": "Le Leader Pragmatique",
@@ -706,22 +706,22 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Intégrateur": "L'Explorateur Polyvalent",
     "L'Apprenant Perpétuel": "L'Explorateur Polyvalent",
     "Le Multipotentiel": "L'Explorateur Polyvalent",
-    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent"
+    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent",
 
     // The Organizer - L'Organisateur
     "Le Chef de Projet": "L'Organisateur",
-    "L'organisateur d'Événements": "L'Organisateur",
+    "L'Organisateur d'Événements": "L'Organisateur",
     "Le Penseur Systémique": "L'Organisateur",
 
     // The Communicator - Le Communicateur
-    "L'Orateur Public": "Le Communicateur",
+    "L'Orateur": "Le Communicateur",
     "L'Écrivain": "Le Communicateur",
     "Le Négociateur": "Le Communicateur",
 
     // The Self-Improver - L'Améliorateur de Soi
-    "L'Apprenant à Vie": "Le Développeur personnel",
-    "Le Mentor": "Le Développeur personnel",
-    "Le Défenseur du Bien-Être": "Le Développeur personnel",
+    "L'Apprenant Perpétuel": "L'Améliorateur de Soi",
+    "Le Mentor": "L'Améliorateur de Soi",
+    "Le Défenseur du Bien-être": "L'Améliorateur de Soi"
 };
 
 export const profile_summaries: Record<string, {
