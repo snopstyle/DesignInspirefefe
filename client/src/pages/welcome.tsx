@@ -11,67 +11,29 @@ export default function WelcomePage() {
   const [_, navigate] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
-  const { setTempUserId } = useUser();
+  const { createTempUser, isAuthenticated } = useUser();
   const { toast } = useToast();
 
   const handleSubmit = async () => {
     if (!username.trim()) {
       toast({
-        title: "Erreur",
-        description: "Veuillez entrer un pseudo",
+        title: "Error",
+        description: "Please enter a username",
         variant: "destructive"
       });
       return;
     }
 
     try {
-      const response = await fetch('/api/users/temp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username }),
-        credentials: 'include'
-      });
+      await createTempUser.mutateAsync(username);
+      setIsOpen(false);
 
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
+      // Wait a short moment for session to be properly saved
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      const data = await response.json();
-      if (data.id) {
-        // Set the temp user ID in the app state
-        setTempUserId(data.id);
-        setIsOpen(false);
-
-        // Wait for session to be properly saved
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // Verify session before navigation
-        const verifyResponse = await fetch('/api/users/verify', {
-          credentials: 'include'
-        });
-
-        if (!verifyResponse.ok) {
-          throw new Error('Session verification failed');
-        }
-
-        const verifyData = await verifyResponse.json();
-        if (verifyData.valid && verifyData.id) {
-          navigate("/landing");
-        } else {
-          throw new Error('Invalid session state');
-        }
-      } else {
-        throw new Error('No user ID received from server');
-      }
+      navigate("/landing");
     } catch (error) {
       console.error('Error in handleSubmit:', error);
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la création de votre compte temporaire",
-        variant: "destructive"
-      });
     }
   };
 
@@ -92,11 +54,11 @@ export default function WelcomePage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.8 }}
       >
-        Hey! 👋 T'es prêt(e) à découvrir ton futur ? 
+        Hey! 👋 Ready to discover your future? 
         <br/><br/>
-        Pas de stress, on est là pour t'aider à trouver ta voie. 
-        Grâce à notre IA de ouf, on va matcher ton profil avec les formations qui te correspondent vraiment. 
-        Plus de prise de tête, juste des choix qui te ressemblent !
+        No stress, we're here to help you find your way. 
+        With our AI, we'll match your profile with trainings that really suit you. 
+        No more headaches, just choices that look like you!
       </motion.p>
 
       <motion.div
@@ -105,33 +67,36 @@ export default function WelcomePage() {
         transition={{ delay: 0.6, duration: 0.8 }}
       >
         <Button 
-          onClick={() => setIsOpen(true)} 
+          onClick={() => setIsOpen(true)}
+          disabled={createTempUser.isPending} 
           className="w-32 h-16 flex items-center justify-center text-2xl rounded-full bg-black text-white transition-all duration-500 transform hover:scale-105 hover:bg-gradient-to-r hover:from-purple-500/60 hover:via-gray-600/60 hover:to-purple-700/60 hover:animate-gradient-fast hover:bg-[length:400%_400%]"
         >
-          🚀 🚀 🚀
+          {createTempUser.isPending ? '⏳' : '🚀 🚀 🚀'}
         </Button>
       </motion.div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="bg-black/80 backdrop-blur-sm border-white/20">
           <DialogHeader>
-            <DialogTitle>Choisis ton pseudo</DialogTitle>
+            <DialogTitle>Choose your username</DialogTitle>
             <DialogDescription>
-              Entre un pseudo pour commencer ton voyage
+              Enter a username to start your journey
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Input
-              placeholder="Ton pseudo"
+              placeholder="Your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="bg-black/50 border-white/20"
+              disabled={createTempUser.isPending}
             />
             <Button 
               onClick={handleSubmit}
+              disabled={createTempUser.isPending}
               className="w-full bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500"
             >
-              Commencer
+              {createTempUser.isPending ? 'Creating...' : 'Start'}
             </Button>
           </div>
         </DialogContent>
