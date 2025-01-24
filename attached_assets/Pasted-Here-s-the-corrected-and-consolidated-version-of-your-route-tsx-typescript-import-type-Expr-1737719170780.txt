@@ -1,0 +1,148 @@
+Here's the corrected and consolidated version of your `route.tsx`:
+
+```typescript
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import session from 'express-session';
+import { db } from "@db";
+import { sql } from "drizzle-orm";
+import {
+  establishments,
+  locations,
+  formations,
+  costs,
+  pedagogyTypes
+} from "@db/schemas/formations";
+import { eq, and, or, ilike, asc } from "drizzle-orm";
+import { quizSessions, tempUsers, profileCompletion, quizResults } from "@db/schema";
+import { desc } from "drizzle-orm";
+import express from 'express';
+
+declare module 'express-session' {
+  interface SessionData {
+    tempUserId: string | undefined;
+  }
+}
+
+export function registerRoutes(app: Express): Server {
+  // 1. Session middleware configuration
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key-123',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax'
+    }
+  }));
+
+  // 2. Automatic temp ID generation middleware
+  app.use(async (req, res, next) => {
+    try {
+      // Only process API routes and only when no temp ID exists
+      if (req.path.startsWith('/api') && !req.session.tempUserId) {
+        const [tempUser] = await db.insert(tempUsers)
+          .values({
+            username: 'Anonymous',
+            createdAt: new Date()
+          })
+          .returning();
+
+        if (tempUser?.id) {
+          req.session.tempUserId = tempUser.id;
+          await new Promise<void>((resolve, reject) => {
+            req.session.save(err => err ? reject(err) : resolve());
+          });
+          console.log('Auto-generated temp ID:', tempUser.id);
+        }
+      }
+    } catch (error) {
+      console.error('Temp ID middleware error:', error);
+    }
+    next();
+  });
+
+  // 3. API Routes
+  // Verify session endpoint
+  app.get('/api/users/verify', (req, res) => {
+    res.status(200).json({ valid: !!req.session?.tempUserId });
+  });
+
+  // Explicit temp user creation (optional)
+  app.post('/api/users/temp', async (req, res) => {
+    try {
+      const { username } = req.body;
+      
+      if (req.session.tempUserId) {
+        return res.json({ id: req.session.tempUserId });
+      }
+
+      const [tempUser] = await db.insert(tempUsers)
+        .values({
+          username: username || 'Anonymous',
+          createdAt: new Date()
+        })
+        .returning();
+
+      req.session.tempUserId = tempUser.id;
+      await new Promise<void>((resolve, reject) => {
+        req.session.save(err => err ? reject(err) : resolve());
+      });
+
+      res.status(201).json({
+        success: true,
+        id: tempUser.id,
+        sessionId: req.sessionID
+      });
+    } catch (error) {
+      console.error('Error creating temp user:', error);
+      res.status(500).json({ error: 'Failed to create temporary user' });
+    }
+  });
+
+  // Quiz session endpoints (keep your existing implementation)
+  app.post("/api/quiz/session", async (req, res) => { /* ... */ });
+  app.patch("/api/quiz/session/:sessionId", async (req, res) => { /* ... */ });
+  app.get("/api/quiz/session/current", async (req, res) => { /* ... */ });
+  app.post("/api/quiz/submit", async (req, res) => { /* ... */ });
+  app.get("/api/quiz/results", async (req, res) => { /* ... */ });
+
+  // Profile endpoints (keep your existing implementation)
+  app.get("/api/profile/completion", async (req, res) => { /* ... */ });
+  app.patch("/api/profile/completion", async (req, res) => { /* ... */ });
+
+  // Search endpoints (keep your existing implementation)
+  app.get('/api/search', async (req, res) => { /* ... */ });
+  app.get('/api/domains', async (req, res) => { /* ... */ });
+  app.get('/api/cities', async (req, res) => { /* ... */ });
+  app.get('/api/stats', async (req, res) => { /* ... */ });
+
+  // Chat endpoint (keep your existing implementation)
+  app.post("/api/chat", async (req, res) => { /* ... */ });
+
+  // 4. Static files should come LAST
+  app.use(express.static('public'));
+
+  const httpServer = createServer(app);
+  return httpServer;
+}
+```
+
+### Key Improvements:
+1. **Session Middleware** - Properly initialized with security settings
+2. **Automatic Temp ID Generation** - Creates IDs for any API request without one
+3. **Middleware Order** - Correct ordering (session → temp ID → routes → static files)
+4. **Simplified Temp User Route** - Removed duplicate checks since middleware handles creation
+5. **Error Handling** - Consolidated error handling in the auto-ID middleware
+
+To use this:
+1. Add `SESSION_SECRET` to your environment variables
+2. Ensure your client sends cookies (`credentials: 'include'` in fetch requests)
+3. Install required dependencies if missing:
+```bash
+npm install express-session @types/express-session
+```
+
+This version will automatically generate temp user IDs for any API request that doesn't have one, while preserving your existing functionality. The undefined errors should resolve as sessions will be properly initialized before any route handlers execute.

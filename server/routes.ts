@@ -1,10 +1,8 @@
-import type { Express, Request, Response } from "express";
+import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { eq } from "drizzle-orm";
 import { tempUsers } from "@db/schema";
 
-// Basic session type extension
 declare module 'express-session' {
   interface SessionData {
     tempUserId: string | undefined;
@@ -12,41 +10,48 @@ declare module 'express-session' {
 }
 
 export function registerRoutes(app: Express): Server {
-  // Create temporary user
-  app.post("/api/users/temp", async (req: Request, res: Response) => {
-    console.log('Creating temp user, current session:', req.session);
-
+  // Verify session endpoint
+  app.get('/api/users/verify', (req, res) => {
     try {
-      // Return existing temp user if already in session
-      if (req.session.tempUserId) {
-        console.log('Found existing temp user:', req.session.tempUserId);
-        const existingUser = await db.query.tempUsers.findFirst({
-          where: eq(tempUsers.id, req.session.tempUserId)
-        });
+      const isValid = !!req.session?.tempUserId;
+      console.log('Session verification:', { isValid, id: req.session?.tempUserId });
+      res.json({ valid: isValid, id: req.session?.tempUserId });
+    } catch (error) {
+      console.error('Verify session error:', error);
+      res.status(500).json({ error: 'Session verification failed' });
+    }
+  });
 
-        if (existingUser) {
-          return res.json({ id: existingUser.id });
-        } else {
-          console.log('Existing temp user not found in database, creating new one');
-          delete req.session.tempUserId;
-        }
+  // Create temporary user
+  app.post('/api/users/temp', async (req, res) => {
+    try {
+      console.log('Creating temp user, current session:', req.session);
+
+      // If user already has a session, return it
+      if (req.session.tempUserId) {
+        console.log('Existing session found:', req.session.tempUserId);
+        return res.json({ id: req.session.tempUserId });
       }
 
-      // Create new temp user
       console.log('Creating new temp user');
+
+      // Create new temp user
       const [tempUser] = await db.insert(tempUsers)
         .values({})
         .returning();
 
       if (!tempUser?.id) {
-        throw new Error('Failed to create temp user');
+        throw new Error('Failed to create temp user record');
       }
 
+      // Set the ID in session
       req.session.tempUserId = tempUser.id;
+
+      // Save session explicitly
       await new Promise<void>((resolve, reject) => {
-        req.session.save((err) => {
+        req.session.save(err => {
           if (err) {
-            console.error('Failed to save session:', err);
+            console.error('Session save error:', err);
             reject(err);
           } else {
             console.log('Session saved successfully');
@@ -57,26 +62,15 @@ export function registerRoutes(app: Express): Server {
 
       console.log('Created temp user:', tempUser.id);
       res.json({ id: tempUser.id });
+
     } catch (error) {
-      console.error('Error creating temporary user:', error);
+      console.error('Error creating temp user:', error);
       res.status(500).json({ 
-        error: 'Failed to create temporary user',
+        error: true,
+        message: 'Failed to create temporary user',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
     }
-  });
-
-  // Verify session
-  app.get('/api/users/verify', (req: Request, res: Response) => {
-    console.log('Verifying session:', {
-      sessionExists: !!req.session,
-      tempUserId: req.session?.tempUserId
-    });
-
-    res.json({ 
-      valid: Boolean(req.session?.tempUserId),
-      id: req.session?.tempUserId
-    });
   });
 
   return createServer(app);

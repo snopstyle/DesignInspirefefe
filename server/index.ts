@@ -10,18 +10,28 @@ const SessionStore = MemoryStore(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Simple session setup
+// Configure session before any routes
 app.use(session({
   store: new SessionStore({
-    checkPeriod: 86400000 // 24h
+    checkPeriod: 86400000 // prune expired entries every 24h
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
+  name: 'sid',
   resave: false,
   saveUninitialized: true,
-  cookie: { 
-    maxAge: 24 * 60 * 60 * 1000 // 24h
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'lax'
   }
 }));
+
+// Debug middleware for session tracking
+app.use((req, res, next) => {
+  console.log(`Session ID: ${req.sessionID}, TempUserID: ${req.session.tempUserId}`);
+  next();
+});
 
 // Basic request logging
 app.use((req, res, next) => {
@@ -39,10 +49,15 @@ app.use((req, res, next) => {
 (async () => {
   const server = registerRoutes(app);
 
-  // Simple error handler
+  // Global error handler
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    console.error('Error:', err);
-    res.status(500).json({ error: err.message });
+    console.error('Server Error:', err);
+    res.status(500).json({ 
+      error: true,
+      message: process.env.NODE_ENV === 'production' 
+        ? 'An internal server error occurred' 
+        : err.message
+    });
   });
 
   if (app.get("env") === "development") {
