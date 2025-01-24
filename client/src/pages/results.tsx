@@ -47,7 +47,7 @@ export default function Results() {
   return (
     <GradientBackground>
       <div className="container mx-auto py-8 space-y-4">
-        {/* Dominant Profile Card */}
+        {/* Only Dominant Profile Card */}
         <Dialog>
           <DialogTrigger asChild>
             <Card className="bg-white/10 backdrop-blur-sm cursor-pointer hover:bg-white/20 transition">
@@ -55,65 +55,23 @@ export default function Results() {
                 <CardTitle>Profil Dominant</CardTitle>
                 <CardDescription>{dominantProfile}</CardDescription>
               </CardHeader>
-            </Card>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4">Profil Dominant: {dominantProfile}</h2>
-            {/* Add more detailed content here */}
-          </DialogContent>
-        </Dialog>
-
-        {/* Sub-Profile Card */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Card className="bg-white/10 backdrop-blur-sm cursor-pointer hover:bg-white/20 transition">
-              <CardHeader>
-                <CardTitle>Sous-Profil</CardTitle>
-                <CardDescription>
-                  {profile} - Match: {matchPercentage}%
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4">Sous-Profil: {profile}</h2>
-            <p className="text-lg">Pourcentage de correspondance: {matchPercentage}%</p>
-            {/* Add more detailed content here */}
-          </DialogContent>
-        </Dialog>
-
-        {/* Key Traits Card */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Card className="bg-white/10 backdrop-blur-sm cursor-pointer hover:bg-white/20 transition">
-              <CardHeader>
-                <CardTitle>Traits Principaux</CardTitle>
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-2">
-                    {sortedTraits.map(([trait, score]) => (
+              <CardContent>
+                <div className="grid grid-cols-1 gap-2">
+                  {Object.entries(scores)
+                    .filter(([, score]) => score > 0)
+                    .sort(([, a], [, b]) => b - a)
+                    .map(([trait, score]) => (
                       <div key={trait} className="flex justify-between items-center">
                         <span>{trait}</span>
                         <span className="font-mono">{(score * 100).toFixed(1)}%</span>
                       </div>
                     ))}
-                  </div>
-                </CardContent>
-              </CardHeader>
+                </div>
+              </CardContent>
             </Card>
           </DialogTrigger>
           <DialogContent className="max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4">Traits Principaux</h2>
-            <div className="space-y-4">
-              {sortedTraits.map(([trait, score]) => (
-                <div key={trait} className="border-b pb-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium">{trait}</span>
-                    <span className="font-mono text-lg">{(score * 100).toFixed(1)}%</span>
-                  </div>
-                  {/* Add more detailed content for each trait here */}
-                </div>
-              ))}
-            </div>
+            <h2 className="text-2xl font-bold mb-4">Profil Dominant: {dominantProfile}</h2>
           </DialogContent>
         </Dialog>
       </div>
