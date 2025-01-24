@@ -235,3 +235,267 @@ export const profile_summaries: Record<string, {
     skills_to_develop: ["Engagement à long terme", "Spécialisation"]
   }
 };
+
+// Helper functions
+export function answerValue(answer: string, questionId: string): number {
+    const answerScales: Record<string, Record<string, number>> = {
+        "Q1": {
+            "Forte préférence pour le travail d'équipe": 1.0,
+            "Préférence pour le travail d'équipe": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour l'indépendance": 0.25,
+            "Forte préférence pour l'indépendance": 0.0
+        },
+        "Q2": {
+            "Raisonnement logique": 1.0,
+            "Solutions créatives": 0.75,
+            "Un mélange des deux": 0.5,
+            "J'évite les problèmes": 0.0
+        },
+        "Q3": {
+            "Idées abstraites": 1.0,
+            "Applications pratiques": 0.75,
+            "Les deux également": 0.5,
+            "Ni l'un ni l'autre": 0.0
+        },
+        "Q4": {
+            "Très importante": 1.0,
+            "Importante": 0.75,
+            "Neutre": 0.5,
+            "Peu importante": 0.25,
+            "Pas du tout importante": 0.0
+        },
+        "Q5": {
+            "Forte préférence pour les risques": 1.0,
+            "Préférence pour les risques": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour la prudence": 0.25,
+            "Forte préférence pour la prudence": 0.0
+        },
+        "Q6": {
+            "J'adore ça": 1.0,
+            "J'aime bien": 0.75,
+            "Neutre": 0.5,
+            "Je n'aime pas": 0.25,
+            "Je déteste": 0.0
+        },
+        "Q7": {
+            "Forte préférence pour les tâches créatives": 1.0,
+            "Préférence pour les tâches créatives": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour les tâches techniques": 0.25,
+            "Forte préférence pour les tâches techniques": 0.0
+        },
+        "Q8": {
+            "Très bien": 1.0,
+            "Bien": 0.75,
+            "Neutre": 0.5,
+            "Mal": 0.25,
+            "Très mal": 0.0
+        },
+        "Q9": {
+            "Très importante": 1.0,
+            "Importante": 0.75,
+            "Neutre": 0.5,
+            "Peu importante": 0.25,
+            "Pas du tout importante": 0.0
+        },
+        "Q10": {
+            "J'adore ça": 1.0,
+            "J'aime bien": 0.75,
+            "Neutre": 0.5,
+            "Je n'aime pas": 0.25,
+            "Je déteste": 0.0
+        },
+        "Q11": {
+            "Très précis": 1.0,
+            "Précis": 0.75,
+            "Neutre": 0.5,
+            "Imprécis": 0.25,
+            "Très imprécis": 0.0
+        },
+        "Q12": {
+            "Très curieux": 1.0,
+            "Curieux": 0.75,
+            "Neutre": 0.5,
+            "Peu curieux": 0.25,
+            "Pas curieux du tout": 0.0
+        },
+        "Q13": {
+            "Excellent leader": 1.0,
+            "Bon leader": 0.75,
+            "Neutre": 0.5,
+            "Mauvais leader": 0.25,
+            "Horrible leader": 0.0
+        },
+        "Q14": {
+            "Très important": 1.0,
+            "Important": 0.75,
+            "Neutre": 0.5,
+            "Peu important": 0.25,
+            "Pas du tout important": 0.0
+        },
+        "Q15": {
+            "Très résilient": 1.0,
+            "Résilient": 0.75,
+            "Neutre": 0.5,
+            "Peu résilient": 0.25,
+            "Pas du tout résilient": 0.0
+        },
+        "Q16": {
+            "Très important": 1.0,
+            "Important": 0.75,
+            "Neutre": 0.5,
+            "Peu important": 0.25,
+            "Pas du tout important": 0.0
+        },
+        "Q17": {
+            "Très sensible": 1.0,
+            "Sensible": 0.75,
+            "Neutre": 0.5,
+            "Peu sensible": 0.25,
+            "Pas du tout sensible": 0.0
+        },
+        "Q18": {
+            "Très diplomate": 1.0,
+            "Diplomate": 0.75,
+            "Neutre": 0.5,
+            "Peu diplomate": 0.25,
+            "Pas du tout diplomate": 0.0
+        },
+        "Q19": {
+            "Très efficace": 1.0,
+            "Efficace": 0.75,
+            "Neutre": 0.5,
+            "Peu efficace": 0.25,
+            "Pas du tout efficace": 0.0
+        },
+        "Q20": {
+            "Excellent communicateur": 1.0,
+            "Bon communicateur": 0.75,
+            "Neutre": 0.5,
+            "Mauvais communicateur": 0.25,
+            "Horrible communicateur": 0.0
+        },
+        "Q21": {
+            "Très compétent": 1.0,
+            "Compétent": 0.75,
+            "Neutre": 0.5,
+            "Peu compétent": 0.25,
+            "Incompétent": 0.0
+        },
+        "Q22": {
+            "Très adaptable": 1.0,
+            "Adaptable": 0.75,
+            "Neutre": 0.5,
+            "Peu adaptable": 0.25,
+            "Pas du tout adaptable": 0.0
+        },
+        "Q23": {
+            "Très visionnaire": 1.0,
+            "Visionnaire": 0.75,
+            "Neutre": 0.5,
+            "Peu visionnaire": 0.25,
+            "Pas du tout visionnaire": 0.0
+        },
+        "Q24": {
+            "Très polyvalent": 1.0,
+            "Polyvalent": 0.75,
+            "Neutre": 0.5,
+            "Peu polyvalent": 0.25,
+            "Pas du tout polyvalent": 0.0
+        },
+        "Q25": {
+            "Très engagé": 1.0,
+            "Engagé": 0.75,
+            "Neutre": 0.5,
+            "Peu engagé": 0.25,
+            "Pas du tout engagé": 0.0
+        }
+    };
+
+    const scale = answerScales[questionId] || {};
+    return scale[answer] || 0.0;
+}
+
+export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
+    const profileScores: Record<string, number> = { ...key_traits };
+
+    // Validation des réponses
+    console.log('Calculating scores for answers:', userAnswers);
+
+    for (const [questionId, answer] of Object.entries(userAnswers)) {
+        if (!question_weights[questionId]) {
+            console.warn(`No weights defined for question ${questionId}`);
+            continue;
+        }
+
+        const value = answerValue(answer, questionId);
+        console.log(`Question ${questionId} answer "${answer}" has value ${value}`);
+
+        for (const [trait, weight] of Object.entries(question_weights[questionId])) {
+            if (!(trait in profileScores)) {
+                console.warn(`Unknown trait "${trait}" in question ${questionId}`);
+                continue;
+            }
+            const score = weight * value;
+            profileScores[trait] = (profileScores[trait] || 0) + score;
+            console.log(`Adding score ${score} to trait ${trait} (weight: ${weight})`);
+        }
+    }
+
+    console.log('Final profile scores:', profileScores);
+    return profileScores;
+}
+
+export function getMatchedProfile(profileScores: Record<string, number>): string {
+    let maxScore = -1;
+    let matchedProfile = "";
+    console.log('Matching profile for scores:', profileScores);
+
+    for (const [profile, traits] of Object.entries(sub_profiles)) {
+        let score = 0;
+        let validTraits = 0;
+
+        for (const trait of traits) {
+            if (!(trait in profileScores)) {
+                console.warn(`Missing trait "${trait}" for profile "${profile}"`);
+                continue;
+            }
+
+            if (!(profile in sub_profile_weights)) {
+                console.warn(`Missing weights for profile "${profile}"`);
+                continue;
+            }
+
+            const weight = sub_profile_weights[profile][trait] || 0;
+            const traitScore = profileScores[trait] * weight;
+            score += traitScore;
+            validTraits++;
+
+            console.log(`Profile ${profile} - Trait ${trait}: score=${traitScore} (value=${profileScores[trait]} * weight=${weight})`);
+        }
+
+        // Normalize score based on valid traits
+        if (validTraits > 0) {
+            score = score / validTraits;
+        }
+
+        console.log(`Profile ${profile} total score: ${score}`);
+
+        if (score > maxScore) {
+            maxScore = score;
+            matchedProfile = profile;
+        }
+    }
+
+    console.log('Best matching profile:', matchedProfile, 'with score:', maxScore);
+    return matchedProfile;
+}
+
+// Export for testing and debugging
+export const __testing = {
+    answerValue,
+    calculateProfileScores,
+    getMatchedProfile
+};
