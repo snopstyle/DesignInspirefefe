@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
 import { tempUsers } from "@db/schema";
+import { eq } from "drizzle-orm";
 
 declare module 'express-session' {
   interface SessionData {
@@ -37,13 +38,13 @@ export function registerRoutes(app: Express): Server {
 
       // Check for existing session
       if (req.session.tempUserId) {
-        const existingUser = await db.query.tempUsers.findFirst({
-          where: (tempUsers, { eq }) => eq(tempUsers.id, req.session.tempUserId)
-        });
+        const existingUser = await db.select().from(tempUsers)
+          .where(eq(tempUsers.id, req.session.tempUserId))
+          .limit(1);
 
-        if (existingUser) {
-          console.log('Using existing temp user:', existingUser.id);
-          return res.json({ id: existingUser.id });
+        if (existingUser.length > 0) {
+          console.log('Using existing temp user:', existingUser[0].id);
+          return res.json({ id: existingUser[0].id });
         }
       }
 
