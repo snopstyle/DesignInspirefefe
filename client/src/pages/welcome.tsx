@@ -1,4 +1,3 @@
-
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -36,35 +35,41 @@ export default function WelcomePage() {
       });
 
       if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error);
+        throw new Error(await response.text());
       }
 
       const data = await response.json();
-      if (data.success && data.id) {
-        await setTempUserId(data.id);
+      if (data.id) {
+        // Set the temp user ID in the app state
+        setTempUserId(data.id);
         setIsOpen(false);
-        
+
         // Wait for session to be properly saved
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Verify session before navigation
         const verifyResponse = await fetch('/api/users/verify', {
           credentials: 'include'
         });
-        
-        if (verifyResponse.ok) {
-          navigate("/landing");
-        } else {
+
+        if (!verifyResponse.ok) {
           throw new Error('Session verification failed');
         }
+
+        const verifyData = await verifyResponse.json();
+        if (verifyData.valid && verifyData.id) {
+          navigate("/landing");
+        } else {
+          throw new Error('Invalid session state');
+        }
       } else {
-        throw new Error('Invalid server response');
+        throw new Error('No user ID received from server');
       }
     } catch (error) {
+      console.error('Error in handleSubmit:', error);
       toast({
         title: "Erreur",
-        description: "Une erreur est survenue",
+        description: "Une erreur est survenue lors de la création de votre compte temporaire",
         variant: "destructive"
       });
     }
