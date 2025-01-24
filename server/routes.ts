@@ -168,10 +168,25 @@ export function registerRoutes(app: Express): Server {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      // For now, return a simple response
-      const response = {
-        message: "I understand your message. I'm here to help with any questions about education, careers, or your future path."
-      };
+      // Generate contextual responses in French
+      let response;
+      if (message.toLowerCase().includes('formation') || message.toLowerCase().includes('étude')) {
+        response = {
+          message: "Je peux vous aider à trouver la formation qui vous correspond. Quels sont vos centres d'intérêt ?"
+        };
+      } else if (message.toLowerCase().includes('métier') || message.toLowerCase().includes('carrière')) {
+        response = {
+          message: "Il existe de nombreuses opportunités professionnelles. Parlons de vos compétences et de vos aspirations."
+        };
+      } else if (message.toLowerCase().includes('profil') || message.toLowerCase().includes('personnalité')) {
+        response = {
+          message: "Votre profil est unique. Je peux vous aider à mieux comprendre vos points forts et vos domaines de développement."
+        };
+      } else {
+        response = {
+          message: "Je suis là pour vous guider dans votre orientation. Posez-moi des questions sur les formations, les métiers ou votre profil."
+        };
+      }
 
       res.json(response);
     } catch (error) {
