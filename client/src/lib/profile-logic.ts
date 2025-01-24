@@ -1,169 +1,94 @@
 import { type Question } from './quiz-logic';
 
 // Core data structures
-const key_traits: Record<string, number> = {
-  "Organisation": 0,
-  "Efficacité": 0,
-  "Planification Stratégique": 0,
-  "Mentalité Orientée Résultats": 0,
-  // Keep rest of traits, just prioritize Organisateur traits
+export const key_traits: Record<string, number> = {
   "Raisonnement Analytique": 0,
   "Curiosité Intellectuelle": 0,
   "Interprétation des Données": 0,
   "Expertise Technique": 0,
   "Précision": 0,
+  "Planification Stratégique": 0,
   "Évaluation des Risques": 0,
+  "Pensée à Long Terme": 0,
+  "Efficacité": 0,
   "Expression Créative": 0,
   "Sensibilité Esthétique": 0,
   "Imagination": 0,
   "Focus sur la Durabilité": 0,
   "Innovation": 0,
   "Adaptabilité": 0,
-  "Pensée à Long Terme": 0,
+  "Approche Centrée sur l'Utilisateur": 0,
+  "Pensée Visuelle": 0,
+  "Résolution de Problèmes": 0,
+  "Conscience Sociale": 0,
+  "Plaidoyer Engagé": 0,
+  "Diplomatie": 0,
   "Compétences en Communication": 0,
   "Partage des Connaissances": 0,
   "Patience": 0,
   "Compassion": 0,
   "Perspective Globale": 0,
   "Collaboration": 0,
+  "Exécution Stratégique": 0,
+  "Prise de Risque": 0,
+  "Ambition": 0,
   "Leadership Stratégique": 0,
   "Prise de Décision": 0,
   "Vision": 0,
+  "Organisation": 0,
+  "Mentalité Orientée Résultats": 0,
+  "Polyvalence": 0,
   "Large Éventail de Compétences": 0,
   "Pensée Interdisciplinaire": 0,
   "État d'Esprit de Croissance": 0
 };
 
-const sub_profiles: Record<string, string[]> = {
-  "Organisateur": ["Organisation", "Efficacité", "Planification Stratégique", "Mentalité Orientée Résultats"],
-  "Communicant": ["Compétences en Communication", "Collaboration", "Adaptabilité"],
-  // Keep other profiles
+export const sub_profiles: Record<string, string[]> = {
   "Chercheur": ["Raisonnement Analytique", "Curiosité Intellectuelle", "Interprétation des Données"],
   "Ingénieur": ["Expertise Technique", "Précision", "Planification Stratégique"],
   "Stratège en Données": ["Évaluation des Risques", "Pensée à Long Terme", "Efficacité"],
   "Artiste": ["Expression Créative", "Sensibilité Esthétique", "Imagination"],
   "Innovateur": ["Focus sur la Durabilité", "Innovation", "Adaptabilité"],
-  "Designer": ["Expression Créative", "Pensée Visuelle", "Résolution de Problèmes"],
+  "Designer": ["Approche Centrée sur l'Utilisateur", "Pensée Visuelle", "Résolution de Problèmes"],
   "Défenseur": ["Conscience Sociale", "Plaidoyer Engagé", "Diplomatie"],
   "Éducateur": ["Compétences en Communication", "Partage des Connaissances", "Patience"],
   "Humanitaire": ["Compassion", "Perspective Globale", "Collaboration"],
-  "Entrepreneur": ["Leadership Stratégique", "Innovation", "Mentalité Orientée Résultats"],
+  "Entrepreneur": ["Exécution Stratégique", "Prise de Risque", "Ambition"],
   "Leader": ["Leadership Stratégique", "Prise de Décision", "Vision"],
-  "Généraliste": ["Adaptabilité", "Large Éventail de Compétences", "Pensée Interdisciplinaire"],
+  "Organisateur": ["Organisation", "Efficacité", "Mentalité Orientée Résultats"],
+  "Généraliste": ["Adaptabilité", "Polyvalence", "Large Éventail de Compétences"],
   "Apprenant à Vie": ["Curiosité Intellectuelle", "État d'Esprit de Croissance", "Pensée Interdisciplinaire"]
 };
 
-const question_weights: Record<string, Record<string, number>> = {
-  // Increase weights for organization-related answers in first questions
-  "1": { "Organisation": 0.5, "Efficacité": 0.3 },
-  "2": { "Planification Stratégique": 0.5, "Mentalité Orientée Résultats": 0.3 },
-  "3": { "Organisation": 0.4, "Efficacité": 0.4 },
-  "4": { "Compétences en Communication": 0.6, "Collaboration": 0.4 }, // Communication profile
-  "5": { "Compétences en Communication": 0.5, "Adaptabilité": 0.3 }, // Communication profile
-  "6": { "Compétences en Communication": 0.6, "Collaboration": 0.4 }, // Communication profile
-  // Keep other weights with reduced values
-  "7": { "Expression Créative": 0.3, "Adaptabilité": 0.2 },
-  "8": { "Efficacité": 0.3, "Organisation": 0.2 },
-  "9": { "Leadership Stratégique": 0.3, "Vision": 0.2 },
-  "10": { "Perspective Globale": 0.3, "Pensée Interdisciplinaire": 0.2 },
-  "11": { "Précision": 0.3, "Organisation": 0.2 },
-  "12": { "Curiosité Intellectuelle": 0.3, "État d'Esprit de Croissance": 0.2 },
-  "13": { "Leadership Stratégique": 0.3, "Prise de Décision": 0.2 },
-  "14": { "Innovation": 0.3, "Focus sur la Durabilité": 0.2 },
-  "15": { "Adaptabilité": 0.3, "Résolution de Problèmes": 0.2 },
-  "16": { "Expertise Technique": 0.3, "Précision": 0.2 },
-  "17": { "Expression Créative": 0.3, "Sensibilité Esthétique": 0.2 },
-  "18": { "Diplomatie": 0.3, "Compétences en Communication": 0.2 },
-  "19": { "Organisation": 0.3, "Efficacité": 0.2 },
-  "20": { "Compétences en Communication": 0.3, "Leadership Stratégique": 0.2 },
-  "21": { "Innovation": 0.3, "Expertise Technique": 0.2 },
-  "22": { "Adaptabilité": 0.3, "Efficacité": 0.2 },
-  "23": { "Vision": 0.3, "Planification Stratégique": 0.2 },
-  "24": { "Large Éventail de Compétences": 0.3, "Adaptabilité": 0.2 },
-  "25": { "Conscience Sociale": 0.3, "Perspective Globale": 0.2 }
+export const question_weights: Record<string, Record<string, number>> = {
+  "1": { "Collaboration": 0.4, "Adaptabilité": 0.3 },
+  "2": { "Raisonnement Analytique": 0.5, "Expression Créative": 0.3 },
+  "3": { "Pensée Interdisciplinaire": 0.4, "Pensée à Long Terme": 0.3 },
+  "4": { "Conscience Sociale": 0.6, "État d'Esprit de Croissance": 0.2 },
+  "5": { "Évaluation des Risques": 0.5, "Prise de Risque": 0.3 },
+  "6": { "Interprétation des Données": 0.6, "Précision": 0.2 },
+  "7": { "Expression Créative": 0.7, "Expertise Technique": 0.3 },
+  "8": { "Efficacité": 0.5, "Organisation": 0.3 },
+  "9": { "Plaidoyer Engagé": 0.7, "Leadership Stratégique": 0.2 },
+  "10": { "Perspective Globale": 0.5, "Pensée Interdisciplinaire": 0.3 },
+  "11": { "Précision": 0.6, "Organisation": 0.2 },
+  "12": { "Curiosité Intellectuelle": 0.5, "État d'Esprit de Croissance": 0.3 },
+  "13": { "Leadership Stratégique": 0.6, "Prise de Décision": 0.2 },
+  "14": { "Focus sur la Durabilité": 0.7, "Innovation": 0.2 },
+  "15": { "Adaptabilité": 0.4, "Résolution de Problèmes": 0.3 },
+  "16": { "Expertise Technique": 0.7, "Résolution de Problèmes": 0.2 },
+  "17": { "Sensibilité Esthétique": 0.6, "Expression Créative": 0.2 },
+  "18": { "Diplomatie": 0.5, "Compétences en Communication": 0.3 },
+  "19": { "Exécution Stratégique": 0.6, "Organisation": 0.2 },
+  "20": { "Compétences en Communication": 0.5, "Leadership Stratégique": 0.3 },
+  "21": { "Expertise Technique": 0.5, "Innovation": 0.3 },
+  "22": { "Adaptabilité": 0.6, "Polyvalence": 0.2 },
+  "23": { "Pensée à Long Terme": 0.5, "Vision": 0.3 },
+  "24": { "Polyvalence": 0.5, "Large Éventail de Compétences": 0.3 },
+  "25": { "Plaidoyer Engagé": 0.6, "Conscience Sociale": 0.2 }
 };
 
-const sub_profile_weights: Record<string, Record<string, number>> = {
-  "Organisateur": {
-    "Organisation": 0.4,
-    "Efficacité": 0.3,
-    "Planification Stratégique": 0.2,
-    "Mentalité Orientée Résultats": 0.1
-  },
-  "Communicant": {
-    "Compétences en Communication": 0.4,
-    "Collaboration": 0.3,
-    "Adaptabilité": 0.3
-  },
-  // Keep other profile weights
-  "Chercheur": {
-    "Raisonnement Analytique": 0.4,
-    "Curiosité Intellectuelle": 0.3,
-    "Interprétation des Données": 0.3
-  },
-  "Ingénieur": {
-    "Expertise Technique": 0.4,
-    "Précision": 0.3,
-    "Planification Stratégique": 0.3
-  },
-  "Stratège en Données": {
-    "Évaluation des Risques": 0.4,
-    "Pensée à Long Terme": 0.3,
-    "Efficacité": 0.3
-  },
-  "Artiste": {
-    "Expression Créative": 0.4,
-    "Sensibilité Esthétique": 0.3,
-    "Imagination": 0.3
-  },
-  "Innovateur": {
-    "Focus sur la Durabilité": 0.4,
-    "Innovation": 0.3,
-    "Adaptabilité": 0.3
-  },
-  "Designer": {
-    "Approche Centrée sur l'Utilisateur": 0.4,
-    "Pensée Visuelle": 0.3,
-    "Résolution de Problèmes": 0.3
-  },
-  "Défenseur": {
-    "Conscience Sociale": 0.4,
-    "Plaidoyer Engagé": 0.3,
-    "Diplomatie": 0.3
-  },
-  "Éducateur": {
-    "Compétences en Communication": 0.4,
-    "Partage des Connaissances": 0.3,
-    "Patience": 0.3
-  },
-  "Humanitaire": {
-    "Compassion": 0.4,
-    "Perspective Globale": 0.3,
-    "Collaboration": 0.3
-  },
-  "Entrepreneur": {
-    "Exécution Stratégique": 0.4,
-    "Prise de Risque": 0.3,
-    "Ambition": 0.3
-  },
-  "Leader": {
-    "Leadership Stratégique": 0.4,
-    "Prise de Décision": 0.3,
-    "Vision": 0.3
-  },
-  "Généraliste": {
-    "Adaptabilité": 0.4,
-    "Polyvalence": 0.3,
-    "Large Éventail de Compétences": 0.3
-  },
-  "Apprenant à Vie": {
-    "Curiosité Intellectuelle": 0.4,
-    "État d'Esprit de Croissance": 0.3,
-    "Pensée Interdisciplinaire": 0.3
-  }
-};
-
-const dominant_profile_mapping: Record<string, string> = {
+export const dominant_profile_mapping: Record<string, string> = {
   "Chercheur": "Analytique & Technique",
   "Ingénieur": "Analytique & Technique",
   "Stratège en Données": "Analytique & Technique",
@@ -177,11 +102,97 @@ const dominant_profile_mapping: Record<string, string> = {
   "Leader": "Pragmatique & Stratégique",
   "Organisateur": "Pragmatique & Stratégique",
   "Généraliste": "Adaptatif & Exploratoire",
-  "Apprenant à Vie": "Adaptatif & Exploratoire",
-  "Communicant": "Social & Interactif"
+  "Apprenant à Vie": "Adaptatif & Exploratoire"
 };
 
-const profile_summaries: Record<string, {
+export const sub_profile_weights: Record<string, Record<string, number>> = {
+  "Chercheur": {
+    "Curiosité Intellectuelle": 0.30,
+    "Précision": 0.25,
+    "État d'Esprit de Croissance": 0.20,
+    "Pensée Interdisciplinaire": 0.15
+  },
+  "Ingénieur": {
+    "Compétences Techniques": 0.35,
+    "Résolution de Problèmes": 0.30,
+    "Mentalité Orientée Résultats": 0.20,
+    "Précision": 0.15
+  },
+  "Stratège en Données": {
+    "Pensée Analytique": 0.30,
+    "Évaluation des Risques": 0.25,
+    "Perspective à Long Terme": 0.25,
+    "Efficacité": 0.20
+  },
+  "Artiste": {
+    "Créativité": 0.40,
+    "Intelligence Émotionnelle": 0.25,
+    "Expression de Soi": 0.15,
+    "Sensibilité Esthétique": 0.10
+  },
+  "Innovateur": {
+    "Créativité": 0.40,
+    "Expertise Technique": 0.25,
+    "Mentalité Tournée vers l'Avenir": 0.15,
+    "Prise de Risque": 0.10
+  },
+  "Designer": {
+    "Créativité": 0.40,
+    "Souci du Détail": 0.25,
+    "Approche Centrée sur l'Utilisateur": 0.15,
+    "Pensée Visuelle": 0.10
+  },
+  "Défenseur": {
+    "Empathie": 0.40,
+    "Détermination": 0.25,
+    "Compétences en Communication": 0.15,
+    "Plaidoyer": 0.10
+  },
+  "Éducateur": {
+    "Patience": 0.40,
+    "Compétences en Communication": 0.25,
+    "Partage des Connaissances": 0.15,
+    "Mentorat": 0.10
+  },
+  "Humanitaire": {
+    "Compassion": 0.40,
+    "Résilience": 0.25,
+    "Perspective Globale": 0.15,
+    "Résolution de Problèmes": 0.10
+  },
+  "Entrepreneur": {
+    "Leadership": 0.35,
+    "Créativité": 0.25,
+    "Mentalité Orientée Résultats": 0.20,
+    "Ambition": 0.10
+  },
+  "Leader": {
+    "Prise de Décision": 0.35,
+    "Communication": 0.25,
+    "Vision pour l'Avenir": 0.20,
+    "Pensée Stratégique": 0.10
+  },
+  "Organisateur": {
+    "Organisation": 0.35,
+    "Efficacité": 0.25,
+    "Planification Stratégique": 0.30,
+    "Mentalité Orientée Résultats": 0.10
+  },
+  "Généraliste": {
+    "Adaptabilité": 0.35,
+    "Curiosité": 0.25,
+    "Large Éventail de Compétences": 0.20,
+    "Ensemble de Compétences Étendues": 0.10
+  },
+  "Apprenant à Vie": {
+    "Curiosité": 0.35,
+    "Adaptabilité": 0.25,
+    "État d'Esprit de Croissance": 0.20,
+    "Auto-Amélioration": 0.10
+  }
+};
+
+export const profile_summaries: Record<string, {
   description: string;
   strengths: string[];
   careers: string[];
@@ -222,149 +233,288 @@ const profile_summaries: Record<string, {
     careers: ["Consultant", "Voyageur", "Généraliste", "Passionné de culture"],
     education_paths: ["Théorie Triarchique (Sternberg)", "État d'Esprit de Croissance (Dweck)"],
     skills_to_develop: ["Engagement à long terme", "Spécialisation"]
-  },
-  "Social & Interactif": {
-    description: "Vous êtes une personne sociable et interactive, motivée par la collaboration et la communication.",
-    strengths: ["Collaboration", "Communication", "Adaptabilité"],
-    careers: ["Enseignant", "Journaliste", "Responsable des relations publiques", "Travailleur social"],
-    education_paths: ["Communication non-violente", "Intelligence émotionnelle"],
-    skills_to_develop: ["Gestion du temps", "Leadership"]
   }
 };
 
-function answerValue(answer: string, questionId: string): number {
-  const answerScales: Record<string, Record<string, number>> = {
-    "Q1": {
-      "Forte préférence pour le travail d'équipe": 1.0,
-      "Préférence pour le travail d'équipe": 0.75,
-      "Neutre": 0.5,
-      "Préférence pour l'indépendance": 0.25,
-      "Forte préférence pour l'indépendance": 0.0
-    },
-    "Q2": {
-      "Raisonnement logique": 1.0,
-      "Solutions créatives": 0.75,
-      "Un mélange des deux": 0.5,
-      "J'évite les problèmes": 0.0
-    },
-    "Q3": {
-      "Idées abstraites": 1.0,
-      "Applications pratiques": 0.75,
-      "Les deux également": 0.5,
-      "Ni l'un ni l'autre": 0.0
-    },
-    "Q4": {
-      "Très importante": 1.0,
-      "Importante": 0.75,
-      "Neutre": 0.5,
-      "Peu importante": 0.25,
-      "Pas du tout importante": 0.0
-    },
-    "Q5": {
-      "Forte préférence pour les risques": 1.0,
-      "Préférence pour les risques": 0.75,
-      "Neutre": 0.5,
-      "Préférence pour la prudence": 0.25,
-      "Forte préférence pour la prudence": 0.0
-    },
-    "Q6": {
-      "J'adore ça": 1.0,
-      "J'aime bien": 0.75,
-      "Neutre": 0.5,
-      "Je n'aime pas": 0.25,
-      "Je déteste": 0.0
-    },
-    "Q7": {
-      "Forte préférence pour les tâches créatives": 1.0,
-      "Préférence pour les tâches créatives": 0.75,
-      "Neutre": 0.5,
-      "Préférence pour les tâches techniques": 0.25,
-      "Forte préférence pour les tâches techniques": 0.0
-    }
-  };
-
-  // Add default scale for remaining questions
-  for (let i = 8; i <= 25; i++) {
-    answerScales[`Q${i}`] = {
-      "Très important": 1.0,
-      "Important": 0.75,
-      "Neutre": 0.5,
-      "Peu important": 0.25,
-      "Pas important": 0.0
+// Helper functions
+export function answerValue(answer: string, questionId: string): number {
+    // Default 5-point scale for most questions
+    const defaultScale = {
+        "Très important": 1.0,
+        "Important": 0.75,
+        "Neutre": 0.5,
+        "Peu important": 0.25,
+        "Pas important": 0.0,
+        "J'adore ça": 1.0,
+        "J'aime bien": 0.75,
+        "Neutre": 0.5,
+        "Je n'aime pas": 0.25,
+        "Je déteste": 0.0,
+        "Très bien": 1.0,
+        "Bien": 0.75,
+        "Neutre": 0.5,
+        "Mal": 0.25,
+        "Très mal": 0.0
     };
-  }
 
-  const scale = answerScales[questionId] || {};
-  return scale[answer] || 0.0;
+    const answerScales: Record<string, Record<string, number>> = {
+        "Q1": {
+            "Forte préférence pour le travail d'équipe": 1.0,
+            "Préférence pour le travail d'équipe": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour l'indépendance": 0.25,
+            "Forte préférence pour l'indépendance": 0.0
+        },
+        "Q2": {
+            "Raisonnement logique": 1.0,
+            "Solutions créatives": 0.75,
+            "Un mélange des deux": 0.5,
+            "J'évite les problèmes": 0.0
+        },
+        "Q3": {
+            "Idées abstraites": 1.0,
+            "Applications pratiques": 0.75,
+            "Les deux également": 0.5,
+            "Ni l'un ni l'autre": 0.0
+        },
+        "Q4": {
+            "Très importante": 1.0,
+            "Importante": 0.75,
+            "Neutre": 0.5,
+            "Peu importante": 0.25,
+            "Pas du tout importante": 0.0
+        },
+        "Q5": {
+            "Forte préférence pour les risques": 1.0,
+            "Préférence pour les risques": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour la prudence": 0.25,
+            "Forte préférence pour la prudence": 0.0
+        },
+        "Q6": {
+            "J'adore ça": 1.0,
+            "J'aime bien": 0.75,
+            "Neutre": 0.5,
+            "Je n'aime pas": 0.25,
+            "Je déteste": 0.0
+        },
+        "Q7": {
+            "Forte préférence pour les tâches créatives": 1.0,
+            "Préférence pour les tâches créatives": 0.75,
+            "Neutre": 0.5,
+            "Préférence pour les tâches techniques": 0.25,
+            "Forte préférence pour les tâches techniques": 0.0
+        },
+        "Q8": {
+            "Très bien": 1.0,
+            "Bien": 0.75,
+            "Neutre": 0.5,
+            "Mal": 0.25,
+            "Très mal": 0.0
+        },
+        "Q9": {
+            "Très importante": 1.0,
+            "Importante": 0.75,
+            "Neutre": 0.5,
+            "Peu importante": 0.25,
+            "Pas du tout importante": 0.0
+        },
+        "Q10": {
+            "J'adore ça": 1.0,
+            "J'aime bien": 0.75,
+            "Neutre": 0.5,
+            "Je n'aime pas": 0.25,
+            "Je déteste": 0.0
+        },
+        "Q11": {
+            "Très précis": 1.0,
+            "Précis": 0.75,
+            "Neutre": 0.5,
+            "Imprécis": 0.25,
+            "Très imprécis": 0.0
+        },
+        "Q12": {
+            "Très curieux": 1.0,
+            "Curieux": 0.75,
+            "Neutre": 0.5,
+            "Peu curieux": 0.25,
+            "Pas curieux du tout": 0.0
+        },
+        "Q13": {
+            "Excellent leader": 1.0,
+            "Bon leader": 0.75,
+            "Neutre": 0.5,
+            "Mauvais leader": 0.25,
+            "Horrible leader": 0.0
+        },
+        "Q14": {
+            "Très important": 1.0,
+            "Important": 0.75,
+            "Neutre": 0.5,
+            "Peu important": 0.25,
+            "Pas du tout important": 0.0
+        },
+        "Q15": {
+            "Très résilient": 1.0,
+            "Résilient": 0.75,
+            "Neutre": 0.5,
+            "Peu résilient": 0.25,
+            "Pas du tout résilient": 0.0
+        },
+        "Q16": {
+            "Très important": 1.0,
+            "Important": 0.75,
+            "Neutre": 0.5,
+            "Peu important": 0.25,
+            "Pas du tout important": 0.0
+        },
+        "Q17": {
+            "Très sensible": 1.0,
+            "Sensible": 0.75,
+            "Neutre": 0.5,
+            "Peu sensible": 0.25,
+            "Pas du tout sensible": 0.0
+        },
+        "Q18": {
+            "Très diplomate": 1.0,
+            "Diplomate": 0.75,
+            "Neutre": 0.5,
+            "Peu diplomate": 0.25,
+            "Pas du tout diplomate": 0.0
+        },
+        "Q19": {
+            "Très efficace": 1.0,
+            "Efficace": 0.75,
+            "Neutre": 0.5,
+            "Peu efficace": 0.25,
+            "Pas du tout efficace": 0.0
+        },
+        "Q20": {
+            "Excellent communicateur": 1.0,
+            "Bon communicateur": 0.75,
+            "Neutre": 0.5,
+            "Mauvais communicateur": 0.25,
+            "Horrible communicateur": 0.0
+        },
+        "Q21": {
+            "Très compétent": 1.0,
+            "Compétent": 0.75,
+            "Neutre": 0.5,
+            "Peu compétent": 0.25,
+            "Incompétent": 0.0
+        },
+        "Q22": {
+            "Très adaptable": 1.0,
+            "Adaptable": 0.75,
+            "Neutre": 0.5,
+            "Peu adaptable": 0.25,
+            "Pas du tout adaptable": 0.0
+        },
+        "Q23": {
+            "Très visionnaire": 1.0,
+            "Visionnaire": 0.75,
+            "Neutre": 0.5,
+            "Peu visionnaire": 0.25,
+            "Pas du tout visionnaire": 0.0
+        },
+        "Q24": {
+            "Très polyvalent": 1.0,
+            "Polyvalent": 0.75,
+            "Neutre": 0.5,
+            "Peu polyvalent": 0.25,
+            "Pas du tout polyvalent": 0.0
+        },
+        "Q25": {
+            "Très engagé": 1.0,
+            "Engagé": 0.75,
+            "Neutre": 0.5,
+            "Peu engagé": 0.25,
+            "Pas du tout engagé": 0.0
+        }
+    };
+
+    const scale = answerScales[questionId] || {};
+    return scale[answer] || 0.0;
 }
 
-function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
-  const profileScores: Record<string, number> = { ...key_traits };
+export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
+    const profileScores: Record<string, number> = { ...key_traits };
+    
+    console.log('Calculating scores for answers:', userAnswers);
 
-  for (const [questionId, answer] of Object.entries(userAnswers)) {
-    const qId = questionId.replace('Q', '');
-    if (!question_weights[qId]) continue;
+    for (const [questionId, answer] of Object.entries(userAnswers)) {
+        // Only process questions 1-25 for trait calculation
+        const qNum = questionId.toString();
+        if (parseInt(qNum) > 25 || !question_weights[qNum]) {
+            continue;
+        }
 
-    const value = answerValue(answer, questionId);
-    for (const [trait, weight] of Object.entries(question_weights[qId])) {
-      if (trait in profileScores) {
-        profileScores[trait] = (profileScores[trait] || 0) + (weight * value);
-      }
+        const value = answerValue(answer, `Q${qNum}`);
+        console.log(`Question ${qNum} answer "${answer}" has value ${value}`);
+
+        for (const [trait, weight] of Object.entries(question_weights[qNum])) {
+            if (!(trait in profileScores)) {
+                console.warn(`Unknown trait "${trait}" in question ${qNum}`);
+                continue;
+            }
+            const score = weight * value;
+            profileScores[trait] = (profileScores[trait] || 0) + score;
+            console.log(`Adding score ${score} to trait ${trait} (weight: ${weight})`);
+        }
     }
-  }
 
-  const maxScorePerTrait: Record<string, number> = {};
-  for (const weights of Object.values(question_weights)) {
-    for (const [trait, weight] of Object.entries(weights)) {
-      maxScorePerTrait[trait] = (maxScorePerTrait[trait] || 0) + weight;
-    }
-  }
-
-  for (const trait in profileScores) {
-    if (maxScorePerTrait[trait] && maxScorePerTrait[trait] > 0) {
-      profileScores[trait] = profileScores[trait] / maxScorePerTrait[trait];
-    }
-  }
-
-  return profileScores;
+    console.log('Final profile scores:', profileScores);
+    return profileScores;
 }
 
-function getMatchedProfile(profileScores: Record<string, number>): string {
-  let maxScore = -1;
-  let matchedProfile = "";
+export function getMatchedProfile(profileScores: Record<string, number>): string {
+    let maxScore = -1;
+    let matchedProfile = "";
+    console.log('Matching profile for scores:', profileScores);
 
-  for (const [profile, traits] of Object.entries(sub_profiles)) {
-    let score = 0;
-    let totalWeight = 0;
+    for (const [profile, traits] of Object.entries(sub_profiles)) {
+        let score = 0;
+        let validTraits = 0;
 
-    for (const trait of traits) {
-      if (trait in profileScores && profile in sub_profile_weights) {
-        const weight = sub_profile_weights[profile][trait] || 0;
-        score += profileScores[trait] * weight;
-        totalWeight += weight;
-      }
+        for (const trait of traits) {
+            if (!(trait in profileScores)) {
+                console.warn(`Missing trait "${trait}" for profile "${profile}"`);
+                continue;
+            }
+
+            if (!(profile in sub_profile_weights)) {
+                console.warn(`Missing weights for profile "${profile}"`);
+                continue;
+            }
+
+            const weight = sub_profile_weights[profile][trait] || 0;
+            const traitScore = profileScores[trait] * weight;
+            score += traitScore;
+            validTraits++;
+
+            console.log(`Profile ${profile} - Trait ${trait}: score=${traitScore} (value=${profileScores[trait]} * weight=${weight})`);
+        }
+
+        // Normalize score based on valid traits
+        if (validTraits > 0) {
+            score = score / validTraits;
+        }
+
+        console.log(`Profile ${profile} total score: ${score}`);
+
+        if (score > maxScore) {
+            maxScore = score;
+            matchedProfile = profile;
+        }
     }
 
-    score = totalWeight > 0 ? (score / totalWeight) * 100 : 0;
-
-    if (score > maxScore) {
-      maxScore = score;
-      matchedProfile = profile;
-    }
-  }
-
-  return matchedProfile;
+    console.log('Best matching profile:', matchedProfile, 'with score:', maxScore);
+    return matchedProfile;
 }
 
-// Single export statement for all shared items
-export {
-  key_traits,
-  sub_profiles,
-  question_weights,
-  sub_profile_weights,
-  dominant_profile_mapping,
-  profile_summaries,
-  answerValue,
-  calculateProfileScores,
-  getMatchedProfile
+// Export for testing and debugging
+export const __testing = {
+    answerValue,
+    calculateProfileScores,
+    getMatchedProfile
 };
