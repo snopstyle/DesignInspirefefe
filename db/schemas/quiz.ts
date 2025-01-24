@@ -1,6 +1,7 @@
-import { pgTable, text, timestamp, uuid, integer, jsonb, boolean, decimal, relations } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, integer, jsonb, boolean, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { users } from "./auth";
+import { relations } from "drizzle-orm";
 
 // Temporary users for quiz sessions
 export const tempUsers = pgTable("quiz_temp_users", {
@@ -15,8 +16,8 @@ export const quizSessions = pgTable("quiz_sessions", {
   tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
   status: text("status").notNull().default('in_progress'),
   currentQuestionId: text("current_question_id"),
-  completedQuestions: jsonb("completed_questions").$type<string[]>().default([]).notNull(),
-  answers: jsonb("answers").$type<Record<string, string>>().default({}).notNull(),
+  completedQuestions: jsonb("completed_questions").default([]).notNull(),
+  answers: jsonb("answers").default({}).notNull(),
   startedAt: timestamp("started_at").defaultNow().notNull(),
   lastUpdated: timestamp("last_updated").defaultNow().notNull(),
   completedAt: timestamp("completed_at")
@@ -28,20 +29,13 @@ export const quizResults = pgTable("quiz_results", {
   userId: integer("user_id").references(() => users.id),
   tempUserId: uuid("temp_user_id").references(() => tempUsers.id),
   sessionId: uuid("session_id").references(() => quizSessions.id),
-  answers: jsonb("answers").$type<Record<string, string>>().notNull(),
-  adaptiveFlow: jsonb("adaptive_flow").$type<{
-    path: string[];
-    branchingDecisions: Record<string, {
-      question: string;
-      answer: string;
-      nextQuestion: string;
-    }>
-  }>().notNull(),
-  traitScores: jsonb("trait_scores").$type<Record<string, number>>().notNull(),
+  answers: jsonb("answers").notNull(),
+  adaptiveFlow: jsonb("adaptive_flow").notNull(),
+  traitScores: jsonb("trait_scores").notNull(),
   dominantProfile: text("dominant_profile").notNull(),
   subProfile: text("sub_profile").notNull(),
-  traits: jsonb("traits").$type<string[]>().notNull(),
-  profileMatchScores: jsonb("profile_match_scores").$type<Record<string, number>>().notNull(),
+  traits: jsonb("traits").notNull(),
+  profileMatchScores: jsonb("profile_match_scores").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 

@@ -2,732 +2,236 @@ import { type Question } from './quiz-logic';
 
 // Core data structures
 export const key_traits: Record<string, number> = {
-    "Travail d'équipe": 0,
-    "Indépendance": 0,
-    "Raisonnement logique": 0,
-    "Compétences analytiques": 0,
-    "Créativité": 0,
-    "Résolution de problèmes": 0,
-    "Pensée abstraite": 0,
-    "Pragmatisme": 0,
-    "Innovation": 0,
-    "Orientation résultats": 0,
-    "Intelligence émotionnelle": 0,
-    "Expression personnelle": 0,
-    "Empathie": 0,
-    "Compassion": 0,
-    "Prise de risque": 0,
-    "Prudence": 0,
-    "Évaluation des risques": 0,
-    "Planification stratégique": 0,
-    "Amour des chiffres": 0,
-    "Interprétation des données": 0,
-    "Pensée analytique": 0,
-    "Reconnaissance des modèles": 0,
-    "Amour de l'apprentissage": 0,
-    "Curiosité intellectuelle": 0,
-    "Esprit de croissance": 0,
-    "Développement personnel": 0,
-    "Attention aux détails": 0,
-    "Précision": 0,
-    "Mentalité axée sur les résultats": 0,
-    "Leadership": 0,
-    "Prise de décision": 0,
-    "Pensée stratégique": 0,
-    "Vision d'avenir": 0,
-    "Passion pour la durabilité": 0,
-    "Plaidoyer": 0,
-    "Perspective globale": 0,
-    "Condition physique": 0,
-    "Amour de la nature": 0,
-    "Résilience": 0,
-    "Résolution pratique de problèmes": 0,
-    "Compétences techniques": 0,
-    "Imagination": 0,
-    "Sensibilité esthétique": 0,
-    "Résolution de conflits": 0,
-    "Diplomatie": 0,
-    "Compétences en communication": 0,
-    "Organisation": 0,
-    "Efficacité": 0,
-    "Planification à long terme": 0,
-    "Confiance": 0,
-    "Charisme": 0,
-    "Expression émotionnelle": 0,
-    "Expertise technique": 0,
-    "Esprit tourné vers l'avenir": 0,
-    "Adaptabilité": 0,
-    "Réflexion à long terme": 0,
-    "Ambition": 0,
-    "Multitâche": 0,
-    "Désir d'aider les autres": 0
+  "Raisonnement Analytique": 0,
+  "Curiosité Intellectuelle": 0,
+  "Interprétation des Données": 0,
+  "Expertise Technique": 0,
+  "Précision": 0,
+  "Planification Stratégique": 0,
+  "Évaluation des Risques": 0,
+  "Pensée à Long Terme": 0,
+  "Efficacité": 0,
+  "Expression Créative": 0,
+  "Sensibilité Esthétique": 0,
+  "Imagination": 0,
+  "Focus sur la Durabilité": 0,
+  "Innovation": 0,
+  "Adaptabilité": 0,
+  "Approche Centrée sur l'Utilisateur": 0,
+  "Pensée Visuelle": 0,
+  "Résolution de Problèmes": 0,
+  "Conscience Sociale": 0,
+  "Plaidoyer Engagé": 0,
+  "Diplomatie": 0,
+  "Compétences en Communication": 0,
+  "Partage des Connaissances": 0,
+  "Patience": 0,
+  "Compassion": 0,
+  "Perspective Globale": 0,
+  "Collaboration": 0,
+  "Exécution Stratégique": 0,
+  "Prise de Risque": 0,
+  "Ambition": 0,
+  "Leadership Stratégique": 0,
+  "Prise de Décision": 0,
+  "Vision": 0,
+  "Organisation": 0,
+  "Mentalité Orientée Résultats": 0,
+  "Polyvalence": 0,
+  "Large Éventail de Compétences": 0,
+  "Pensée Interdisciplinaire": 0,
+  "État d'Esprit de Croissance": 0
 };
 
 export const sub_profiles: Record<string, string[]> = {
-    "Le Chercheur": ["Curiosité intellectuelle", "Attention aux détails", "Amour de l'apprentissage", "Pensée abstraite", "Patience"],
-    "Le Solutionneur": ["Raisonnement logique", "Compétences analytiques", "Orientation résultats", "Pragmatisme", "Pensée critique"],
-    "L'Analyste de Données": ["Pensée analytique", "Attention aux détails", "Affinité pour les chiffres", "Reconnaissance des modèles", "Interprétation des données"],
-    "Le Théoricien": ["Pensée profonde", "Créativité conceptuelle", "Rigueur intellectuelle", "Raisonnement abstrait", "Curiosité"],
-    "L'Ingénieur": ["Compétences techniques", "Résolution de problèmes", "Orientation résultats", "Précision", "Innovation"],
-    "L'Artiste": ["Créativité", "Intelligence émotionnelle", "Expression personnelle", "Imagination", "Sensibilité esthétique"],
-    "L'Innovateur": ["Créativité", "Expertise technique", "Vision d'avenir", "Prise de risque", "Curiosité"],
-    "Le Narrateur": ["Créativité", "Communication", "Intelligence émotionnelle", "Construction narrative", "Empathie"],
-    "L'Interprète": ["Charisme", "Expression émotionnelle", "Présence scénique", "Confiance", "Adaptabilité"],
-    "Le Designer": ["Créativité", "Attention aux détails", "Approche centrée utilisateur", "Pensée visuelle", "Résolution de problèmes"],
-    "L'Aidant": ["Empathie", "Patience", "Désir d'aider les autres", "Collaboration", "Intelligence émotionnelle"],
-    "L'Activiste": ["Passion", "Détermination", "Communication forte", "Plaidoyer", "Résilience"],
-    "Le Communicant": ["Compétences interpersonnelles", "Empathie", "Adaptabilité", "Facilitation du dialogue", "Construction de relations"],
-    "L'Éducateur": ["Patience", "Communication", "Amour de l'apprentissage", "Partage des connaissances", "Mentorat"],
-    "L'Humanitaire": ["Compassion", "Résilience", "Perspective globale", "Résolution de problèmes", "Plaidoyer"],
-    "L'Entrepreneur": ["Leadership", "Créativité", "Orientation résultats", "Prise de risque", "Ambition"],
-    "Le Leader": ["Prise de décision", "Communication", "Vision d'avenir", "Pensée stratégique", "Confiance"],
-    "Le Stratège": ["Pensée analytique", "Organisation", "Orientation résultats", "Efficacité", "Pensée à long terme"],
-    "Le Commercial": ["Charisme", "Persévérance", "Orientation client", "Négociation", "Adaptabilité"],
-    "L'Investisseur": ["Pensée analytique", "Évaluation des risques", "Vision à long terme", "Acuité financière", "Planification stratégique"],
-    "Le Généraliste": ["Adaptabilité", "Curiosité", "Amour de l'apprentissage", "Polyvalence", "Large éventail de compétences"],
-    "L'Intégrateur": ["Polyvalence", "Créativité", "Résolution de problèmes", "Pensée interdisciplinaire", "Adaptabilité"],
-    "L'Apprenant Perpétuel": ["Curiosité", "Adaptabilité", "Mentalité de croissance", "Amour de l'apprentissage", "Développement personnel"],
-    "Le Multipotentiel": ["Polyvalence", "Créativité", "Large éventail de compétences", "Adaptabilité", "Curiosité"],
-    "L'Enthousiaste Culturel": ["Ouverture d'esprit", "Communication", "Perspective globale", "Curiosité", "Adaptabilité"],
-    "Le Codeur": ["Compétences techniques", "Résolution de problèmes", "Passion pour le code", "Pensée logique", "Innovation"],
-    "Le Passionné de Technologie": ["Compétences techniques", "Créativité", "Passion pour le bricolage", "Résolution pratique", "Curiosité"],
-    "Le Créateur Numérique": ["Créativité", "Compétences techniques", "Approche centrée utilisateur", "Innovation", "Adaptabilité"],
-    "Le protecteur de l'environnement": ["Passion pour la nature", "Résolution de problèmes", "Perspective globale", "Plaidoyer", "Résilience"],
-    "L'Aventurier": ["Condition physique", "Adaptabilité", "Amour de la nature", "Résolution de problèmes", "Curiosité"],
-    "L'Innovateur Durable": ["Créativité", "Compétences techniques", "Passion pour la durabilité", "Résolution de problèmes", "Innovation"]
+  "Chercheur": ["Raisonnement Analytique", "Curiosité Intellectuelle", "Interprétation des Données"],
+  "Ingénieur": ["Expertise Technique", "Précision", "Planification Stratégique"],
+  "Stratège en Données": ["Évaluation des Risques", "Pensée à Long Terme", "Efficacité"],
+  "Artiste": ["Expression Créative", "Sensibilité Esthétique", "Imagination"],
+  "Innovateur": ["Focus sur la Durabilité", "Innovation", "Adaptabilité"],
+  "Designer": ["Approche Centrée sur l'Utilisateur", "Pensée Visuelle", "Résolution de Problèmes"],
+  "Défenseur": ["Conscience Sociale", "Plaidoyer Engagé", "Diplomatie"],
+  "Éducateur": ["Compétences en Communication", "Partage des Connaissances", "Patience"],
+  "Humanitaire": ["Compassion", "Perspective Globale", "Collaboration"],
+  "Entrepreneur": ["Exécution Stratégique", "Prise de Risque", "Ambition"],
+  "Leader": ["Leadership Stratégique", "Prise de Décision", "Vision"],
+  "Organisateur": ["Organisation", "Efficacité", "Mentalité Orientée Résultats"],
+  "Généraliste": ["Adaptabilité", "Polyvalence", "Large Éventail de Compétences"],
+  "Apprenant à Vie": ["Curiosité Intellectuelle", "État d'Esprit de Croissance", "Pensée Interdisciplinaire"]
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
-    "Q1": { "Travail d'équipe": 0.3, "Indépendance": 0.3 },
-    "Q2": { "Raisonnement logique": 0.3, "Compétences analytiques": 0.25, "Créativité": 0.4, "Résolution de problèmes": 0.25 },
-    "Q3": { "Pensée abstraite": 0.3, "Pragmatisme": 0.3, "Innovation": 0.4, "Orientation résultats": 0.2 },
-    "Q4": { "Intelligence émotionnelle": 0.4, "Expression personnelle": 0.25, "Empathie": 0.4, "Compassion": 0.4 },
-    "Q5": { "Prise de risque": 0.4, "Prudence": 0.3, "Évaluation des risques": 0.25, "Planification stratégique": 0.15 },
-    "Q6": { "Amour des chiffres": 0.3, "Interprétation des données": 0.25, "Pensée analytique": 0.3, "Reconnaissance des modèles": 0.15 },
-    "Q7": { "Créativité": 0.4, "Compétences techniques": 0.25, "Innovation": 0.2, "Résolution pratique de problèmes": 0.15 },
-    "Q8": { "Efficacité": 0.3, "Adaptabilité": 0.25, "Organisation": 0.2, "Réflexion à long terme": 0.15 },
-    "Q9": { "Empathie": 0.4, "Désir d'aider les autres": 0.25, "Mentorat": 0.2, "Plaidoyer": 0.15 },
-    "Q10": { "Ouverture d'esprit": 0.3, "Perspective globale": 0.25, "Curiosité": 0.2, "Pensée interdisciplinaire": 0.15 },
-    "Q11": { "Attention aux détails": 0.3, "Précision": 0.25, "Orientation résultats": 0.2 },
-    "Q12": { "Amour de l'apprentissage": 0.2, "Curiosité intellectuelle": 0.3, "Esprit de croissance": 0.2, "Développement personnel": 0.1 },
-    "Q13": { "Leadership": 0.3, "Prise de décision": 0.25, "Pensée stratégique": 0.2, "Vision d'avenir": 0.15 },
-    "Q14": { "Passion pour la durabilité": 0.4, "Plaidoyer": 0.25, "Perspective globale": 0.2, "Résolution de problèmes": 0.15 },
-    "Q15": { "Condition physique": 0.4, "Amour de la nature": 0.25, "Résilience": 0.2 },
-    "Q16": { "Résolution pratique de problèmes": 0.3, "Compétences techniques": 0.25, "Innovation": 0.2, "Pragmatisme": 0.15 },
-    "Q17": { "Créativité": 0.4, "Expression personnelle": 0.25, "Imagination": 0.2, "Sensibilité esthétique": 0.15 },
-    "Q18": { "Résolution de conflits": 0.3, "Diplomatie": 0.25, "Compétences en communication": 0.2 },
-    "Q19": { "Organisation": 0.3, "Efficacité": 0.25, "Pensée stratégique": 0.2, "Planification à long terme": 0.15 },
-    "Q20": { "Compétences en communication": 0.4, "Confiance": 0.25, "Charisme": 0.2, "Expression émotionnelle": 0.15 },
-    "Q21": { "Expertise technique": 0.4, "Innovation": 0.25, "Esprit tourné vers l'avenir": 0.2, "Adaptabilité": 0.15 },
-    "Q22": { "Adaptabilité": 0.3, "Résilience": 0.25, "Efficacité": 0.2, "Résolution de problèmes": 0.15 },
-    "Q23": { "Réflexion à long terme": 0.3, "Planification stratégique": 0.25, "Ambition": 0.2, "Prise de décision": 0.15 },
-    "Q24": { "Multitâche": 0.3, "Adaptabilité": 0.25, "Organisation": 0.2, "Efficacité": 0.15 },
-    "Q25": { "Plaidoyer": 0.4, "Compassion": 0.25, "Perspective globale": 0.2, "Désir d'aider les autres": 0.15 }
+  "Q1": { "Collaboration": 0.4, "Indépendance": 0.3 },
+  "Q2": { "Raisonnement Analytique": 0.5, "Résolution Créative de Problèmes": 0.3 },
+  "Q3": { "Pensée Abstraite": 0.4, "Application Pratique": 0.4 },
+  "Q4": { "Conscience Sociale": 0.6 },
+  "Q5": { "Évaluation des Risques": 0.5, "Prise de Risque Stratégique": 0.3 },
+  "Q6": { "Interprétation des Données": 0.6 },
+  "Q7": { "Expression Créative": 0.7, "Expertise Technique": 0.3 },
+  "Q8": { "Efficacité": 0.5 },
+  "Q9": { "Plaidoyer Engagé": 0.7 },
+  "Q10": { "Perspective Globale": 0.5, "Pensée Interdisciplinaire": 0.3 },
+  "Q11": { "Précision": 0.6 },
+  "Q12": { "Curiosité Intellectuelle": 0.5, "État d'Esprit de Croissance": 0.3 },
+  "Q13": { "Leadership Stratégique": 0.6 },
+  "Q14": { "Focus sur la Durabilité": 0.7 },
+  "Q15": { "Résilience en Plein Air": 0.4 },
+  "Q16": { "Application Pratique": 0.4, "Expertise Technique": 0.3 },
+  "Q17": { "Sensibilité Esthétique": 0.6 },
+  "Q18": { "Diplomatie": 0.5 },
+  "Q19": { "Exécution Stratégique": 0.6 },
+  "Q20": { "Compétences en Communication": 0.5 },
+  "Q21": { "Expertise Technique": 0.5 },
+  "Q22": { "Adaptabilité": 0.6 },
+  "Q23": { "Pensée à Long Terme": 0.5 },
+  "Q24": { "Polyvalence": 0.5 },
+  "Q25": { "Plaidoyer Engagé": 0.6 }
+};
+
+export const dominant_profile_mapping: Record<string, string> = {
+  "Chercheur": "Analytique & Technique",
+  "Ingénieur": "Analytique & Technique",
+  "Stratège en Données": "Analytique & Technique",
+  "Artiste": "Créatif & Expressif",
+  "Innovateur": "Créatif & Expressif",
+  "Designer": "Créatif & Expressif",
+  "Défenseur": "Social & Humanitaire",
+  "Éducateur": "Social & Humanitaire",
+  "Humanitaire": "Social & Humanitaire",
+  "Entrepreneur": "Pragmatique & Stratégique",
+  "Leader": "Pragmatique & Stratégique",
+  "Organisateur": "Pragmatique & Stratégique",
+  "Généraliste": "Adaptatif & Exploratoire",
+  "Apprenant à Vie": "Adaptatif & Exploratoire"
 };
 
 export const sub_profile_weights: Record<string, Record<string, number>> = {
-    "Le Chercheur": {
-        "Curiosité intellectuelle": 0.3,
-        "Attention aux détails": 0.25,
-        "Amour de l'apprentissage": 0.2,
-        "Pensée abstraite": 0.15,
-        "Patience": 0.1
-    },
-    "Le Solutionneur": {
-        "Raisonnement logique": 0.3,
-        "Compétences analytiques": 0.25,
-        "Orientation résultats": 0.2,
-        "Pragmatisme": 0.15,
-        "Pensée critique": 0.1
-    },
-    "L'Analyste de Données": {
-        "Pensée analytique": 0.3,
-        "Attention aux détails": 0.25,
-        "Amour des chiffres": 0.2,
-        "Reconnaissance des modèles": 0.15,
-        "Interprétation des données": 0.1
-    },
-    "Le Théoricien": {
-        "Pensée profonde": 0.3,
-        "Créativité conceptuelle": 0.25,
-        "Rigueur intellectuelle": 0.2,
-        "Raisonnement abstrait": 0.15,
-        "Curiosité": 0.1
-    },
-    "L'Ingénieur": {
-        "Compétences techniques": 0.3,
-        "Résolution de problèmes": 0.25,
-        "Orientation résultats": 0.2,
-        "Précision": 0.15,
-        "Innovation": 0.1
-    },
-    "L'Artiste": {
-        "Créativité": 0.4,
-        "Intelligence émotionnelle": 0.25,
-        "Expression personnelle": 0.15,
-        "Imagination": 0.1,
-        "Sensibilité esthétique": 0.1
-    },
-    "L'Innovateur": {
-        "Créativité": 0.4,
-        "Expertise technique": 0.25,
-        "Vision d'avenir": 0.15,
-        "Prise de risque": 0.1,
-        "Curiosité": 0.1
-    },
-    "Le Narrateur": {
-        "Créativité": 0.4,
-        "Compétences en communication": 0.25,
-        "Intelligence émotionnelle": 0.15,
-        "Construction narrative": 0.1,
-        "Empathie": 0.1
-    },
-    "L'Interprète": {
-        "Charisme": 0.4,
-        "Expression émotionnelle": 0.25,
-        "Présence scénique": 0.15,
-        "Confiance": 0.1,
-        "Adaptabilité": 0.1
-    },
-    "Le Designer": {
-        "Créativité": 0.4,
-        "Attention aux détails": 0.25,
-        "Approche centrée utilisateur": 0.15,
-        "Pensée visuelle": 0.1,
-        "Résolution de problèmes": 0.1
-    },
-    "L'Aidant": {
-        "Empathie": 0.4,
-        "Patience": 0.25,
-        "Désir d'aider les autres": 0.15,
-        "Collaboration": 0.1,
-        "Intelligence émotionnelle": 0.1
-    },
-    "L'Activiste": {
-        "Passion": 0.4,
-        "Détermination": 0.25,
-        "Compétences en communication": 0.15,
-        "Plaidoyer": 0.1,
-        "Résilience": 0.1
-    },
-    "Le Communicant": {
-        "Compétences interpersonnelles": 0.4,
-        "Empathie": 0.25,
-        "Adaptabilité": 0.15,
-        "Facilitation du dialogue": 0.1,
-        "Construction de relations": 0.1
-    },
-    "L'Éducateur": {
-        "Patience": 0.4,
-        "Compétences en communication": 0.25,
-        "Amour de l'apprentissage": 0.15,
-        "Partage des connaissances": 0.1,
-        "Mentorat": 0.1
-    },
-    "L'Humanitaire": {
-        "Compassion": 0.4,
-        "Résilience": 0.25,
-        "Perspective globale": 0.15,
-        "Résolution de problèmes": 0.1,
-        "Plaidoyer": 0.1
-    },
-    "L'Entrepreneur": {
-        "Leadership": 0.3,
-        "Créativité": 0.25,
-        "Orientation résultats": 0.2,
-        "Prise de risque": 0.15,
-        "Ambition": 0.1
-    },
-    "Le Leader": {
-        "Prise de décision": 0.3,
-        "Communication": 0.25,
-        "Vision d'avenir": 0.2,
-        "Pensée stratégique": 0.15,
-        "Confiance": 0.1
-    },
-    "Le Stratège": {
-        "Pensée analytique": 0.3,
-        "Organisation": 0.25,
-        "Orientation résultats": 0.2,
-        "Efficacité": 0.15,
-        "Réflexion à long terme": 0.1
-    },
-    "Le Commercial": {
-        "Charisme": 0.3,
-        "Persévérance": 0.25,
-        "Orientation client": 0.2,
-        "Compétences en négociation": 0.15,
-        "Adaptabilité": 0.1
-    },
-    "L'Investisseur": {
-        "Pensée analytique": 0.3,
-        "Évaluation des risques": 0.25,
-        "Vision à long terme": 0.2,
-        "Acuité financière": 0.15,
-        "Planification stratégique": 0.1
-    },
-    "Le Généraliste": {
-        "Adaptabilité": 0.3,
-        "Curiosité": 0.25,
-        "Amour de l'apprentissage": 0.2,
-        "Polyvalence": 0.15,
-        "Large éventail de compétences": 0.1
-    },
-    "L'Intégrateur": {
-        "Polyvalence": 0.3,
-        "Créativité": 0.25,
-        "Résolution de problèmes": 0.2,
-        "Pensée interdisciplinaire": 0.15,
-        "Adaptabilité": 0.1
-    },
-    "L'Apprenant Perpétuel": {
-        "Curiosité": 0.3,
-        "Adaptabilité": 0.25,
-        "Mentalité de croissance": 0.2,
-        "Amour de l'apprentissage": 0.15,
-        "Développement personnel": 0.1
-    },
-    "Le Multipotentiel": {
-        "Polyvalence": 0.3,
-        "Créativité": 0.25,
-        "Large éventail de compétences": 0.2,
-        "Adaptabilité": 0.15,
-        "Curiosité": 0.1
-    },
-    "L'Enthousiaste Culturel": {
-        "Ouverture d'esprit": 0.3,
-        "Compétences en communication": 0.25,
-        "Perspective globale": 0.2,
-        "Curiosité": 0.15,
-        "Adaptabilité": 0.1
-    },
-    "Le Codeur": {
-        "Compétences techniques": 0.4,
-        "Résolution de problèmes": 0.25,
-        "Passion pour le code": 0.15,
-        "Pensée logique": 0.1,
-        "Innovation": 0.1
-    },
-    "Le Passionné de Technologie": {
-        "Compétences techniques": 0.4,
-        "Créativité": 0.25,
-        "Passion pour le bricolage": 0.15,
-        "Résolution pratique": 0.1,
-        "Curiosité": 0.1
-    },
-    "Le Créateur Numérique": {
-        "Créativité": 0.4,
-        "Compétences techniques": 0.25,
-        "Approche centrée utilisateur": 0.15,
-        "Innovation": 0.1,
-        "Adaptabilité": 0.1
-    },
-    "Le Conservateur": {
-        "Passion pour la nature": 0.4,
-        "Résolution de problèmes": 0.25,
-        "Perspective globale": 0.15,
-        "Plaidoyer": 0.1,
-        "Résilience": 0.1
-    },
-    "L'Aventurier": {
-        "Condition physique": 0.4,
-        "Adaptabilité": 0.25,
-        "Amour de la nature": 0.15,
-        "Résolution de problèmes": 0.1,
-        "Curiosité": 0.1
-    },
-    "L'Innovateur Durable": {
-        "Créativité": 0.4,
-        "Compétences techniques": 0.25,
-        "Passion pour la durabilité": 0.15,
-        "Résolution de problèmes": 0.1,
-        "Innovation": 0.1
-    },
-    "Le Chef de Projet": {
-        "Leadership": 0.3,
-        "Organisation": 0.25,
-        "Résolution de problèmes": 0.2,
-        "Efficacité": 0.15,
-        "Pensée stratégique": 0.1
-    },
-    "L'Organisateur d'Événements": {
-        "Attention aux détails": 0.3,
-        "Communication": 0.25,
-        "Créativité": 0.2,
-        "Adaptabilité": 0.15,
-        "Résolution de problèmes": 0.1
-    },
-    "Le Penseur Systémique": {
-        "Pensée analytique": 0.3,
-        "Résolution de problèmes": 0.25,
-        "Orientation résultats": 0.2,
-        "Efficacité": 0.15,
-        "Innovation": 0.1
-    },
-    "L'Orateur": {
-        "Charisme": 0.4,
-        "Compétences en communication": 0.25,
-        "Intelligence émotionnelle": 0.15,
-        "Influence": 0.1,
-        "Adaptabilité": 0.1
-    },
-    "L'Écrivain": {
-        "Créativité": 0.4,
-        "Compétences en communication": 0.25,
-        "Attention aux détails": 0.15,
-        "Narration": 0.1,
-        "Empathie": 0.1
-    },
-    "Le Négociateur": {
-        "Communication": 0.4,
-        "Empathie": 0.25,
-        "Résolution de problèmes": 0.15,
-        "Diplomatie": 0.1,
-        "Adaptabilité": 0.1
-    },
-    "Le Mentor": {
-        "Empathie": 0.4,
-        "Compétences en communication": 0.25,
-        "Désir d'aider les autres": 0.15,
-        "Leadership": 0.1,
-        "Patience": 0.1
-    },
-    "Le Défenseur du Bien-être": {
-        "Empathie": 0.4,
-        "Compétences en communication": 0.25,
-        "Passion pour la santé": 0.15,
-        "Résolution de problèmes": 0.1,
-        "Adaptabilité": 0.1
-    }
-};
-
-// Helper functions
-export function answerValue(answer: string, questionId: string): number {
-    const answerScales: Record<string, Record<string, number>> = {
-        "Q1": {
-            "Forte préférence pour le travail d'équipe": 1.0,
-            "Préférence pour le travail d'équipe": 0.75,
-            "Neutre": 0.5,
-            "Préférence pour l'indépendance": 0.25,
-            "Forte préférence pour l'indépendance": 0.0
-        },
-        "Q2": {
-            "Raisonnement logique": 1.0,
-            "Solutions créatives": 0.75,
-            "Un mélange des deux": 0.5,
-            "J'évite les problèmes": 0.0
-        },
-        "Q3": {
-            "Idées abstraites": 1.0,
-            "Applications pratiques": 0.75,
-            "Les deux également": 0.5,
-            "Ni l'un ni l'autre": 0.0
-        },
-        "Q4": {
-            "Très importante": 1.0,
-            "Importante": 0.75,
-            "Neutre": 0.5,
-            "Peu importante": 0.25,
-            "Pas du tout importante": 0.0
-        },
-        "Q5": {
-            "Forte préférence pour les risques": 1.0,
-            "Préférence pour les risques": 0.75,
-            "Neutre": 0.5,
-            "Préférence pour la prudence": 0.25,
-            "Forte préférence pour la prudence": 0.0
-        },
-        "Q6": {
-            "J'adore ça": 1.0,
-            "J'aime bien": 0.75,
-            "Neutre": 0.5,
-            "Je n'aime pas": 0.25,
-            "Je déteste": 0.0
-        },
-        "Q7": {
-            "Forte préférence pour les tâches créatives": 1.0,
-            "Préférence pour les tâches créatives": 0.75,
-            "Neutre": 0.5,
-            "Préférence pour les tâches techniques": 0.25,
-            "Forte préférence pour les tâches techniques": 0.0
-        },
-        "Q8": {
-            "Very well": 1.0,
-            "Well": 0.75,
-            "Neutral": 0.5,
-            "Poorly": 0.25,
-            "Very poorly": 0.0
-        },
-        "Q9": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        },
-        "Q10": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
-        },
-        "Q11": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        },
-        "Q12": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
-        },
-        "Q13": {
-            "Very well": 1.0,
-            "Well": 0.75,
-            "Neutral": 0.5,
-            "Poorly": 0.25,
-            "Very poorly": 0.0
-        },
-        "Q14": {
-            "Very passionate": 1.0,
-            "Passionate": 0.75,
-            "Neutral": 0.5,
-            "Not passionate": 0.25,
-            "Not at all passionate": 0.0
-        },
-        "Q15": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
-        },
-        "Q16": {
-            "Very well": 1.0,
-            "Well": 0.75,
-            "Neutral": 0.5,
-            "Poorly": 0.25,
-            "Very poorly": 0.0
-        },
-        "Q17": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        },
-        "Q18": {
-            "Very well": 1.0,
-            "Well": 0.75,
-            "Neutral": 0.5,
-            "Poorly": 0.25,
-            "Very poorly": 0.0
-        },
-        "Q19": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        },
-        "Q20": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
-        },
-        "Q21": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        },
-        "Q22": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
-        },
-        "Q23": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        },
-        "Q24": {
-            "Love it": 1.0,
-            "Enjoy it": 0.75,
-            "Neutral": 0.5,
-            "Dislike it": 0.25,
-            "Hate it": 0.0
-        },
-        "Q25": {
-            "Very important": 1.0,
-            "Important": 0.75,
-            "Neutral": 0.5,
-            "Not important": 0.25,
-            "Not at all important": 0.0
-        }
-    };
-
-    const scale = answerScales[questionId] || {};
-    return scale[answer] || 0.0;
-}
-
-export function calculateProfileScores(userAnswers: Record<string, string>): Record<string, number> {
-    const profileScores: Record<string, number> = { ...key_traits };
-
-    // Validation des réponses
-    console.log('Calculating scores for answers:', userAnswers);
-
-    for (const [questionId, answer] of Object.entries(userAnswers)) {
-        if (!question_weights[questionId]) {
-            console.warn(`No weights defined for question ${questionId}`);
-            continue;
-        }
-
-        const value = answerValue(answer, questionId);
-        console.log(`Question ${questionId} answer "${answer}" has value ${value}`);
-
-        for (const [trait, weight] of Object.entries(question_weights[questionId])) {
-            if (!(trait in key_traits)) {
-                console.warn(`Unknown trait "${trait}" in question ${questionId}`);
-                continue;
-            }
-            const score = weight * value;
-            profileScores[trait] = (profileScores[trait] || 0) + score;
-            console.log(`Adding score ${score} to trait ${trait} (weight: ${weight})`);
-        }
-    }
-
-    console.log('Final profile scores:', profileScores);
-    return profileScores;
-}
-
-export function getMatchedProfile(profileScores: Record<string, number>): string {
-    let maxScore = -1;
-    let matchedProfile = "";
-    console.log('Matching profile for scores:', profileScores);
-
-    for (const [profile, traits] of Object.entries(sub_profiles)) {
-        let score = 0;
-        let validTraits = 0;
-
-        for (const trait of traits) {
-            if (!(trait in profileScores)) {
-                console.warn(`Missing trait "${trait}" for profile "${profile}"`);
-                continue;
-            }
-
-            const weight = sub_profile_weights[profile][trait] || 0;
-            const traitScore = profileScores[trait] * weight;
-            score += traitScore;
-            validTraits++;
-
-            console.log(`Profile ${profile} - Trait ${trait}: score=${traitScore} (value=${profileScores[trait]} * weight=${weight})`);
-        }
-
-        // Normalize score based on valid traits
-        if (validTraits > 0) {
-            score = score / validTraits;
-        }
-
-        console.log(`Profile ${profile} total score: ${score}`);
-
-        if (score > maxScore) {
-            maxScore = score;
-            matchedProfile = profile;
-        }
-    }
-
-    console.log('Best matching profile:', matchedProfile, 'with score:', maxScore);
-    return matchedProfile;
-}
-
-// Export for testing and debugging
-export const __testing = {
-    answerValue,
-    calculateProfileScores,
-    getMatchedProfile
-};
-
-// Résumés détaillés des profils pour la page de résultats
-// Mapping between Sub-Profiles and their Dominant Profiles
-export const dominant_profile_mapping: Record<string, string> = {
-    // The Analytical Thinker - Le Penseur Analytique
-    "Le Chercheur": "Le Penseur Analytique",
-    "Le Solutionneur": "Le Penseur Analytique",
-    "L'Analyste de Données": "Le Penseur Analytique",
-    "Le Théoricien": "Le Penseur Analytique",
-    "L'Ingénieur": "Le Penseur Analytique",
-
-    // The Creative Visionary - Le Visionnaire Créatif
-    "L'Artiste": "Le Visionnaire Créatif",
-    "L'Innovateur": "Le Visionnaire Créatif",
-    "Le Narrateur": "Le Visionnaire Créatif",
-    "L'Interprète": "Le Visionnaire Créatif",
-    "Le Designer": "Le Visionnaire Créatif",
-
-    // The Social Advocate - L'Acteur du social
-    "L'Aidant": "L'Acteur du social",
-    "L'Activiste": "L'Acteur du social",
-    "Le Communicant": "L'Acteur du social",
-    "L'Éducateur": "L'Acteur du social",
-    "L'Humanitaire": "L'Acteur du social",
-
-    // The Strategic Leader - Le Leader Pragmatique
-    "L'Entrepreneur": "Le Leader Pragmatique",
-    "Le Leader": "Le Leader Pragmatique",
-    "Le Stratège": "Le Leader Pragmatique",
-    "Le Commercial": "Le Leader Pragmatique",
-    "L'Investisseur": "Le Leader Pragmatique",
-
-    // The Technical Expert - L'Expert Technique
-    "Le Codeur": "L'Expert Technique",
-    "Le Passionné de Technologie": "L'Expert Technique",
-    "Le Créateur Numérique": "L'Expert Technique",
-
-    // The Sustainable Innovator - L'Innovateur Durable
-    "Le protecteur de l'environnement": "L'Innovateur Durable",
-    "L'Aventurier": "L'Innovateur Durable",
-    "L'Innovateur Durable": "L'Innovateur Durable",
-
-    // The Versatile Explorer - L'Explorateur Polyvalent
-    "Le Généraliste": "L'Explorateur Polyvalent",
-    "L'Intégrateur": "L'Explorateur Polyvalent",
-    "L'Apprenant Perpétuel": "L'Explorateur Polyvalent",
-    "Le Multipotentiel": "L'Explorateur Polyvalent",
-    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent",
-
-    // The Organizer - L'Organisateur
-    "Le Chef de Projet": "L'Organisateur",
-    "L'Organisateur d'Événements": "L'Organisateur",
-    "Le Penseur Systémique": "L'Organisateur",
-
-    // The Communicator - Le Communicateur
-    "L'Orateur": "Le Communicateur",
-    "L'Écrivain": "Le Communicateur",
-    "Le Négociateur": "Le Communicateur",
-
-    // The Self-Improver - L'Améliorateur de Soi
-    "L'Apprenant Perpétuel": "L'Améliorateur de Soi",
-    "Le Mentor": "L'Améliorateur de Soi",
-    "Le Défenseur du Bien-être": "L'Améliorateur de Soi"
+  "Chercheur": {
+    "Curiosité Intellectuelle": 0.30,
+    "Souci du Détail": 0.25,
+    "Passion pour l'Apprentissage": 0.20,
+    "Pensée Abstraite": 0.15
+  },
+  "Ingénieur": {
+    "Compétences Techniques": 0.35,
+    "Résolution de Problèmes": 0.30,
+    "Mentalité Orientée Résultats": 0.20,
+    "Précision": 0.15
+  },
+  "Stratège en Données": {
+    "Pensée Analytique": 0.30,
+    "Évaluation des Risques": 0.25,
+    "Perspective à Long Terme": 0.25,
+    "Efficacité": 0.20
+  },
+  "Artiste": {
+    "Créativité": 0.40,
+    "Intelligence Émotionnelle": 0.25,
+    "Expression de Soi": 0.15,
+    "Sensibilité Esthétique": 0.10
+  },
+  "Innovateur": {
+    "Créativité": 0.40,
+    "Expertise Technique": 0.25,
+    "Mentalité Tournée vers l'Avenir": 0.15,
+    "Prise de Risque": 0.10
+  },
+  "Designer": {
+    "Créativité": 0.40,
+    "Souci du Détail": 0.25,
+    "Approche Centrée sur l'Utilisateur": 0.15,
+    "Pensée Visuelle": 0.10
+  },
+  "Défenseur": {
+    "Empathie": 0.40,
+    "Détermination": 0.25,
+    "Compétences en Communication": 0.15,
+    "Plaidoyer": 0.10
+  },
+  "Éducateur": {
+    "Patience": 0.40,
+    "Compétences en Communication": 0.25,
+    "Partage des Connaissances": 0.15,
+    "Mentorat": 0.10
+  },
+  "Humanitaire": {
+    "Compassion": 0.40,
+    "Résilience": 0.25,
+    "Perspective Globale": 0.15,
+    "Résolution de Problèmes": 0.10
+  },
+  "Entrepreneur": {
+    "Leadership": 0.35,
+    "Créativité": 0.25,
+    "Mentalité Orientée Résultats": 0.20,
+    "Ambition": 0.10
+  },
+  "Leader": {
+    "Prise de Décision": 0.35,
+    "Communication": 0.25,
+    "Vision pour l'Avenir": 0.20,
+    "Pensée Stratégique": 0.10
+  },
+  "Organisateur": {
+    "Organisation": 0.35,
+    "Efficacité": 0.25,
+    "Planification Stratégique": 0.20,
+    "Planification Stratégique": 0.10
+  },
+  "Généraliste": {
+    "Adaptabilité": 0.35,
+    "Curiosité": 0.25,
+    "Large Éventail de Compétences": 0.20,
+    "Ensemble de Compétences Étendues": 0.10
+  },
+  "Apprenant à Vie": {
+    "Curiosité": 0.35,
+    "Adaptabilité": 0.25,
+    "État d'Esprit de Croissance": 0.20,
+    "Auto-Amélioration": 0.10
+  }
 };
 
 export const profile_summaries: Record<string, {
-    description: string;           // Description générale du profil
-    strengths: string[];          // Points forts caractéristiques
-    careers: string[];           // Carrières recommandées
-    education_paths: string[];   // Parcours d'études suggérés
-    skills_to_develop: string[]; // Compétences à développer
-}> = {};
+  description: string;
+  strengths: string[];
+  careers: string[];
+  education_paths: string[];
+  skills_to_develop: string[];
+}> = {
+  "Analytique & Technique": {
+    description: "Vous êtes un résolveur de problèmes naturel qui excelle grâce à la logique, aux données et à la précision.",
+    strengths: ["Pensée critique", "Résolution de problèmes", "Attention aux détails"],
+    careers: ["Scientifique", "Ingénieur", "Analyste de données", "Chercheur", "Universitaire"],
+    education_paths: ["Intelligence logico-mathématique", "Système 2 de Daniel Kahneman"],
+    skills_to_develop: ["Vue d'ensemble", "Expression émotionnelle"]
+  },
+  "Créatif & Expressif": {
+    description: "Vous êtes un rêveur et un innovateur qui voit le monde à travers le prisme des possibilités.",
+    strengths: ["Créativité", "Innovation", "Expression émotionnelle"],
+    careers: ["Artiste", "Designer", "Écrivain", "Entrepreneur", "Innovateur"],
+    education_paths: ["Pensée divergente (Guilford)", "Théorie du Flux (Csikszentmihalyi)"],
+    skills_to_develop: ["Structure", "Planification pratique"]
+  },
+  "Social & Humanitaire": {
+    description: "Vous êtes une personne compatissante et empathique, motivée par l'impact social.",
+    strengths: ["Empathie", "Communication", "Justice sociale"],
+    careers: ["Travailleur social", "Enseignant", "Conseiller", "Militant", "Humanitaire"],
+    education_paths: ["Intelligence Émotionnelle (Goleman)", "Comportement Prosocial (Eisenberg)"],
+    skills_to_develop: ["Fixer des limites", "Gestion de l'épuisement"]
+  },
+  "Pragmatique & Stratégique": {
+    description: "Vous êtes axé sur les résultats, l'ambition et l'exécution stratégique.",
+    strengths: ["Leadership", "Mentalité axée sur les résultats", "Pensée stratégique"],
+    careers: ["Entrepreneur", "Manager", "Stratège", "Investisseur"],
+    education_paths: ["Rôles Managériaux (Mintzberg)", "Théorie du Changement (Kotter)"],
+    skills_to_develop: ["Équilibre travail-vie", "Collaboration émotionnelle"]
+  },
+  "Adaptatif & Exploratoire": {
+    description: "Vous êtes un explorateur polyvalent, motivé par la curiosité et l'adaptabilité.",
+    strengths: ["Adaptabilité", "Curiosité", "Polyvalence"],
+    careers: ["Consultant", "Voyageur", "Généraliste", "Passionné de culture"],
+    education_paths: ["Théorie Triarchique (Sternberg)", "État d'Esprit de Croissance (Dweck)"],
+    skills_to_develop: ["Engagement à long terme", "Spécialisation"]
+  }
+};

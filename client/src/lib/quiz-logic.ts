@@ -1,5 +1,3 @@
-// Quiz sections and types based on QUIZ POOL.xlsx
-import quizData from './quiz-data.json';
 import { calculateProfileScores, getMatchedProfile } from './profile-logic';
 import { useCallback } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -17,7 +15,6 @@ export interface Question {
 // Helper function to parse slider options
 export function parseSliderOptions(optionText: string) {
   try {
-    // Example format: "Slider: €0–€20,000 (default: €5,000, step: €500)"
     const matches = optionText.match(/€(\d+(?:,\d+)?)[^€]*€(\d+(?:,\d+)?)[^€]*€(\d+(?:,\d+)?)[^€]*€(\d+(?:,\d+)?)/);
     if (!matches) return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
 
@@ -33,7 +30,6 @@ export function parseSliderOptions(optionText: string) {
     return { min: 0, max: 20000, defaultValue: 5000, step: 500 };
   }
 }
-
 
 export const useQuizSession = () => {
   return useQuery({
@@ -124,14 +120,9 @@ export const useSaveQuizResults = () => {
 
       return response.json();
     },
-    onError: (error) => {
-      console.error('Error saving quiz results:', error);
-    },
-    onSuccess: (data) => {
-      console.log('Quiz results saved successfully:', data);
-    },
   });
 };
+
 export interface QuizState {
   currentSection: string;
   currentQuestion: number;
@@ -159,41 +150,6 @@ export interface Profile {
     mobility: string | undefined;
     criteria: string[] | undefined;
   };
-}
-
-// Questions are organized by sections as defined in QUIZ POOL.xlsx
-export const QUIZ_SECTIONS = {
-  PSYCHO_SOCIAL: "PSYCHO-SOCIAL PROFILE QUIZ",
-  PASSION: "Passion & Interests",
-  EDUCATION: "Education Project"
-} as const;
-
-export const QUESTIONS = quizData.questions;
-
-export function getCurrentSection(questionId: number): string {
-  const question = QUESTIONS.find(q => q.id === questionId);
-  return question?.section || "";
-}
-
-export function getNextQuestion(currentId: number): number | null {
-  const currentIndex = QUESTIONS.findIndex(q => q.id === currentId);
-  if (currentIndex === -1 || currentIndex === QUESTIONS.length - 1) return null;
-  return QUESTIONS[currentIndex + 1].id;
-}
-
-// Debug function to help identify question loading issues
-export function debugQuestionData(questionId: number) {
-  const question = QUESTIONS.find(q => q.id === questionId);
-  console.log('Question Data:', question);
-  return question;
-}
-
-// Helper function to check if a question should use tag layout
-export function shouldUseTagLayout(question: Question): boolean {
-  return (
-    (question.format === "Multiple choice" || question.format === "Multiple selection") &&
-    question.options.length > 8
-  );
 }
 
 export function calculateProfile(answers: Record<number, string | string[]>): Profile {
@@ -246,4 +202,40 @@ export function calculateProfile(answers: Record<number, string | string[]>): Pr
       criteria: ensureArray(answers[37])
     }
   };
+}
+
+// Questions are organized by sections as defined in QUIZ POOL.xlsx
+export const QUIZ_SECTIONS = {
+  PSYCHO_SOCIAL: "PSYCHO-SOCIAL PROFILE QUIZ",
+  PASSION: "Passion & Interests",
+  EDUCATION: "Education Project"
+} as const;
+
+//import quizData from './quiz-data.json';
+export const QUESTIONS = [];//quizData.questions;
+
+export function getCurrentSection(questionId: number): string {
+  const question = QUESTIONS.find(q => q.id === questionId);
+  return question?.section || "";
+}
+
+export function getNextQuestion(currentId: number): number | null {
+  const currentIndex = QUESTIONS.findIndex(q => q.id === currentId);
+  if (currentIndex === -1 || currentIndex === QUESTIONS.length - 1) return null;
+  return QUESTIONS[currentIndex + 1].id;
+}
+
+// Debug function to help identify question loading issues
+export function debugQuestionData(questionId: number) {
+  const question = QUESTIONS.find(q => q.id === questionId);
+  console.log('Question Data:', question);
+  return question;
+}
+
+// Helper function to check if a question should use tag layout
+export function shouldUseTagLayout(question: Question): boolean {
+  return (
+    (question.format === "Multiple choice" || question.format === "Multiple selection") &&
+    question.options.length > 8
+  );
 }
