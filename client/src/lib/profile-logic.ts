@@ -108,9 +108,9 @@ export const dominant_profile_mapping: Record<string, string> = {
 export const sub_profile_weights: Record<string, Record<string, number>> = {
   "Chercheur": {
     "Curiosité Intellectuelle": 0.30,
-    "Souci du Détail": 0.25,
-    "Passion pour l'Apprentissage": 0.20,
-    "Pensée Abstraite": 0.15
+    "Précision": 0.25,
+    "État d'Esprit de Croissance": 0.20,
+    "Pensée Interdisciplinaire": 0.15
   },
   "Ingénieur": {
     "Compétences Techniques": 0.35,
