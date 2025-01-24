@@ -10,18 +10,21 @@ const SessionStore = MemoryStore(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Configure session middleware with strict settings
+// Configure session middleware
 const sessionMiddleware = session({
   store: new SessionStore({
     checkPeriod: 86400000, // prune expired entries every 24h
     ttl: 86400000, // 24 hours
-    stale: false
+    stale: false,
+    noDisposeOnSet: true,
+    touchAfter: 24 * 3600 // time period in seconds for touch
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
   name: 'sid',
-  resave: true, // Changed to true to ensure session is saved
-  saveUninitialized: true,
-  rolling: true, // Refresh session with each request
+  resave: true,
+  saveUninitialized: false,
+  rolling: true,
+  unset: 'destroy',
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
@@ -31,26 +34,33 @@ const sessionMiddleware = session({
   }
 });
 
+// Apply session middleware
 app.use(sessionMiddleware);
 
-// Debug middleware for session tracking
+// Session debug middleware
 app.use((req, res, next) => {
+  if (!req.session) {
+    console.error('No session available');
+    return next(new Error('No session available'));
+  }
+
   console.log('Session debug:', {
     sessionID: req.sessionID,
-    tempUserId: req.session?.tempUserId,
-    isNew: req.session?.isNew,
-    cookie: req.session?.cookie
+    tempUserId: req.session.tempUserId,
+    cookie: req.session.cookie
   });
   next();
 });
 
-// Basic request logging
+// Request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
-  res.on('finish', () => {
+  const path = req.path;
+
+  res.on("finish", () => {
     const duration = Date.now() - start;
-    if (req.path.startsWith("/api")) {
-      log(`${req.method} ${req.path} ${res.statusCode} in ${duration}ms`);
+    if (path.startsWith("/api")) {
+      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
     }
   });
   next();
