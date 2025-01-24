@@ -10,40 +10,28 @@ const SessionStore = MemoryStore(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session configuration
+// Simple session setup
 app.use(session({
   store: new SessionStore({
-    checkPeriod: 86400000, // Prune expired entries every 24h
-    ttl: 24 * 60 * 60 * 1000 // Session TTL (24 hours)
+    checkPeriod: 86400000 // 24h
   }),
   secret: process.env.REPL_ID || 'super-secret-key',
-  name: 'quiz.sid',
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'lax'
+  saveUninitialized: true,
+  cookie: { 
+    maxAge: 24 * 60 * 60 * 1000 // 24h
   }
 }));
 
-// Request logging middleware with type-safe response.end override
+// Basic request logging
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
-
-  // Type-safe override of res.end
-  const originalEnd = res.end;
-  const newEnd: typeof originalEnd = function(this: Response, ...args) {
+  res.on('finish', () => {
     const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      log(`${req.method} ${path} completed in ${duration}ms`);
+    if (req.path.startsWith("/api")) {
+      log(`${req.method} ${req.path} ${res.statusCode} in ${duration}ms`);
     }
-    return originalEnd.apply(this, args);
-  };
-  res.end = newEnd;
-
+  });
   next();
 });
 
@@ -51,13 +39,10 @@ app.use((req, res, next) => {
 (async () => {
   const server = registerRoutes(app);
 
-  // Error handling middleware
+  // Simple error handler
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error('Error:', err);
-    res.status(500).json({ 
-      error: true,
-      message: err.message || "Internal Server Error"
-    });
+    res.status(500).json({ error: err.message });
   });
 
   if (app.get("env") === "development") {
