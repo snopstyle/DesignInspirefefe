@@ -1,33 +1,20 @@
+import { pgTable, text, timestamp, uuid, serial, integer, jsonb } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { 
-  pgTable, 
-  text,
-  timestamp, 
-  uuid,
-  serial,
-  integer,
-  jsonb,
-  varchar
-} from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
 
-// Regular user table 
+// Core tables only
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
-  email: varchar("email", { length: 255 }).notNull(),
   password: text("password").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// Temporary users for quiz sessions
 export const tempUsers = pgTable("temp_users", {
   id: uuid("id").defaultRandom().primaryKey(),
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
 
-// Quiz session table
 export const quizSessions = pgTable("quiz_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: integer("user_id").references(() => users.id),
@@ -74,7 +61,6 @@ export const selectQuizSessionSchema = createSelectSchema(quizSessions);
 // Types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
-export type InsertUser = z.infer<typeof insertUserSchema>;
 
 export type TempUser = typeof tempUsers.$inferSelect;
 export type NewTempUser = typeof tempUsers.$inferInsert;

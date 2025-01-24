@@ -6,16 +6,17 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL environment variable is required");
 }
 
+const { PGHOST, PGUSER, PGPASSWORD, PGDATABASE } = process.env;
+
 export default defineConfig({
   schema: "./db/schema.ts",
   out: "./migrations",
   dialect: "postgresql",
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? {
-      rejectUnauthorized: false,
-      mode: "require"
-    } : false
+    host: PGHOST || "",
+    user: PGUSER || "",
+    password: PGPASSWORD || "",
+    database: PGDATABASE || "",
   },
   verbose: true,
   strict: true
