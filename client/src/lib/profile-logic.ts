@@ -61,11 +61,11 @@ export const sub_profiles: Record<string, string[]> = {
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
-  "Q1": { "Collaboration": 0.4, "Indépendance": 0.3 },
-  "Q2": { "Raisonnement Analytique": 0.5, "Résolution Créative de Problèmes": 0.3 },
-  "Q3": { "Pensée Abstraite": 0.4, "Application Pratique": 0.4 },
+  "Q1": { "Collaboration": 0.4 },
+  "Q2": { "Raisonnement Analytique": 0.5 },
+  "Q3": { "Pensée Interdisciplinaire": 0.4 },
   "Q4": { "Conscience Sociale": 0.6 },
-  "Q5": { "Évaluation des Risques": 0.5, "Prise de Risque Stratégique": 0.3 },
+  "Q5": { "Évaluation des Risques": 0.5, "Prise de Risque": 0.3 },
   "Q6": { "Interprétation des Données": 0.6 },
   "Q7": { "Expression Créative": 0.7, "Expertise Technique": 0.3 },
   "Q8": { "Efficacité": 0.5 },
@@ -75,8 +75,8 @@ export const question_weights: Record<string, Record<string, number>> = {
   "Q12": { "Curiosité Intellectuelle": 0.5, "État d'Esprit de Croissance": 0.3 },
   "Q13": { "Leadership Stratégique": 0.6 },
   "Q14": { "Focus sur la Durabilité": 0.7 },
-  "Q15": { "Résilience en Plein Air": 0.4 },
-  "Q16": { "Application Pratique": 0.4, "Expertise Technique": 0.3 },
+  "Q15": { "Adaptabilité": 0.4 },
+  "Q16": { "Expertise Technique": 0.7 },
   "Q17": { "Sensibilité Esthétique": 0.6 },
   "Q18": { "Diplomatie": 0.5 },
   "Q19": { "Exécution Stratégique": 0.6 },
