@@ -94,7 +94,10 @@ export const sub_profiles: Record<string, string[]> = {
     "Le Créateur Numérique": ["Créativité", "Compétences techniques", "Approche centrée utilisateur", "Innovation", "Adaptabilité"],
     "Le Conservateur": ["Passion pour la nature", "Résolution de problèmes", "Perspective globale", "Plaidoyer", "Résilience"],
     "L'Aventurier": ["Condition physique", "Adaptabilité", "Amour de la nature", "Résolution de problèmes", "Curiosité"],
-    "L'Innovateur Durable": ["Créativité", "Compétences techniques", "Passion pour la durabilité", "Résolution de problèmes", "Innovation"]
+    "L'Innovateur Durable": ["Créativité", "Compétences techniques", "Passion pour la durabilité", "Résolution de problèmes", "Innovation"],
+    "L'Organisateur": ["Organisation", "Planification", "Leadership", "Communication", "Efficacité"],
+    "Le Communicateur": ["Communication", "Empathie", "Adaptabilité", "Ecoute active", "Diplomatie"],
+    "L'Auto-Perfectionniste": ["Développement personnel", "Amour de l'apprentissage", "Résilience", "Adaptabilité", "Curiosité"]
 };
 
 export const question_weights: Record<string, Record<string, number>> = {
@@ -668,6 +671,7 @@ export const dominant_profile_mapping: Record<string, string> = {
     "Le Solutionneur": "Le Penseur Analytique",
     "L'Analyste de Données": "Le Penseur Analytique",
     "Le Théoricien": "Le Penseur Analytique",
+    "L'Ingénieur": "Le Penseur Analytique",
 
     // The Creative Visionary - Le Visionnaire Créatif
     "L'Artiste": "Le Visionnaire Créatif",
@@ -706,7 +710,17 @@ export const dominant_profile_mapping: Record<string, string> = {
     "L'Intégrateur": "L'Explorateur Polyvalent",
     "L'Apprenant Perpétuel": "L'Explorateur Polyvalent",
     "Le Multipotentiel": "L'Explorateur Polyvalent",
-    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent"
+    "L'Enthousiaste Culturel": "L'Explorateur Polyvalent",
+
+    // Adding the three new profiles
+    // The Organizer - L'Organisateur
+    "L'Organisateur": "Le Leader Stratégique",
+
+    // The Communicator - Le Communicateur
+    "Le Communicateur": "L'Agent de Changement Social",
+
+    // The Self-Improver - L'Auto-Perfectionniste
+    "L'Auto-Perfectionniste": "L'Explorateur Polyvalent"
 };
 
 export const profile_summaries: Record<string, {
