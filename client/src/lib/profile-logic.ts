@@ -174,11 +174,20 @@ const Q28_MAPPINGS: Record<string, string> = {
     export function answerValue(answer: string | string[], questionId: string): number {
       const scale: Record<string, number> = {
         "Très important": 1.0, "Important": 0.75, "Neutre": 0.5, "Peu important": 0.25, "Pas important": 0.0,
-        "J'adore ça": 1.0, "J'aime bien": 0.75, "Je n'aime pas": 0.25, "Je déteste": 0.0
+        "Très importante": 1.0, "Importante": 0.75, "Peu importante": 0.25, "Pas du tout importante": 0.0,
+        "J'adore ça": 1.0, "J'aime bien": 0.75, "Neutre": 0.5, "Je n'aime pas": 0.25, "Je déteste": 0.0,
+        "Très bien": 1.0, "Bien": 0.75, "Mal": 0.25, "Très mal": 0.0,
+        "Très passionné": 1.0, "Passionné": 0.75, "Peu passionné": 0.25, "Pas du tout passionné": 0.0,
+        "Forte préférence pour le travail d'équipe": 1.0, "Préférence pour le travail d'équipe": 0.75,
+        "Préférence pour l'indépendance": 0.25, "Forte préférence pour l'indépendance": 0.0,
+        "Forte préférence pour les risques": 1.0, "Préférence pour les risques": 0.75,
+        "Préférence pour la prudence": 0.25, "Forte préférence pour la prudence": 0.0,
+        "Forte préférence pour les tâches créatives": 1.0, "Préférence pour les tâches créatives": 0.75,
+        "Préférence pour les tâches techniques": 0.25, "Forte préférence pour les tâches techniques": 0.0
       };
 
-      if (Array.isArray(answer)) return answer.length > 0 ? 1.0 : 0.0; // Sélections multiples
-      return scale[answer] || 0.0;
+      if (Array.isArray(answer)) return answer.length > 0 ? 1.0 : 0.0;
+      return scale[answer] || 0.5; // Default to neutral (0.5) if not found
     }
 
     // Mapping des profils dominants
