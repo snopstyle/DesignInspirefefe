@@ -39,8 +39,6 @@ export default function Results() {
     };
 
     loadResults();
-    setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
-    setMatchPercentage(calculatedPercentage);
   }, [setLocation]);
 
   const [showLoading, setShowLoading] = useState(true);
