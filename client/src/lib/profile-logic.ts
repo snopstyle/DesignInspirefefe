@@ -150,6 +150,44 @@ export const dominant_profile_mapping: Record<string, string> = {
   "Apprentissage & Croissance": "Adaptatif & Exploratoire"
 };
 
+export const profile_summaries = {
+  "Analytique & Technique": {
+    description: "Profil orienté vers l'analyse et la résolution technique de problèmes",
+    strengths: ["Analyse logique", "Résolution de problèmes", "Pensée méthodique"],
+    careers: ["Ingénieur", "Analyste de données", "Chercheur"],
+    education_paths: ["Écoles d'ingénieurs", "Cursus scientifiques", "Formations techniques spécialisées"],
+    skills_to_develop: ["Programmation", "Analyse de données", "Méthodologie scientifique"]
+  },
+  "Pragmatique & Stratégique": {
+    description: "Profil axé sur la planification et l'exécution efficace",
+    strengths: ["Organisation", "Planification", "Prise de décision"],
+    careers: ["Chef de projet", "Consultant", "Stratège"],
+    education_paths: ["École de commerce", "Management", "Gestion de projet"],
+    skills_to_develop: ["Leadership", "Gestion du temps", "Analyse stratégique"]
+  },
+  "Créatif & Expressif": {
+    description: "Profil orienté vers l'innovation et l'expression créative",
+    strengths: ["Créativité", "Innovation", "Expression artistique"],
+    careers: ["Designer", "Artiste", "Directeur créatif"],
+    education_paths: ["Écoles d'art", "Design", "Communication"],
+    skills_to_develop: ["Design thinking", "Communication visuelle", "Créativité appliquée"]
+  },
+  "Social & Humanitaire": {
+    description: "Profil focalisé sur l'aide et l'impact social",
+    strengths: ["Empathie", "Communication", "Travail d'équipe"],
+    careers: ["Travailleur social", "Éducateur", "Conseiller"],
+    education_paths: ["Sciences sociales", "Psychologie", "Travail social"],
+    skills_to_develop: ["Communication interpersonnelle", "Gestion de conflits", "Accompagnement"]
+  },
+  "Adaptatif & Exploratoire": {
+    description: "Profil polyvalent et curieux",
+    strengths: ["Adaptabilité", "Curiosité", "Apprentissage rapide"],
+    careers: ["Entrepreneur", "Chercheur", "Innovateur"],
+    education_paths: ["Cursus pluridisciplinaires", "Double diplômes", "Formation continue"],
+    skills_to_develop: ["Veille", "Agilité", "Auto-apprentissage"]
+  }
+};
+
 export function getMatchedProfile(categoryScores: Record<string, number>): string {
   let maxScore = -1;
   let matchedCategory = "";
