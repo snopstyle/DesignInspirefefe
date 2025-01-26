@@ -6,6 +6,7 @@ import { GradientBackground } from '@/components/layout/gradient-background';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { LoadingAnimation } from '@/components/ui/loading-animation';
 
 export default function Results() {
   const [, setLocation] = useLocation();
