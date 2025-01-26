@@ -249,11 +249,11 @@ export function answerValue(answer: string, questionId: string): number {
 
     const answerScales: Record<string, Record<string, number>> = {
         "Q1": {
-            "Forte préférence pour le travail d'équipe": 1.0,
-            "Préférence pour le travail d'équipe": 0.75,
-            "Neutre": 0.5,
-            "Préférence pour l'indépendance": 0.25,
-            "Forte préférence pour l'indépendance": 0.0
+            "J'adore travailler en équipe": 1.0,
+            "Je préfère travailler en équipe": 0.75,
+            "Ça dépend des situations": 0.5,
+            "Je préfère travailler seul": 0.25,
+            "Je déteste travailler en équipe": 0.0
         },
         "Q2": {
             "Raisonnement logique": 1.0,
