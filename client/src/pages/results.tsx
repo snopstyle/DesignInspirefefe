@@ -41,16 +41,7 @@ export default function Results() {
     loadResults();
   }, [setLocation]);
 
-  const [showLoading, setShowLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLoading(false);
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (showLoading) {
+  if (!dominantProfile) {
     return (
       <GradientBackground>
         <div className="min-h-screen flex items-center justify-center">
@@ -58,10 +49,6 @@ export default function Results() {
         </div>
       </GradientBackground>
     );
-  }
-
-  if (!dominantProfile) {
-    return <div>Loading...</div>;
   }
 
   const profileDetails = profile_summaries[dominantProfile];
