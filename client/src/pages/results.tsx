@@ -36,7 +36,7 @@ export default function Results() {
     setMatchPercentage(calculatedPercentage);
   }, [setLocation]);
 
-  if (!profile || !dominantProfile) {
+  if (!dominantProfile) {
     return <div>Loading...</div>;
   }
 
