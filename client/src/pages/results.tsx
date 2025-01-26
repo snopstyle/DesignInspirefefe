@@ -15,25 +15,29 @@ export default function Results() {
   const [matchPercentage, setMatchPercentage] = useState<number>(0);
 
   useEffect(() => {
-    const answers = sessionStorage.getItem('quizAnswers');
-    if (!answers) {
-      setLocation('/quiz');
-      return;
-    }
+    const loadResults = async () => {
+      const answers = sessionStorage.getItem('quizAnswers');
+      if (!answers) {
+        setLocation('/quiz');
+        return;
+      }
 
-    const calculatedScores = calculateProfileScores(JSON.parse(answers));
-    const matchedProfile = getMatchedProfile(calculatedScores);
-    const nonZeroScores = Object.entries(calculatedScores)
-      .filter(([, score]) => score > 0)
-      .sort(([, a], [, b]) => b - a);
-    
-    // Calculer le score maximum possible pour chaque catégorie
-    const maxPossibleScore = Object.values(calculatedScores).reduce((max, score) => max + 5, 0); // 5 étant le score maximum par catégorie
-    const totalScore = Object.values(calculatedScores).reduce((sum, score) => sum + score, 0);
-    const calculatedPercentage = Math.round((totalScore / maxPossibleScore) * 100);
+      // Calculer les scores de manière asynchrone
+      const calculatedScores = calculateProfileScores(JSON.parse(answers));
+      const matchedProfile = getMatchedProfile(calculatedScores);
+      
+      // Calculer le pourcentage de correspondance
+      const totalPossibleScore = 5 * Object.keys(calculatedScores).length;
+      const totalScore = Object.values(calculatedScores).reduce((sum, score) => sum + score, 0);
+      const calculatedPercentage = Math.round((totalScore / totalPossibleScore) * 100);
 
-    setProfile(profile);
-    setScores(calculatedScores);
+      setProfile(matchedProfile);
+      setScores(calculatedScores);
+      setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
+      setMatchPercentage(calculatedPercentage);
+    };
+
+    loadResults();
     setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
     setMatchPercentage(calculatedPercentage);
   }, [setLocation]);
