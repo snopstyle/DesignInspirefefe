@@ -81,17 +81,35 @@ export const question_weights: Record<string, Record<string, number>> = {
 };
 
 const Q26_MAPPINGS: Record<string, { category: string; weight: number }[]> = {
-  "Coder ou programmer": [{ category: "Analytique & Technique", weight: 0.6 }],
-  "Peindre, dessiner ou autres arts visuels": [{ category: "Créativité & Innovation", weight: 0.7 }],
-  "Faire du sport ou des activités de plein air": [{ category: "Apprentissage & Croissance", weight: 0.4 }],
-  "Faire du bénévolat ou du service communautaire": [{ category: "Social & Humanitaire", weight: 0.5 }],
-  "Lire des livres": [{ category: "Apprentissage & Croissance", weight: 0.5 }],
-  "Bricoler avec des gadgets ou de l'électronique": [{ category: "Analytique & Technique", weight: 0.5 }],
-  "Voyager ou explorer de nouvelles cultures": [{ category: "Social & Humanitaire", weight: 0.5 }]
+  "Coder ou programmer": [
+    { category: "Analytique & Technique", weight: 0.8 },
+    { category: "Apprentissage & Croissance", weight: 0.3 }
+  ],
+  "Peindre, dessiner ou autres arts visuels": [
+    { category: "Créativité & Innovation", weight: 0.8 }
+  ],
+  "Faire du sport ou des activités de plein air": [
+    { category: "Apprentissage & Croissance", weight: 0.6 },
+    { category: "Leadership & Exécution", weight: 0.3 }
+  ],
+  "Faire du bénévolat ou du service communautaire": [
+    { category: "Social & Humanitaire", weight: 0.8 }
+  ],
+  "Lire des livres": [
+    { category: "Apprentissage & Croissance", weight: 0.7 }
+  ],
+  "Bricoler avec des gadgets ou de l'électronique": [
+    { category: "Analytique & Technique", weight: 0.7 },
+    { category: "Créativité & Innovation", weight: 0.3 }
+  ],
+  "Voyager ou explorer de nouvelles cultures": [
+    { category: "Social & Humanitaire", weight: 0.7 },
+    { category: "Apprentissage & Croissance", weight: 0.4 }
+  ]
 };
 
 // Configuration spéciale pour Q27 (classement)
-const RANKING_WEIGHTS = [1.0, 0.7, 0.5, 0.3, 0.1];
+const RANKING_WEIGHTS = [1.0, 0.8, 0.6, 0.4, 0.2];
 const Q27_MAPPINGS: Record<string, string> = {
   "Mathématiques": "Analytique & Technique",
   "Physique-Chimie": "Analytique & Technique",
