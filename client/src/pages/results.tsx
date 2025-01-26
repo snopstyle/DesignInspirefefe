@@ -42,6 +42,25 @@ export default function Results() {
     setMatchPercentage(calculatedPercentage);
   }, [setLocation]);
 
+  const [showLoading, setShowLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoading(false);
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showLoading) {
+    return (
+      <GradientBackground>
+        <div className="min-h-screen flex items-center justify-center">
+          <LoadingAnimation />
+        </div>
+      </GradientBackground>
+    );
+  }
+
   if (!dominantProfile) {
     return <div>Loading...</div>;
   }
