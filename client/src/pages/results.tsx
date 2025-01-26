@@ -27,8 +27,10 @@ export default function Results() {
       .filter(([, score]) => score > 0)
       .sort(([, a], [, b]) => b - a);
     
-    const totalScore = nonZeroScores.reduce((sum, [, score]) => sum + score, 0);
-    const calculatedPercentage = Math.round((nonZeroScores[0]?.[1] || 0) / totalScore * 100);
+    // Calculer le score maximum possible pour chaque catégorie
+    const maxPossibleScore = Object.values(calculatedScores).reduce((max, score) => max + 5, 0); // 5 étant le score maximum par catégorie
+    const totalScore = Object.values(calculatedScores).reduce((sum, score) => sum + score, 0);
+    const calculatedPercentage = Math.round((totalScore / maxPossibleScore) * 100);
 
     setProfile(profile);
     setScores(calculatedScores);
