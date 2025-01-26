@@ -41,32 +41,36 @@ export const categories: Record<string, string[]> = {
 
 // Pondérations des questions étendues à Q32
 export const question_weights: Record<string, Record<string, number>> = {
-      // Questions fondamentales - fort impact
-      "1": { "Social & Humanitaire": 0.8, "Leadership & Exécution": 0.4 },
-      "2": { "Analytique & Technique": 0.8, "Créativité & Innovation": 0.4 },
-      "3": { "Apprentissage & Croissance": 0.8, "Stratégie & Planification": 0.4 },
-      "4": { "Social & Humanitaire": 0.7, "Créativité & Innovation": 0.3 },
-      "5": { "Stratégie & Planification": 0.7, "Leadership & Exécution": 0.4 },
-      "6": { "Analytique & Technique": 0.6 },
+      // Questions fondamentales - fort impact (0.8-1.0)
+      "1": { "Social & Humanitaire": 1.0, "Leadership & Exécution": 0.3 },
+      "2": { "Analytique & Technique": 1.0, "Créativité & Innovation": 0.3 },
+      "3": { "Apprentissage & Croissance": 1.0, "Stratégie & Planification": 0.3 },
+      "4": { "Social & Humanitaire": 0.8, "Créativité & Innovation": 0.2 },
+      "5": { "Stratégie & Planification": 0.8, "Leadership & Exécution": 0.2 },
+      
+      // Questions moyennes (0.5-0.7)
+      "6": { "Analytique & Technique": 0.7 },
       "7": { "Créativité & Innovation": 0.7, "Analytique & Technique": 0.3 },
-      "8": { "Leadership & Exécution": 0.5 },
+      "8": { "Leadership & Exécution": 0.7 },
       "9": { "Social & Humanitaire": 0.7 },
-      "10": { "Apprentissage & Croissance": 0.5 },
+      "10": { "Apprentissage & Croissance": 0.7 },
       "11": { "Analytique & Technique": 0.6 },
-      "12": { "Apprentissage & Croissance": 0.5 },
+      "12": { "Apprentissage & Croissance": 0.6 },
       "13": { "Leadership & Exécution": 0.6 },
-      "14": { "Créativité & Innovation": 0.7 },
-      "15": { "Apprentissage & Croissance": 0.4 },
-      "16": { "Leadership & Exécution": 0.7 },
-      "17": { "Créativité & Innovation": 0.6 },
+      "14": { "Créativité & Innovation": 0.6 },
+      "15": { "Apprentissage & Croissance": 0.6 },
+      
+      // Questions complémentaires (0.3-0.5)
+      "16": { "Leadership & Exécution": 0.5 },
+      "17": { "Créativité & Innovation": 0.5 },
       "18": { "Social & Humanitaire": 0.5 },
-      "19": { "Leadership & Exécution": 0.6 },
+      "19": { "Leadership & Exécution": 0.5 },
       "20": { "Social & Humanitaire": 0.5 },
       "21": { "Analytique & Technique": 0.5 },
-      "22": { "Apprentissage & Croissance": 0.6 },
+      "22": { "Apprentissage & Croissance": 0.5 },
       "23": { "Stratégie & Planification": 0.5 },
       "24": { "Apprentissage & Croissance": 0.5 },
-      "25": { "Social & Humanitaire": 0.6 },
+      "25": { "Social & Humanitaire": 0.5 },
       "26": {}, // Géré par Q26_MAPPINGS
       "27": {}, // Géré par Q27_MAPPINGS
       "28": {}, // Géré par Q28_MAPPINGS
