@@ -45,10 +45,10 @@ export default function Results() {
   return (
     <GradientBackground>
       <div className="container mx-auto py-8 space-y-6">
-        {/* Dominant Profile Card */}
+        {/* Profile Card */}
         <Card className="bg-white/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Profil Dominant</CardTitle>
+            <CardTitle>Profil</CardTitle>
             <CardDescription>{dominantProfile}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -70,20 +70,6 @@ export default function Results() {
                   ))}
                 </ul>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Sub-Profile Card */}
-        <Card className="bg-white/10 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Sous-Profil</CardTitle>
-            <CardDescription>
-              {profile} - Match: {matchPercentage}%
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
               <div>
                 <h3 className="font-semibold mb-2">Parcours Éducatifs Recommandés</h3>
                 <ul className="list-disc list-inside">
