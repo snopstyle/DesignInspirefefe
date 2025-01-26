@@ -41,12 +41,12 @@ export const categories: Record<string, string[]> = {
 
 // Pondérations des questions étendues à Q32
 export const question_weights: Record<string, Record<string, number>> = {
-      // Questions fondamentales - fort impact (0.8-1.0)
-      "1": { "Social & Humanitaire": 1.0, "Leadership & Exécution": 0.3 },
-      "2": { "Analytique & Technique": 1.0, "Créativité & Innovation": 0.3 },
-      "3": { "Apprentissage & Croissance": 1.0, "Stratégie & Planification": 0.3 },
-      "4": { "Social & Humanitaire": 0.8, "Créativité & Innovation": 0.2 },
-      "5": { "Stratégie & Planification": 0.8, "Leadership & Exécution": 0.2 },
+      // Questions équilibrées - impact ajusté
+      "1": { "Social & Humanitaire": 0.8, "Leadership & Exécution": 0.4 },
+      "2": { "Analytique & Technique": 0.8, "Créativité & Innovation": 0.4 },
+      "3": { "Apprentissage & Croissance": 0.8, "Stratégie & Planification": 0.4 },
+      "4": { "Social & Humanitaire": 0.6, "Créativité & Innovation": 0.4 },
+      "5": { "Stratégie & Planification": 0.8, "Leadership & Exécution": 0.4 },
       
       // Questions moyennes (0.5-0.7)
       "6": { "Analytique & Technique": 0.7 },
