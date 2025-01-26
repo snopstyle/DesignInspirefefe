@@ -245,16 +245,6 @@ export function answerValue(answer: string, questionId: string): number {
         "Neutre": 0.5,
         "Peu important": 0.25,
         "Pas important": 0.0,
-        "J'adore ça": 1.0,
-        "J'aime bien": 0.75,
-        "Neutre": 0.5,
-        "Je n'aime pas": 0.25,
-        "Je déteste": 0.0,
-        "Très bien": 1.0,
-        "Bien": 0.75,
-        "Neutre": 0.5,
-        "Mal": 0.25,
-        "Très mal": 0.0
     };
 
     const answerScales: Record<string, Record<string, number>> = {
@@ -267,14 +257,14 @@ export function answerValue(answer: string, questionId: string): number {
         },
         "Q2": {
             "Raisonnement logique": 1.0,
-            "Solutions créatives": 0.75,
-            "Un mélange des deux": 0.5,
+            "Solutions créatives": 0.6,
+            "Un mélange des deux": 0.3,
             "J'évite les problèmes": 0.0
         },
         "Q3": {
             "Idées abstraites": 1.0,
-            "Applications pratiques": 0.75,
-            "Les deux également": 0.5,
+            "Applications pratiques": 0.6,
+            "Les deux également": 0.3,
             "Ni l'un ni l'autre": 0.0
         },
         "Q4": {
