@@ -1,0 +1,109 @@
+const Q29_MAPPINGS: Record<string, { category: string; weight: number }> = {
+  "Structuré et organisé (ex: bureau d'entreprise, laboratoire)": { category: "Leadership & Exécution", weight: 0.8 },
+  "Créatif et flexible (ex: studio de design, startup)": { category: "Créativité & Innovation", weight: 0.9 },
+  "Extérieur ou pratique (ex: travail de terrain, construction)": { category: "Apprentissage & Croissance", weight: 0.7 },
+  "Social et collaboratif (ex: ONG, éducation)": { category: "Social & Humanitaire", weight: 0.8 },
+  "Indépendant et autonome (ex: freelance, recherche)": { category: "Stratégie & Planification", weight: 0.7 }
+};
+
+// Fonction principale de calcul des scores
+export function calculateProfileScores(userAnswers: Record<string, string | string[]>): Record<string, number> {
+  const categoryScores = Object.keys(categories).reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {});
+
+  Object.entries(userAnswers).forEach(([questionId, answer]) => {
+    const qNum = questionId.replace('Q', '');
+
+    // Traitement de Q26 (Hobbies)
+    if (qNum === '26') {
+      (answer as string[]).forEach(hobby => {
+        const mappings = Q26_MAPPINGS[hobby];
+        mappings?.forEach(({ category, weight }) => {
+          categoryScores[category] += weight;
+        });
+      });
+    }
+
+    // Traitement de Q27 (Classement académique)
+    else if (qNum === '27') {
+      (answer as string[]).slice(0, 5).forEach((option, index) => {
+        const category = Q27_MAPPINGS[option];
+        if (category) {
+          categoryScores[category] += RANKING_WEIGHTS[index] || 0;
+        }
+      });
+    }
+
+    // Traitement de Q28 (Industries exclues)
+    else if (qNum === '28') {
+      (answer as string[]).forEach(industry => {
+        const category = Q28_MAPPINGS[industry];
+        if (category) categoryScores[category] -= 0.5; // Pénalité de -0.5
+      });
+    }
+
+    // Traitement de Q29 (Environnement de travail)
+    else if (qNum === '29') {
+      const selectedEnv = answer as string;
+      const mapping = Q29_MAPPINGS[selectedEnv];
+      if (mapping) categoryScores[mapping.category] += mapping.weight;
+    }
+
+    // Traitement des questions 1-25 (logique existante)
+    else if (parseInt(qNum) <= 25) {
+      const value = answerValue(answer, `Q${qNum}`);
+      Object.entries(question_weights[qNum] || {}).forEach(([category, weight]) => {
+        categoryScores[category] += weight * value;
+      });
+    }
+  });
+
+  return categoryScores;
+}
+
+// Fonction de conversion des réponses en valeurs numériques
+export function answerValue(answer: string | string[], questionId: string): number {
+  const scale: Record<string, number> = {
+    "Très important": 1.0, "Important": 0.75, "Neutre": 0.5, "Peu important": 0.25, "Pas important": 0.0,
+    "J'adore ça": 1.0, "J'aime bien": 0.75, "Je n'aime pas": 0.25, "Je déteste": 0.0
+  };
+
+  if (Array.isArray(answer)) return answer.length > 0 ? 1.0 : 0.0; // Sélections multiples
+  return scale[answer] || 0.0;
+}
+
+// Mapping des profils dominants
+export const dominant_profile_mapping: Record<string, string> = {
+  "Analytique & Technique": "Analytique & Technique",
+  "Stratégie & Planification": "Pragmatique & Stratégique",
+  "Créativité & Innovation": "Créatif & Expressif",
+  "Social & Humanitaire": "Social & Humanitaire",
+  "Leadership & Exécution": "Pragmatique & Stratégique",
+  "Apprentissage & Croissance": "Adaptatif & Exploratoire"
+};
+
+// Résumés des profils
+export const profile_summaries = {
+  "Analytique & Technique": {
+    description: "Profil orienté vers l'analyse et la résolution technique de problèmes",
+    strengths: ["Analyse logique", "Résolution de problèmes", "Pensée méthodique"],
+    careers: ["Ingénieur", "Analyste de données", "Chercheur"],
+    education_paths: ["Écoles d'ingénieurs", "Cursus scientifiques", "Formations techniques spécialisées"],
+    skills_to_develop: ["Programmation", "Analyse de données", "Méthodologie scientifique"]
+  },
+  // ... (autres profils)
+};
+
+// Détermination du profil dominant
+export function getMatchedProfile(categoryScores: Record<string, number>): string {
+  let maxScore = -Infinity;
+  let matchedCategory = "";
+
+  Object.entries(categoryScores).forEach(([category, score]) => {
+    if (score > maxScore) {
+      maxScore = score;
+      matchedCategory = category;
+    }
+  });
+
+  return dominant_profile_mapping[matchedCategory] || "Non déterminé";
+}
