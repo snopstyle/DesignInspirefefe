@@ -33,9 +33,9 @@ export default function Results() {
         const calculatedScores = calculateProfileScores(JSON.parse(answers));
         const matchedProfile = getMatchedProfile(calculatedScores);
         
-        const totalPossibleScore = 5 * Object.keys(calculatedScores).length;
-        const totalScore = Object.values(calculatedScores).reduce((sum, score) => sum + score, 0);
-        const calculatedPercentage = Math.round((totalScore / totalPossibleScore) * 100);
+        // On prend le score le plus élevé comme référence
+        const maxPossibleScore = Math.max(...Object.values(calculatedScores));
+        const calculatedPercentage = Math.round((maxPossibleScore * 100) / 5);
 
         setProfile(matchedProfile);
         setScores(calculatedScores);
