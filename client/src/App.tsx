@@ -39,30 +39,31 @@ function Router() {
 }
 
 function App() {
-  const [isSessionInitialized, setIsSessionInitialized] = useState(false);
-  const location = useLocation();
+  const [isSessionInitialized, setIsSessionInitialized] = useState<boolean>(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const initSession = async () => {
-      if (location[0] === '/') {
+      if (location === '/') {
         setIsSessionInitialized(true);
         return;
       }
-      
+
       try {
-        await fetch('/api/users/temp', {
+        const response = await fetch('/api/users/temp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({ username: 'Anonymous' })
         });
+        if (!response.ok) throw new Error('Failed to initialize session');
         setIsSessionInitialized(true);
       } catch (error) {
         console.error('Session initialization failed:', error);
         window.location.href = '/';
       }
     };
-    
+
     initSession();
   }, [location]);
 
@@ -71,7 +72,9 @@ function App() {
       {isSessionInitialized ? (
         <Router />
       ) : (
-        <div>Loading...</div>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        </div>
       )}
       <Toaster />
     </QueryClientProvider>
