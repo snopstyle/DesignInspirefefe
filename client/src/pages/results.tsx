@@ -14,34 +14,44 @@ export default function Results() {
   const [scores, setScores] = useState<Record<string, number>>({});
   const [dominantProfile, setDominantProfile] = useState<string>('');
   const [matchPercentage, setMatchPercentage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadResults = async () => {
-      const answers = sessionStorage.getItem('quizAnswers');
-      if (!answers) {
-        setLocation('/quiz');
-        return;
+      try {
+        const answers = sessionStorage.getItem('quizAnswers');
+        if (!answers) {
+          setLocation('/quiz');
+          return;
+        }
+
+        setIsLoading(true);
+        
+        // Wrap calculation in setTimeout to prevent UI blocking
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const calculatedScores = calculateProfileScores(JSON.parse(answers));
+        const matchedProfile = getMatchedProfile(calculatedScores);
+        
+        const totalPossibleScore = 5 * Object.keys(calculatedScores).length;
+        const totalScore = Object.values(calculatedScores).reduce((sum, score) => sum + score, 0);
+        const calculatedPercentage = Math.round((totalScore / totalPossibleScore) * 100);
+
+        setProfile(matchedProfile);
+        setScores(calculatedScores);
+        setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
+        setMatchPercentage(calculatedPercentage);
+      } catch (error) {
+        console.error('Error loading results:', error);
+      } finally {
+        setIsLoading(false);
       }
-
-      // Calculer les scores de manière asynchrone
-      const calculatedScores = calculateProfileScores(JSON.parse(answers));
-      const matchedProfile = getMatchedProfile(calculatedScores);
-      
-      // Calculer le pourcentage de correspondance
-      const totalPossibleScore = 5 * Object.keys(calculatedScores).length;
-      const totalScore = Object.values(calculatedScores).reduce((sum, score) => sum + score, 0);
-      const calculatedPercentage = Math.round((totalScore / totalPossibleScore) * 100);
-
-      setProfile(matchedProfile);
-      setScores(calculatedScores);
-      setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
-      setMatchPercentage(calculatedPercentage);
     };
 
     loadResults();
   }, [setLocation]);
 
-  if (!dominantProfile) {
+  if (isLoading || !dominantProfile) {
     return (
       <GradientBackground>
         <div className="min-h-screen flex items-center justify-center">
