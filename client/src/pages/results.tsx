@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { calculateProfileScores, getMatchedProfile, dominant_profile_mapping, profile_summaries } from '@/lib/profile-logic';
@@ -26,21 +25,21 @@ export default function Results() {
         }
 
         setIsLoading(true);
-        
+
         // Wrap calculation in setTimeout to prevent UI blocking
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         const calculatedScores = calculateProfileScores(JSON.parse(answers));
         const matchedProfile = getMatchedProfile(calculatedScores);
-        
-        // On calcule le pourcentage basé sur le score du profil dominant
-        const dominantScore = calculatedScores[matchedProfile] || 0;
-        const totalPossibleWeights = Object.entries(question_weights)
-          .reduce((sum, [, weights]) => {
-            const profileWeight = weights[matchedProfile] || 0;
-            return sum + profileWeight;
-          }, 0);
-        const calculatedPercentage = Math.round((dominantScore * 100) / totalPossibleWeights);
+
+        const dominantCategory = Object.entries(dominant_profile_mapping)
+          .find(([, profile]) => profile === matchedProfile)?.[0] || '';
+
+        const score = calculatedScores[dominantCategory] || 0;
+        const maxPossibleScore = Object.values(calculatedScores)
+          .reduce((max, value) => Math.max(max, value), 0);
+
+        const calculatedPercentage = Math.round((score * 100) / maxPossibleScore);
 
         setProfile(matchedProfile);
         setScores(calculatedScores);
