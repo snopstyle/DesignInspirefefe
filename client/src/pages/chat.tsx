@@ -70,10 +70,14 @@ export default function ChatPage() {
       }
 
       const data = await response.json();
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: data.message.replace(/\*\*/g, '')
-      }]);
+      if (data && typeof data.message === 'string') {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: data.message.replace(/\*\*/g, '')
+        }]);
+      } else {
+        throw new Error('Invalid response format');
+      }
     } catch (error) {
       console.error('Error:', error);
       toast({
