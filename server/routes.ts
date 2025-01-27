@@ -259,5 +259,25 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  app.get("/api/serp-search", async (req, res) => {
+    try {
+      const { q } = req.query;
+      const response = await getJson({
+        api_key: process.env.SERP_API_KEY,
+        engine: "google",
+        q: q as string,
+        location: "France",
+        google_domain: "google.fr",
+        gl: "fr",
+        hl: "fr",
+      });
+      
+      res.json(response);
+    } catch (error) {
+      console.error('SerpAPI error:', error);
+      res.status(500).json({ error: "Failed to fetch search results" });
+    }
+  });
+
   return createServer(app);
 }

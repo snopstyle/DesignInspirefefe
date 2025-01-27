@@ -9,6 +9,8 @@ import { SearchFilters } from "@/components/search/filters";
 import { FormationCard } from "@/components/ui/formation-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
+import { getJson } from "serpapi";
+
 interface FormationResult {
   id: string;
   formation: string;
@@ -20,6 +22,12 @@ interface FormationResult {
   facebook?: string;
   instagram?: string;
   linkedin?: string;
+}
+
+interface SerpApiResult {
+  title: string;
+  link: string;
+  snippet: string;
 }
 
 export default function SearchPage() {
