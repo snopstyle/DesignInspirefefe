@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { db } from "@db";
 import { tempUsers, quizSessions, quizResults } from "@db/schema";
 import { eq } from "drizzle-orm";
+import { getJson } from "serpapi";
 
 declare module 'express-session' {
   interface SessionData {
@@ -81,9 +82,9 @@ export function registerRoutes(app: Express): Server {
 
     } catch (error) {
       console.error('Error in temp user creation:', error);
-      res.status(500).json({ 
-        error: true, 
-        message: 'Failed to create temporary user' 
+      res.status(500).json({
+        error: true,
+        message: 'Failed to create temporary user'
       });
     }
   });
@@ -163,7 +164,7 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/chat", async (req, res) => {
     try {
       const { message } = req.body;
-      
+
       if (!message) {
         return res.status(400).json({ error: "Message is required" });
       }
@@ -189,7 +190,7 @@ export function registerRoutes(app: Express): Server {
       });
 
       const data = await response.json();
-      
+
       if (data.choices && data.choices[0]?.message?.content) {
         res.json({ message: data.choices[0].message.content });
       } else {
@@ -263,7 +264,7 @@ export function registerRoutes(app: Express): Server {
     try {
       const { q } = req.query;
       const response = await getJson({
-        api_key: process.env.SERP_API_KEY,
+        api_key: process.env.SERPAPI_API_KEY,
         engine: "google",
         q: q as string,
         location: "France",
@@ -271,7 +272,7 @@ export function registerRoutes(app: Express): Server {
         gl: "fr",
         hl: "fr",
       });
-      
+
       res.json(response);
     } catch (error) {
       console.error('SerpAPI error:', error);

@@ -9,8 +9,6 @@ import { SearchFilters } from "@/components/search/filters";
 import { FormationCard } from "@/components/ui/formation-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-import { getJson } from "serpapi";
-
 interface FormationResult {
   id: string;
   formation: string;
@@ -25,9 +23,11 @@ interface FormationResult {
 }
 
 interface SerpApiResult {
-  title: string;
-  link: string;
-  snippet: string;
+  organic_results: Array<{
+    title: string;
+    link: string;
+    snippet: string;
+  }>;
 }
 
 export default function SearchPage() {
@@ -52,11 +52,44 @@ export default function SearchPage() {
     return `/api/search?${params.toString()}`;
   };
 
-  const { data: results = [], isLoading } = useQuery<FormationResult[]>({
+  const buildSerpUrl = () => {
+    return `/api/serp-search?q=${encodeURIComponent(debouncedValue + ' formation')}`;
+  };
+
+  const { data: localResults = [], isLoading: isLocalLoading } = useQuery<FormationResult[]>({
     queryKey: [buildSearchUrl()],
     enabled: Boolean(debouncedValue?.trim()) || Boolean(selectedVille?.trim()),
     staleTime: 1000
   });
+
+  const { data: serpResults, isLoading: isSerpLoading } = useQuery<SerpApiResult>({
+    queryKey: [buildSerpUrl()],
+    enabled: Boolean(debouncedValue?.trim()),
+    staleTime: 1000
+  });
+
+  const isLoading = isLocalLoading || isSerpLoading;
+
+  // Combine local and SerpAPI results
+  const combinedResults = React.useMemo(() => {
+    const results = [...localResults];
+
+    if (serpResults?.organic_results) {
+      serpResults.organic_results.forEach((result, index) => {
+        results.push({
+          id: `serp-${index}`,
+          formation: result.title,
+          etablissement: new URL(result.link).hostname,
+          domaines: [],
+          ville: "External",
+          duree: "N/A",
+          lien: result.link
+        });
+      });
+    }
+
+    return results;
+  }, [localResults, serpResults]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-background/50 py-8">
@@ -120,8 +153,8 @@ export default function SearchPage() {
                 <div className="flex justify-center py-8">
                   <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
                 </div>
-              ) : results.length > 0 ? (
-                results.map((result) => (
+              ) : combinedResults.length > 0 ? (
+                combinedResults.map((result) => (
                   <FormationCard
                     key={result.id}
                     formation={result.formation}
