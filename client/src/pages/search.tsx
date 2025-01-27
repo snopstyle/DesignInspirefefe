@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Filter, GraduationCap } from "lucide-react";
+import { Search, Filter, GraduationCap, Sparkles } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SearchFilters } from "@/components/search/filters";
 import { FormationCard } from "@/components/ui/formation-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface FormationResult {
   id: string;
@@ -34,6 +36,7 @@ export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVille, setSelectedVille] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
+  const [aiEnrichment, setAiEnrichment] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedValue(searchTerm), 300);
@@ -64,17 +67,17 @@ export default function SearchPage() {
 
   const { data: serpResults, isLoading: isSerpLoading } = useQuery<SerpApiResult>({
     queryKey: [buildSerpUrl()],
-    enabled: Boolean(debouncedValue?.trim()),
+    enabled: Boolean(debouncedValue?.trim()) && aiEnrichment,
     staleTime: 1000
   });
 
-  const isLoading = isLocalLoading || isSerpLoading;
+  const isLoading = isLocalLoading || (aiEnrichment && isSerpLoading);
 
   // Combine local and SerpAPI results
   const combinedResults = React.useMemo(() => {
     const results = [...localResults];
 
-    if (serpResults?.organic_results) {
+    if (aiEnrichment && serpResults?.organic_results) {
       serpResults.organic_results.forEach((result, index) => {
         results.push({
           id: `serp-${index}`,
@@ -89,7 +92,7 @@ export default function SearchPage() {
     }
 
     return results;
-  }, [localResults, serpResults]);
+  }, [localResults, serpResults, aiEnrichment]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-background/50 py-8">
@@ -142,6 +145,17 @@ export default function SearchPage() {
                       <Search className="h-4 w-4" />
                     )}
                   </Button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch
+                    id="ai-enrichment"
+                    checked={aiEnrichment}
+                    onCheckedChange={setAiEnrichment}
+                  />
+                  <Label htmlFor="ai-enrichment" className="flex items-center gap-2 cursor-pointer">
+                    <Sparkles className="h-4 w-4 text-yellow-500" />
+                    Enrichissement IA
+                  </Label>
                 </div>
               </div>
             </CardContent>
