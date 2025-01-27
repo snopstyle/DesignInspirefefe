@@ -139,7 +139,7 @@ export default function Results() {
                         style={{ width: `${score * 100}%` }}
                       ></div>
                     </div>
-                    <span className="font-mono w-16 text-right">{(score * 100).toFixed(1)}%</span>
+                    <span className="font-mono w-16 text-right">{(score * 100 / 5).toFixed(1)}%</span>
                   </div>
                 ))}
             </div>
