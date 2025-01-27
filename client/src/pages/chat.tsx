@@ -70,10 +70,11 @@ export default function ChatPage() {
       }
 
       const data = await response.json();
-      if (data && typeof data.message === 'string') {
+      if (data?.message) {
+        const message = typeof data.message === 'string' ? data.message : String(data.message);
         setMessages(prev => [...prev, { 
           role: 'assistant', 
-          content: data.message.replace(/\*\*/g, '')
+          content: message.replace(/\*\*/g, '')
         }]);
       } else {
         throw new Error('Invalid response format');

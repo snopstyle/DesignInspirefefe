@@ -189,8 +189,12 @@ export function registerRoutes(app: Express): Server {
       });
 
       const data = await response.json();
-
-      res.json(response);
+      
+      if (data.choices && data.choices[0]?.message?.content) {
+        res.json({ message: data.choices[0].message.content });
+      } else {
+        throw new Error('Invalid API response format');
+      }
     } catch (error) {
       console.error('Error in chat endpoint:', error);
       res.status(500).json({ error: "Failed to process chat message" });
