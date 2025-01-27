@@ -33,9 +33,14 @@ export default function Results() {
         const calculatedScores = calculateProfileScores(JSON.parse(answers));
         const matchedProfile = getMatchedProfile(calculatedScores);
         
-        // On prend le score le plus élevé comme référence
-        const maxPossibleScore = Math.max(...Object.values(calculatedScores));
-        const calculatedPercentage = Math.round((maxPossibleScore * 100) / 5);
+        // On calcule le pourcentage basé sur le score du profil dominant
+        const dominantScore = calculatedScores[matchedProfile] || 0;
+        const totalPossibleWeights = Object.entries(question_weights)
+          .reduce((sum, [, weights]) => {
+            const profileWeight = weights[matchedProfile] || 0;
+            return sum + profileWeight;
+          }, 0);
+        const calculatedPercentage = Math.round((dominantScore * 100) / totalPossibleWeights);
 
         setProfile(matchedProfile);
         setScores(calculatedScores);
