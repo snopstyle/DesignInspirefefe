@@ -70,7 +70,12 @@ export default function Results() {
         <Card className="bg-white/10 backdrop-blur-sm">
           <CardHeader>
             <CardTitle>Profil</CardTitle>
-            <CardDescription>{dominantProfile}</CardDescription>
+            <CardDescription className="flex items-center justify-between">
+              <span>{dominantProfile}</span>
+              <span className="text-sm bg-white/10 px-2 py-1 rounded-full">
+                {matchPercentage}% de matching
+              </span>
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-lg mb-4">{profileDetails?.description}</p>
