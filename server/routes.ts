@@ -180,7 +180,7 @@ export function registerRoutes(app: Express): Server {
           model: "deepseek-chat",
           messages: [{
             role: "system",
-            content: "Tu es un conseiller d'orientation professionnel français. Tu dois aider les utilisateurs à trouver leur voie en fonction de leurs intérêts, compétences et aspirations."
+            content: "You are a code assistant that helps improve code and implement tasks. Review code snippets and provide specific improvements or implementations that can be directly applied."
           }, {
             role: "user",
             content: message
