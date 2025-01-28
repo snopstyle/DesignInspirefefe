@@ -53,22 +53,23 @@ export default function Results() {
           <CardContent>
             <div className="prose prose-invert max-w-none">
               {analysis.split('\n').map((paragraph, index) => {
-                if (paragraph.startsWith('- ')) {
-                  const title = paragraph.substring(2).split(':')[0];
-                  const content = paragraph.split(':')[1];
-                  return (
-                    <div key={index} className="mb-6">
-                      <h2 className="text-xl font-bold text-white mb-2 uppercase tracking-wide">
-                        {title}
-                      </h2>
-                      <p className="text-gray-100 text-lg leading-relaxed">
-                        {content}
-                      </p>
-                    </div>
-                  );
+                if (paragraph.includes(':')) {
+                  const [title, content] = paragraph.split(':');
+                  if (content) {
+                    return (
+                      <div key={index} className="mb-8 bg-white/5 p-6 rounded-lg backdrop-blur-sm">
+                        <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-wide">
+                          {title.trim()}
+                        </h2>
+                        <p className="text-gray-100 text-xl leading-relaxed font-medium">
+                          {content.trim()}
+                        </p>
+                      </div>
+                    );
+                  }
                 }
                 return (
-                  <p key={index} className="text-gray-100 text-lg leading-relaxed mb-4">
+                  <p key={index} className="text-gray-100 text-xl leading-relaxed mb-6 font-medium">
                     {paragraph}
                   </p>
                 );
