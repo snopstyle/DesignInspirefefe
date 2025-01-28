@@ -24,21 +24,21 @@ export async function askDeepSeek(message: string) {
 }
 
 export async function analyzePersonality(answers: QuizAnswers) {
-  const prompt = `En tant qu'expert en analyse de personnalité, analyse les réponses suivantes au questionnaire et fournis une analyse détaillée en français. Utilise un ton engageant et professionnel:
+  const prompt = `En tant qu'expert en analyse de personnalité pour la Génération Z, analyse ces réponses et crée un profil personnalisé qui parle directement au répondant. Utilise le tutoiement et un ton décontracté mais impactant:
 
 ${JSON.stringify(answers, null, 2)}
 
-Structure ton analyse avec:
-- Profil dominant
-- Profil affiné
-- Forces
-- Faiblesses
-- Citation qui résume parfaitement la personnalité
-- Texte explicatif de personnalité
-- Célébrités au profil similaire
-- Métiers conseillés
+Structure l'analyse avec:
+- PROFIL DOMINANT: Décris leur trait de personnalité principal de façon directe et moderne
+- PROFIL AFFINÉ: Explique leur personnalité plus en détail avec des références actuelles
+- FORCES: Liste leurs superpouvoirs avec des emojis pertinents
+- FAIBLESSES: Présente leurs points d'amélioration de façon constructive
+- CITATION INSPIRANTE: Choisis une citation d'un influenceur ou d'une personnalité Gen Z qui résonne avec leur profil
+- TON ESSENCE: Un paragraphe qui capture leur personnalité avec des références à la culture pop actuelle
+- SQUAD GOALS: Liste des célébrités/créateurs de contenu français et internationaux qui partagent leur personnalité
+- TON FUTUR: Suggestions de carrières modernes et émergentes qui correspondent à leur profil
 
-Adopte un ton à la fois fun et sérieux dans ton analyse.`;
+Utilise un langage jeune, des références actuelles (TikTok, Instagram, YouTube), et reste authentique. Évite tout langage corporate ou trop formel.`;
 
   return askDeepSeek(prompt);
 }
