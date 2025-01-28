@@ -24,9 +24,23 @@ export async function askDeepSeek(message: string) {
 }
 
 export async function analyzePersonality(answers: QuizAnswers) {
-  const prompt = `En tant que coach de vie et d'orientation pour la Génération Z, analyse ces réponses et crée un profil personnalisé authentique et engageant. Réponds directement au répondant en le tutoyant, avec un ton chaleureux et impactant:
+  // Récupérer les questions depuis le fichier quiz-data.json
+  const quizData = await import('./quiz-data.json');
+  
+  // Créer un objet qui combine questions et réponses
+  const fullContext = Object.entries(answers).map(([questionId, answer]) => {
+    const question = quizData.questions.find(q => `Q${q.id}` === questionId);
+    return {
+      question: question?.text || "Question inconnue",
+      options: question?.options || [],
+      answer: answer
+    };
+  });
 
-${JSON.stringify(answers, null, 2)}
+  const prompt = `En tant que coach de vie et d'orientation pour la Génération Z, analyse ce profil basé sur les questions et réponses suivantes. Réponds directement au répondant en le tutoyant, avec un ton chaleureux et impactant:
+
+Questions et Réponses:
+${JSON.stringify(fullContext, null, 2)}
 
 Structure ta réponse en français avec:
 
