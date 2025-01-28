@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
-import { calculateProfileScores, getMatchedProfile, dominant_profile_mapping, profile_summaries } from '@/lib/profile-logic';
 import { GradientBackground } from '@/components/layout/gradient-background';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingAnimation } from '@/components/ui/loading-animation';
+import { analyzePersonality } from '@/lib/deepseek';
 
 export default function Results() {
   const [, setLocation] = useLocation();
-  const [profile, setProfile] = useState<string | null>(null);
-  const [scores, setScores] = useState<Record<string, number>>({});
-  const [dominantProfile, setDominantProfile] = useState<string>('');
-  const [matchPercentage, setMatchPercentage] = useState<number>(0);
+  const [analysis, setAnalysis] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,26 +21,8 @@ export default function Results() {
         }
 
         setIsLoading(true);
-
-        // Wrap calculation in setTimeout to prevent UI blocking
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        const calculatedScores = calculateProfileScores(JSON.parse(answers));
-        const matchedProfile = getMatchedProfile(calculatedScores);
-
-        const dominantCategory = Object.entries(dominant_profile_mapping)
-          .find(([, profile]) => profile === matchedProfile)?.[0] || '';
-
-        const score = calculatedScores[dominantCategory] || 0;
-        const maxPossibleScore = Object.values(calculatedScores)
-          .reduce((max, value) => Math.max(max, value), 0);
-
-        const calculatedPercentage = Math.round((score * 100) / maxPossibleScore);
-
-        setProfile(matchedProfile);
-        setScores(calculatedScores);
-        setDominantProfile(dominant_profile_mapping[matchedProfile] || '');
-        setMatchPercentage(calculatedPercentage);
+        const result = await analyzePersonality(JSON.parse(answers));
+        setAnalysis(result);
       } catch (error) {
         console.error('Error loading results:', error);
       } finally {
@@ -55,7 +33,7 @@ export default function Results() {
     loadResults();
   }, [setLocation]);
 
-  if (isLoading || !dominantProfile) {
+  if (isLoading) {
     return (
       <GradientBackground>
         <div className="min-h-screen flex items-center justify-center">
@@ -65,83 +43,18 @@ export default function Results() {
     );
   }
 
-  const profileDetails = profile_summaries[dominantProfile];
-
   return (
     <GradientBackground>
       <div className="container mx-auto py-8 space-y-6">
-        {/* Profile Card */}
         <Card className="bg-white/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Profil</CardTitle>
-            <CardDescription className="flex items-center justify-between">
-              <span>{dominantProfile}</span>
-              <span className="text-sm bg-white/10 px-2 py-1 rounded-full">
-                {matchPercentage}% de matching
-              </span>
-            </CardDescription>
+            <CardTitle>Votre Analyse de Personnalité</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg mb-4">{profileDetails?.description}</p>
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Forces</h3>
-                <ul className="list-disc list-inside">
-                  {profileDetails?.strengths.map((strength, i) => (
-                    <li key={i}>{strength}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Carrières Suggérées</h3>
-                <ul className="list-disc list-inside">
-                  {profileDetails?.careers.map((career, i) => (
-                    <li key={i}>{career}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Parcours Éducatifs Recommandés</h3>
-                <ul className="list-disc list-inside">
-                  {profileDetails?.education_paths.map((path, i) => (
-                    <li key={i}>{path}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Compétences à Développer</h3>
-                <ul className="list-disc list-inside">
-                  {profileDetails?.skills_to_develop.map((skill, i) => (
-                    <li key={i}>{skill}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Key Traits Card */}
-        <Card className="bg-white/10 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Traits Clés</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 gap-2">
-              {Object.entries(scores)
-                .filter(([, score]) => score > 0)
-                .sort(([, a], [, b]) => b - a)
-                .map(([trait, score]) => (
-                  <div key={trait} className="flex justify-between items-center p-2 bg-white/5 rounded">
-                    <span>{trait}</span>
-                    <div className="w-1/2 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                      <div 
-                        className="bg-blue-600 h-2.5 rounded-full" 
-                        style={{ width: `${score * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className="font-mono w-16 text-right">{(score * 100 / 5).toFixed(1)}%</span>
-                  </div>
-                ))}
+            <div className="prose prose-invert max-w-none">
+              {analysis.split('\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
             </div>
           </CardContent>
         </Card>
