@@ -1,4 +1,3 @@
-
 import type { QuizAnswers } from './quiz-logic';
 
 export async function askDeepSeek(message: string) {
@@ -10,11 +9,11 @@ export async function askDeepSeek(message: string) {
       },
       body: JSON.stringify({ message }),
     });
-    
+
     if (!response.ok) {
       throw new Error('Failed to get response from DeepSeek');
     }
-    
+
     const data = await response.json();
     return data.message;
   } catch (error) {
@@ -24,23 +23,20 @@ export async function askDeepSeek(message: string) {
 }
 
 export async function analyzePersonality(answers: QuizAnswers) {
-  // Récupérer les questions depuis le fichier quiz-data.json
   const quizData = await import('./quiz-data.json');
-  
-  // Créer un objet qui combine questions et réponses
-  const fullContext = Object.entries(answers).map(([questionId, answer]) => {
+  const questionsAndAnswers = Object.entries(answers).map(([questionId, answer]) => {
     const question = quizData.questions.find(q => `Q${q.id}` === questionId);
     return {
-      question: question?.text || "Question inconnue",
-      options: question?.options || [],
+      question: question?.text,
+      options: question?.options,
       answer: answer
     };
   });
 
-  const prompt = `En tant que coach de vie et d'orientation pour la Génération Z, analyse ce profil basé sur les questions et réponses suivantes. Réponds directement au répondant en le tutoyant, avec un ton chaleureux et impactant:
+  const prompt = `En tant que coach de vie et d'orientation pour la Génération Z, analyse ce profil basé sur ces questions et réponses. Crée un profil personnalisé authentique qui parle directement au répondant. Utilise le tutoiement et un ton engageant adapté à la Gen Z française.
 
-Questions et Réponses:
-${JSON.stringify(fullContext, null, 2)}
+Voici les réponses détaillées du répondant:
+${JSON.stringify(questionsAndAnswers, null, 2)}
 
 Structure ta réponse en français avec:
 
