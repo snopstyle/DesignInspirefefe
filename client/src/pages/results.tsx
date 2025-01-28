@@ -1,10 +1,11 @@
+
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { GradientBackground } from '@/components/layout/gradient-background';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingAnimation } from '@/components/ui/loading-animation';
 import { analyzePersonality } from '@/lib/deepseek';
+import { motion } from 'framer-motion';
 
 export default function Results() {
   const [, setLocation] = useLocation();
@@ -45,44 +46,75 @@ export default function Results() {
 
   return (
     <GradientBackground>
-      <div className="container mx-auto py-8 space-y-6">
-        <Card className="bg-white/10 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-white">TON ANALYSE DE PERSONNALITÉ</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="prose prose-invert max-w-none">
-              {analysis.split('\n').map((paragraph, index) => {
-                if (paragraph.includes(':')) {
-                  const [title, content] = paragraph.split(':');
-                  if (content) {
-                    return (
-                      <div key={index} className="mb-8 bg-white/5 p-6 rounded-lg backdrop-blur-sm">
-                        <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-wide">
-                          {title.trim()}
-                        </h2>
-                        <p className="text-gray-100 text-xl leading-relaxed font-medium">
-                          {content.trim()}
-                        </p>
-                      </div>
-                    );
-                  }
-                }
-                return (
-                  <p key={index} className="text-gray-100 text-xl leading-relaxed mb-6 font-medium">
-                    {paragraph}
-                  </p>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen w-full max-w-4xl mx-auto py-12 px-4 space-y-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-4"
+        >
+          <h1 className="text-[85px] font-black">
+            <span className="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-['Unbounded']">
+              RÉSULTATS
+            </span>
+          </h1>
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+            Voici ton analyse personnalisée basée sur tes réponses au questionnaire
+          </p>
+        </motion.div>
 
-        <div className="flex justify-center pt-4">
-          <Button onClick={() => setLocation('/search')}>
+        <div className="prose prose-invert max-w-none space-y-12">
+          {analysis.split('\n').map((paragraph, index) => {
+            if (paragraph.includes(':')) {
+              const [title, content] = paragraph.split(':');
+              if (content) {
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="space-y-4"
+                  >
+                    <h2 className="text-3xl font-black bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                      {title.trim()}
+                    </h2>
+                    <div className="text-xl leading-relaxed font-light text-gray-100">
+                      {content.trim()}
+                    </div>
+                  </motion.div>
+                );
+              }
+            }
+            if (paragraph.trim()) {
+              return (
+                <motion.p
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-xl leading-relaxed font-light text-gray-100"
+                >
+                  {paragraph}
+                </motion.p>
+              );
+            }
+            return null;
+          })}
+        </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-center pt-8"
+        >
+          <Button 
+            onClick={() => setLocation('/search')}
+            className="bg-white/10 hover:bg-white/20 text-white text-lg px-8 py-6"
+          >
             Découvrir les Formations
           </Button>
-        </div>
+        </motion.div>
       </div>
     </GradientBackground>
   );
