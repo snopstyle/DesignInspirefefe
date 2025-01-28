@@ -38,30 +38,29 @@ export async function analyzePersonality(answers: QuizAnswers) {
 Voici les réponses détaillées du répondant:
 ${JSON.stringify(questionsAndAnswers, null, 2)}
 
-Structure ta réponse en français avec:
+Structure ta réponse en français avec la structure suivante:
 
 PROFIL DOMINANT:
-Une phrase courte et percutante qui capture l'essence de leur personnalité
+Une analyse détaillée (2-3 phrases) de la dominante psycho-sociale spécifique du répondant, basée sur l'ensemble de ses réponses.
 
-FORCES 💪:
-3-4 superpouvoirs clés avec des emojis pertinents
+ANALYSE DU PROFIL PSYCHO-SOCIAL:
+Un texte professionnel de 15-20 lignes analysant en détail le mode de fonctionnement du répondant, ses schémas de pensée, ses motivations profondes et sa façon d'interagir avec le monde. Cette analyse doit être nourrie par les réponses spécifiques au questionnaire.
 
-FAIBLESSES 🔄:
-2-3 points d'amélioration présentés de manière constructive
+FORCES PRINCIPALES:
+Une analyse approfondie des 3-4 forces majeures qui émergent du profil, avec des exemples concrets de leur manifestation.
 
-CITATION INSPIRANTE 💭:
-Une citation d'un influenceur, artiste ou entrepreneur qui résonne avec leur profil (privilégier des personnalités françaises Gen Z)
+CITATION RÉVÉLATRICE:
+Une citation significative d'un penseur, philosophe ou personnalité historique qui résonne particulièrement avec l'essence du profil analysé.
 
-TON ESSENCE EN QUELQUES MOTS:
-Un court paragraphe personnel et touchant qui décrit qui ils sont vraiment
+MODÈLES INSPIRANTS:
+Une ou deux personnalités historiques ou contemporaines dont le parcours et le profil font écho aux caractéristiques du répondant. Expliquer les parallèles.
 
-SQUAD:
-3-4 personnalités inspirantes (YouTubeurs, créateurs de contenu, entrepreneurs) qui partagent leur type de personnalité
+ORIENTATION ACADÉMIQUE:
+• Liste structurée des domaines d'études les plus adaptés au profil
+• Analyse des convergences entre les aspirations personnelles et les voies académiques suggérées
+• Recommandations spécifiques basées sur les réponses aux questions sur le projet d'études
 
-MÉTIERS FAITS POUR TOI:
-4-5 suggestions de carrières modernes et émergentes qui correspondent à leur profil
-
-Utilise un style direct, jeune et authentique. Évite le jargon corporate et reste humain.`;
+Utilise un style professionnel, nuancé et analytique. L'analyse doit être détaillée et rigoureuse, en évitant les généralisations.`;
 
   return askDeepSeek(prompt);
 }
