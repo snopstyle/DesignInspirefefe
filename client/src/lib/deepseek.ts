@@ -1,4 +1,3 @@
-
 export async function askOpenRouter(message: string) {
   try {
     const response = await fetch("/api/chat", {
@@ -14,10 +13,16 @@ export async function askOpenRouter(message: string) {
     }
 
     const data = await response.json();
+    if (data.error) {
+      if (data.error.code === 402) {
+        throw new Error("Le service d'analyse est temporairement indisponible. Veuillez réessayer plus tard.");
+      }
+      throw new Error(data.error.message || "Une erreur est survenue");
+    }
     return data.message;
   } catch (error) {
     console.error('Error calling OpenRouter:', error);
-    throw error;
+    throw error instanceof Error ? error : new Error("Une erreur inattendue est survenue");
   }
 }
 

@@ -26,7 +26,7 @@ export default function Results() {
         setAnalysis(result);
       } catch (error) {
         console.error('Error loading results:', error);
-        setAnalysis("Désolé, une erreur est survenue lors de l'analyse de vos réponses. Veuillez réessayer.");
+        setAnalysis(error instanceof Error ? error.message : "Désolé, une erreur est survenue lors de l'analyse de vos réponses. Veuillez réessayer.");
       } finally {
         setIsLoading(false);
       }
