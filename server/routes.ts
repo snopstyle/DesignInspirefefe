@@ -179,9 +179,6 @@ export function registerRoutes(app: Express): Server {
         body: JSON.stringify({
           model: "deepseek-R1",
           messages: [{
-            role: "system",
-            content: "You are a code assistant that helps improve code and implement tasks. Review code snippets and provide specific improvements or implementations that can be directly applied."
-          }, {
             role: "user",
             content: message
           }],
