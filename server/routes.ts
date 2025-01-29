@@ -177,7 +177,7 @@ export function registerRoutes(app: Express): Server {
           "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`
         },
         body: JSON.stringify({
-          model: "deepseek-chat",
+          model: "deepseek-R1",
           messages: [{
             role: "system",
             content: "You are a code assistant that helps improve code and implement tasks. Review code snippets and provide specific improvements or implementations that can be directly applied."
