@@ -47,23 +47,24 @@ export default function Results() {
 
   return (
     <GradientBackground>
-      <div className="min-h-screen w-full max-w-4xl mx-auto py-12 px-4 space-y-8">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-4"
-        >
-          <h1 className="text-[85px] font-black">
-            <span className="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-['Unbounded']">
-              RÉSULTATS
-            </span>
-          </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
-            Voici ton analyse personnalisée basée sur tes réponses au questionnaire
-          </p>
-        </motion.div>
+      <div className="container mx-auto min-h-screen flex items-center justify-center py-12 px-4">
+        <div className="w-full max-w-4xl rounded-xl bg-black/30 backdrop-blur-md border border-white/10 p-8 shadow-xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center space-y-4 mb-12"
+          >
+            <h1 className="text-[85px] font-black">
+              <span className="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-['Unbounded']">
+                RÉSULTATS
+              </span>
+            </h1>
+            <p className="text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+              Voici ton analyse personnalisée basée sur tes réponses au questionnaire
+            </p>
+          </motion.div>
 
-        <div className="prose prose-invert max-w-none space-y-12">
+          <div className="prose prose-invert max-w-none space-y-12">
           {analysis.split('\n').map((paragraph, index) => {
             if (paragraph.includes(':')) {
               const [title, content] = paragraph.split(':');
@@ -103,19 +104,20 @@ export default function Results() {
           })}
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="flex justify-center pt-8"
-        >
-          <Button 
-            onClick={() => setLocation('/search')}
-            className="bg-white/10 hover:bg-white/20 text-white text-lg px-8 py-6"
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex justify-center pt-8"
           >
-            Découvrir les Formations
-          </Button>
-        </motion.div>
+            <Button 
+              onClick={() => setLocation('/search')}
+              className="bg-white/10 hover:bg-white/20 text-white text-lg px-8 py-6"
+            >
+              Découvrir les Formations
+            </Button>
+          </motion.div>
+        </div>
       </div>
     </GradientBackground>
   );
