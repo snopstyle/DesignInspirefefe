@@ -37,34 +37,30 @@ export async function analyzePersonality(answers: Record<string, any>) {
     };
   });
 
-  const prompt = `En tant que coach de vie et d'orientation pour la Génération Z, analyse ce profil basé sur ces questions et réponses. Crée un profil personnalisé authentique qui parle directement au répondant. Utilise le tutoiement et un ton engageant adapté à la Gen Z française.
+  const prompt = `Analyse psycho-sociale du profil Gen Z. Tutoiement requis.
 
-Voici les réponses détaillées du répondant:
-${JSON.stringify(questionsAndAnswers, null, 2)}
+Réponses:
+${JSON.stringify(questionsAndAnswers)}
 
-Structure ta réponse en français avec la structure suivante:
+Structure de réponse:
 
 PROFIL DOMINANT:
-Une analyse détaillée (2-3 phrases) de la dominante psycho-sociale spécifique du répondant, basée sur l'ensemble de ses réponses.
+Brève analyse psycho-sociale.
 
-ANALYSE DU PROFIL PSYCHO-SOCIAL:
-Un texte professionnel de 15-20 lignes analysant en détail le mode de fonctionnement du répondant, ses schémas de pensée, ses motivations profondes et sa façon d'interagir avec le monde. Cette analyse doit être nourrie par les réponses spécifiques au questionnaire.
+ANALYSE DÉTAILLÉE:
+15-20 lignes sur pensée et interactions.
 
-FORCES PRINCIPALES:
-Une analyse approfondie des 3-4 forces majeures qui émergent du profil, avec des exemples concrets de leur manifestation.
+FORCES:
+Forces majeures avec exemples.
 
-CITATION RÉVÉLATRICE:
-Une citation significative d'un penseur, philosophe ou personnalité historique qui résonne particulièrement avec l'essence du profil analysé.
+CITATION:
+Citation pertinente.
 
-MODÈLES INSPIRANTS:
-Une ou deux personnalités historiques ou contemporaines dont le parcours et le profil font écho aux caractéristiques du répondant. Expliquer les parallèles.
+MODÈLES:
+Personnalités similaires.
 
-ORIENTATION ACADÉMIQUE:
-• Liste structurée des domaines d'études les plus adaptés au profil
-• Analyse des convergences entre les aspirations personnelles et les voies académiques suggérées
-• Recommandations spécifiques basées sur les réponses aux questions sur le projet d'études
-
-Utilise un style professionnel, nuancé et analytique. L'analyse doit être détaillée et rigoureuse, en évitant les généralisations.`;
+ORIENTATION:
+• Domaines et recommandations académiques.`;
 
   return askOpenRouter(prompt);
 }
