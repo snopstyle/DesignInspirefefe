@@ -175,7 +175,7 @@ export function registerRoutes(app: Express): Server {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "${process.env.OPENROUTER_REFERER || 'https://chat.openai.com'}",
+          "HTTP-Referer": `${process.env.OPENROUTER_REFERER || 'https://chat.openai.com'}`,
           "X-Title": "Career Quiz Analysis"
         },
         body: JSON.stringify({

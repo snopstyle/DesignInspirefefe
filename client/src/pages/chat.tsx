@@ -72,9 +72,14 @@ export default function ChatPage() {
       const data = await response.json();
       if (data?.message) {
         const message = typeof data.message === 'string' ? data.message : String(data.message);
+        // Handle OpenRouter's markdown-style formatting
+        const cleanedMessage = message
+          .replace(/\*\*/g, '') // Remove bold markers
+          .replace(/^>?\s*/gm, '') // Remove quote markers
+          .trim();
         setMessages(prev => [...prev, { 
           role: 'assistant', 
-          content: message.replace(/\*\*/g, '')
+          content: cleanedMessage
         }]);
       } else {
         throw new Error('Invalid response format');
