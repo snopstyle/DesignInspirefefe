@@ -170,14 +170,16 @@ export function registerRoutes(app: Express): Server {
       }
 
       // Using DeepSeek API
-      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "${process.env.OPENROUTER_REFERER || 'https://chat.openai.com'}",
+          "X-Title": "Career Quiz Analysis"
         },
         body: JSON.stringify({
-          model: "deepseek-R1",
+          model: "anthropic/claude-2",
           messages: [{
             role: "user",
             content: message

@@ -1,6 +1,5 @@
-import type { QuizAnswers } from './quiz-logic';
 
-export async function askDeepSeek(message: string) {
+export async function askOpenRouter(message: string) {
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -11,18 +10,18 @@ export async function askDeepSeek(message: string) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get response from DeepSeek');
+      throw new Error('Failed to get response from OpenRouter');
     }
 
     const data = await response.json();
     return data.message;
   } catch (error) {
-    console.error('Error calling DeepSeek:', error);
+    console.error('Error calling OpenRouter:', error);
     throw error;
   }
 }
 
-export async function analyzePersonality(answers: QuizAnswers) {
+export async function analyzePersonality(answers: Record<string, any>) {
   const quizData = await import('./quiz-data.json');
   const questionsAndAnswers = Object.entries(answers).map(([questionId, answer]) => {
     const question = quizData.questions.find(q => `Q${q.id}` === questionId);
@@ -62,5 +61,5 @@ ORIENTATION ACADÉMIQUE:
 
 Utilise un style professionnel, nuancé et analytique. L'analyse doit être détaillée et rigoureuse, en évitant les généralisations.`;
 
-  return askDeepSeek(prompt);
+  return askOpenRouter(prompt);
 }
