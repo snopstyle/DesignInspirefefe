@@ -179,7 +179,7 @@ export function registerRoutes(app: Express): Server {
           "X-Title": "Career Quiz Analysis"
         },
         body: JSON.stringify({
-          model: "anthropic/claude-2",
+          model: "deepseek-ai/deepseek-r1-base:free",
           messages: [{
             role: "user",
             content: message
