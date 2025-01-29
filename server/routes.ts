@@ -189,10 +189,18 @@ export function registerRoutes(app: Express): Server {
       });
 
       const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('OpenRouter API error:', data);
+        throw new Error(`OpenRouter API error: ${data.error || 'Unknown error'}`);
+      }
 
       if (data.choices && data.choices[0]?.message?.content) {
         res.json({ message: data.choices[0].message.content });
+      } else if (data.error) {
+        throw new Error(`API error: ${data.error}`);
       } else {
+        console.error('Unexpected OpenRouter response:', data);
         throw new Error('Invalid API response format');
       }
     } catch (error) {
